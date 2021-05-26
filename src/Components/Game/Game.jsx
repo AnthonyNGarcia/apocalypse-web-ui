@@ -11,7 +11,7 @@ import './Game.css';
 const Game = (props) => {
   return (
     <React.Fragment>
-
+      <h1>Game Component</h1>
     </React.Fragment>
   );
 };

@@ -11,7 +11,7 @@ import './InLobby.css';
 const InLobby = (props) => {
   return (
     <React.Fragment>
-
+      <h3>In Lobby Component</h3>
     </React.Fragment>
   );
 };

@@ -9,6 +9,8 @@ const apiBasePath = 'http://localhost:9595';
 const apiEndpoints = {
   basePath: apiBasePath,
   websocketPath: apiBasePath + '/sockjs',
+  userController: apiBasePath + '/user',
+  lobbyController: apiBasePath + '/lobby',
 };
 
 export default apiEndpoints;
