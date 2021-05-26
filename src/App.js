@@ -4,12 +4,14 @@ import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
 import generalReducer from './Redux/Reducers/generalReducer';
 import lobbyReducer from './Redux/Reducers/lobbyReducer';
+import gameReducer from './Redux/Reducers/gameReducer';
 import DynamicContainerComponent from './Components/DynamicContainerComponent';
 import './App.css';
 
 const rootReducer = combineReducers({
   general: generalReducer,
   lobby: lobbyReducer,
+  game: gameReducer,
 });
 
 const store = createStore(rootReducer,

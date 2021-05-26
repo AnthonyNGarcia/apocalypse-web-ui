@@ -11,7 +11,7 @@ import './CampaignMap.css';
 const CampaignMap = (props) => {
   return (
     <React.Fragment>
-
+      <h3>Campaign Map Component</h3>
     </React.Fragment>
   );
 };

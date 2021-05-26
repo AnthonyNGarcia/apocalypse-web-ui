@@ -8,6 +8,9 @@ import Button from 'react-bootstrap/Button';
 import AbstractedWebsocket from '../../Utilities/AbstractedWebsocket';
 import LOBBY_VIEWS from '../../Utilities/lobbyViews';
 import lobbyAC from '../../../Redux/actionCreators/lobbyActionCreators';
+import gameAC from '../../../Redux/actionCreators/gameActionCreators';
+import generalAC from '../../../Redux/actionCreators/generalActionCreators';
+import MAIN_VIEWS from '../../Utilities/mainViews';
 import axios from 'axios';
 import apiEndpoints from '../../Utilities/apiEndpoints';
 import './InLobby.css';
@@ -21,6 +24,13 @@ import './InLobby.css';
  */
 const InLobby = (props) => {
   const websocket = useRef(null);
+
+  const navigateToInGame = (gameData) => {
+    props.updateGamePlayerOneUsername(gameData.playerOneUsername);
+    props.updateGamePlayerTwoUsername(gameData.playerTwoUsername);
+    props.updateGameId(gameData.gameId);
+    props.updateMainViewToGame();
+  };
 
   const navigateToBrowseLobbies = () => {
     props.savePlayerOneUsername(null);
@@ -43,6 +53,12 @@ const InLobby = (props) => {
         props.savePlayerTwoUsername(playerTwoUsername);
       }
     }
+
+    if (message.body.gameId) {
+      console.log('Game starting!');
+      console.log(message.body);
+      navigateToInGame(message.body);
+    }
   };
 
   const leaveLobbyHandler = async (e) => {
@@ -57,6 +73,23 @@ const InLobby = (props) => {
       console.log(serverResponse);
     } catch (e) {
       console.log('Oops! There was an error trying to leave the lobby!');
+      console.log(e);
+    }
+  };
+
+  const startGameHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const startGameRequest = {
+        lobbyId: props.lobbyId,
+        playerOneUsername: props.playerOneUsername,
+        playerTwoUsername: props.playerTwoUsername,
+      };
+      const serverResponse = await axios.post(
+          apiEndpoints.gameController + '/in-memory', startGameRequest);
+      console.log(serverResponse);
+    } catch (e) {
+      console.log('Oops! There was an error trying to create the lobby!');
       console.log(e);
     }
   };
@@ -79,7 +112,17 @@ const InLobby = (props) => {
           </Col>
         </Row>
         <Row>
-          <Button variant="primary" onClick={leaveLobbyHandler}>Leave</Button>
+          <Col>
+            <Button variant="primary" onClick={leaveLobbyHandler}>Leave</Button>
+          </Col>
+          <Col>
+            {props.ownUsername === props.playerOneUsername ?
+            <Button variant="primary"
+              disabled={props.playerOneUsername === null ||
+                props.playerTwoUsername === null}
+              onClick={startGameHandler}>Start</Button> :
+            null}
+          </Col>
         </Row>
       </Container>
     </React.Fragment>
@@ -105,6 +148,14 @@ const mapDispatchToProps = (dispatch) => {
         lobbyAC.setPlayerTwoUsername(username)),
     saveLobbyId: (lobbyId) => dispatch(
         lobbyAC.setLobbyId(lobbyId)),
+    updateMainViewToGame: () => dispatch(
+        generalAC.setMainView(MAIN_VIEWS.GAME_VIEW)),
+    updateGamePlayerOneUsername: (username) => dispatch(
+        gameAC.setPlayerOneUsername(username)),
+    updateGamePlayerTwoUsername: (username) => dispatch(
+        gameAC.setPlayerTwoUsername(username)),
+    updateGameId: (gameId) => dispatch(
+        gameAC.setGameId(gameId)),
   };
 };
 
@@ -117,6 +168,10 @@ InLobby.propTypes = {
   savePlayerOneUsername: PropTypes.func,
   savePlayerTwoUsername: PropTypes.func,
   saveLobbyId: PropTypes.func,
+  updateGameId: PropTypes.func,
+  updateGamePlayerOneUsername: PropTypes.func,
+  updateGamePlayerTwoUsername: PropTypes.func,
+  updateMainViewToGame: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InLobby);

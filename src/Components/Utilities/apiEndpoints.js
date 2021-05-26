@@ -11,6 +11,7 @@ const apiEndpoints = {
   websocketPath: apiBasePath + '/sockjs',
   userController: apiBasePath + '/user',
   lobbyController: apiBasePath + '/lobby',
+  gameController: apiBasePath + '/game',
 };
 
 export default apiEndpoints;
