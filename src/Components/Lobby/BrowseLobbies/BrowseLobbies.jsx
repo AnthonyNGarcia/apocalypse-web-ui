@@ -51,7 +51,7 @@ const BrowseLobbies = (props) => {
     try {
       const joinLobbyRequest = {
         lobbyId: lobbyId,
-        joinerUsername: props.ownUsername,
+        playerUsername: props.ownUsername,
       };
       console.log(joinLobbyRequest);
       const response = await axios.patch(
