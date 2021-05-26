@@ -1,5 +1,8 @@
 const reducerActionTypes = {
   SET_LOBBY_VIEW: 'SET_LOBBY_VIEW',
+  SET_LOBBY_ID: 'SET_LOBBY_ID',
+  SET_PLAYER_ONE_USERNAME: 'SET_PLAYER_ONE_USERNAME',
+  SET_PLAYER_TWO_USERNAME: 'SET_PLAYER_TWO_USERNAME',
 };
 
 export default reducerActionTypes;
