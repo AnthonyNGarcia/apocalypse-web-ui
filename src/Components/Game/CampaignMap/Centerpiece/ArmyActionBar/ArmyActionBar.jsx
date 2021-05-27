@@ -11,7 +11,7 @@ import './ArmyActionBar.css';
 const ArmyActionBar = (props) => {
   return (
     <React.Fragment>
-
+      <h5>Army Action Bar</h5>
     </React.Fragment>
   );
 };

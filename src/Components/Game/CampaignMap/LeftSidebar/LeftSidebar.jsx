@@ -11,7 +11,7 @@ import './LeftSidebar.css';
 const LeftSidebar = (props) => {
   return (
     <React.Fragment>
-
+      <h5>Left Sidebar</h5>
     </React.Fragment>
   );
 };

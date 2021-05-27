@@ -3,6 +3,7 @@ const reducerActionTypes = {
   SET_GAME_ID: 'SET_GAME_ID',
   SET_PLAYER_ONE_USERNAME: 'SET_PLAYER_ONE_USERNAME',
   SET_PLAYER_TWO_USERNAME: 'SET_PLAYER_TWO_USERNAME',
+  SET_GAME_BOARD: 'SET_GAME_BOARD',
 };
 
 export default reducerActionTypes;

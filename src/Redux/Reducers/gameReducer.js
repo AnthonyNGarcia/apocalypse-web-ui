@@ -1,12 +1,17 @@
 /* eslint-disable max-len */
 import gameAT from '../actionTypes/gameActionTypes';
 import GAME_VIEWS from '../../Components/Utilities/gameViews';
+import defaultHoneycombConfigs from '../../Components/Utilities/honeycombConfigs';
+
+console.log(defaultHoneycombConfigs);
 
 const initialState = {
   gameView: GAME_VIEWS.CAMPAIGN_MAP_VIEW,
   gameId: null,
   playerOneUsername: null,
   playerTwoUsername: null,
+  gameBoard: [],
+  honeycombConfigs: defaultHoneycombConfigs,
 };
 
 const setGameView = (state, action) => {
@@ -37,12 +42,20 @@ const setPlayerTwoUsername = (state, action) => {
   };
 };
 
+const setGameBoard = (state, action) => {
+  return {
+    ...state,
+    gameBoard: action.gameBoard,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case gameAT.SET_GAME_VIEW: return setGameView(state, action);
     case gameAT.SET_GAME_ID: return setGameId(state, action);
     case gameAT.SET_PLAYER_ONE_USERNAME: return setPlayerOneUsername(state, action);
     case gameAT.SET_PLAYER_TWO_USERNAME: return setPlayerTwoUsername(state, action);
+    case gameAT.SET_GAME_BOARD: return setGameBoard(state, action);
     default: return state;
   }
 };

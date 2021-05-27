@@ -25,6 +25,12 @@ const actionCreators = {
       username: username,
     };
   },
+  setGameBoard: (gameBoard) => {
+    return {
+      type: gameAT.SET_GAME_BOARD,
+      gameBoard: gameBoard,
+    };
+  },
 };
 
 export default actionCreators;

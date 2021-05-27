@@ -29,6 +29,7 @@ const InLobby = (props) => {
     props.updateGamePlayerOneUsername(gameData.playerOneUsername);
     props.updateGamePlayerTwoUsername(gameData.playerTwoUsername);
     props.updateGameId(gameData.gameId);
+    props.updateGameBoard(gameData.gameBoard);
     props.updateMainViewToGame();
   };
 
@@ -156,6 +157,8 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setPlayerTwoUsername(username)),
     updateGameId: (gameId) => dispatch(
         gameAC.setGameId(gameId)),
+    updateGameBoard: (gameBoard) => dispatch(
+        gameAC.setGameBoard(gameBoard)),
   };
 };
 
@@ -172,6 +175,7 @@ InLobby.propTypes = {
   updateGamePlayerOneUsername: PropTypes.func,
   updateGamePlayerTwoUsername: PropTypes.func,
   updateMainViewToGame: PropTypes.func,
+  updateGameBoard: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InLobby);
