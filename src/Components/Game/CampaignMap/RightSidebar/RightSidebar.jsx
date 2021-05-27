@@ -1,4 +1,9 @@
 import React from 'react';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import MainInfoPanel from './MainInfoPanel/MainInfoPanel';
+import SupplementalInfoPanel from
+  './SupplementalInfoPanel/SupplementalInfoPanel';
 import './RightSidebar.css';
 
 /**
@@ -12,6 +17,14 @@ const RightSidebar = (props) => {
   return (
     <React.Fragment>
       <h5>Right Sidebar</h5>
+      <Container>
+        <Row>
+          <MainInfoPanel/>
+        </Row>
+        <Row>
+          <SupplementalInfoPanel/>
+        </Row>
+      </Container>
     </React.Fragment>
   );
 };

@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import GAME_VIEWS from '../Utilities/gameViews';
@@ -45,8 +45,6 @@ const Game = (props) => {
   };
 
   const navigateToBrowseLobbies = () => {
-    props.savePlayerOneUsername(null);
-    props.savePlayerTwoUsername(null);
     props.saveGameId(null);
     props.clearLobbyId();
     props.clearLobbyPlayerOneUsername();
@@ -64,6 +62,13 @@ const Game = (props) => {
       navigateToBrowseLobbies();
     }
   };
+
+  useEffect(() => {
+    return () => {
+      props.clearPlayerOne();
+      props.clearPlayerTwo();
+    };
+  }, []);
 
   return (
     <React.Fragment>
@@ -105,8 +110,8 @@ const mapStateToProps = (state) => {
     gameView: state.game.gameView,
     gameId: state.game.gameId,
     ownUsername: state.general.ownUsername,
-    playerOneUsername: state.game.playerOneUsername,
-    playerTwoUsername: state.game.playerTwoUsername,
+    playerOneUsername: state.game.playerOne.username,
+    playerTwoUsername: state.game.playerTwo.username,
   };
 };
 
@@ -116,10 +121,10 @@ const mapDispatchToProps = (dispatch) => {
         generalAC.setMainView(MAIN_VIEWS.LOBBY_VIEW)),
     updateLobbyViewToBrowseLobbies: () => dispatch(
         lobbyAC.setLobbyView(LOBBY_VIEWS.BROWSE_LOBBIES_VIEW)),
-    savePlayerOneUsername: (username) => dispatch(
-        gameAC.setPlayerOneUsername(username)),
-    savePlayerTwoUsername: (username) => dispatch(
-        gameAC.setPlayerTwoUsername(username)),
+    clearPlayerOne: () => dispatch(
+        gameAC.setPlayerOne(null)),
+    clearPlayerTwo: () => dispatch(
+        gameAC.setPlayerTwo(null)),
     saveGameId: (gameId) => dispatch(
         gameAC.setGameId(gameId)),
     clearLobbyPlayerOneUsername: () => dispatch(
@@ -139,8 +144,8 @@ Game.propTypes = {
   playerTwoUsername: PropTypes.string,
   updateMainViewToLobby: PropTypes.func,
   updateLobbyViewToBrowseLobbies: PropTypes.func,
-  savePlayerOneUsername: PropTypes.func,
-  savePlayerTwoUsername: PropTypes.func,
+  clearPlayerOne: PropTypes.func,
+  clearPlayerTwo: PropTypes.func,
   clearLobbyPlayerOneUsername: PropTypes.func,
   clearLobbyPlayerTwoUsername: PropTypes.func,
   clearLobbyId: PropTypes.func,

@@ -1,0 +1,16 @@
+/**
+ * ENUM file.
+ */
+const HILL = 'FOREST';
+const FOREST = 'FOREST';
+const DESERT = 'DESERT';
+const GRASSLAND = 'GRASSLAND';
+
+const TERRAIN_TYPES = {
+  HILL: HILL,
+  FOREST: FOREST,
+  DESERT: DESERT,
+  GRASSLAND: GRASSLAND,
+};
+
+export default TERRAIN_TYPES;

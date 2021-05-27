@@ -64,6 +64,13 @@ const BrowseLobbies = (props) => {
     }
   };
 
+  const refreshLobbiesHandler = async (e) => {
+    e.preventDefault();
+    const serverResponse = await
+    axios.get(apiEndpoints.lobbyController + '/in-memory');
+    setCurrentLobbies(serverResponse.data);
+  };
+
   useEffect(async () => {
     const fetchCurrentLobbies = async () => {
       const serverResponse = await
@@ -78,8 +85,16 @@ const BrowseLobbies = (props) => {
 
   return (
     <React.Fragment>
-      <h3>Browsing Lobbies Component</h3>
       <Container>
+        <Row>
+          <Col xs={8}>
+            <h3>Browsing Lobbies Component</h3>
+          </Col>
+          <Col xs={4}>
+            <Button variant="primary"
+              onClick={(e) => refreshLobbiesHandler(e)}>Refresh</Button>
+          </Col>
+        </Row>
         {currentLobbies.length > 0 ? currentLobbies.map((lobby) =>
           <Row key={lobby.lobbyId}>
             <Col>

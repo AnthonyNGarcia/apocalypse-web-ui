@@ -26,10 +26,10 @@ const InLobby = (props) => {
   const websocket = useRef(null);
 
   const navigateToInGame = (gameData) => {
-    props.updateGamePlayerOneUsername(gameData.playerOneUsername);
-    props.updateGamePlayerTwoUsername(gameData.playerTwoUsername);
     props.updateGameId(gameData.gameId);
     props.updateGameBoard(gameData.gameBoard);
+    props.savePlayerOne(gameData.playerOne);
+    props.savePlayerTwo(gameData.playerTwo);
     props.updateMainViewToGame();
   };
 
@@ -151,10 +151,10 @@ const mapDispatchToProps = (dispatch) => {
         lobbyAC.setLobbyId(lobbyId)),
     updateMainViewToGame: () => dispatch(
         generalAC.setMainView(MAIN_VIEWS.GAME_VIEW)),
-    updateGamePlayerOneUsername: (username) => dispatch(
-        gameAC.setPlayerOneUsername(username)),
-    updateGamePlayerTwoUsername: (username) => dispatch(
-        gameAC.setPlayerTwoUsername(username)),
+    savePlayerOne: (player) => dispatch(
+        gameAC.setPlayerOne(player)),
+    savePlayerTwo: (player) => dispatch(
+        gameAC.setPlayerTwo(player)),
     updateGameId: (gameId) => dispatch(
         gameAC.setGameId(gameId)),
     updateGameBoard: (gameBoard) => dispatch(
@@ -172,10 +172,10 @@ InLobby.propTypes = {
   savePlayerTwoUsername: PropTypes.func,
   saveLobbyId: PropTypes.func,
   updateGameId: PropTypes.func,
-  updateGamePlayerOneUsername: PropTypes.func,
-  updateGamePlayerTwoUsername: PropTypes.func,
   updateMainViewToGame: PropTypes.func,
   updateGameBoard: PropTypes.func,
+  savePlayerOne: PropTypes.func,
+  savePlayerTwo: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InLobby);

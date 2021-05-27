@@ -1,4 +1,11 @@
 import React from 'react';
+import ArmyInfoPanel from './ArmyInfoPanel/ArmyInfoPanel';
+import CityInfoPanel from './CityInfoPanel/CityInfoPanel';
+import TileInfoPanel from './TileInfoPanel/TileInfoPanel';
+import MAIN_PANEL_VIEWS from '../../../../Utilities/gameMainPanelViews';
+import flattenObject from '../../../../Utilities/flattenObjectValuesToArray';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import './MainInfoPanel.css';
 
 /**
@@ -11,9 +18,28 @@ import './MainInfoPanel.css';
 const MainInfoPanel = (props) => {
   return (
     <React.Fragment>
-
+      <h6>Main Info Panel</h6>
+      {props.mainPanelView === MAIN_PANEL_VIEWS.ARMY_INFO ?
+        <ArmyInfoPanel/> :
+        props.mainPanelView === MAIN_PANEL_VIEWS.CITY_INFO ?
+        <CityInfoPanel/> :
+        props.mainPanelView === MAIN_PANEL_VIEWS.TILE_INFO ?
+        <TileInfoPanel/> :
+        props.mainPanelView === MAIN_PANEL_VIEWS.NONE ?
+        <p>Nothing to view. Select a unit or tile for details.</p> :
+        <p>Oops! An Invalid main panel view was rendered</p>}
     </React.Fragment>
   );
 };
 
-export default MainInfoPanel;
+const mapStateToProps = (state) => {
+  return {
+    mainPanelView: state.game.mainPanelView,
+  };
+};
+
+MainInfoPanel.propTypes = {
+  mainPanelView: PropTypes.oneOf(flattenObject(MAIN_PANEL_VIEWS)),
+};
+
+export default connect(mapStateToProps)(MainInfoPanel);
