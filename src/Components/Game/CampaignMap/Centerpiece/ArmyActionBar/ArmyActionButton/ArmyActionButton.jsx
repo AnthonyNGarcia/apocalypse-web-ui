@@ -21,7 +21,7 @@ const ArmyActionButton = (props) => {
   };
 
   const hideActionTooltip = () => {
-    props.updateActionBarTooltip('');
+    props.updateActionBarTooltip('Select an Army to get started.');
   };
 
   const initiateActionHandler = () => {
@@ -46,7 +46,7 @@ const ArmyActionButton = (props) => {
       <Button onMouseEnter={showActionTooltip}
         onMouseLeave={hideActionTooltip}
         onClick={initiateActionHandler}
-        disabled={!props.isOwnTurn}>{props.actionData.name}</Button>
+        disabled={props.tapped}>{props.actionData.name}</Button>
     </React.Fragment>
   );
 };
@@ -75,6 +75,7 @@ ArmyActionButton.propTypes = {
   updateIsMovingArmy: PropTypes.func,
   selectedTilePosition: PropTypes.number,
   isOwnTurn: PropTypes.bool,
+  tapped: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArmyActionButton);

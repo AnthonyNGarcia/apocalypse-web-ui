@@ -91,6 +91,18 @@ const actionCreators = {
       isOwnTurn: isOwnTurn,
     };
   },
+  setAwaitingServerConfirmation: (awaitingServerConfirmation) => {
+    return {
+      type: gameAT.SET_AWAITING_SERVER_CONFIRMATION,
+      awaitingServerConfirmation: awaitingServerConfirmation,
+    };
+  },
+  setQueuedActionCost: (queuedActionCost) => {
+    return {
+      type: gameAT.SET_QUEUED_ACTION_COST,
+      queuedActionCost: queuedActionCost,
+    };
+  },
 };
 
 export default actionCreators;

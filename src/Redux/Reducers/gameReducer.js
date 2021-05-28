@@ -19,10 +19,12 @@ const initialState = {
   supplementalPanelData: {},
   actionBarView: ACTION_BAR_VIEWS.NONE,
   actionBarData: {},
-  actionBarTooltip: '',
+  actionBarTooltip: 'Select an Army or City to get started.',
   isMovingArmy: false,
   selectedTilePosition: -1,
   isOwnTurn: false,
+  awaitingServerConfirmation: false,
+  queuedActionCost: 0, // unused property, may remove later
 };
 
 const setGameView = (state, action) => {
@@ -130,6 +132,20 @@ const setIsOwnTurn = (state, action) => {
   };
 };
 
+const setAwaitingServerConfirmation = (state, action) => {
+  return {
+    ...state,
+    awaitingServerConfirmation: action.awaitingServerConfirmation,
+  };
+};
+
+const setQueuedActionCost = (state, action) => {
+  return {
+    ...state,
+    queuedActionCost: action.queuedActionCost,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case gameAT.SET_GAME_VIEW: return setGameView(state, action);
@@ -147,6 +163,8 @@ const reducer = (state=initialState, action) => {
     case gameAT.SET_ACTION_BAR_TOOLTIP: return setActionBarTooltip(state, action);
     case gameAT.SET_SELECTED_TILE_POSITION: return setSelectedTilePosition(state, action);
     case gameAT.SET_IS_OWN_TURN: return setIsOwnTurn(state, action);
+    case gameAT.SET_AWAITING_SERVER_CONFIRMATION: return setAwaitingServerConfirmation(state, action);
+    case gameAT.SET_QUEUED_ACTION_COST: return setQueuedActionCost(state, action);
     default: return state;
   }
 };

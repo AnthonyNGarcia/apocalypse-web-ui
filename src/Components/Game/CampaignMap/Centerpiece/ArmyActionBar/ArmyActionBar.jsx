@@ -17,6 +17,7 @@ import './ArmyActionBar.css';
  */
 const ArmyActionBar = (props) => {
   const [computedData, setComputedData] = useState();
+  const [armyIsTapped, setArmyIsTapped] = useState(false);
   useEffect(() => {
     if (props.selectedTilePosition >= 0) {
       const tileData = props.gameBoard[props.selectedTilePosition];
@@ -24,6 +25,8 @@ const ArmyActionBar = (props) => {
         tileData.army.owner === PLAYER.ONE) ||
         (props.ownUsername === props.playerTwo.username &&
           tileData.army.owner === PLAYER.TWO))) {
+        setArmyIsTapped(tileData.army.remainingActions <= 0 ||
+            !props.isOwnTurn);
         setComputedData(props.actionBarData);
       } else {
         setComputedData(null);
@@ -31,7 +34,8 @@ const ArmyActionBar = (props) => {
     } else {
       setComputedData(null);
     }
-  }, [props.actionBarData, props.selectedTilePosition, props.gameBoard]);
+  }, [props.actionBarData, props.selectedTilePosition,
+    props.gameBoard, props.isOwnTurn]);
   return (
     <React.Fragment>
       <h5>Army Action Bar</h5>
@@ -40,7 +44,7 @@ const ArmyActionBar = (props) => {
           {computedData && computedData.length > 0 ?
             computedData.map((action, index) => (
               <Col key={action.name + '-' + index}>
-                <ArmyActionButton actionData={action}/>
+                <ArmyActionButton actionData={action} tapped={armyIsTapped}/>
               </Col>
             )) : null}
         </Row>
@@ -59,6 +63,7 @@ const mapStateToProps = (state) => {
     playerOne: state.game.playerOne,
     playerTwo: state.game.playerTwo,
     ownUsername: state.general.ownUsername,
+    isOwnTurn: state.game.isOwnTurn,
   };
 };
 
@@ -70,6 +75,7 @@ ArmyActionBar.propTypes = {
   playerOne: PropTypes.any,
   playerTwo: PropTypes.any,
   ownUsername: PropTypes.string,
+  isOwnTurn: PropTypes.bool,
 };
 
 export default connect(mapStateToProps)(ArmyActionBar);

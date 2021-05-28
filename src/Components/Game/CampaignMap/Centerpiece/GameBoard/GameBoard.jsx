@@ -24,7 +24,18 @@ const GameBoard = (props) => {
   const websocket = useRef(null);
 
   const onReceiveMessage = (message) => {
-    props.updateGameBoard(message.body.gameBoard);
+    if (message.body.gameBoard) {
+      props.updateGameBoard(message.body.gameBoard);
+    }
+    if (message.body.playerEndingTurn) {
+      if (message.body.playerEndingTurn !== props.ownUsername) {
+        props.updateIsOwnTurn(true);
+      } else {
+        props.updateIsOwnTurn(false);
+      }
+    }
+
+    props.updateAwaitingServerConfirmation(false);
   };
 
   useEffect(() => {
@@ -47,10 +58,12 @@ const GameBoard = (props) => {
         props.updateMainPanelData(item.army);
       } else {
         if (props.isMovingArmy &&
-          (item.tileHighlightType === TILE_HIGHLIGHT_TYPES.CAN_MOVE_HERE)) {
+          (item.tileHighlightType === TILE_HIGHLIGHT_TYPES.CAN_MOVE_HERE) &&
+          !props.awaitingServerConfirmation) {
           const gameBoardCopy = await JSON.parse(
               JSON.stringify(await props.gameBoard));
           const armyToMove = gameBoardCopy[props.selectedTilePosition].army;
+          armyToMove.remainingActions = armyToMove.remainingActions - 1;
           gameBoardCopy[item.tilePosition].army = armyToMove;
           gameBoardCopy[props.selectedTilePosition].army = null;
           const cleanedGameBoard = await tileHighlightManager
@@ -60,6 +73,7 @@ const GameBoard = (props) => {
             secondaryPlayerUsername: null,
             gameBoard: cleanedGameBoard,
           };
+          await props.updateAwaitingServerConfirmation(true);
           sendWebsocketMessage(websocket,
               '/socket-game/board/' + props.gameId, message);
         } else {
@@ -147,6 +161,7 @@ const mapStateToProps = (state) => {
     selectedTilePosition: state.game.selectedTilePosition,
     gameId: state.game.gameId,
     ownUsername: state.general.ownUsername,
+    awaitingServerConfirmation: state.game.awaitingServerConfirmation,
   };
 };
 
@@ -168,6 +183,10 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setIsMovingArmy(isMovingArmy)),
     updateGameBoard: (gameBoard) => dispatch(
         gameAC.setGameBoard(gameBoard)),
+    updateAwaitingServerConfirmation: (awaitingServerConfirmation) => dispatch(
+        gameAC.setAwaitingServerConfirmation(awaitingServerConfirmation)),
+    updateIsOwnTurn: (isOwnTurn) => dispatch(
+        gameAC.setIsOwnTurn(isOwnTurn)),
   };
 };
 
@@ -186,6 +205,9 @@ GameBoard.propTypes = {
   updateGameBoard: PropTypes.func,
   gameId: PropTypes.string,
   ownUsername: PropTypes.string,
+  updateAwaitingServerConfirmation: PropTypes.func,
+  awaitingServerConfirmation: PropTypes.bool,
+  updateIsOwnTurn: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);
