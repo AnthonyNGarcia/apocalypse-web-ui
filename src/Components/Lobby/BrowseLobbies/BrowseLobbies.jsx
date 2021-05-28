@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
@@ -20,13 +20,21 @@ import './BrowseLobbies.css';
  */
 const BrowseLobbies = (props) => {
   const [currentLobbies, setCurrentLobbies] = useState([]);
+  const isMounted = useRef(null);
 
   const navigateToInLobby = async (lobbyData) => {
-    console.log(lobbyData);
-    props.savePlayerOneUsername(lobbyData.playerOneUsername);
-    props.savePlayerTwoUsername(lobbyData.playerTwoUsername);
-    props.saveLobbyId(lobbyData.lobbyId);
-    props.updateLobbyViewToInLobby();
+    if (isMounted.current) {
+      await props.savePlayerOneUsername(lobbyData.playerOneUsername);
+    }
+    if (isMounted.current) {
+      await props.savePlayerTwoUsername(lobbyData.playerTwoUsername);
+    }
+    if (isMounted.current) {
+      await props.saveLobbyId(lobbyData.lobbyId);
+    }
+    if (isMounted.current) {
+      props.updateLobbyViewToInLobby();
+    }
   };
 
   const createLobbyHandler = async (e) => {
@@ -35,14 +43,12 @@ const BrowseLobbies = (props) => {
       const createLobbyRequest = {
         creatorUsername: props.ownUsername,
       };
-      console.log(createLobbyRequest);
       const serverResponse = await axios.post(
           apiEndpoints.lobbyController + '/in-memory', createLobbyRequest);
-      console.log(serverResponse);
       await navigateToInLobby(serverResponse.data);
     } catch (error) {
-      console.log('Failed to create a new lobby!');
-      console.log(error);
+      console.warn('Failed to create a new lobby!');
+      console.warn(error);
     }
   };
 
@@ -53,14 +59,12 @@ const BrowseLobbies = (props) => {
         lobbyId: lobbyId,
         playerUsername: props.ownUsername,
       };
-      console.log(joinLobbyRequest);
       const response = await axios.patch(
           apiEndpoints.lobbyController + '/in-memory-join', joinLobbyRequest);
-      console.log(response);
       await navigateToInLobby(response.data);
     } catch (error) {
-      console.log('Failed to join Lobby ' + lobbyId + '!');
-      console.log(error);
+      console.warn('Failed to join Lobby ' + lobbyId + '!');
+      console.warn(error);
     }
   };
 
@@ -68,19 +72,24 @@ const BrowseLobbies = (props) => {
     e.preventDefault();
     const serverResponse = await
     axios.get(apiEndpoints.lobbyController + '/in-memory');
-    setCurrentLobbies(serverResponse.data);
+    if (isMounted.current) {
+      setCurrentLobbies(serverResponse.data);
+    }
   };
 
   useEffect(async () => {
+    isMounted.current = true;
     const fetchCurrentLobbies = async () => {
       const serverResponse = await
       axios.get(apiEndpoints.lobbyController + '/in-memory');
-      console.log(serverResponse);
-      console.log(serverResponse.data);
-      return serverResponse.data;
+      if (isMounted.current) {
+        setCurrentLobbies(serverResponse.data);
+      }
     };
-
-    setCurrentLobbies(await fetchCurrentLobbies());
+    fetchCurrentLobbies();
+    return () => {
+      isMounted.current = false;
+    };
   }, []);
 
   return (
@@ -95,17 +104,18 @@ const BrowseLobbies = (props) => {
               onClick={(e) => refreshLobbiesHandler(e)}>Refresh</Button>
           </Col>
         </Row>
-        {currentLobbies.length > 0 ? currentLobbies.map((lobby) =>
-          <Row key={lobby.lobbyId}>
-            <Col>
-              <p>{lobby.playerOneUsername + '\'s Lobby'}</p>
-            </Col>
-            <Col>
-              <Button variant="primary"
-                onClick={(e) => joinLobbyHandler(e, lobby.lobbyId)}>
+        {currentLobbies && currentLobbies.length > 0 ?
+          currentLobbies.map((lobby) =>
+            <Row key={lobby.lobbyId}>
+              <Col>
+                <p>{lobby.playerOneUsername + '\'s Lobby'}</p>
+              </Col>
+              <Col>
+                <Button variant="primary"
+                  onClick={(e) => joinLobbyHandler(e, lobby.lobbyId)}>
                   Join</Button>
-            </Col>
-          </Row>) : <p>No lobbies available to join. Try creating one!</p>}
+              </Col>
+            </Row>) : <p>No lobbies available to join. Try creating one!</p>}
         <Row>
           <Button variant="primary"
             onClick={createLobbyHandler}>Create Lobby</Button>

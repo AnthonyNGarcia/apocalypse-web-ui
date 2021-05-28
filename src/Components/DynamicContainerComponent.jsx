@@ -25,13 +25,12 @@ const DynamicContainerComponent = (props) => {
       const url = apiEndpoints.userController + '/random';
 
       try {
-        console.log(url);
         const response = await axios.get(url);
-        console.log(response);
         const ownUsername = response.data.randomUsername;
         props.saveOwnUsername(ownUsername);
       } catch (error) {
-        console.log(error);
+        console.warn('Error getting random username from server! Is it down?');
+        console.warn(error);
       }
     };
 

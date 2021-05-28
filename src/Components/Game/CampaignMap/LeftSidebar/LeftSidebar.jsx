@@ -25,13 +25,9 @@ const LeftSidebar = (props) => {
   }, [props.playerOne, props.playerTwo]);
   return (
     <React.Fragment>
-      <h5>Left Sidebar</h5>
       <Container>
         <Row>
           <Button disabled>Researching Javelineers</Button>
-        </Row>
-        <Row>
-          <h5>Faction Stats</h5>
         </Row>
         <Row>
           <h5>You are playing as {ownPlayer ? ownPlayer.faction : null}</h5>

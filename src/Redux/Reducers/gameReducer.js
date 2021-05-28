@@ -4,8 +4,7 @@ import GAME_VIEWS from '../../Components/Utilities/gameViews';
 import defaultHoneycombConfigs from '../../Components/Utilities/honeycombConfigs';
 import MAIN_PANEL_VIEWS from '../../Components/Utilities/gameMainPanelViews';
 import SUPPLEMENTAL_PANEL_VIEWS from '../../Components/Utilities/gameSupplementalPanelViews';
-
-console.log(defaultHoneycombConfigs);
+import ACTION_BAR_VIEWS from '../../Components/Utilities/actionBarViews';
 
 const initialState = {
   gameView: GAME_VIEWS.CAMPAIGN_MAP_VIEW,
@@ -18,6 +17,12 @@ const initialState = {
   mainPanelData: {},
   supplementalPanelView: SUPPLEMENTAL_PANEL_VIEWS.NONE,
   supplementalPanelData: {},
+  actionBarView: ACTION_BAR_VIEWS.NONE,
+  actionBarData: {},
+  actionBarTooltip: '',
+  isMovingArmy: false,
+  selectedTilePosition: -1,
+  isOwnTurn: false,
 };
 
 const setGameView = (state, action) => {
@@ -83,6 +88,48 @@ const setSupplementalPanelData = (state, action) => {
   };
 };
 
+const setActionBarView = (state, action) => {
+  return {
+    ...state,
+    actionBarView: action.view,
+  };
+};
+
+const setActionBarData = (state, action) => {
+  return {
+    ...state,
+    actionBarData: action.data,
+  };
+};
+
+const setIsMovingArmy = (state, action) => {
+  return {
+    ...state,
+    isMovingArmy: action.isMovingArmy,
+  };
+};
+
+const setActionBarTooltip = (state, action) => {
+  return {
+    ...state,
+    actionBarTooltip: action.actionBarTooltip,
+  };
+};
+
+const setSelectedTilePosition = (state, action) => {
+  return {
+    ...state,
+    selectedTilePosition: action.selectedTilePosition,
+  };
+};
+
+const setIsOwnTurn = (state, action) => {
+  return {
+    ...state,
+    isOwnTurn: action.isOwnTurn,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case gameAT.SET_GAME_VIEW: return setGameView(state, action);
@@ -94,6 +141,12 @@ const reducer = (state=initialState, action) => {
     case gameAT.SET_MAIN_PANEL_DATA: return setMainPanelData(state, action);
     case gameAT.SET_SUPPLEMENTAL_PANEL_VIEW: return setSupplementalPanelView(state, action);
     case gameAT.SET_SUPPLEMENTAL_PANEL_DATA: return setSupplementalPanelData(state, action);
+    case gameAT.SET_ACTION_BAR_VIEW: return setActionBarView(state, action);
+    case gameAT.SET_ACTION_BAR_DATA: return setActionBarData(state, action);
+    case gameAT.SET_IS_MOVING_ARMY: return setIsMovingArmy(state, action);
+    case gameAT.SET_ACTION_BAR_TOOLTIP: return setActionBarTooltip(state, action);
+    case gameAT.SET_SELECTED_TILE_POSITION: return setSelectedTilePosition(state, action);
+    case gameAT.SET_IS_OWN_TURN: return setIsOwnTurn(state, action);
     default: return state;
   }
 };

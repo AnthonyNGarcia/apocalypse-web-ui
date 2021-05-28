@@ -55,6 +55,42 @@ const actionCreators = {
       supplementalPanelData: supplementalPanelData,
     };
   },
+  setActionBarView: (view) => {
+    return {
+      type: gameAT.SET_ACTION_BAR_VIEW,
+      view: view,
+    };
+  },
+  setActionBarData: (data) => {
+    return {
+      type: gameAT.SET_ACTION_BAR_DATA,
+      data: data,
+    };
+  },
+  setIsMovingArmy: (isMovingArmy) => {
+    return {
+      type: gameAT.SET_IS_MOVING_ARMY,
+      isMovingArmy: isMovingArmy,
+    };
+  },
+  setActionBarTooltip: (actionBarTooltip) => {
+    return {
+      type: gameAT.SET_ACTION_BAR_TOOLTIP,
+      actionBarTooltip: actionBarTooltip,
+    };
+  },
+  setSelectedTilePosition: (selectedTilePosition) => {
+    return {
+      type: gameAT.SET_SELECTED_TILE_POSITION,
+      selectedTilePosition: selectedTilePosition,
+    };
+  },
+  setIsOwnTurn: (isOwnTurn) => {
+    return {
+      type: gameAT.SET_IS_OWN_TURN,
+      isOwnTurn: isOwnTurn,
+    };
+  },
 };
 
 export default actionCreators;

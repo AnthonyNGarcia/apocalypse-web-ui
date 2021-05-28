@@ -1,6 +1,6 @@
 const honeycombConfigs = {
   columns: 5,
-  size: 64,
+  size: 52,
 };
 
 export default honeycombConfigs;

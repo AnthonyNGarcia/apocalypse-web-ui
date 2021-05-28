@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /**
- * Static text source file, enum-compatible with TERRAIN_TYPES for easy collection.
+ * Static text source file
  */
 const HILL_NAME = 'Hill';
 const HILL_DESC = 'These hilly mountainsides are a useful source of ores and raw materials, boosting the production of adjacent cities. Not only that, but this rugged terrain makes for a great defensive advantage in combat for armies in this tile.';

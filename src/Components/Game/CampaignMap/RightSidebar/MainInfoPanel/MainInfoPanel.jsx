@@ -18,7 +18,6 @@ import './MainInfoPanel.css';
 const MainInfoPanel = (props) => {
   return (
     <React.Fragment>
-      <h6>Main Info Panel</h6>
       {props.mainPanelView === MAIN_PANEL_VIEWS.ARMY_INFO ?
         <ArmyInfoPanel/> :
         props.mainPanelView === MAIN_PANEL_VIEWS.CITY_INFO ?

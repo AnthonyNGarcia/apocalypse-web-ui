@@ -17,17 +17,16 @@ import './CampaignMap.css';
 const CampaignMap = (props) => {
   return (
     <React.Fragment>
-      <h3>Campaign Map Component</h3>
-      <Container>
+      <Container className='campaign-map-container'>
         <Row>
           <Col>
-            <LeftSidebar/>
+            <LeftSidebar className='left-sidebar'/>
           </Col>
           <Col>
-            <Centerpiece/>
+            <Centerpiece className='centerpiece'/>
           </Col>
           <Col>
-            <RightSidebar/>
+            <RightSidebar className='right-sidebar'/>
           </Col>
         </Row>
       </Container>

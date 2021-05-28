@@ -16,7 +16,6 @@ import './Centerpiece.css';
 const Centerpiece = (props) => {
   return (
     <React.Fragment>
-      <h5>Centerpiece Component</h5>
       <Container>
         <Row>
           <GameBoard/>

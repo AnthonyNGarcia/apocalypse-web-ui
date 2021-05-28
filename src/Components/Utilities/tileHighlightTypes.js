@@ -1,0 +1,14 @@
+/**
+ * Enum file.
+ */
+const NONE = 'NONE';
+const CAN_MOVE_HERE = 'CAN_MOVE_HERE';
+const CAN_ATTACK_HERE = 'CAN_ATTACK_HERE';
+
+const TILE_HIGHLIGHT_TYPES = {
+  NONE: NONE,
+  CAN_MOVE_HERE: CAN_MOVE_HERE,
+  CAN_ATTACK_HERE: CAN_ATTACK_HERE,
+};
+
+export default TILE_HIGHLIGHT_TYPES;

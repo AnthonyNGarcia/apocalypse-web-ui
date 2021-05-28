@@ -74,21 +74,16 @@ const Game = (props) => {
     <React.Fragment>
       <AbstractedWebsocket topics={['/game/' + props.gameId]}
         onReceiveMessage={onReceiveMessage} ref={websocket}/>
-      <Container>
+      <Container className='game-sizing'>
         <Row>
           <Col>
-            <h1>Game Component</h1>
+            <h3>Player One: {props.playerOneUsername}</h3>
+          </Col>
+          <Col>
+            <h3>Player Two: {props.playerTwoUsername}</h3>
           </Col>
           <Col className="center-text">
-            <h4>Game ID: {props.gameId}</h4>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <h5>Player One: {props.playerOneUsername}</h5>
-          </Col>
-          <Col>
-            <h5>Player Two: {props.playerTwoUsername}</h5>
+            <h3>Game ID: {props.gameId}</h3>
           </Col>
         </Row>
         <Row>
@@ -110,8 +105,10 @@ const mapStateToProps = (state) => {
     gameView: state.game.gameView,
     gameId: state.game.gameId,
     ownUsername: state.general.ownUsername,
-    playerOneUsername: state.game.playerOne.username,
-    playerTwoUsername: state.game.playerTwo.username,
+    playerOneUsername: state.game.playerOne ?
+      state.game.playerOne.username : 'error',
+    playerTwoUsername: state.game.playerTwo ?
+      state.game.playerTwo.username : 'error',
   };
 };
 

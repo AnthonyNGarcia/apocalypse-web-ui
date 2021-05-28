@@ -1,0 +1,8 @@
+.left-sidebar, .centerpiece, .right-sidebar {
+    display: flex;
+}
+
+.campaign-map-container {
+    height: 70vh;
+    width: 50vw;
+}

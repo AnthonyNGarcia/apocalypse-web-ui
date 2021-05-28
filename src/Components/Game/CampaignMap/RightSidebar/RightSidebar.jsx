@@ -16,7 +16,6 @@ import './RightSidebar.css';
 const RightSidebar = (props) => {
   return (
     <React.Fragment>
-      <h5>Right Sidebar</h5>
       <Container>
         <Row>
           <MainInfoPanel/>

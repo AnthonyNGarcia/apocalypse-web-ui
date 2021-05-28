@@ -11,6 +11,7 @@ import lobbyAC from '../../../Redux/actionCreators/lobbyActionCreators';
 import gameAC from '../../../Redux/actionCreators/gameActionCreators';
 import generalAC from '../../../Redux/actionCreators/generalActionCreators';
 import MAIN_VIEWS from '../../Utilities/mainViews';
+import FACTIONS from '../../Utilities/factions';
 import axios from 'axios';
 import apiEndpoints from '../../Utilities/apiEndpoints';
 import './InLobby.css';
@@ -25,11 +26,30 @@ import './InLobby.css';
 const InLobby = (props) => {
   const websocket = useRef(null);
 
+  const saveFactionGameData = (playerData) => {
+    switch (playerData.faction) {
+      case FACTIONS.HUMANS.NAME:
+        props.saveActionBarData(FACTIONS.HUMANS.ACTION_BAR_DATA);
+        break;
+      case FACTIONS.INSECTS.NAME:
+        props.saveActionBarData(FACTIONS.INSECTS.ACTION_BAR_DATA);
+        break;
+      default:
+        console.warn('Oops! An invalid faction was parsed!');
+    }
+  };
+
   const navigateToInGame = (gameData) => {
-    props.updateGameId(gameData.gameId);
-    props.updateGameBoard(gameData.gameBoard);
+    props.saveGameId(gameData.gameId);
+    props.saveGameBoard(gameData.gameBoard);
     props.savePlayerOne(gameData.playerOne);
     props.savePlayerTwo(gameData.playerTwo);
+    if (gameData.playerOne.username === props.ownUsername) {
+      saveFactionGameData(gameData.playerOne);
+      props.updateIsOwnTurn(true);
+    } else {
+      saveFactionGameData(gameData.playerTwo);
+    }
     props.updateMainViewToGame();
   };
 
@@ -41,7 +61,6 @@ const InLobby = (props) => {
   };
 
   const onReceiveMessage = (message) => {
-    console.log(message);
     const playerOneUsername = message.body.playerOneUsername;
     if (!playerOneUsername) {
       navigateToBrowseLobbies();
@@ -56,8 +75,6 @@ const InLobby = (props) => {
     }
 
     if (message.body.gameId) {
-      console.log('Game starting!');
-      console.log(message.body);
       navigateToInGame(message.body);
     }
   };
@@ -69,12 +86,11 @@ const InLobby = (props) => {
         lobbyId: props.lobbyId,
         playerUsername: props.ownUsername,
       };
-      const serverResponse = await axios.patch(
+      await axios.patch(
           apiEndpoints.lobbyController + '/in-memory-leave', leaveRequest);
-      console.log(serverResponse);
     } catch (e) {
-      console.log('Oops! There was an error trying to leave the lobby!');
-      console.log(e);
+      console.warn('Oops! There was an error trying to leave the lobby!');
+      console.warn(e);
     }
   };
 
@@ -86,12 +102,11 @@ const InLobby = (props) => {
         playerOneUsername: props.playerOneUsername,
         playerTwoUsername: props.playerTwoUsername,
       };
-      const serverResponse = await axios.post(
+      await axios.post(
           apiEndpoints.gameController + '/in-memory', startGameRequest);
-      console.log(serverResponse);
     } catch (e) {
-      console.log('Oops! There was an error trying to create the lobby!');
-      console.log(e);
+      console.warn('Oops! There was an error trying to create the lobby!');
+      console.warn(e);
     }
   };
 
@@ -155,10 +170,14 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setPlayerOne(player)),
     savePlayerTwo: (player) => dispatch(
         gameAC.setPlayerTwo(player)),
-    updateGameId: (gameId) => dispatch(
+    saveGameId: (gameId) => dispatch(
         gameAC.setGameId(gameId)),
-    updateGameBoard: (gameBoard) => dispatch(
+    saveGameBoard: (gameBoard) => dispatch(
         gameAC.setGameBoard(gameBoard)),
+    saveActionBarData: (data) => dispatch(
+        gameAC.setActionBarData(data)),
+    updateIsOwnTurn: (isOwnTurn) => dispatch(
+        gameAC.setIsOwnTurn(isOwnTurn)),
   };
 };
 
@@ -171,11 +190,13 @@ InLobby.propTypes = {
   savePlayerOneUsername: PropTypes.func,
   savePlayerTwoUsername: PropTypes.func,
   saveLobbyId: PropTypes.func,
-  updateGameId: PropTypes.func,
+  saveGameId: PropTypes.func,
   updateMainViewToGame: PropTypes.func,
-  updateGameBoard: PropTypes.func,
+  saveGameBoard: PropTypes.func,
   savePlayerOne: PropTypes.func,
   savePlayerTwo: PropTypes.func,
+  saveActionBarData: PropTypes.func,
+  updateIsOwnTurn: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InLobby);
