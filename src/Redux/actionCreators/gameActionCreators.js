@@ -109,6 +109,12 @@ const actionCreators = {
       ownPlayerNumber: ownPlayerNumber,
     };
   },
+  setViewingArmyInCity: (viewingArmyInCity) => {
+    return {
+      type: gameAT.SET_VIEWING_ARMY_IN_CITY,
+      viewingArmyInCity: viewingArmyInCity,
+    };
+  },
 };
 
 export default actionCreators;

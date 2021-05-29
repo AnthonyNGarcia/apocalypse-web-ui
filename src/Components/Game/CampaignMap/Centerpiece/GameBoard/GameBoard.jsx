@@ -48,12 +48,20 @@ const GameBoard = (props) => {
 
     const tileClicked = async (e, item) => {
       e.preventDefault();
-      if (item.army) {
-        tileHighlightManager.unhighlightAllTiles();
+
+      const updateToCityView = () => {
+        props.updateIsMovingArmy(false);
+        props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
+        props.updateActionBarView(ACTION_BAR_VIEWS.CITY_ACTIONS_VIEW);
+        props.updateMainPanelData(item.city);
+      };
+
+      const updateToArmyView = () => {
         props.updateMainPanelView(MAIN_PANEL_VIEWS.ARMY_INFO);
         props.updateActionBarView(ACTION_BAR_VIEWS.ARMY_ACTIONS_VIEW);
         props.updateMainPanelData(item.army);
-        if (!props.isMovingArmy && item.army.owner === props.ownPlayerNumber &&
+        if (!props.isMovingArmy &&
+            item.army.owner === props.ownPlayerNumber &&
             props.isOwnTurn && item.army.remainingActions > 0) {
           props.updateIsMovingArmy(true);
           props.updateActionBarTooltip(
@@ -62,6 +70,25 @@ const GameBoard = (props) => {
               highlightAvailableMoveTiles(item.tilePosition);
         } else {
           props.updateIsMovingArmy(false);
+        }
+      };
+
+      if (item.city && !item.army) {
+        updateToCityView();
+      } else if (item.army) {
+        tileHighlightManager.unhighlightAllTiles();
+        if (item.tilePosition !== props.selectedTilePosition) {
+          updateToArmyView();
+        } else {
+          if (item.city) {
+            if (props.viewingArmyInCity) {
+              updateToCityView();
+              props.updateViewingArmyInCity(false);
+            } else {
+              updateToArmyView();
+              props.updateViewingArmyInCity(true);
+            }
+          }
         }
       } else {
         if (props.isMovingArmy &&
@@ -99,7 +126,7 @@ const GameBoard = (props) => {
 
     const renderTile = (item) => {
       let army = null;
-      const city = null;
+      let city = null;
       let extraStyling = '';
       if (item.tileIsHighlighted) {
         switch (item.tileHighlightType) {
@@ -124,6 +151,16 @@ const GameBoard = (props) => {
             alt=""
             className={'heximage army-icon' +
               (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
+            onClick={(e) => tileClicked(e, item)}
+          />
+        );
+      }
+      if (item.city) {
+        city = (
+          <img
+            src={'hall.png'}
+            alt=""
+            className={'heximage city-icon'}
             onClick={(e) => tileClicked(e, item)}
           />
         );
@@ -175,6 +212,7 @@ const mapStateToProps = (state) => {
     awaitingServerConfirmation: state.game.awaitingServerConfirmation,
     ownPlayerNumber: state.game.ownPlayerNumber,
     isOwnTurn: state.game.isOwnTurn,
+    viewingArmyInCity: state.game.viewingArmyInCity,
   };
 };
 
@@ -202,6 +240,8 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setPlayerWhoseTurnItIs(playerWhoseTurnItIs)),
     updateActionBarTooltip: (tooltip) => dispatch(
         gameAC.setActionBarTooltip(tooltip)),
+    updateViewingArmyInCity: (viewingArmyInCity) => dispatch(
+        gameAC.setViewingArmyInCity(viewingArmyInCity)),
   };
 };
 
@@ -226,6 +266,8 @@ GameBoard.propTypes = {
   ownPlayerNumber: PropTypes.string,
   isOwnTurn: PropTypes.bool,
   updateActionBarTooltip: PropTypes.func,
+  viewingArmyInCity: PropTypes.bool,
+  updateViewingArmyInCity: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);

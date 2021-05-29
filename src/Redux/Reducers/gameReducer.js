@@ -27,6 +27,7 @@ const initialState = {
   isOwnTurn: false,
   awaitingServerConfirmation: false,
   gameConstants: {},
+  viewingArmyInCity: true,
 };
 
 const setGameView = (state, action) => {
@@ -156,6 +157,13 @@ const setOwnPlayerNumber = (state, action) => {
   };
 };
 
+const setViewingArmyInCity = (state, action) => {
+  return {
+    ...state,
+    viewingArmyInCity: action.viewingArmyInCity,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case gameAT.SET_GAME_VIEW: return setGameView(state, action);
@@ -176,6 +184,7 @@ const reducer = (state=initialState, action) => {
     case gameAT.SET_GAME_CONSTANTS: return setGameConstants(state, action);
     case gameAT.SET_PLAYER_WHOSE_TURN_IT_IS: return setPlayerWhoseTurnItIs(state, action);
     case gameAT.SET_OWN_PLAYER_NUMBER: return setOwnPlayerNumber(state, action);
+    case gameAT.SET_VIEWING_ARMY_IN_CITY: return setViewingArmyInCity(state, action);
     default: return state;
   }
 };

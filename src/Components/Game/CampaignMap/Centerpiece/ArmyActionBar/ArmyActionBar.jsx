@@ -38,7 +38,7 @@ const ArmyActionBar = (props) => {
     props.gameBoard, props.isOwnTurn]);
   return (
     <React.Fragment>
-      <h5>Army Action Bar</h5>
+      <h5>Action Bar</h5>
       <Container>
         <Row>
           {computedData && computedData.length > 0 ?

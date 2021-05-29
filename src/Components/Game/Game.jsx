@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useRef} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import GAME_VIEWS from '../Utilities/gameViews';
@@ -62,13 +62,6 @@ const Game = (props) => {
       navigateToBrowseLobbies();
     }
   };
-
-  useEffect(() => {
-    return () => {
-      props.clearPlayerOne();
-      props.clearPlayerTwo();
-    };
-  }, []);
 
   return (
     <React.Fragment>
