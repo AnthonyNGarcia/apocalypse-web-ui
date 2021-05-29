@@ -6,6 +6,7 @@ import gameAC from '../../../../../Redux/actionCreators/gameActionCreators';
 import axios from 'axios';
 import apiEndpoints from '../../../../Utilities/apiEndpoints';
 import './MainPromptButton.css';
+import PLAYER from '../../../../Utilities/playerEnums';
 
 /**
  *
@@ -20,7 +21,9 @@ const MainPromptButton = (props) => {
     await props.updateAwaitingServerConfirmation(true);
     try {
       const endTurnRequest = {
-        playerEndingTurn: props.ownUsername,
+        playerEndingTurn: props.ownPlayerNumber,
+        playerWhoseTurnItIs: props.ownPlayerNumber === PLAYER.ONE ?
+        PLAYER.TWO : PLAYER.ONE,
       };
       await axios.post(
           apiEndpoints.gameController +
@@ -46,7 +49,7 @@ const mapStateToProps = (state) => {
     isOwnTurn: state.game.isOwnTurn,
     awaitingServerConfirmation: state.game.awaitingServerConfirmation,
     gameId: state.game.gameId,
-    ownUsername: state.general.ownUsername,
+    ownPlayerNumber: state.game.ownPlayerNumber,
   };
 };
 
@@ -61,7 +64,7 @@ MainPromptButton.propTypes = {
   isOwnTurn: PropTypes.bool,
   awaitingServerConfirmation: PropTypes.bool,
   gameId: PropTypes.string,
-  ownUsername: PropTypes.string,
+  ownPlayerNumber: PropTypes.string,
   updateAwaitingServerConfirmation: PropTypes.func,
 };
 

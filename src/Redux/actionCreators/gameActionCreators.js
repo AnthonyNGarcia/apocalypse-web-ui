@@ -85,22 +85,28 @@ const actionCreators = {
       selectedTilePosition: selectedTilePosition,
     };
   },
-  setIsOwnTurn: (isOwnTurn) => {
-    return {
-      type: gameAT.SET_IS_OWN_TURN,
-      isOwnTurn: isOwnTurn,
-    };
-  },
   setAwaitingServerConfirmation: (awaitingServerConfirmation) => {
     return {
       type: gameAT.SET_AWAITING_SERVER_CONFIRMATION,
       awaitingServerConfirmation: awaitingServerConfirmation,
     };
   },
-  setQueuedActionCost: (queuedActionCost) => {
+  setGameConstants: (gameConstants) => {
     return {
-      type: gameAT.SET_QUEUED_ACTION_COST,
-      queuedActionCost: queuedActionCost,
+      type: gameAT.SET_GAME_CONSTANTS,
+      gameConstants: gameConstants,
+    };
+  },
+  setPlayerWhoseTurnItIs: (playerWhoseTurnItIs) => {
+    return {
+      type: gameAT.SET_PLAYER_WHOSE_TURN_IT_IS,
+      playerWhoseTurnItIs: playerWhoseTurnItIs,
+    };
+  },
+  setOwnPlayerNumber: (ownPlayerNumber) => {
+    return {
+      type: gameAT.SET_OWN_PLAYER_NUMBER,
+      ownPlayerNumber: ownPlayerNumber,
     };
   },
 };

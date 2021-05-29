@@ -4,7 +4,7 @@
 ;
 
 const ARMY_ACTION_ENUMS = {
-  MOVE: 'MOVE',
+  CAMP: 'CAMP',
 };
 
 export default ARMY_ACTION_ENUMS;

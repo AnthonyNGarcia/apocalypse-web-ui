@@ -9,6 +9,7 @@ import gameAC from '../../../../../Redux/actionCreators/gameActionCreators';
 import tileHighlightManager from '../../../../Utilities/tileHighlightManager';
 import AbstractedWebsocket from '../../../../Utilities/AbstractedWebsocket';
 import sendWebsocketMessage from '../../../../Utilities/sendWebsocketMessage';
+import ARMY_ACTION_ENUMS from '../../../../Utilities/armyActionEnums';
 import './GameBoard.css';
 
 /**
@@ -28,11 +29,7 @@ const GameBoard = (props) => {
       props.updateGameBoard(message.body.gameBoard);
     }
     if (message.body.playerEndingTurn) {
-      if (message.body.playerEndingTurn !== props.ownUsername) {
-        props.updateIsOwnTurn(true);
-      } else {
-        props.updateIsOwnTurn(false);
-      }
+      props.updatePlayerWhoseTurnItIs(message.body.playerWhoseTurnItIs);
     }
 
     props.updateAwaitingServerConfirmation(false);
@@ -56,14 +53,27 @@ const GameBoard = (props) => {
         props.updateMainPanelView(MAIN_PANEL_VIEWS.ARMY_INFO);
         props.updateActionBarView(ACTION_BAR_VIEWS.ARMY_ACTIONS_VIEW);
         props.updateMainPanelData(item.army);
+        if (!props.isMovingArmy && item.army.owner === props.ownPlayerNumber &&
+            props.isOwnTurn && item.army.remainingActions > 0) {
+          props.updateIsMovingArmy(true);
+          props.updateActionBarTooltip(
+              'Move this army or have it camp in place.');
+          tileHighlightManager.
+              highlightAvailableMoveTiles(item.tilePosition);
+        } else {
+          props.updateIsMovingArmy(false);
+        }
       } else {
         if (props.isMovingArmy &&
           (item.tileHighlightType === TILE_HIGHLIGHT_TYPES.CAN_MOVE_HERE) &&
           !props.awaitingServerConfirmation) {
+          props.updateActionBarTooltip(
+              'Select an Army or City to get started.');
           const gameBoardCopy = await JSON.parse(
               JSON.stringify(await props.gameBoard));
           const armyToMove = gameBoardCopy[props.selectedTilePosition].army;
           armyToMove.remainingActions = armyToMove.remainingActions - 1;
+          armyToMove.armyStance = ARMY_ACTION_ENUMS.NONE;
           gameBoardCopy[item.tilePosition].army = armyToMove;
           gameBoardCopy[props.selectedTilePosition].army = null;
           const cleanedGameBoard = await tileHighlightManager
@@ -82,9 +92,9 @@ const GameBoard = (props) => {
           props.updateActionBarView(ACTION_BAR_VIEWS.NONE);
           props.updateMainPanelData(getTileData(item));
         }
+        props.updateIsMovingArmy(false);
       }
       props.updateSelectedTilePosition(item.tilePosition);
-      props.updateIsMovingArmy(false);
     };
 
     const renderTile = (item) => {
@@ -112,7 +122,8 @@ const GameBoard = (props) => {
           <img
             src={'army.jpg'}
             alt=""
-            className={'heximage army-icon'}
+            className={'heximage army-icon' +
+              (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
             onClick={(e) => tileClicked(e, item)}
           />
         );
@@ -162,6 +173,8 @@ const mapStateToProps = (state) => {
     gameId: state.game.gameId,
     ownUsername: state.general.ownUsername,
     awaitingServerConfirmation: state.game.awaitingServerConfirmation,
+    ownPlayerNumber: state.game.ownPlayerNumber,
+    isOwnTurn: state.game.isOwnTurn,
   };
 };
 
@@ -185,8 +198,10 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setGameBoard(gameBoard)),
     updateAwaitingServerConfirmation: (awaitingServerConfirmation) => dispatch(
         gameAC.setAwaitingServerConfirmation(awaitingServerConfirmation)),
-    updateIsOwnTurn: (isOwnTurn) => dispatch(
-        gameAC.setIsOwnTurn(isOwnTurn)),
+    updatePlayerWhoseTurnItIs: (playerWhoseTurnItIs) => dispatch(
+        gameAC.setPlayerWhoseTurnItIs(playerWhoseTurnItIs)),
+    updateActionBarTooltip: (tooltip) => dispatch(
+        gameAC.setActionBarTooltip(tooltip)),
   };
 };
 
@@ -207,7 +222,10 @@ GameBoard.propTypes = {
   ownUsername: PropTypes.string,
   updateAwaitingServerConfirmation: PropTypes.func,
   awaitingServerConfirmation: PropTypes.bool,
-  updateIsOwnTurn: PropTypes.func,
+  updatePlayerWhoseTurnItIs: PropTypes.func,
+  ownPlayerNumber: PropTypes.string,
+  isOwnTurn: PropTypes.bool,
+  updateActionBarTooltip: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);

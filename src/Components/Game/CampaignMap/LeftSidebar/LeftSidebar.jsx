@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -14,15 +14,6 @@ import './LeftSidebar.css';
  * @return {JSX} to render
  */
 const LeftSidebar = (props) => {
-  const [ownPlayer, setOwnPlayer] = useState(null);
-
-  useEffect(() => {
-    if (props.playerOne.username === props.ownUsername) {
-      setOwnPlayer(props.playerOne);
-    } else {
-      setOwnPlayer(props.playerTwo);
-    }
-  }, [props.playerOne, props.playerTwo]);
   return (
     <React.Fragment>
       <Container>
@@ -30,15 +21,9 @@ const LeftSidebar = (props) => {
           <Button disabled>Researching Javelineers</Button>
         </Row>
         <Row>
-          <h5>You are playing as {ownPlayer ? ownPlayer.faction : null}</h5>
-        </Row>
-        <Row>
-          <p>You can currently support {ownPlayer ?
-            ownPlayer.maxArmies : null} armies.</p>
-        </Row>
-        <Row>
-          <p>You can field armies as large as {ownPlayer ?
-            ownPlayer.maxArmySize: null} units.</p>
+          <h4>Scoreboard</h4>
+          <h5>{props.playerOne.username} - 420</h5>
+          <h5>{props.playerTwo.username} - 69</h5>
         </Row>
       </Container>
     </React.Fragment>
@@ -47,14 +32,12 @@ const LeftSidebar = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    ownUsername: state.general.ownUsername,
     playerOne: state.game.playerOne,
     playerTwo: state.game.playerTwo,
   };
 };
 
 LeftSidebar.propTypes = {
-  ownUsername: PropTypes.string,
   playerOne: PropTypes.any,
   playerTwo: PropTypes.any,
 };

@@ -5,10 +5,10 @@
 import ARMY_ACTION_ENUMS from './armyActionEnums';
 
 const ARMY_ACTIONS = {
-  MOVE: {
-    enum: ARMY_ACTION_ENUMS.MOVE,
-    name: 'Move',
-    tooltip: 'Move the selected army to an adjacent tile.',
+  CAMP: {
+    enum: ARMY_ACTION_ENUMS.CAMP,
+    name: 'Camp',
+    tooltip: 'Spend all remaining movement to fortify and heal in place.',
     actionCost: 1,
   },
 };

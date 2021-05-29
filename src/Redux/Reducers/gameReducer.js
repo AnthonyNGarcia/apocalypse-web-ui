@@ -11,6 +11,8 @@ const initialState = {
   gameId: null,
   playerOne: null,
   playerTwo: null,
+  playerWhoseTurnItIs: null,
+  ownPlayerNumber: null,
   gameBoard: [],
   honeycombConfigs: defaultHoneycombConfigs,
   mainPanelView: MAIN_PANEL_VIEWS.NONE,
@@ -24,7 +26,7 @@ const initialState = {
   selectedTilePosition: -1,
   isOwnTurn: false,
   awaitingServerConfirmation: false,
-  queuedActionCost: 0, // unused property, may remove later
+  gameConstants: {},
 };
 
 const setGameView = (state, action) => {
@@ -125,13 +127,6 @@ const setSelectedTilePosition = (state, action) => {
   };
 };
 
-const setIsOwnTurn = (state, action) => {
-  return {
-    ...state,
-    isOwnTurn: action.isOwnTurn,
-  };
-};
-
 const setAwaitingServerConfirmation = (state, action) => {
   return {
     ...state,
@@ -139,10 +134,25 @@ const setAwaitingServerConfirmation = (state, action) => {
   };
 };
 
-const setQueuedActionCost = (state, action) => {
+const setGameConstants = (state, action) => {
   return {
     ...state,
-    queuedActionCost: action.queuedActionCost,
+    gameConstants: action.gameConstants,
+  };
+};
+
+const setPlayerWhoseTurnItIs = (state, action) => {
+  return {
+    ...state,
+    playerWhoseTurnItIs: action.playerWhoseTurnItIs,
+    isOwnTurn: action.playerWhoseTurnItIs === state.ownPlayerNumber,
+  };
+};
+
+const setOwnPlayerNumber = (state, action) => {
+  return {
+    ...state,
+    ownPlayerNumber: action.ownPlayerNumber,
   };
 };
 
@@ -162,9 +172,10 @@ const reducer = (state=initialState, action) => {
     case gameAT.SET_IS_MOVING_ARMY: return setIsMovingArmy(state, action);
     case gameAT.SET_ACTION_BAR_TOOLTIP: return setActionBarTooltip(state, action);
     case gameAT.SET_SELECTED_TILE_POSITION: return setSelectedTilePosition(state, action);
-    case gameAT.SET_IS_OWN_TURN: return setIsOwnTurn(state, action);
     case gameAT.SET_AWAITING_SERVER_CONFIRMATION: return setAwaitingServerConfirmation(state, action);
-    case gameAT.SET_QUEUED_ACTION_COST: return setQueuedActionCost(state, action);
+    case gameAT.SET_GAME_CONSTANTS: return setGameConstants(state, action);
+    case gameAT.SET_PLAYER_WHOSE_TURN_IT_IS: return setPlayerWhoseTurnItIs(state, action);
+    case gameAT.SET_OWN_PLAYER_NUMBER: return setOwnPlayerNumber(state, action);
     default: return state;
   }
 };

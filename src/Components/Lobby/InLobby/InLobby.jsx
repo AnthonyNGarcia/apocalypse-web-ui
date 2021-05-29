@@ -15,6 +15,7 @@ import FACTIONS from '../../Utilities/factions';
 import axios from 'axios';
 import apiEndpoints from '../../Utilities/apiEndpoints';
 import './InLobby.css';
+import PLAYER from '../../Utilities/playerEnums';
 
 /**
  *
@@ -40,16 +41,22 @@ const InLobby = (props) => {
   };
 
   const navigateToInGame = (gameData) => {
-    props.saveGameId(gameData.gameId);
-    props.saveGameBoard(gameData.gameBoard);
-    props.savePlayerOne(gameData.playerOne);
-    props.savePlayerTwo(gameData.playerTwo);
-    if (gameData.playerOne.username === props.ownUsername) {
-      saveFactionGameData(gameData.playerOne);
-      props.updateIsOwnTurn(true);
+    const initialGameData = gameData.initialGameData;
+    const gameConstants = gameData.gameConstants;
+    props.saveGameId(initialGameData.gameId);
+    props.saveGameBoard(initialGameData.gameBoard);
+    props.savePlayerOne(initialGameData.playerOne);
+    props.savePlayerTwo(initialGameData.playerTwo);
+    if (initialGameData.playerOne.username === props.ownUsername) {
+      saveFactionGameData(initialGameData.playerOne);
+      props.saveOwnPlayerNumber(PLAYER.ONE);
     } else {
-      saveFactionGameData(gameData.playerTwo);
+      saveFactionGameData(initialGameData.playerTwo);
+      props.saveOwnPlayerNumber(PLAYER.TWO);
     }
+    props.updatePlayerWhoseTurnItIs(
+        initialGameData.playerWhoseTurnItIs);
+    props.saveGameConstants(gameConstants);
     props.updateMainViewToGame();
   };
 
@@ -74,7 +81,7 @@ const InLobby = (props) => {
       }
     }
 
-    if (message.body.gameId) {
+    if (message.body.initialGameData) {
       navigateToInGame(message.body);
     }
   };
@@ -176,8 +183,12 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setGameBoard(gameBoard)),
     saveActionBarData: (data) => dispatch(
         gameAC.setActionBarData(data)),
-    updateIsOwnTurn: (isOwnTurn) => dispatch(
-        gameAC.setIsOwnTurn(isOwnTurn)),
+    updatePlayerWhoseTurnItIs: (playerWhoseTurnItIs) => dispatch(
+        gameAC.setPlayerWhoseTurnItIs(playerWhoseTurnItIs)),
+    saveGameConstants: (gameConstants) => dispatch(
+        gameAC.setGameConstants(gameConstants)),
+    saveOwnPlayerNumber: (ownPlayerNumber) => dispatch(
+        gameAC.setOwnPlayerNumber(ownPlayerNumber)),
   };
 };
 
@@ -196,7 +207,9 @@ InLobby.propTypes = {
   savePlayerOne: PropTypes.func,
   savePlayerTwo: PropTypes.func,
   saveActionBarData: PropTypes.func,
-  updateIsOwnTurn: PropTypes.func,
+  updatePlayerWhoseTurnItIs: PropTypes.func,
+  saveGameConstants: PropTypes.func,
+  saveOwnPlayerNumber: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InLobby);
