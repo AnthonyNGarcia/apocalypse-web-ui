@@ -1,29 +1,25 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
+import {Scrollbars} from 'react-custom-scrollbars-2';
 import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
-import gameAC from '../../../../../../Redux/actionCreators/gameActionCreators';
+import FACTIONS from '../../../../../Utilities/factions';
 import PLAYER from '../../../../../Utilities/playerEnums';
-import './CityInfoPanel.css';
+import './CityDetailsSidebar.css';
 
 /**
  *
- * CityInfoPanel JSDocs
+ * CityDetailsSidebar JSDocs
  *
  * @param {Object} props passed from the parent component
  * @return {JSX} to render
  */
-const CityInfoPanel = (props) => {
+const CityDetailsSidebar = (props) => {
+  const [cityHeader, setCityHeader] = useState('');
   const [ownPlayerData, setOwnPlayerData] = useState();
-
-  const showCityMenuHandler = (e) => {
-    e.preventDefault();
-    props.updateShowCityModalInfo(true);
-  };
 
   useEffect(() => {
     if (props.ownPlayerNumber === PLAYER.ONE) {
@@ -33,20 +29,23 @@ const CityInfoPanel = (props) => {
     } else {
       console.log('Oops! Couldn\'t identify own player number/data!');
     }
+    if (props.mainPanelData.faction === FACTIONS.HUMANS.NAME) {
+      setCityHeader('Tier ' + props.mainPanelData.tier + ' Human Settlement');
+    } else if (props.mainPanelData.faction === FACTIONS.INSECTS.NAME) {
+      setCityHeader('Tier ' + props.mainPanelData.tier + ' Insect Hive');
+    } else {
+      console.warn('Oops! Couldn\'t identify this city faction!');
+    }
   }, [props]);
-
   if (ownPlayerData) {
     return (
       <React.Fragment>
         <Container>
-          <Row className='center-text'>
-            <footer>{props.mainPanelData.name}</footer>
+          <Row>
+            <h5>{cityHeader}</h5>
           </Row>
-          <Row className='center-text'>
-          Tier {props.mainPanelData.tier} City
-          </Row>
-          <Row className='center-text'>
-            <Col xs={8}>
+          <Row className='center-text' style={{height: '15vh', width: '20vw'}}>
+            <Col xs={4}>
               <Row>
               Production:
               </Row>
@@ -57,7 +56,7 @@ const CityInfoPanel = (props) => {
               Growth:
               </Row>
             </Col>
-            <Col xs={4}>
+            <Col xs={8}>
               <Row>
                 {(
                   props.mainPanelData.baseProduction +
@@ -97,9 +96,60 @@ const CityInfoPanel = (props) => {
             </Col>
           </Row>
           <Row>
-            {props.ownPlayerNumber === props.mainPanelData.owner ?
-            <Button variant="primary"
-              onClick={showCityMenuHandler}>Show City Menu</Button> : null}
+            <h5>Current Buildings</h5>
+          </Row>
+          <Row>
+            {/* Map completed buildings to generate dynamic, scrollable list */}
+            <Scrollbars style={{height: '20vh', width: '20vw'}}>
+              {props.mainPanelData.completedBuildings &&
+              props.mainPanelData.completedBuildings.length > 0 ?
+              props.mainPanelData.completedBuildings.map((building, index) => (
+                <div key={index} style={{overflow: 'hidden'}}>
+                  <Col xs={2}>
+                    <img
+                      src={'shield.png'}
+                      alt=""
+                      className='icon-image'/>
+                  </Col>
+                  <Col xs={10}>
+                    {props.allBuildings[building.buildingType].displayName}
+                  </Col>
+                </div>
+              )) : (
+                <React.Fragment>
+                  This city has no constructed buildings
+                </React.Fragment>
+              )}
+            </Scrollbars>
+          </Row>
+          <Row>
+            <h5>City Garrison</h5>
+          </Row>
+          <Row>
+            {/* Map garrison units to generate dynamic, scrollable list */}
+            <Scrollbars style={{height: '20vh', width: '20vw'}}>
+              {props.mainPanelData.cityGarrison &&
+              props.mainPanelData.cityGarrison.length > 0 ?
+              props.mainPanelData.cityGarrison.map((unit, index) => (
+                <div key={index} style={{overflow: 'hidden'}}>
+                  <Row>
+                    <Col xs={2}>
+                      <img
+                        src={'shield.png'}
+                        alt=""
+                        className='icon-image'/>
+                    </Col>
+                    <Col xs={10}>
+                      {props.allUnits[unit.unitType].displayName}
+                    </Col>
+                  </Row>
+                </div>
+              )) : (
+                <React.Fragment>
+                  ---
+                </React.Fragment>
+              )}
+            </Scrollbars>
           </Row>
         </Container>
       </React.Fragment>
@@ -121,6 +171,8 @@ const mapStateToProps = (state) => {
     playerOne: state.game.playerOne,
     playerTwo: state.game.playerTwo,
     ownPlayerNumber: state.game.ownPlayerNumber,
+    allBuildings: state.game.gameConstants.allBuildings,
+    allUnits: state.game.gameConstants.allUnits,
   };
 };
 
@@ -131,11 +183,13 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-CityInfoPanel.propTypes = {
+CityDetailsSidebar.propTypes = {
   mainPanelData: PropTypes.any,
   playerOne: PropTypes.any,
   playerTwo: PropTypes.any,
   ownPlayerNumber: PropTypes.string,
+  updateShowCityModalInfo: PropTypes.func,
+  allBuildings: PropTypes.any,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CityInfoPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(CityDetailsSidebar);

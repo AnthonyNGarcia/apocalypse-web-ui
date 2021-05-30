@@ -115,6 +115,18 @@ const actionCreators = {
       viewingArmyInCity: viewingArmyInCity,
     };
   },
+  setShowCityModalInfo: (showCityModalInfo) => {
+    return {
+      type: gameAT.SET_SHOW_CITY_MODAL_INFO,
+      showCityModalInfo: showCityModalInfo,
+    };
+  },
+  setShowResearchModalInfo: (showResearchModalInfo) => {
+    return {
+      type: gameAT.SET_SHOW_RESEARCH_MODAL_INFO,
+      showResearchModalInfo: showResearchModalInfo,
+    };
+  },
 };
 
 export default actionCreators;

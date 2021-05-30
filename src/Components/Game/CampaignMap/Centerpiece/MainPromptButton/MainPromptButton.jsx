@@ -24,6 +24,7 @@ const MainPromptButton = (props) => {
         playerEndingTurn: props.ownPlayerNumber,
         playerWhoseTurnItIs: props.ownPlayerNumber === PLAYER.ONE ?
         PLAYER.TWO : PLAYER.ONE,
+        cityTiles: [],
       };
       await axios.post(
           apiEndpoints.gameController +
@@ -37,9 +38,10 @@ const MainPromptButton = (props) => {
 
   return (
     <React.Fragment>
-      <Button variant="primary" onClick={endTurnHandler}
+      <Button variant='warning' size='lg' onClick={endTurnHandler}
         disabled={!props.isOwnTurn ||
-        props.awaitingServerConfirmation}>End Turn</Button>
+        props.awaitingServerConfirmation}
+        className='center-button'>End Turn</Button>
     </React.Fragment>
   );
 };

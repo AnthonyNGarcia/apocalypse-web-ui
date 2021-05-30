@@ -1,14 +1,14 @@
 import React from 'react';
-import './CityDetailsSidebar.css';
+import './CitySupplementalInfoBox.css';
 
 /**
  *
- * CityDetailsSidebar JSDocs
+ * CitySupplementalInfoBox JSDocs
  *
  * @param {Object} props passed from the parent component
  * @return {JSX} to render
  */
-const CityDetailsSidebar = (props) => {
+const CitySupplementalInfoBox = (props) => {
   return (
     <React.Fragment>
 
@@ -16,4 +16,4 @@ const CityDetailsSidebar = (props) => {
   );
 };
 
-export default CityDetailsSidebar;
+export default CitySupplementalInfoBox;

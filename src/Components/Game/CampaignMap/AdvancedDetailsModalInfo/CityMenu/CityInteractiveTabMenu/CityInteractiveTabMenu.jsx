@@ -1,14 +1,14 @@
 import React from 'react';
-import './CityMenu.css';
+import './CityInteractiveTabMenu.css';
 
 /**
  *
- * CityMenu JSDocs
+ * CityInteractiveTabMenu JSDocs
  *
  * @param {Object} props passed from the parent component
  * @return {JSX} to render
  */
-const CityMenu = (props) => {
+const CityInteractiveTabMenu = (props) => {
   return (
     <React.Fragment>
 
@@ -16,4 +16,4 @@ const CityMenu = (props) => {
   );
 };
 
-export default CityMenu;
+export default CityInteractiveTabMenu;

@@ -28,6 +28,8 @@ const initialState = {
   awaitingServerConfirmation: false,
   gameConstants: {},
   viewingArmyInCity: true,
+  showCityModalInfo: false,
+  showResearchModalInfo: false,
 };
 
 const setGameView = (state, action) => {
@@ -164,6 +166,20 @@ const setViewingArmyInCity = (state, action) => {
   };
 };
 
+const setShowCityModalInfo = (state, action) => {
+  return {
+    ...state,
+    showCityModalInfo: action.showCityModalInfo,
+  };
+};
+
+const setShowResearchModalInfo = (state, action) => {
+  return {
+    ...state,
+    showResearchModalInfo: action.showResearchModalInfo,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case gameAT.SET_GAME_VIEW: return setGameView(state, action);
@@ -185,6 +201,8 @@ const reducer = (state=initialState, action) => {
     case gameAT.SET_PLAYER_WHOSE_TURN_IT_IS: return setPlayerWhoseTurnItIs(state, action);
     case gameAT.SET_OWN_PLAYER_NUMBER: return setOwnPlayerNumber(state, action);
     case gameAT.SET_VIEWING_ARMY_IN_CITY: return setViewingArmyInCity(state, action);
+    case gameAT.SET_SHOW_CITY_MODAL_INFO: return setShowCityModalInfo(state, action);
+    case gameAT.SET_SHOW_RESEARCH_MODAL_INFO: return setShowResearchModalInfo(state, action);
     default: return state;
   }
 };

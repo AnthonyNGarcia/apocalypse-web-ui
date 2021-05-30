@@ -1,7 +1,8 @@
-.center-button {
+.icon-image {
   display: block;
   margin-left: auto;
   margin-right: auto;
   position: absolute;
-  width:100%;
+  width:50%;
+  height:100%;
 }
