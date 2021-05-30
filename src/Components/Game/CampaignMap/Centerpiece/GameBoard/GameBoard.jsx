@@ -74,17 +74,13 @@ const GameBoard = (props) => {
       };
 
       if (item.city && !item.army && !props.isMovingArmy) {
-        console.log('selected a tile with a city but no army');
         updateToCityView();
       } else if (item.army) {
-        console.log('selected a tile with an army');
         tileHighlightManager.unhighlightAllTiles();
         if (item.tilePosition !== props.selectedTilePosition) {
-          console.log('just selected a different tile than previously');
           updateToArmyView();
           props.updateViewingArmyInCity(true);
         } else {
-          console.log('just selected the same tile again');
           if (item.city) {
             if (props.viewingArmyInCity) {
               updateToCityView();
@@ -94,7 +90,6 @@ const GameBoard = (props) => {
               props.updateViewingArmyInCity(true);
             }
           } else {
-            console.log('the selected tile has no city');
             updateToArmyView();
             props.updateViewingArmyInCity(true);
           }
