@@ -5,9 +5,8 @@ import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Spinner from 'react-bootstrap/Spinner';
 import FACTIONS from '../../../../../Utilities/factions';
-import PLAYER from '../../../../../Utilities/playerEnums';
+import Spinner from 'react-bootstrap/esm/Spinner';
 import './CityDetailsSidebar.css';
 
 /**
@@ -19,25 +18,20 @@ import './CityDetailsSidebar.css';
  */
 const CityDetailsSidebar = (props) => {
   const [cityHeader, setCityHeader] = useState('');
-  const [ownPlayerData, setOwnPlayerData] = useState();
 
   useEffect(() => {
-    if (props.ownPlayerNumber === PLAYER.ONE) {
-      setOwnPlayerData(props.playerOne);
-    } else if (props.ownPlayerNumber === PLAYER.TWO) {
-      setOwnPlayerData(props.playerTwo);
-    } else {
-      console.log('Oops! Couldn\'t identify own player number/data!');
-    }
-    if (props.mainPanelData.faction === FACTIONS.HUMANS.NAME) {
-      setCityHeader('Tier ' + props.mainPanelData.tier + ' Human Settlement');
-    } else if (props.mainPanelData.faction === FACTIONS.INSECTS.NAME) {
-      setCityHeader('Tier ' + props.mainPanelData.tier + ' Insect Hive');
-    } else {
-      console.warn('Oops! Couldn\'t identify this city faction!');
+    if (props.city) {
+      if (props.city.faction === FACTIONS.HUMANS.NAME) {
+        setCityHeader('Tier ' + props.city.tier + ' Human Settlement');
+      } else if (props.city.faction === FACTIONS.INSECTS.NAME) {
+        setCityHeader('Tier ' + props.city.tier + ' Insect Hive');
+      } else {
+        console.warn('Oops! Couldn\'t identify this city faction!');
+      }
     }
   }, [props]);
-  if (ownPlayerData) {
+
+  if (props.city) {
     return (
       <React.Fragment>
         <Container>
@@ -45,7 +39,7 @@ const CityDetailsSidebar = (props) => {
             <h5>{cityHeader}</h5>
           </Row>
           <Row className='center-text' style={{height: '15vh', width: '20vw'}}>
-            <Col xs={4}>
+            <Col md={6}>
               <Row>
               Production:
               </Row>
@@ -56,42 +50,16 @@ const CityDetailsSidebar = (props) => {
               Growth:
               </Row>
             </Col>
-            <Col xs={8}>
+            <Col md={6}>
               <Row>
-                {(
-                  props.mainPanelData.baseProduction +
-                ownPlayerData.flatGlobalProductionBonus
-                ) *
-              (
-                (
-                  100 + props.mainPanelData.percentProductionBonus +
-                  ownPlayerData.percentGlobalProductionBonus
-                ) / 100
-              )}
+                {props.finalProduction}
               </Row>
               <Row>
-                {(
-                  props.mainPanelData.baseResearch +
-                ownPlayerData.flatGlobalResearchBonus
-                ) *
-              (
-                (
-                  100 + props.mainPanelData.percentResearchBonus +
-                  ownPlayerData.percentGlobalResearchBonus
-                ) / 100
-              )}
+                {props.finalResearch}
               </Row>
               <Row>
-                {props.mainPanelData.currentGrowthStockpile}/200 (+{(
-                  props.mainPanelData.baseGrowth +
-                ownPlayerData.flatGlobalGrowthBonus
-                ) *
-              (
-                (
-                  100 + props.mainPanelData.percentGrowthBonus +
-                  ownPlayerData.percentGlobalGrowthBonus
-                ) / 100
-              )})
+                {props.city.currentGrowthStockpile}/200 (+
+                {props.finalGrowth})
               </Row>
             </Col>
           </Row>
@@ -101,19 +69,21 @@ const CityDetailsSidebar = (props) => {
           <Row>
             {/* Map completed buildings to generate dynamic, scrollable list */}
             <Scrollbars style={{height: '20vh', width: '20vw'}}>
-              {props.mainPanelData.completedBuildings &&
-              props.mainPanelData.completedBuildings.length > 0 ?
-              props.mainPanelData.completedBuildings.map((building, index) => (
+              {props.city.completedBuildings &&
+              props.city.completedBuildings.length > 0 ?
+              props.city.completedBuildings.map((building, index) => (
                 <div key={index} style={{overflow: 'hidden'}}>
-                  <Col xs={2}>
-                    <img
-                      src={'shield.png'}
-                      alt=""
-                      className='icon-image'/>
-                  </Col>
-                  <Col xs={10}>
-                    {props.allBuildings[building.buildingType].displayName}
-                  </Col>
+                  <Row>
+                    <Col xs={2}>
+                      <img
+                        src={'tower.png'}
+                        alt=""
+                        className='icon-image'/>
+                    </Col>
+                    <Col xs={10}>
+                      {props.allBuildings[building.buildingType].displayName}
+                    </Col>
+                  </Row>
                 </div>
               )) : (
                 <React.Fragment>
@@ -128,9 +98,9 @@ const CityDetailsSidebar = (props) => {
           <Row>
             {/* Map garrison units to generate dynamic, scrollable list */}
             <Scrollbars style={{height: '20vh', width: '20vw'}}>
-              {props.mainPanelData.cityGarrison &&
-              props.mainPanelData.cityGarrison.length > 0 ?
-              props.mainPanelData.cityGarrison.map((unit, index) => (
+              {props.city.cityGarrison &&
+              props.city.cityGarrison.length > 0 ?
+              props.city.cityGarrison.map((unit, index) => (
                 <div key={index} style={{overflow: 'hidden'}}>
                   <Row>
                     <Col xs={2}>
@@ -167,29 +137,18 @@ const CityDetailsSidebar = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    mainPanelData: state.game.mainPanelData,
-    playerOne: state.game.playerOne,
-    playerTwo: state.game.playerTwo,
-    ownPlayerNumber: state.game.ownPlayerNumber,
     allBuildings: state.game.gameConstants.allBuildings,
     allUnits: state.game.gameConstants.allUnits,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateShowCityModalInfo: (showCityModalInfo) => dispatch(
-        gameAC.setShowCityModalInfo(showCityModalInfo)),
-  };
-};
-
 CityDetailsSidebar.propTypes = {
-  mainPanelData: PropTypes.any,
-  playerOne: PropTypes.any,
-  playerTwo: PropTypes.any,
-  ownPlayerNumber: PropTypes.string,
-  updateShowCityModalInfo: PropTypes.func,
   allBuildings: PropTypes.any,
+  allUnits: PropTypes.any,
+  finalProduction: PropTypes.number,
+  finalGrowth: PropTypes.number,
+  finalResearch: PropTypes.number,
+  city: PropTypes.any,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CityDetailsSidebar);
+export default connect(mapStateToProps)(CityDetailsSidebar);

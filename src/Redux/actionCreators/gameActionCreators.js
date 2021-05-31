@@ -1,4 +1,5 @@
 import gameAT from '../actionTypes/gameActionTypes';
+import {store} from '../../App';
 
 const actionCreators = {
   setGameView: (gameView) => {
@@ -125,6 +126,22 @@ const actionCreators = {
     return {
       type: gameAT.SET_SHOW_RESEARCH_MODAL_INFO,
       showResearchModalInfo: showResearchModalInfo,
+    };
+  },
+  setCityShowingProductionTab: (cityShowingProductionTab) => {
+    return {
+      type: gameAT.SET_CITY_SHOWING_PRODUCTION_TAB,
+      cityShowingProductionTab: cityShowingProductionTab,
+    };
+  },
+  setCurrentCityConstructionProject: (constructionProject) => {
+    const state = store.getState();
+    const newGameBoard = [...state.game.gameBoard];
+    newGameBoard[state.game.selectedTilePosition]
+        .city.currentConstructionProject = constructionProject;
+    return {
+      type: gameAT.SET_GAME_BOARD,
+      gameBoard: newGameBoard,
     };
   },
 };

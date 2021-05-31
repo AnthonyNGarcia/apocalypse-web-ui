@@ -4,5 +4,12 @@
 
 .campaign-map-container {
     height: 70vh;
-    width: 50vw;
+    width: 80vw;
+}
+
+.modal-dialog-custom-sizing {
+    position: absolute;
+    width: 80vw;
+    min-width: 80vw;
+    max-width: 80vw;
 }

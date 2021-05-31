@@ -30,6 +30,7 @@ const initialState = {
   viewingArmyInCity: true,
   showCityModalInfo: false,
   showResearchModalInfo: false,
+  cityShowingProductionTab: true,
 };
 
 const setGameView = (state, action) => {
@@ -180,6 +181,13 @@ const setShowResearchModalInfo = (state, action) => {
   };
 };
 
+const setCityShowingProductionTab = (state, action) => {
+  return {
+    ...state,
+    cityShowingProductionTab: action.cityShowingProductionTab,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case gameAT.SET_GAME_VIEW: return setGameView(state, action);
@@ -203,6 +211,7 @@ const reducer = (state=initialState, action) => {
     case gameAT.SET_VIEWING_ARMY_IN_CITY: return setViewingArmyInCity(state, action);
     case gameAT.SET_SHOW_CITY_MODAL_INFO: return setShowCityModalInfo(state, action);
     case gameAT.SET_SHOW_RESEARCH_MODAL_INFO: return setShowResearchModalInfo(state, action);
+    case gameAT.SET_CITY_SHOWING_PRODUCTION_TAB: return setCityShowingProductionTab(state, action);
     default: return state;
   }
 };

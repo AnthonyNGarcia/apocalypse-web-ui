@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import LeftSidebar from './LeftSidebar/LeftSidebar';
@@ -29,10 +28,11 @@ const CampaignMap = (props) => {
   return (
     <React.Fragment>
       <Modal show={props.showCityModalInfo || props.showResearchModalInfo}
-        onHide={closeAdvancedDetailsModal} size="xl">
+        onHide={closeAdvancedDetailsModal} size="xl"
+        dialogClassName='modal-dialog-custom-sizing'>
         <AdvancedDetailsModalInfo/>
       </Modal>
-      <Container className='campaign-map-container'>
+      <div className='campaign-map-container'>
         <Row>
           <Col>
             <LeftSidebar className='left-sidebar'/>
@@ -44,7 +44,7 @@ const CampaignMap = (props) => {
             <RightSidebar className='right-sidebar'/>
           </Col>
         </Row>
-      </Container>
+      </div>
     </React.Fragment>
   );
 };

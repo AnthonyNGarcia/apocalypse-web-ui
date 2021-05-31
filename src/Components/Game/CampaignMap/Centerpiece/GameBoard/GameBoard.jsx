@@ -8,8 +8,12 @@ import TILE_HIGHLIGHT_TYPES from '../../../../Utilities/tileHighlightTypes';
 import gameAC from '../../../../../Redux/actionCreators/gameActionCreators';
 import tileHighlightManager from '../../../../Utilities/tileHighlightManager';
 import AbstractedWebsocket from '../../../../Utilities/AbstractedWebsocket';
-import sendWebsocketMessage from '../../../../Utilities/sendWebsocketMessage';
-import ARMY_ACTION_ENUMS from '../../../../Utilities/armyActionEnums';
+import ARMY_ACTION_REQUEST_TYPE from
+  '../../../../Utilities/armyActionRequestTypes';
+import WEBSOCKET_MESSAGE_TYPES from
+  '../../../../Utilities/websocketMessageTypes';
+import axios from 'axios';
+import apiEndpoints from '../../../../Utilities/apiEndpoints';
 import './GameBoard.css';
 
 /**
@@ -24,15 +28,55 @@ const GameBoard = (props) => {
   const [fullHoneycombConfigs, setFullHoneycombConfigs] = useState(null);
   const websocket = useRef(null);
 
-  const onReceiveMessage = (message) => {
+  const resetPlayerView = () => {
+    props.unshowCityModal();
+    props.updateMainPanelView(MAIN_PANEL_VIEWS.NONE);
+    props.updateMainPanelData(null);
+  };
+
+  const logUnexpectedWebsocketMessage = (message) => {
+    console.warn('Client received an unexpected websocket message.');
+    console.warn('---Unexpected message start---');
+    console.warn(message);
+    console.warn('---Unexpected message end---');
+  };
+
+  const onReceiveMessage = async (message) => {
+    props.updateAwaitingServerConfirmation(false);
+    // No matter what, if the server gives us a game board,
+    // we must accept it immediately, without modifications.
     if (message.body.gameBoard) {
       props.updateGameBoard(message.body.gameBoard);
+      console.log('Received websocket message to replace the entire board!');
     }
-    if (message.body.playerEndingTurn) {
-      props.updatePlayerWhoseTurnItIs(message.body.playerWhoseTurnItIs);
+    // Let's identify what kind of message this is, to handle it properly
+    if (message.body.messageType) {
+      switch (message.body.messageType) {
+        case WEBSOCKET_MESSAGE_TYPES.PLAYER_ENDED_TURN:
+          resetPlayerView();
+          props.updatePlayerWhoseTurnItIs(message.body.playerWhoseTurnItIs);
+          break;
+        case WEBSOCKET_MESSAGE_TYPES.ARMY_MOVED_UNCONTESTED:
+          const gameBoardWithArmyMoved = await JSON.parse(
+              JSON.stringify(props.gameBoard));
+          gameBoardWithArmyMoved[message.body.endingTilePosition].army =
+            message.body.army;
+          gameBoardWithArmyMoved[message.body.startingTilePosition].army = null;
+          props.updateGameBoard(gameBoardWithArmyMoved);
+          break;
+        case WEBSOCKET_MESSAGE_TYPES.ARMY_STANCE_CHANGED:
+          const gameBoardWithArmyStanceChanged = await JSON.parse(
+              JSON.stringify(props.gameBoard));
+          gameBoardWithArmyStanceChanged[message.body.tilePosition].army =
+            message.body.army;
+          props.updateGameBoard(gameBoardWithArmyStanceChanged);
+          break;
+        default:
+          logUnexpectedWebsocketMessage(message);
+      }
+    } else {
+      logUnexpectedWebsocketMessage(message);
     }
-
-    props.updateAwaitingServerConfirmation(false);
   };
 
   useEffect(() => {
@@ -100,23 +144,15 @@ const GameBoard = (props) => {
           !props.awaitingServerConfirmation) {
           props.updateActionBarTooltip(
               'Select an Army or City to get started.');
-          const gameBoardCopy = await JSON.parse(
-              JSON.stringify(await props.gameBoard));
-          const armyToMove = gameBoardCopy[props.selectedTilePosition].army;
-          armyToMove.remainingActions = armyToMove.remainingActions - 1;
-          armyToMove.armyStance = ARMY_ACTION_ENUMS.NONE;
-          gameBoardCopy[item.tilePosition].army = armyToMove;
-          gameBoardCopy[props.selectedTilePosition].army = null;
-          const cleanedGameBoard = await tileHighlightManager
-              .unhighlightAllTiles(gameBoardCopy);
-          const message = {
-            primaryPlayerUsername: props.ownUsername,
-            secondaryPlayerUsername: null,
-            gameBoard: cleanedGameBoard,
+          tileHighlightManager.unhighlightAllTiles();
+          const request = {
+            primaryArmyAction: ARMY_ACTION_REQUEST_TYPE.MOVE,
+            primaryArmyInitialTile: props.gameBoard[props.selectedTilePosition],
+            primaryArmyDesiredTile: item,
           };
           await props.updateAwaitingServerConfirmation(true);
-          sendWebsocketMessage(websocket,
-              '/socket-game/board/' + props.gameId, message);
+          axios.post(apiEndpoints.gameController + '/in-memory-army-action/' +
+        props.gameId, request);
         } else {
           tileHighlightManager.unhighlightAllTiles();
           props.updateMainPanelView(MAIN_PANEL_VIEWS.TILE_INFO);
@@ -246,6 +282,8 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setActionBarTooltip(tooltip)),
     updateViewingArmyInCity: (viewingArmyInCity) => dispatch(
         gameAC.setViewingArmyInCity(viewingArmyInCity)),
+    unshowCityModal: () => dispatch(
+        gameAC.setShowCityModalInfo(false)),
   };
 };
 
@@ -272,6 +310,7 @@ GameBoard.propTypes = {
   updateActionBarTooltip: PropTypes.func,
   viewingArmyInCity: PropTypes.bool,
   updateViewingArmyInCity: PropTypes.func,
+  unshowCityModal: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);

@@ -1,14 +1,14 @@
 import React from 'react';
-import './AvailableBuildingItem.css';
+import './ArmyTab.css';
 
 /**
  *
- * AvailableBuildingItem JSDocs
+ * ArmyTab JSDocs
  *
  * @param {Object} props passed from the parent component
  * @return {JSX} to render
  */
-const AvailableBuildingItem = (props) => {
+const ArmyTab = (props) => {
   return (
     <React.Fragment>
 
@@ -16,4 +16,4 @@ const AvailableBuildingItem = (props) => {
   );
 };
 
-export default AvailableBuildingItem;
+export default ArmyTab;

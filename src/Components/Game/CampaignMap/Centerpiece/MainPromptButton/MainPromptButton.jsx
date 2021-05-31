@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import gameAC from '../../../../../Redux/actionCreators/gameActionCreators';
 import axios from 'axios';
 import apiEndpoints from '../../../../Utilities/apiEndpoints';
-import './MainPromptButton.css';
 import PLAYER from '../../../../Utilities/playerEnums';
+import './MainPromptButton.css';
 
 /**
  *
@@ -19,12 +19,14 @@ const MainPromptButton = (props) => {
   const endTurnHandler = async (e) => {
     e.preventDefault();
     await props.updateAwaitingServerConfirmation(true);
+    const ownCityTiles = props.gameBoard.filter((tile) =>
+      tile.city && (tile.city.owner === props.ownPlayerNumber));
     try {
       const endTurnRequest = {
         playerEndingTurn: props.ownPlayerNumber,
         playerWhoseTurnItIs: props.ownPlayerNumber === PLAYER.ONE ?
         PLAYER.TWO : PLAYER.ONE,
-        cityTiles: [],
+        cityTiles: ownCityTiles,
       };
       await axios.post(
           apiEndpoints.gameController +
@@ -39,8 +41,7 @@ const MainPromptButton = (props) => {
   return (
     <React.Fragment>
       <Button variant='warning' size='lg' onClick={endTurnHandler}
-        disabled={!props.isOwnTurn ||
-        props.awaitingServerConfirmation}
+        disabled={!props.isOwnTurn}
         className='center-button'>End Turn</Button>
     </React.Fragment>
   );
@@ -52,6 +53,7 @@ const mapStateToProps = (state) => {
     awaitingServerConfirmation: state.game.awaitingServerConfirmation,
     gameId: state.game.gameId,
     ownPlayerNumber: state.game.ownPlayerNumber,
+    gameBoard: state.game.gameBoard,
   };
 };
 
@@ -68,6 +70,7 @@ MainPromptButton.propTypes = {
   gameId: PropTypes.string,
   ownPlayerNumber: PropTypes.string,
   updateAwaitingServerConfirmation: PropTypes.func,
+  gameBoard: PropTypes.any,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPromptButton);

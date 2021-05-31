@@ -1,14 +1,13 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import gameAC from '../../../../../../Redux/actionCreators/gameActionCreators';
-import ARMY_ACTION_ENUMS from '../../../../../Utilities/armyActionEnums';
+import ARMY_ACTION_ENUMS from '../../../../../Utilities/armyActionRequestTypes';
 import tileHighlightManager from
   '../../../../../Utilities/tileHighlightManager';
-import sendWebsocketMessage from
-  '../../../../../Utilities/sendWebsocketMessage';
-import AbstractedWebsocket from '../../../../../Utilities/AbstractedWebsocket';
+import axios from 'axios';
+import apiEndpoints from '../../../../../Utilities/apiEndpoints';
 import './ArmyActionButton.css';
 
 /**
@@ -19,8 +18,6 @@ import './ArmyActionButton.css';
  * @return {JSX} to render
  */
 const ArmyActionButton = (props) => {
-  const websocket = useRef(null);
-
   const showActionTooltip = () => {
     props.updateActionBarTooltip(props.actionData.tooltip);
   };
@@ -32,22 +29,15 @@ const ArmyActionButton = (props) => {
   const initiateActionHandler = async () => {
     switch (props.actionData.enum) {
       case ARMY_ACTION_ENUMS.CAMP:
-        const gameBoardCopy = await JSON.parse(
-            JSON.stringify(await props.gameBoard));
-        const selectedArmy = gameBoardCopy[props.selectedTilePosition].army;
-        selectedArmy.remainingActions = 0;
-        selectedArmy.armyStance = ARMY_ACTION_ENUMS.CAMP;
-        const cleanedGameBoard = await tileHighlightManager
-            .unhighlightAllTiles(gameBoardCopy);
-        const message = {
-          primaryPlayerUsername: props.ownUsername,
-          secondaryPlayerUsername: null,
-          gameBoard: cleanedGameBoard,
-        };
+        tileHighlightManager.unhighlightAllTiles();
         hideActionTooltip();
+        const request = {
+          primaryArmyAction: 'CAMP',
+          primaryArmyInitialTile: props.gameBoard[props.selectedTilePosition],
+        };
         await props.updateAwaitingServerConfirmation(true);
-        sendWebsocketMessage(websocket,
-            '/socket-game/board/' + props.gameId, message);
+        axios.post(apiEndpoints.gameController + '/in-memory-army-action/' +
+        props.gameId, request);
         break;
       default:
         console.log('Oops! An Invalid army action was evaluated.');
@@ -56,8 +46,6 @@ const ArmyActionButton = (props) => {
 
   return (
     <React.Fragment>
-      <AbstractedWebsocket topics={[]}
-        onReceiveMessage={() =>{}} ref={websocket}/>
       <Button onMouseEnter={showActionTooltip}
         onMouseLeave={hideActionTooltip}
         onClick={initiateActionHandler}
