@@ -11,7 +11,7 @@ import './SelectedUnitDetails.css';
 const SelectedUnitDetails = (props) => {
   return (
     <React.Fragment>
-
+      Selected Unit Details - not yet implemented!
     </React.Fragment>
   );
 };

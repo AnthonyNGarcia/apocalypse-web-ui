@@ -15,6 +15,8 @@ import WEBSOCKET_MESSAGE_TYPES from
 import axios from 'axios';
 import apiEndpoints from '../../../../Utilities/apiEndpoints';
 import './GameBoard.css';
+import CITY_MENU_SUPPLEMENTAL_VIEWS from
+  '../../../../Utilities/cityMenuSupplementalViews';
 
 /**
  *
@@ -31,7 +33,9 @@ const GameBoard = (props) => {
   const resetPlayerView = () => {
     props.unshowCityModal();
     props.updateMainPanelView(MAIN_PANEL_VIEWS.NONE);
-    props.updateMainPanelData(null);
+    props.updateMainPanelData({});
+    props.updateCityMenuSupplementalData({});
+    props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.NONE);
   };
 
   const logUnexpectedWebsocketMessage = (message) => {
@@ -284,6 +288,10 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setViewingArmyInCity(viewingArmyInCity)),
     unshowCityModal: () => dispatch(
         gameAC.setShowCityModalInfo(false)),
+    updateCityMenuSupplementalView: (view) => dispatch(
+        gameAC.setCityMenuSupplementalView(view)),
+    updateCityMenuSupplementalData: (data) => dispatch(
+        gameAC.setCityMenuSupplementalData(data)),
   };
 };
 
@@ -311,6 +319,8 @@ GameBoard.propTypes = {
   viewingArmyInCity: PropTypes.bool,
   updateViewingArmyInCity: PropTypes.func,
   unshowCityModal: PropTypes.func,
+  updateCityMenuSupplementalView: PropTypes.func,
+  updateCityMenuSupplementalData: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);

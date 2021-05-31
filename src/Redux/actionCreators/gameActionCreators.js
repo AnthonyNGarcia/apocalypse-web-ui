@@ -144,6 +144,18 @@ const actionCreators = {
       gameBoard: newGameBoard,
     };
   },
+  setCityMenuSupplementalView: (cityMenuSupplementalView) => {
+    return {
+      type: gameAT.SET_CITY_MENU_SUPPLEMENTAL_VIEW,
+      cityMenuSupplementalView: cityMenuSupplementalView,
+    };
+  },
+  setCityMenuSupplementalData: (cityMenuSupplementalData) => {
+    return {
+      type: gameAT.SET_CITY_MENU_SUPPLEMENTAL_DATA,
+      cityMenuSupplementalData: cityMenuSupplementalData,
+    };
+  },
 };
 
 export default actionCreators;

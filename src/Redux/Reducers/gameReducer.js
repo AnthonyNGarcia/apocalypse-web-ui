@@ -5,6 +5,7 @@ import defaultHoneycombConfigs from '../../Components/Utilities/honeycombConfigs
 import MAIN_PANEL_VIEWS from '../../Components/Utilities/gameMainPanelViews';
 import SUPPLEMENTAL_PANEL_VIEWS from '../../Components/Utilities/gameSupplementalPanelViews';
 import ACTION_BAR_VIEWS from '../../Components/Utilities/actionBarViews';
+import CITY_MENU_SUPPLEMENTAL_VIEWS from '../../Components/Utilities/cityMenuSupplementalViews';
 
 const initialState = {
   gameView: GAME_VIEWS.CAMPAIGN_MAP_VIEW,
@@ -31,6 +32,8 @@ const initialState = {
   showCityModalInfo: false,
   showResearchModalInfo: false,
   cityShowingProductionTab: true,
+  cityMenuSupplementalView: CITY_MENU_SUPPLEMENTAL_VIEWS.NONE,
+  cityMenuSupplementalData: {},
 };
 
 const setGameView = (state, action) => {
@@ -188,6 +191,20 @@ const setCityShowingProductionTab = (state, action) => {
   };
 };
 
+const setCityMenuSupplementalView = (state, action) => {
+  return {
+    ...state,
+    cityMenuSupplementalView: action.cityMenuSupplementalView,
+  };
+};
+
+const setCityMenuSupplementalData = (state, action) => {
+  return {
+    ...state,
+    cityMenuSupplementalData: action.cityMenuSupplementalData,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case gameAT.SET_GAME_VIEW: return setGameView(state, action);
@@ -212,6 +229,8 @@ const reducer = (state=initialState, action) => {
     case gameAT.SET_SHOW_CITY_MODAL_INFO: return setShowCityModalInfo(state, action);
     case gameAT.SET_SHOW_RESEARCH_MODAL_INFO: return setShowResearchModalInfo(state, action);
     case gameAT.SET_CITY_SHOWING_PRODUCTION_TAB: return setCityShowingProductionTab(state, action);
+    case gameAT.SET_CITY_MENU_SUPPLEMENTAL_VIEW: return setCityMenuSupplementalView(state, action);
+    case gameAT.SET_CITY_MENU_SUPPLEMENTAL_DATA: return setCityMenuSupplementalData(state, action);
     default: return state;
   }
 };

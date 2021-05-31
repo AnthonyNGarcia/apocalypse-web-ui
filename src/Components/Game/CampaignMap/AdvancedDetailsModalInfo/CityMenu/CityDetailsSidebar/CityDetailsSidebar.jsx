@@ -7,7 +7,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import FACTIONS from '../../../../../Utilities/factions';
 import Spinner from 'react-bootstrap/esm/Spinner';
+import gameAC from '../../../../../../Redux/actionCreators/gameActionCreators';
 import './CityDetailsSidebar.css';
+import CITY_MENU_SUPPLEMENTAL_VIEWS from
+  '../../../../../Utilities/cityMenuSupplementalViews';
 
 /**
  *
@@ -18,6 +21,12 @@ import './CityDetailsSidebar.css';
  */
 const CityDetailsSidebar = (props) => {
   const [cityHeader, setCityHeader] = useState('');
+
+  const viewBuildingHandler = (e, building) => {
+    e.preventDefault();
+    props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.BUILDING);
+    props.updateCityMenuSupplementalData(building);
+  };
 
   useEffect(() => {
     if (props.city) {
@@ -73,7 +82,8 @@ const CityDetailsSidebar = (props) => {
               props.city.completedBuildings.length > 0 ?
               props.city.completedBuildings.map((building, index) => (
                 <div key={index} style={{overflow: 'hidden'}}>
-                  <Row>
+                  <Row onClick={(e) =>
+                    viewBuildingHandler(e, building)}>
                     <Col xs={2}>
                       <img
                         src={'tower.png'}
@@ -142,6 +152,15 @@ const mapStateToProps = (state) => {
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateCityMenuSupplementalData: (cityMenuSupplementalData) => dispatch(
+        gameAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
+    updateCityMenuSupplementalView: (cityMenuSupplementalView) => dispatch(
+        gameAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
+  };
+};
+
 CityDetailsSidebar.propTypes = {
   allBuildings: PropTypes.any,
   allUnits: PropTypes.any,
@@ -149,6 +168,8 @@ CityDetailsSidebar.propTypes = {
   finalGrowth: PropTypes.number,
   finalResearch: PropTypes.number,
   city: PropTypes.any,
+  updateCityMenuSupplementalData: PropTypes.func,
+  updateCityMenuSupplementalView: PropTypes.func,
 };
 
-export default connect(mapStateToProps)(CityDetailsSidebar);
+export default connect(mapStateToProps, mapDispatchToProps)(CityDetailsSidebar);

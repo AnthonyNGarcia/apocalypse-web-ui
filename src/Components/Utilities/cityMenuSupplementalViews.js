@@ -1,0 +1,12 @@
+/**
+ * ENUM file.
+ */
+;
+
+const CITY_MENU_SUPPLEMENTAL_VIEWS = {
+  NONE: 'NONE',
+  BUILDING: 'BUILDING',
+  UNIT: 'UNIT',
+};
+
+export default CITY_MENU_SUPPLEMENTAL_VIEWS;

@@ -7,6 +7,8 @@ import Button from 'react-bootstrap/Button';
 import gameAC from
   '../../../../../../../../Redux/actionCreators/gameActionCreators';
 import Spinner from 'react-bootstrap/esm/Spinner';
+import CITY_MENU_SUPPLEMENTAL_VIEWS from
+  '../../../../../../../Utilities/cityMenuSupplementalViews';
 import './AvailableBuildingItem.css';
 
 /**
@@ -22,10 +24,18 @@ const AvailableBuildingItem = (props) => {
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
 
+  const viewBuildingHandler = (e, building) => {
+    e.preventDefault();
+    console.log(building);
+    console.log(CITY_MENU_SUPPLEMENTAL_VIEWS.BUILDING);
+    props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.BUILDING);
+    props.updateCityMenuSupplementalData(building);
+  };
+
   const constructBuildingHandler = (e) => {
     e.preventDefault();
     if (!isBuildingThis) {
-      // Logic to change the current construction project
+      // Outsource the logic to change the current construction project
       // We basically have to change the main panel data....
       props.updateCurrentCityConstructionProject(props.bldg);
     }
@@ -68,7 +78,7 @@ const AvailableBuildingItem = (props) => {
   if (props.city) {
     return (
       <div className='building-option-container'>
-        <Row>
+        <Row onClick={(e) => viewBuildingHandler(e, props.bldg)}>
           <Col md={2}>
             <img
               src={'tower.png'}
@@ -88,7 +98,6 @@ const AvailableBuildingItem = (props) => {
               /> :
             <Button
               variant='warning'
-              style={{margin: 'auto', display: 'block'}}
               onClick={constructBuildingHandler}
               disabled={!props.isOwnTurn}>
                 Build
@@ -119,6 +128,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateCurrentCityConstructionProject: (newConstructionProject) => dispatch(
         gameAC.setCurrentCityConstructionProject(newConstructionProject)),
+    updateCityMenuSupplementalData: (cityMenuSupplementalData) => dispatch(
+        gameAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
+    updateCityMenuSupplementalView: (cityMenuSupplementalView) => dispatch(
+        gameAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
   };
 };
 
@@ -129,6 +142,8 @@ AvailableBuildingItem.propTypes = {
   updateCurrentCityConstructionProject: PropTypes.func,
   isOwnTurn: PropTypes.bool,
   city: PropTypes.any,
+  updateCityMenuSupplementalData: PropTypes.func,
+  updateCityMenuSupplementalView: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

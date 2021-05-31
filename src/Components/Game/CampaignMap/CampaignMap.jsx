@@ -11,6 +11,8 @@ import AdvancedDetailsModalInfo from
 import gameAC from '../../../Redux/actionCreators/gameActionCreators';
 import Modal from 'react-bootstrap/Modal';
 import './CampaignMap.css';
+import CITY_MENU_SUPPLEMENTAL_VIEWS from
+  '../../Utilities/cityMenuSupplementalViews';
 
 /**
  *
@@ -23,6 +25,8 @@ const CampaignMap = (props) => {
   const closeAdvancedDetailsModal = () => {
     props.updateShowCityModalInfo(false);
     props.updateShowResearchModalInfo(false);
+    props.updateCityMenuSupplementalData({});
+    props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.NONE);
   };
 
   return (
@@ -62,6 +66,10 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setShowCityModalInfo(showCityModalInfo)),
     updateShowResearchModalInfo: (showResearchModalInfo) => dispatch(
         gameAC.setShowResearchModalInfo(showResearchModalInfo)),
+    updateCityMenuSupplementalView: (view) => dispatch(
+        gameAC.setCityMenuSupplementalView(view)),
+    updateCityMenuSupplementalData: (data) => dispatch(
+        gameAC.setCityMenuSupplementalData(data)),
   };
 };
 
@@ -70,6 +78,8 @@ CampaignMap.propTypes = {
   showResearchModalInfo: PropTypes.bool,
   updateShowCityModalInfo: PropTypes.func,
   updateShowResearchModalInfo: PropTypes.func,
+  updateCityMenuSupplementalView: PropTypes.func,
+  updateCityMenuSupplementalData: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CampaignMap);
