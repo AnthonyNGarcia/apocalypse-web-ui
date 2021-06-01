@@ -11,16 +11,16 @@
 }
 
 .own-player-label {
-    color: darkgreen;
+    color: black;
     
 }
 
 .other-player-label {
-    color: darkred
+    color: red
 }
 
 .active-turn {
-    background-color: greenyellow;
+    background-color: lightgreen;
     animation-name: blink; 
     animation-duration: 1.5s; 
     animation-iteration-count: infinite;
