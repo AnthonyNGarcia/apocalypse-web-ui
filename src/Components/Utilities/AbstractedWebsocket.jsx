@@ -36,7 +36,8 @@ const AbstractedWebsocket = forwardRef((props, ref) => {
   return (
     <React.Fragment>
       <SockJsClient url={apiEndpoints.websocketPath} topics={processedTopics}
-        onMessage={(msg) => props.onReceiveMessage(msg)} ref={ref}/>
+        onMessage={(msg) => props.onReceiveMessage(msg)} ref={ref}
+        onDisconnect={props.onDisconnect ? props.onDisconnect : ()=>{}}/>
     </React.Fragment>
   );
 });
@@ -46,6 +47,7 @@ AbstractedWebsocket.displayName = 'AbstractedWebsocket-to-SockJSClient';
 AbstractedWebsocket.propTypes = {
   topics: PropTypes.arrayOf(PropTypes.string).isRequired,
   onReceiveMessage: PropTypes.func.isRequired,
+  onDisconnect: PropTypes.func,
 };
 
 export default AbstractedWebsocket;

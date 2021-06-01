@@ -16,6 +16,8 @@ import gameAC from '../../Redux/actionCreators/gameActionCreators';
 import lobbyAC from '../../Redux/actionCreators/lobbyActionCreators';
 import apiEndpoints from '../Utilities/apiEndpoints';
 import axios from 'axios';
+import {useBeforeunload} from 'react-beforeunload';
+import PLAYER from '../Utilities/playerEnums';
 import './Game.css';
 
 /**
@@ -28,20 +30,28 @@ import './Game.css';
 const Game = (props) => {
   const websocket = useRef(null);
 
-  const leaveGameHandler = async (e) => {
-    e.preventDefault();
+  const gameCleanup = () => {
     try {
       const leaveRequest = {
         gameId: props.gameId,
         playerUsername: props.ownUsername,
       };
-      const serverResponse = await axios.patch(
+      axios.patch(
           apiEndpoints.gameController + '/in-memory-leave', leaveRequest);
-      console.log(serverResponse);
     } catch (e) {
-      console.log('Oops! There was an error trying to leave the game!');
-      console.log(e);
+      console.warn('Oops! There was an error trying to leave the game!');
+      console.warn(e);
     }
+  };
+
+  useBeforeunload(() => {
+    gameCleanup();
+  });
+
+  const leaveGameHandler = (e) => {
+    e.preventDefault();
+    gameCleanup();
+    navigateToBrowseLobbies();
   };
 
   const navigateToBrowseLobbies = () => {
@@ -59,24 +69,37 @@ const Game = (props) => {
     const playerTwoUsername = message.body.playerTwoUsername;
     if (!playerOneUsername || !playerTwoUsername) {
       console.log('A player has left! Closing game...');
+      gameCleanup();
       navigateToBrowseLobbies();
     }
+  };
+
+  const onDisconnect = () => {
+    console.log('Disconnected from game websocket!');
+    gameCleanup();
+    navigateToBrowseLobbies();
   };
 
   return (
     <React.Fragment>
       <AbstractedWebsocket topics={['/game/' + props.gameId]}
-        onReceiveMessage={onReceiveMessage} ref={websocket}/>
+        onReceiveMessage={onReceiveMessage} ref={websocket}
+        onDisconnect={onDisconnect}/>
       <Container className='game-sizing'>
         <Row>
-          <Col>
-            <h3>Player One: {props.playerOneUsername}</h3>
+          <Col className={(props.playerWhoseTurnItIs === PLAYER.ONE ?
+              'active-turn center-text player-label' :
+              'inactive-turn center-text player-label') + (
+                props.ownPlayerNumber === PLAYER.ONE ? ' own-player-label' :
+                ' other-player-label')}>
+            <h3>{props.playerOneUsername}</h3>
           </Col>
-          <Col>
-            <h3>Player Two: {props.playerTwoUsername}</h3>
-          </Col>
-          <Col className="center-text">
-            <h3>Game ID: {props.gameId}</h3>
+          <Col className={(props.playerWhoseTurnItIs === PLAYER.TWO ?
+              'active-turn center-text player-label' :
+              'inactive-turn center-text player-label') + (
+                props.ownPlayerNumber === PLAYER.TWO ? ' own-player-label' :
+                ' other-player-label')}>
+            <h3>{props.playerTwoUsername}</h3>
           </Col>
         </Row>
         <Row>
@@ -102,6 +125,8 @@ const mapStateToProps = (state) => {
       state.game.playerOne.username : 'error',
     playerTwoUsername: state.game.playerTwo ?
       state.game.playerTwo.username : 'error',
+    playerWhoseTurnItIs: state.game.playerWhoseTurnItIs,
+    ownPlayerNumber: state.game.ownPlayerNumber,
   };
 };
 
@@ -140,6 +165,8 @@ Game.propTypes = {
   clearLobbyPlayerTwoUsername: PropTypes.func,
   clearLobbyId: PropTypes.func,
   saveGameId: PropTypes.func,
+  playerWhoseTurnItIs: PropTypes.oneOf(flattenObject(PLAYER)),
+  ownPlayerNumber: PropTypes.oneOf(flattenObject(PLAYER)),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

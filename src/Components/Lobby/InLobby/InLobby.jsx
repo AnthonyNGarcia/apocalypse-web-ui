@@ -14,8 +14,9 @@ import MAIN_VIEWS from '../../Utilities/mainViews';
 import FACTIONS from '../../Utilities/factions';
 import axios from 'axios';
 import apiEndpoints from '../../Utilities/apiEndpoints';
-import './InLobby.css';
 import PLAYER from '../../Utilities/playerEnums';
+import {useBeforeunload} from 'react-beforeunload';
+import './InLobby.css';
 
 /**
  *
@@ -67,6 +68,26 @@ const InLobby = (props) => {
     props.updateLobbyViewToBrowseLobbies();
   };
 
+  const lobbyCleanup = () => {
+    if (props.lobbyId) {
+      try {
+        const leaveRequest = {
+          lobbyId: props.lobbyId,
+          playerUsername: props.ownUsername,
+        };
+        axios.patch(
+            apiEndpoints.lobbyController + '/in-memory-leave', leaveRequest);
+      } catch (e) {
+        console.warn('Oops! There was an error trying to leave the lobby!');
+        console.warn(e);
+      }
+    }
+  };
+
+  useBeforeunload(() => {
+    lobbyCleanup();
+  });
+
   const onReceiveMessage = (message) => {
     const playerOneUsername = message.body.playerOneUsername;
     if (!playerOneUsername) {
@@ -82,23 +103,20 @@ const InLobby = (props) => {
     }
 
     if (message.body.initialGameData) {
+      lobbyCleanup();
       navigateToInGame(message.body);
     }
   };
 
+  const onDisconnect = () => {
+    console.log('Disconnected from in-lobby websocket!');
+    lobbyCleanup();
+    navigateToBrowseLobbies();
+  };
+
   const leaveLobbyHandler = async (e) => {
     e.preventDefault();
-    try {
-      const leaveRequest = {
-        lobbyId: props.lobbyId,
-        playerUsername: props.ownUsername,
-      };
-      await axios.patch(
-          apiEndpoints.lobbyController + '/in-memory-leave', leaveRequest);
-    } catch (e) {
-      console.warn('Oops! There was an error trying to leave the lobby!');
-      console.warn(e);
-    }
+    lobbyCleanup();
   };
 
   const startGameHandler = async (e) => {
@@ -120,7 +138,8 @@ const InLobby = (props) => {
   return (
     <React.Fragment>
       <AbstractedWebsocket topics={['/lobby/' + props.lobbyId]}
-        onReceiveMessage={onReceiveMessage} ref={websocket}/>
+        onReceiveMessage={onReceiveMessage} ref={websocket}
+        onDisconnect={onDisconnect}/>
       <h3>In Lobby Component</h3>
       <Container>
         <Row>

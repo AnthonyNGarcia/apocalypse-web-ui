@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col';
 import PropTypes from 'prop-types';
 import LOBBY_VIEWS from '../../Utilities/lobbyViews';
 import lobbyAC from '../../../Redux/actionCreators/lobbyActionCreators';
+import AbstractedWebsocket from '../../Utilities/AbstractedWebsocket';
 import './BrowseLobbies.css';
 
 /**
@@ -92,8 +93,14 @@ const BrowseLobbies = (props) => {
     };
   }, []);
 
+  const onReceiveMessage = (message) => {
+    setCurrentLobbies(message.body);
+  };
+
   return (
     <React.Fragment>
+      <AbstractedWebsocket topics={['/browse-lobbies']}
+        onReceiveMessage={onReceiveMessage}/>
       <Container>
         <Row>
           <Col xs={8}>
@@ -108,10 +115,12 @@ const BrowseLobbies = (props) => {
           currentLobbies.map((lobby) =>
             <Row key={lobby.lobbyId}>
               <Col>
-                <p>{lobby.playerOneUsername + '\'s Lobby'}</p>
+                <p>{lobby.playerOneUsername + '\'s Lobby' +
+                (lobby.playerTwoUsername ? ' (2/2)' : ' (1/2)')}</p>
               </Col>
               <Col>
                 <Button variant="primary"
+                  disabled={lobby.playerTwoUsername && lobby.playerTwoUsername}
                   onClick={(e) => joinLobbyHandler(e, lobby.lobbyId)}>
                   Join</Button>
               </Col>

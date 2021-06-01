@@ -2,3 +2,38 @@
     height: 70vh;
     width: 100vw;
 }
+
+.player-label {
+    margin: 1vh 1vw;
+    border-radius: 10px;
+    border: 1px solid black;
+    box-shadow: 1px 2px black;
+}
+
+.own-player-label {
+    color: darkgreen;
+    
+}
+
+.other-player-label {
+    color: darkred
+}
+
+.active-turn {
+    background-color: greenyellow;
+    animation-name: blink; 
+    animation-duration: 1.5s; 
+    animation-iteration-count: infinite;
+    transition-timing-function: linear;
+}
+
+.inactive-turn {
+    background-color: white;
+}
+
+@keyframes blink {
+  50% {
+    filter: saturate(2);
+    opacity: 80%;
+  }
+}
