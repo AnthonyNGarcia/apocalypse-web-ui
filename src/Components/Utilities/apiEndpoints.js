@@ -4,7 +4,7 @@
  * urls for components to start making calls, to reduce redundancy and the
  * associated possibilities for typos/errors.
  */
-const apiBasePath = 'http://localhost:9595';
+const apiBasePath = 'http://50.18.21.47:9595';
 
 const apiEndpoints = {
   basePath: apiBasePath,
