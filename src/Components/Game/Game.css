@@ -6,8 +6,7 @@
 .player-label {
     margin: 1vh 1vw;
     border-radius: 10px;
-    border: 1px solid black;
-    box-shadow: 1px 2px black;
+    box-shadow: 2px 3px  7px black;
 }
 
 .own-player-label {
