@@ -191,7 +191,7 @@ const GameBoard = (props) => {
       if (item.army) {
         army = (
           <img
-            src={'army.jpg'}
+            src={'HUMAN_ARMY.png'}
             alt=""
             className={'heximage army-icon' +
               (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
@@ -202,7 +202,7 @@ const GameBoard = (props) => {
       if (item.city) {
         city = (
           <img
-            src={'hall.png'}
+            src={'HUMAN_CITY_TIER_1.png'}
             alt=""
             className={'heximage city-icon'}
             onClick={(e) => tileClicked(e, item)}
@@ -212,9 +212,9 @@ const GameBoard = (props) => {
       return (
         <Hexagon>
           <img
-            src={item.terrainType + '.jpg'}
+            src={item.terrainType + '.png'}
             alt=""
-            className={'hexagon-sizing heximage' + extraStyling}
+            className={'heximage ' + extraStyling}
             onClick={army === null && city === null ?
                 (e) => tileClicked(e, item) : null}/>
           {army ? army : null}

@@ -3,55 +3,59 @@
   margin-left: auto;
   margin-right: auto;
   position: absolute;
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: auto;
 }
 
 .city-icon {
   filter: saturate(5);
   z-index: 10;
   display: block;
-  margin-top: 9px;
-  margin-left: 9px;
+  margin-top: 15px;
   text-align: center;
   position: absolute;
-  width: 75%;
-  height: 75%;
+  width: 100%;
+  height: auto;
 }
 
 .army-icon {
   z-index: 20;
-  display: block;
-  margin-left: 10px;
-  margin-top: 10px;
   position: absolute;
-  width: 75%;
-  height: 75%;
+  margin: auto;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 60%;
+  height: auto;
 }
 
 .army-is-untapped {
-  animation-name: very-subtle-blink;
+  animation-name: bob;
   animation-duration: 1.2s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
 
 .highlight-tile {
-  animation-name: blink;
-  animation-duration: 1.2s;
+  animation-name: slow-blink;
+  animation-duration: 1.1s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
 
-@keyframes very-subtle-blink {
+@keyframes bob {
   50% {
-    filter: saturate(8);
+    transform: translateY(20%);
+  }
+  100% {
+    transform: translateY(0%);
   }
 }
 
-@keyframes blink {
-  50% {
-    filter: saturate(8);
-    opacity: 40%;
+
+@keyframes slow-blink {
+  30% {
+    filter: brightness(1.4);
   }
 }

@@ -42,8 +42,9 @@ const InLobby = (props) => {
   };
 
   const navigateToInGame = (gameData) => {
+    console.log(gameData);
     const initialGameData = gameData.initialGameData;
-    const gameConstants = gameData.gameConstants;
+    const gameConstants = gameData.gameConstantsDTO;
     props.saveGameId(initialGameData.gameId);
     props.saveGameBoard(initialGameData.gameBoard);
     props.savePlayerOne(initialGameData.playerOne);
