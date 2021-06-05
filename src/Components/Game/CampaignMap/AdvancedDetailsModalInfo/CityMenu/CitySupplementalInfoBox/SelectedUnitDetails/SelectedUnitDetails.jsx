@@ -51,7 +51,7 @@ const SelectedUnitDetails = (props) => {
           </Col>
           {/*  Second col is all the text */}
           <Col md={10}>
-            <Row noGutters>
+            <Row noGutters style={{'width': '90%', 'maxWidth': '90%'}}>
               <p>{fullUnitInfo.description}</p>
             </Row>
             {/* Unit Stats */}
@@ -78,8 +78,8 @@ const SelectedUnitDetails = (props) => {
           </Col>
         </Row>
         {/* Passive Abilities*/}
-        <Row>
-          <h5>Passive Abilities:
+        <Row noGutters style={{'width': '90%', 'maxWidth': '90%'}}>
+          <h6>Passive Abilities:
             {fullUnitInfo.basePassiveAbilities &&
                     fullUnitInfo.basePassiveAbilities.length > 0 ?
                     fullUnitInfo.basePassiveAbilities.map((passive, index) => (
@@ -91,14 +91,14 @@ const SelectedUnitDetails = (props) => {
                           passiveAbility={passive}/>
                       </span>
                     )) : ' None'}
-          </h5>
+          </h6>
         </Row>
         {/* Active Ability */}
-        <Row>
-          <h5>Active Ability: {props.allActiveAbilities[
+        <Row noGutters style={{'width': '90%', 'max-width': '90%'}}>
+          <h6>Active Ability: {props.allActiveAbilities[
               fullUnitInfo.baseActiveAbility.activeAbilityType]
               .displayName} - {
-            fullUnitInfo.baseActiveAbilityCharges} charge(s)</h5>
+            fullUnitInfo.baseActiveAbilityCharges} charge(s)</h6>
           <p>{props.allActiveAbilities[
               fullUnitInfo.baseActiveAbility.activeAbilityType]
               .descriptionFragments.map((fragment, index) => (

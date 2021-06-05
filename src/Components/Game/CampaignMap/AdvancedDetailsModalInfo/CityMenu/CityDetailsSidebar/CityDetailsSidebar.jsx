@@ -28,6 +28,12 @@ const CityDetailsSidebar = (props) => {
     props.updateCityMenuSupplementalData(building);
   };
 
+  const viewUnitHandler = (e, unitType) => {
+    e.preventDefault();
+    props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.UNIT);
+    props.updateCityMenuSupplementalData(unitType);
+  };
+
   useEffect(() => {
     if (props.city) {
       if (props.city.faction === FACTIONS.HUMANS.NAME) {
@@ -81,9 +87,10 @@ const CityDetailsSidebar = (props) => {
               {props.city.completedBuildings &&
               props.city.completedBuildings.length > 0 ?
               props.city.completedBuildings.map((building, index) => (
-                <div key={index} style={{overflow: 'hidden'}}>
-                  <Row onClick={(e) =>
+                <div key={index} style={{overflow: 'hidden'}}
+                  onClick={(e) =>
                     viewBuildingHandler(e, building)}>
+                  <Row>
                     <Col xs={2}>
                       <img
                         src={'tower.png'}
@@ -111,15 +118,16 @@ const CityDetailsSidebar = (props) => {
               {props.city.cityGarrison &&
               props.city.cityGarrison.length > 0 ?
               props.city.cityGarrison.map((unit, index) => (
-                <div key={index} style={{overflow: 'hidden'}}>
-                  <Row>
-                    <Col xs={2}>
+                <div key={index} className='garrison-unit-container'
+                  onClick={(e) => viewUnitHandler(e, unit.unitType)}>
+                  <Row noGutters>
+                    <Col md={2}>
                       <img
                         src={'shield.png'}
                         alt=""
-                        className='icon-image'/>
+                        className='unit-icon'/>
                     </Col>
-                    <Col xs={10}>
+                    <Col md={10}>
                       {props.allUnits[unit.unitType].displayName}
                     </Col>
                   </Row>

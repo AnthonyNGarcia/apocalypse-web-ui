@@ -63,6 +63,10 @@ const PASSIVE_ABILITIES = {
     prefix: 'Paralyzer (',
     suffix: ')',
   },
+  SKIRMISHER: {
+    enum: 'SKIRMISHER',
+    displayName: 'Skirmisher',
+  },
 };
 
 export default PASSIVE_ABILITIES;
