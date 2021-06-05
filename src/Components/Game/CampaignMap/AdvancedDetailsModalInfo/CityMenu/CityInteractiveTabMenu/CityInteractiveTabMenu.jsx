@@ -9,6 +9,8 @@ import ProductionTab from './ProductionTab/ProductionTab';
 import ArmyTab from './ArmyTab/ArmyTab';
 import gameAC from '../../../../../../Redux/actionCreators/gameActionCreators';
 import './CityInteractiveTabMenu.css';
+import CITY_MENU_SUPPLEMENTAL_VIEWS from
+  '../../../../../Utilities/cityMenuSupplementalViews';
 
 /**
  *
@@ -18,13 +20,20 @@ import './CityInteractiveTabMenu.css';
  * @return {JSX} to render
  */
 const CityInteractiveTabMenu = (props) => {
+  const cleanupCityView = () => {
+    props.clearCityMenuSupplementalData();
+    props.clearCityMenuSupplementalView();
+  };
+
   const navigateToProductionTab = (e) => {
     e.preventDefault();
+    cleanupCityView();
     props.updateCityShowingProductionTab(true);
   };
 
   const navigateToArmyTab = (e) => {
     e.preventDefault();
+    cleanupCityView();
     props.updateCityShowingProductionTab(false);
   };
 
@@ -72,6 +81,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateCityShowingProductionTab: (cityShowingProductionTab) => dispatch(
         gameAC.setCityShowingProductionTab(cityShowingProductionTab)),
+    clearCityMenuSupplementalData: () => dispatch(
+        gameAC.setCityMenuSupplementalData({})),
+    clearCityMenuSupplementalView: () => dispatch(
+        gameAC.setCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.NONE)),
   };
 };
 
@@ -80,6 +93,8 @@ CityInteractiveTabMenu.propTypes = {
   updateCityShowingProductionTab: PropTypes.func,
   finalProduction: PropTypes.number,
   city: PropTypes.any,
+  clearCityMenuSupplementalData: PropTypes.func,
+  clearCityMenuSupplementalView: PropTypes.func,
 };
 
 export default connect(mapStateToProps,

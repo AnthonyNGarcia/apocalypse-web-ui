@@ -26,8 +26,6 @@ const AvailableBuildingItem = (props) => {
 
   const viewBuildingHandler = (e, building) => {
     e.preventDefault();
-    console.log(building);
-    console.log(CITY_MENU_SUPPLEMENTAL_VIEWS.BUILDING);
     props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.BUILDING);
     props.updateCityMenuSupplementalData(building);
   };

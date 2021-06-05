@@ -1,0 +1,27 @@
+.unit-image {
+    position: relative;
+    width: 100%;
+    height: auto;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.tiny-hammer-icon {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 2vh;
+  width: auto;
+}
+
+.tiny-timer-icon {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 2vh;
+  width: auto;
+}
+
+.unit-stat-title {
+    font-weight: bold;
+}
