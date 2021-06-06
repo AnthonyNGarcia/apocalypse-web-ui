@@ -31,6 +31,11 @@
   display: inline-block;
   margin-left: auto;
   margin-right: auto;
-  height: 1.6vh;
+  padding-right: 20%;
+  height: 1.8vh;
   width: auto;
+}
+
+.bold-title {
+  font-weight: bold;
 }

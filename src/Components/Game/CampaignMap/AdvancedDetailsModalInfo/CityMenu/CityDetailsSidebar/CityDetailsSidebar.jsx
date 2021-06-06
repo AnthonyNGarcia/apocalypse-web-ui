@@ -56,22 +56,30 @@ const CityDetailsSidebar = (props) => {
           <Row className='center-text' style={{height: '15vh', width: '20vw'}}>
             <Col md={6}>
               <Row>
-              Production:
+                <span><img
+                  src={'hammer.png'}
+                  alt=""
+                  className={'kinda-tiny-hammer-icon'}
+                /></span><span className='bold-title'>Production:</span>
               </Row>
               <Row>
-              Research:
+                <span><img
+                  src={'research.svg'}
+                  alt=""
+                  className={'kinda-tiny-hammer-icon'}
+                /></span><span className='bold-title'>Research:</span>
               </Row>
               <Row>
-              Growth:
+                <span><img
+                  src={'growth.svg'}
+                  alt=""
+                  className={'kinda-tiny-hammer-icon'}
+                /></span><span className='bold-title'>Growth:</span>
               </Row>
             </Col>
             <Col md={6}>
               <Row>
-                {props.selectedCity.totalBuildingProduction} <span><img
-                  src={'hammer.png'}
-                  alt=""
-                  className={'kinda-tiny-hammer-icon'}
-                /></span>
+                {props.selectedCity.totalBuildingProduction}
               </Row>
               <Row>
                 {props.selectedCity.totalResearch}
