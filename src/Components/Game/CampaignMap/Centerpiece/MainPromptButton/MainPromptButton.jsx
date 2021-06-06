@@ -19,15 +19,16 @@ const MainPromptButton = (props) => {
   const endTurnHandler = async (e) => {
     e.preventDefault();
     await props.updateAwaitingServerConfirmation(true);
-    const ownCityTiles = props.gameBoard.filter((tile) =>
-      tile.city && (tile.city.owner === props.ownPlayerNumber));
     try {
+      const tilesOfOwnCities = props.gameBoard.filter( (tile) => tile.city &&
+          tile.city.owner === props.ownPlayerNumber);
       const endTurnRequest = {
         playerEndingTurn: props.ownPlayerNumber,
         playerWhoseTurnItIs: props.ownPlayerNumber === PLAYER.ONE ?
         PLAYER.TWO : PLAYER.ONE,
-        cityTiles: ownCityTiles,
+        cityTilesOfPlayerEndingTurn: tilesOfOwnCities,
       };
+      console.log(endTurnRequest);
       await axios.post(
           apiEndpoints.gameController +
           '/in-memory-end-turn/' + props.gameId, endTurnRequest);

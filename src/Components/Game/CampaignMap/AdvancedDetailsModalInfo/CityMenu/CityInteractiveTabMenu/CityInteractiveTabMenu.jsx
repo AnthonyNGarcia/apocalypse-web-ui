@@ -60,9 +60,7 @@ const CityInteractiveTabMenu = (props) => {
           {/* Second row contains the appropriate tab body */}
           <Row>
             {props.cityShowingProductionTab ?
-          <ProductionTab
-            finalProduction={props.finalProduction}
-            city={{...props.city}}/> :
+          <ProductionTab/> :
           <ArmyTab/>}
           </Row>
         </Container>
@@ -91,8 +89,6 @@ const mapDispatchToProps = (dispatch) => {
 CityInteractiveTabMenu.propTypes = {
   cityShowingProductionTab: PropTypes.bool,
   updateCityShowingProductionTab: PropTypes.func,
-  finalProduction: PropTypes.number,
-  city: PropTypes.any,
   clearCityMenuSupplementalData: PropTypes.func,
   clearCityMenuSupplementalView: PropTypes.func,
 };

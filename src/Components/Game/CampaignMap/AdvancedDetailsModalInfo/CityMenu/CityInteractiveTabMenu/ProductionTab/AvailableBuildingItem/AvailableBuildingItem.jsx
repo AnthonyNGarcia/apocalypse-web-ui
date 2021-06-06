@@ -30,17 +30,18 @@ const AvailableBuildingItem = (props) => {
     props.updateCityMenuSupplementalData(building);
   };
 
-  const constructBuildingHandler = (e) => {
+  const constructBuildingHandler = async (e) => {
     e.preventDefault();
     if (!isBuildingThis) {
       // Outsource the logic to change the current construction project
       // We basically have to change the main panel data....
-      props.updateCurrentCityConstructionProject(props.bldg);
+      await props.updateCurrentCityConstructionProject(props.bldg.buildingType);
+      forceUpdate();
     }
   };
 
   useEffect(() => {
-    if (props.city) {
+    if (props.selectedCity) {
     // Generate the building label
       const bldgInfo = props.allBuildings[props.bldg.buildingType];
       const bldgName = bldgInfo.displayName;
@@ -55,25 +56,28 @@ const AvailableBuildingItem = (props) => {
       } else {
         const turnsToComplete =
           Math.ceil((bldgInfo.productionCost -
-            props.bldg.currentProductionProgress) / props.finalProduction);
+            props.bldg.currentProductionProgress) /
+            props.selectedCity.totalBuildingProduction);
         label = bldgName + ' (' + turnsToComplete + ' Turns)';
       }
       setBuildingLabel(label);
 
       // Determine if this building is currently being built
-      const currentConstruction = props.city.currentConstructionProject;
+      const currentConstruction = props.selectedCity.currentConstructionProject;
       if (currentConstruction &&
-      currentConstruction.buildingType === props.bldg.buildingType) {
+      currentConstruction === props.bldg.buildingType) {
         setIsBuildingThis(true);
       } else {
         setIsBuildingThis(false);
       }
       forceUpdate();
+    } else {
+      console.log('no selected city...');
     }
-  }, [props, props.city.currentConstructionProject ?
-    props.city.currentConstructionProject.currentProductionProgress :
-    props.city.currentConstructionProject]);
-  if (props.city) {
+  }, [props.selectedCity.totalBuildingProduction,
+    props.selectedCity.currentConstructionProject, isBuildingThis,
+    props.bldg.buildingType]);
+  if (props.selectedCity) {
     return (
       <div className='building-option-container'>
         <Row onClick={(e) => viewBuildingHandler(e, props.bldg)}>
@@ -119,6 +123,8 @@ const mapStateToProps = (state) => {
   return {
     allBuildings: state.game.gameConstants.allBuildings,
     isOwnTurn: state.game.isOwnTurn,
+    selectedCity: {...state.game
+        .gameBoard[state.game.selectedTilePosition].city},
   };
 };
 
@@ -136,10 +142,9 @@ const mapDispatchToProps = (dispatch) => {
 AvailableBuildingItem.propTypes = {
   allBuildings: PropTypes.any,
   bldg: PropTypes.any,
-  finalProduction: PropTypes.number,
   updateCurrentCityConstructionProject: PropTypes.func,
   isOwnTurn: PropTypes.bool,
-  city: PropTypes.any,
+  selectedCity: PropTypes.any,
   updateCityMenuSupplementalData: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
 };

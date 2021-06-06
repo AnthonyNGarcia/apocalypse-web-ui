@@ -94,7 +94,7 @@ const SelectedUnitDetails = (props) => {
           </h6>
         </Row>
         {/* Active Ability */}
-        <Row noGutters style={{'width': '90%', 'max-width': '90%'}}>
+        <Row noGutters style={{'width': '90%', 'maxWidth': '90%'}}>
           <h6>Active Ability: {props.allActiveAbilities[
               fullUnitInfo.baseActiveAbility.activeAbilityType]
               .displayName} - {

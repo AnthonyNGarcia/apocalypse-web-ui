@@ -35,18 +35,18 @@ const CityDetailsSidebar = (props) => {
   };
 
   useEffect(() => {
-    if (props.city) {
-      if (props.city.faction === FACTIONS.HUMANS.NAME) {
-        setCityHeader('Tier ' + props.city.tier + ' Human Settlement');
-      } else if (props.city.faction === FACTIONS.INSECTS.NAME) {
-        setCityHeader('Tier ' + props.city.tier + ' Insect Hive');
+    if (props.selectedCity) {
+      if (props.selectedCity.factionType === FACTIONS.HUMANS.NAME) {
+        setCityHeader('Tier ' + props.selectedCity.tier + ' Human Settlement');
+      } else if (props.selectedCity.factionType === FACTIONS.INSECTS.NAME) {
+        setCityHeader('Tier ' + props.selectedCity.tier + ' Insect Hive');
       } else {
         console.warn('Oops! Couldn\'t identify this city faction!');
       }
     }
   }, [props]);
 
-  if (props.city) {
+  if (props.selectedCity) {
     return (
       <React.Fragment>
         <Container>
@@ -67,14 +67,14 @@ const CityDetailsSidebar = (props) => {
             </Col>
             <Col md={6}>
               <Row>
-                {props.finalProduction}
+                {props.selectedCity.totalBuildingProduction}
               </Row>
               <Row>
-                {props.finalResearch}
+                {props.selectedCity.totalResearch}
               </Row>
               <Row>
-                {props.city.currentGrowthStockpile}/200 (+
-                {props.finalGrowth})
+                {props.selectedCity.currentGrowthStockpile}/200 (+
+                {props.selectedCity.totalGrowth})
               </Row>
             </Col>
           </Row>
@@ -84,9 +84,9 @@ const CityDetailsSidebar = (props) => {
           <Row>
             {/* Map completed buildings to generate dynamic, scrollable list */}
             <Scrollbars style={{height: '20vh', width: '20vw'}}>
-              {props.city.completedBuildings &&
-              props.city.completedBuildings.length > 0 ?
-              props.city.completedBuildings.map((building, index) => (
+              {props.selectedCity.completedBuildings &&
+              props.selectedCity.completedBuildings.length > 0 ?
+              props.selectedCity.completedBuildings.map((building, index) => (
                 <div key={index} style={{overflow: 'hidden'}}
                   onClick={(e) =>
                     viewBuildingHandler(e, building)}>
@@ -115,9 +115,9 @@ const CityDetailsSidebar = (props) => {
           <Row>
             {/* Map garrison units to generate dynamic, scrollable list */}
             <Scrollbars style={{height: '20vh', width: '20vw'}}>
-              {props.city.cityGarrison &&
-              props.city.cityGarrison.length > 0 ?
-              props.city.cityGarrison.map((unit, index) => (
+              {props.selectedCity.cityGarrison &&
+              props.selectedCity.cityGarrison.length > 0 ?
+              props.selectedCity.cityGarrison.map((unit, index) => (
                 <div key={index} className='garrison-unit-container'
                   onClick={(e) => viewUnitHandler(e, unit.unitType)}>
                   <Row noGutters>
@@ -157,6 +157,7 @@ const mapStateToProps = (state) => {
   return {
     allBuildings: state.game.gameConstants.allBuildings,
     allUnits: state.game.gameConstants.allUnits,
+    selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
   };
 };
 
@@ -172,10 +173,7 @@ const mapDispatchToProps = (dispatch) => {
 CityDetailsSidebar.propTypes = {
   allBuildings: PropTypes.any,
   allUnits: PropTypes.any,
-  finalProduction: PropTypes.number,
-  finalGrowth: PropTypes.number,
-  finalResearch: PropTypes.number,
-  city: PropTypes.any,
+  selectedCity: PropTypes.any,
   updateCityMenuSupplementalData: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
 };

@@ -20,10 +20,23 @@ import './TrainableUnitItem.css';
  */
 const TrainableUnitItem = (props) => {
   const [fullUnitInfo, setFullUnitInfo] = useState(null);
+  const [canAddUnitToQueue, setCanAddUnitToQueue] = useState(false);
 
-  useEffect(() => {
+  useEffect( () => {
+    const updateCanAddUnitToQueue = (freshFullUnitInfo) => {
+      const usableFullUnitInfo = freshFullUnitInfo ?
+        freshFullUnitInfo : fullUnitInfo;
+      if (props.selectedCity.unitProductionRemaining >=
+        usableFullUnitInfo.productionCost) {
+        setCanAddUnitToQueue(true);
+      } else {
+        setCanAddUnitToQueue(false);
+      }
+    };
     if (props.unitType) {
-      setFullUnitInfo(props.allUnits[props.unitType]);
+      const freshFullUnitInfo = props.allUnits[props.unitType];
+      setFullUnitInfo(freshFullUnitInfo);
+      updateCanAddUnitToQueue(freshFullUnitInfo);
     }
   }, [props]);
 
@@ -35,6 +48,9 @@ const TrainableUnitItem = (props) => {
 
   const addUnitHandler = (e) => {
     e.preventDefault();
+    // Send message/request to backend to approve it
+    // We will have to listen to a websocket message of the
+    // response to see an update render in the UI
   };
 
   if (props.unitType && fullUnitInfo) {
@@ -70,7 +86,7 @@ const TrainableUnitItem = (props) => {
             <Button
               variant='primary'
               onClick={addUnitHandler}
-              disabled={!props.isOwnTurn}>
+              disabled={!props.isOwnTurn || !canAddUnitToQueue}>
                 +
             </Button>
           </Col>
@@ -92,6 +108,7 @@ const mapStateToProps = (state) => {
   return {
     allUnits: state.game.gameConstants.allUnits,
     isOwnTurn: state.game.isOwnTurn,
+    selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
   };
 };
 
@@ -101,6 +118,8 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
     updateCityMenuSupplementalView: (cityMenuSupplementalView) => dispatch(
         gameAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
+    updateCurrentCityRecruitmentQueue: (recruitmentQueue) => dispatch(
+        gameAC.setCurrentCityRecruitmentQueue(recruitmentQueue)),
   };
 };
 
@@ -108,8 +127,10 @@ TrainableUnitItem.propTypes = {
   allUnits: PropTypes.any,
   isOwnTurn: PropTypes.bool,
   unitType: PropTypes.string,
+  selectedCity: PropTypes.any,
   updateCityMenuSupplementalData: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
+  updateCurrentCityRecruitmentQueue: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TrainableUnitItem);

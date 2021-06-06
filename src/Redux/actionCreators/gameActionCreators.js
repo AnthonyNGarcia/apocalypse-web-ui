@@ -144,6 +144,16 @@ const actionCreators = {
       gameBoard: newGameBoard,
     };
   },
+  setCurrentCityRecruitmentQueue: (recruitmentQueue) => {
+    const state = store.getState();
+    const newGameBoard = [...state.game.gameBoard];
+    newGameBoard[state.game.selectedTilePosition]
+        .city.currentRecruitmentQueue = recruitmentQueue;
+    return {
+      type: gameAT.SET_GAME_BOARD,
+      gameBoard: newGameBoard,
+    };
+  },
   setCityMenuSupplementalView: (cityMenuSupplementalView) => {
     return {
       type: gameAT.SET_CITY_MENU_SUPPLEMENTAL_VIEW,

@@ -50,9 +50,9 @@ const SelectedBuildingDetails = (props) => {
             {/* Building bonuses*/}
             <Row>
               <ul>
-                {fullBuildingInfo.bonusesProvided &&
-                fullBuildingInfo.bonusesProvided.length > 0 ?
-                fullBuildingInfo.bonusesProvided.map((bonus, index) => (
+                {fullBuildingInfo.buildingBonusesProvided &&
+                fullBuildingInfo.buildingBonusesProvided.length > 0 ?
+                fullBuildingInfo.buildingBonusesProvided.map((bonus, index) => (
                   <li key={bonus.buildingBonusType + index}>
                     <BuildingBonusItem
                       bonus={bonus}/>

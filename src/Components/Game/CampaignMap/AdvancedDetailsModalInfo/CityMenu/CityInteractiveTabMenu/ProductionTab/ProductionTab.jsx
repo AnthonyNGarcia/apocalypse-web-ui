@@ -28,16 +28,15 @@ const ProductionTab = (props) => {
         {/* Second row is the scrollbar */}
         <Row>
           <Scrollbars style={{height: '30vh', width: '95%'}}>
-            {props.mainPanelData.constructibleBuildings &&
-              props.mainPanelData.constructibleBuildings.length > 0 ?
-              props.mainPanelData.constructibleBuildings
+            {props.selectedCity.constructibleBuildings &&
+              props.selectedCity.constructibleBuildings.length > 0 ?
+              props.selectedCity.constructibleBuildings
                   .map((bldg, index) => (
                     <React.Fragment key={index}>
                       <AvailableBuildingItem
-                        key={index}
-                        bldg={{...bldg}}
-                        finalProduction={props.finalProduction}
-                        city={{...props.city}}/>
+                        key={index +
+                          props.selectedCity.currentConstructionProject}
+                        bldg={{...bldg}}/>
                     </React.Fragment>
                   )) : (
                 <React.Fragment>
@@ -56,16 +55,14 @@ const ProductionTab = (props) => {
         {/* Second row is recruitment queue */}
         <Row>
           <Scrollbars style={{height: '15vh', width: '95%'}}>
-            {props.mainPanelData.currentRecruitmentQueue &&
-              props.mainPanelData.currentRecruitmentQueue.length > 0 ?
-              props.mainPanelData.currentRecruitmentQueue
+            {props.selectedCity.currentRecruitmentQueue &&
+              props.selectedCity.currentRecruitmentQueue.length > 0 ?
+              props.selectedCity.currentRecruitmentQueue
                   .map((queuedUnit, index) => (
                     <React.Fragment key={index}>
                       <QueuedUnitItem
                         key={index}
-                        unit={{...queuedUnit}}
-                        finalProduction={props.finalProduction}
-                        city={{...props.city}}/>
+                        unit={{...queuedUnit}}/>
                     </React.Fragment>
                   )) : (
                 <React.Fragment>
@@ -81,9 +78,9 @@ const ProductionTab = (props) => {
         {/* Fourth row is trainable units scrollbar */}
         <Row>
           <Scrollbars style={{height: '15vh', width: '95%'}}>
-            {props.mainPanelData.trainableUnits &&
-              props.mainPanelData.trainableUnits.length > 0 ?
-              props.mainPanelData.trainableUnits
+            {props.selectedCity.trainableUnits &&
+              props.selectedCity.trainableUnits.length > 0 ?
+              props.selectedCity.trainableUnits
                   .map((unitType, index) => (
                     <React.Fragment key={index}>
                       <TrainableUnitItem
@@ -105,14 +102,12 @@ const ProductionTab = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    mainPanelData: state.game.mainPanelData,
+    selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
   };
 };
 
 ProductionTab.propTypes = {
-  mainPanelData: PropTypes.any,
-  finalProduction: PropTypes.number,
-  city: PropTypes.any,
+  selectedCity: PropTypes.any,
 };
 
 export default connect(mapStateToProps)(ProductionTab);

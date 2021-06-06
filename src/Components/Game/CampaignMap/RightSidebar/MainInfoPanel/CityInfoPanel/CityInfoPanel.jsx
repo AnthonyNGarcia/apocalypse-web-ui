@@ -40,10 +40,10 @@ const CityInfoPanel = (props) => {
       <React.Fragment>
         <Container>
           <Row className='center-text'>
-            <footer>{props.mainPanelData.name}</footer>
+            <footer>{props.selectedCity.name}</footer>
           </Row>
           <Row className='center-text'>
-          Tier {props.mainPanelData.tier} City
+          Tier {props.selectedCity.tier} City
           </Row>
           <Row className='center-text'>
             <Col xs={8}>
@@ -59,45 +59,20 @@ const CityInfoPanel = (props) => {
             </Col>
             <Col xs={4}>
               <Row>
-                {(
-                  props.mainPanelData.baseProduction +
-                ownPlayerData.flatGlobalProductionBonus
-                ) *
-              (
-                (
-                  100 + props.mainPanelData.percentProductionBonus +
-                  ownPlayerData.percentGlobalProductionBonus
-                ) / 100
-              )}
+                {props.selectedCity.totalBuildingProduction}
               </Row>
               <Row>
-                {(
-                  props.mainPanelData.baseResearch +
-                ownPlayerData.flatGlobalResearchBonus
-                ) *
-              (
-                (
-                  100 + props.mainPanelData.percentResearchBonus +
-                  ownPlayerData.percentGlobalResearchBonus
-                ) / 100
-              )}
+                {props.selectedCity.totalResearch}
               </Row>
               <Row>
-                {props.mainPanelData.currentGrowthStockpile}/200 (+{(
-                  props.mainPanelData.baseGrowth +
-                ownPlayerData.flatGlobalGrowthBonus
-                ) *
-              (
-                (
-                  100 + props.mainPanelData.percentGrowthBonus +
-                  ownPlayerData.percentGlobalGrowthBonus
-                ) / 100
-              )})
+                {props.selectedCity.currentGrowthStockpile}/250 (+{
+                  props.selectedCity.totalGrowth
+                })
               </Row>
             </Col>
           </Row>
           <Row>
-            {props.ownPlayerNumber === props.mainPanelData.owner ?
+            {props.ownPlayerNumber === props.selectedCity.owner ?
             <Button variant="primary"
               onClick={showCityMenuHandler}>Show City Menu</Button> : null}
           </Row>
@@ -117,7 +92,7 @@ const CityInfoPanel = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    mainPanelData: state.game.mainPanelData,
+    selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
     playerOne: state.game.playerOne,
     playerTwo: state.game.playerTwo,
     ownPlayerNumber: state.game.ownPlayerNumber,
@@ -132,7 +107,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 CityInfoPanel.propTypes = {
-  mainPanelData: PropTypes.any,
+  selectedCity: PropTypes.any,
   playerOne: PropTypes.any,
   playerTwo: PropTypes.any,
   ownPlayerNumber: PropTypes.string,
