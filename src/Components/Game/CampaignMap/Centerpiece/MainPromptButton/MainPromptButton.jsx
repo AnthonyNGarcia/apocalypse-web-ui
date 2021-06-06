@@ -22,13 +22,15 @@ const MainPromptButton = (props) => {
     try {
       const tilesOfOwnCities = props.gameBoard.filter( (tile) => tile.city &&
           tile.city.owner === props.ownPlayerNumber);
+      const tilesOfOwnArmies = props.gameBoard.filter( (tile) => tile.army &&
+          tile.army.owner === props.ownPlayerNumber);
       const endTurnRequest = {
         playerEndingTurn: props.ownPlayerNumber,
         playerWhoseTurnItIs: props.ownPlayerNumber === PLAYER.ONE ?
         PLAYER.TWO : PLAYER.ONE,
         cityTilesOfPlayerEndingTurn: tilesOfOwnCities,
+        armyTilesOfPlayerEndingTurn: tilesOfOwnArmies,
       };
-      console.log(endTurnRequest);
       await axios.post(
           apiEndpoints.gameController +
           '/in-memory-end-turn/' + props.gameId, endTurnRequest);

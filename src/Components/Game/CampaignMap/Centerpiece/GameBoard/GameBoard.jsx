@@ -49,16 +49,18 @@ const GameBoard = (props) => {
     props.updateAwaitingServerConfirmation(false);
     // No matter what, if the server gives us a game board,
     // we must accept it immediately, without modifications.
-    if (message.body.gameBoard) {
-      props.updateGameBoard(message.body.gameBoard);
+    if (await message.body.gameBoard) {
+      await props.updateGameBoard(message.body.gameBoard);
       console.log('Received websocket message to replace the entire board!');
+      console.log(message.body.gameBoard);
     }
     // Let's identify what kind of message this is, to handle it properly
     if (message.body.messageType) {
       switch (message.body.messageType) {
         case WEBSOCKET_MESSAGE_TYPES.PLAYER_ENDED_TURN:
           resetPlayerView();
-          props.updatePlayerWhoseTurnItIs(message.body.playerWhoseTurnItIs);
+          await props.updatePlayerWhoseTurnItIs(
+              message.body.playerWhoseTurnItIs);
           break;
         case WEBSOCKET_MESSAGE_TYPES.ARMY_MOVED_UNCONTESTED:
           const gameBoardWithArmyMoved = await JSON.parse(
@@ -66,14 +68,26 @@ const GameBoard = (props) => {
           gameBoardWithArmyMoved[message.body.endingTilePosition].army =
             message.body.army;
           gameBoardWithArmyMoved[message.body.startingTilePosition].army = null;
-          props.updateGameBoard(gameBoardWithArmyMoved);
+          await props.updateGameBoard(gameBoardWithArmyMoved);
           break;
         case WEBSOCKET_MESSAGE_TYPES.ARMY_STANCE_CHANGED:
           const gameBoardWithArmyStanceChanged = await JSON.parse(
               JSON.stringify(props.gameBoard));
           gameBoardWithArmyStanceChanged[message.body.tilePosition].army =
             message.body.army;
-          props.updateGameBoard(gameBoardWithArmyStanceChanged);
+          await props.updateGameBoard(gameBoardWithArmyStanceChanged);
+          break;
+        case WEBSOCKET_MESSAGE_TYPES.UNIT_RECRUITMENT_QUEUE_UPDATED:
+          const gameBoardWithRecruitmentQueueUpdated = await JSON.parse(
+              JSON.stringify(props.gameBoard));
+          gameBoardWithRecruitmentQueueUpdated[message.body.cityTilePosition]
+              .city.currentRecruitmentQueue = message.body
+                  .updatedUnitRecruitmentQueue;
+          gameBoardWithRecruitmentQueueUpdated[message.body.cityTilePosition]
+              .city.unitProductionRemaining = message.body
+                  .updatedRemainingUnitProduction;
+          await props.updateGameBoard(gameBoardWithRecruitmentQueueUpdated);
+
           break;
         default:
           logUnexpectedWebsocketMessage(message);

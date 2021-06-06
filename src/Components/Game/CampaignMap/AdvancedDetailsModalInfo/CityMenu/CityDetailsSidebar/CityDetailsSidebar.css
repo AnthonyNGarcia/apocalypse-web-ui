@@ -26,3 +26,11 @@
   transform: translateY(-50%);  
   left: 50%;
 }
+
+.kinda-tiny-hammer-icon {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 1.6vh;
+  width: auto;
+}

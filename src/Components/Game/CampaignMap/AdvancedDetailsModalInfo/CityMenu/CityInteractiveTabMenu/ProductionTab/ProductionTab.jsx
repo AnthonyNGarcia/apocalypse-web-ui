@@ -50,7 +50,14 @@ const ProductionTab = (props) => {
       <Col >
         {/* First row is the header for recruitment queue */}
         <Row>
-          <h5>Recruitment Queue</h5>
+          <h5>Recruitment Queue (
+            {props.selectedCity.unitProductionRemaining}/{
+              props.selectedCity.totalUnitProduction}<span><img
+              src={'hammer.png'}
+              alt=""
+              className={'tiny-hammer-icon'}
+            /></span>)
+          </h5>
         </Row>
         {/* Second row is recruitment queue */}
         <Row>
@@ -59,10 +66,12 @@ const ProductionTab = (props) => {
               props.selectedCity.currentRecruitmentQueue.length > 0 ?
               props.selectedCity.currentRecruitmentQueue
                   .map((queuedUnit, index) => (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={index +
+                    props.selectedCity.currentRecruitmentQueue.length}>
                       <QueuedUnitItem
                         key={index}
-                        unit={{...queuedUnit}}/>
+                        queuedUnit={{...queuedUnit}}
+                        discardingIndex={index}/>
                     </React.Fragment>
                   )) : (
                 <React.Fragment>

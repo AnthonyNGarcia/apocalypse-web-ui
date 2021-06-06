@@ -9,6 +9,8 @@ import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../../../../Utilities/cityMenuSupplementalViews';
 import gameAC from
   '../../../../../../../../Redux/actionCreators/gameActionCreators';
+import axios from 'axios';
+import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
 import './TrainableUnitItem.css';
 
 /**
@@ -46,11 +48,20 @@ const TrainableUnitItem = (props) => {
     props.updateCityMenuSupplementalData(props.unitType);
   };
 
-  const addUnitHandler = (e) => {
+  const addUnitHandler = async (e) => {
     e.preventDefault();
-    // Send message/request to backend to approve it
-    // We will have to listen to a websocket message of the
-    // response to see an update render in the UI
+    try {
+      const addUnitRequest = {
+        cityTilePosition: props.selectedTilePosition,
+        desiredUnitType: props.unitType,
+      };
+      await axios.post(
+          apiEndpoints.gameController +
+          '/in-memory-recruitment-queue/' + props.gameId, addUnitRequest);
+    } catch (e) {
+      console.warn('Oops! There was an error trying to recruit a unit!');
+      console.warn(e);
+    }
   };
 
   if (props.unitType && fullUnitInfo) {
@@ -106,9 +117,11 @@ const TrainableUnitItem = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    gameId: state.game.gameId,
     allUnits: state.game.gameConstants.allUnits,
     isOwnTurn: state.game.isOwnTurn,
     selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
+    selectedTilePosition: state.game.selectedTilePosition,
   };
 };
 
@@ -124,6 +137,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 TrainableUnitItem.propTypes = {
+  gameId: PropTypes.string,
   allUnits: PropTypes.any,
   isOwnTurn: PropTypes.bool,
   unitType: PropTypes.string,
@@ -131,6 +145,7 @@ TrainableUnitItem.propTypes = {
   updateCityMenuSupplementalData: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
   updateCurrentCityRecruitmentQueue: PropTypes.func,
+  selectedTilePosition: PropTypes.number,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TrainableUnitItem);

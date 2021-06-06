@@ -58,19 +58,20 @@ const SelectedBuildingDetails = (props) => {
                       bonus={bonus}/>
                   </li>
                 )) : null}
-                {fullBuildingInfo.unitsUnlockedByThis &&
-                fullBuildingInfo.unitsUnlockedByThis.length > 0 ?
-                fullBuildingInfo.unitsUnlockedByThis.map((unitType, index) => (
-                    props.allUnits[unitType] ? (
-                      <li key={unitType + index}>
-                        Unlocks Training the {props
-                            .allUnits[unitType].displayName}
-                      </li>
-                    ) : null
-                )) : null}
-                {fullBuildingInfo.buildingsUnlockedByThis &&
-                fullBuildingInfo.buildingsUnlockedByThis.length > 0 ?
-                fullBuildingInfo.buildingsUnlockedByThis
+                {fullBuildingInfo.unitTypesUnlockedByThis &&
+                fullBuildingInfo.unitTypesUnlockedByThis.length > 0 ?
+                fullBuildingInfo.unitTypesUnlockedByThis.map(
+                    (unitType, index) => (
+                      props.allUnits[unitType] ? (
+                        <li key={unitType + index}>
+                          Unlocks Training the {props
+                              .allUnits[unitType].displayName}
+                        </li>
+                      ) : null
+                    )) : null}
+                {fullBuildingInfo.buildingTypesUnlockedByThis &&
+                fullBuildingInfo.buildingTypesUnlockedByThis.length > 0 ?
+                fullBuildingInfo.buildingTypesUnlockedByThis
                     .map((buildingType, index) => (
                       props.allBuildings[buildingType] ? (
                         <li key={buildingType + index}>

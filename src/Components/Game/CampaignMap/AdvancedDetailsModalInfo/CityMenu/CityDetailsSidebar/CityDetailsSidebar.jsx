@@ -67,7 +67,11 @@ const CityDetailsSidebar = (props) => {
             </Col>
             <Col md={6}>
               <Row>
-                {props.selectedCity.totalBuildingProduction}
+                {props.selectedCity.totalBuildingProduction} <span><img
+                  src={'hammer.png'}
+                  alt=""
+                  className={'kinda-tiny-hammer-icon'}
+                /></span>
               </Row>
               <Row>
                 {props.selectedCity.totalResearch}
