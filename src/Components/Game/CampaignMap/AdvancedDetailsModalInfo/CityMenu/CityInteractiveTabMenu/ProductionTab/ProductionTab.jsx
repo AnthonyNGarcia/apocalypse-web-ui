@@ -23,7 +23,7 @@ const ProductionTab = (props) => {
       <Col>
         {/* First row is the header */}
         <Row>
-          <h5>Available Buildings to Construct</h5>
+          <h5 style={{'margin': 'auto'}}>Available Buildings to Construct</h5>
         </Row>
         {/* Second row is the scrollbar */}
         <Row>
@@ -50,7 +50,7 @@ const ProductionTab = (props) => {
       <Col >
         {/* First row is the header for recruitment queue */}
         <Row>
-          <h5>Recruitment Queue (
+          <h5 style={{'margin': 'auto'}}>Recruitment Queue (
             {props.selectedCity.unitProductionRemaining}/{
               props.selectedCity.totalUnitProduction}<span><img
               src={'hammer.png'}

@@ -62,15 +62,30 @@ const SelectedUnitDetails = (props) => {
                     UNIT_CLASSES[fullUnitInfo.unitClass].displayName}
                 </li>
                 <li>
-                  <span className='unit-stat-title'>Health:</span> {
+                  <span><img
+                    src={'health.svg'}
+                    alt=""
+                    className={'tiny-hammer-icon'}
+                  /> </span> <span
+                    className='unit-stat-title'>Health: </span> {
                     fullUnitInfo.baseMaxHealth}
                 </li>
                 <li>
-                  <span className='unit-stat-title'>Armor:</span> {
+                  <span><img
+                    src={'armor.svg'}
+                    alt=""
+                    className={'tiny-hammer-icon'}
+                  /> </span> <span
+                    className='unit-stat-title'>Armor: </span> {
                     fullUnitInfo.baseArmor}
                 </li>
                 <li>
-                  <span className='unit-stat-title'>Damage:</span> {
+                  <span><img
+                    src={'damage.svg'}
+                    alt=""
+                    className={'tiny-hammer-icon'}
+                  /> </span> <span
+                    className='unit-stat-title'>Damage: </span> {
                     fullUnitInfo.baseDamage}
                 </li>
               </ul>
