@@ -41,7 +41,7 @@ const QueuedUnitItem = (props) => {
     try {
       const removeUnitRequest = {
         tilePosition: props.selectedTilePosition,
-        discardingIndex: props.discardingIndex,
+        unitIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
           apiEndpoints.gameController +

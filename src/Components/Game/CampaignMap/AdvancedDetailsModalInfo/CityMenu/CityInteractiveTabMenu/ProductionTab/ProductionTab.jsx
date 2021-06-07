@@ -37,7 +37,7 @@ const ProductionTab = (props) => {
         </Row>
         {/* Second row is the scrollbar */}
         <Row>
-          <Scrollbars style={{height: '30vh', width: '95%'}}>
+          <Scrollbars style={{height: '30vh'}}>
             {props.selectedCity.constructibleBuildings &&
               props.selectedCity.constructibleBuildings.length > 0 ?
               props.selectedCity.constructibleBuildings
@@ -57,7 +57,7 @@ const ProductionTab = (props) => {
         </Row>
       </Col>
       {/* Second col is for training */}
-      <Col >
+      <Col>
         {/* First row is the header for recruitment queue */}
         <Row>
           <h5 style={{'margin': 'auto'}}>Recruitment Queue (
@@ -96,7 +96,7 @@ const ProductionTab = (props) => {
         </Row>
         {/* Third row is header for trainable units */}
         <Row>
-          <h5>Available Units to Train</h5>
+          <h5 style={{'margin': 'auto'}}>Available Units to Train</h5>
         </Row>
         {/* Fourth row is trainable units scrollbar */}
         <Row>

@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import {Scrollbars} from 'react-custom-scrollbars-2';
+import ArmyUnitItem from './ArmyUnitItem/ArmyUnitItem';
 import './ArmyInfoPanel.css';
 
 /**
@@ -16,38 +18,67 @@ const ArmyInfoPanel = (props) => {
   const [selectedArmyMaxSize, setSelectedArmyMaxSize] = useState(0);
   useEffect(() => {
     let armySize = 0;
-    if (props.mainPanelData.owner === props.playerOne.playerNumber) {
+    if (props.selectedArmy.owner === props.playerOne.playerNumber) {
       armySize += props.playerOne.currentBaseArmySize;
-    } else if (props.mainPanelData.owner === props.playerTwo.playerNumber) {
+    } else if (props.selectedArmy.owner === props.playerTwo.playerNumber) {
       armySize += props.playerTwo.currentBaseArmySize;
     } else {
       console.log('Oops! Couldn\'t map this army to a player!');
     }
-    armySize += props.mainPanelData.commander.armySizeBonus;
+    armySize += props.selectedArmy.commander.armySizeBonus;
     setSelectedArmyMaxSize(armySize);
   }, [props]);
   return (
     <React.Fragment>
       <Container>
-        <Row className='center-text'>
-          <footer>Commander {props.mainPanelData.commander.name}</footer>
-        </Row>
-        <Row className='center-text'>
-          Level {props.mainPanelData.commander.level}
-        </Row>
-        <Row className='center-text'>
-          Units: {props.mainPanelData.units.length}/
-          {selectedArmyMaxSize}
-        </Row>
-        <Row>
-          <p>{props.mainPanelData.units.map((unit, index) => (
-            <React.Fragment
-              key={index + '-' + unit.unitType}>
-              {props.allUnitsConstants[unit.unitType].displayName +
-              ( index < props.mainPanelData.units.length - 1 ? ', ' : '')}
-            </React.Fragment>
-          ))}</p>
-        </Row>
+        {props.ownPlayerNumber === props.selectedArmy.owner ?
+        <React.Fragment>
+          <Row className='center-text'>
+            <h2>Commander {props.selectedArmy.commander.name}</h2>
+          </Row>
+          <Row className='center-text'>
+            <h5>Level {props.selectedArmy.commander.level}</h5>
+          </Row>
+          <Row className='center-text'>
+            <h5>Units: {props.selectedArmy.units.length}/
+              {selectedArmyMaxSize}</h5>
+          </Row>
+          <Row>
+            <Scrollbars style={{height: '30vh', width: '95%'}}>
+              {props.selectedArmy.units &&
+                props.selectedArmy.units.length > 0 ?
+                props.selectedArmy.units
+                    .map((unit, index) => (
+                      <React.Fragment key={index}>
+                        <ArmyUnitItem
+                          key={index +
+                            unit.unitType}
+                          unit={{...unit}}
+                          discardingIndex={index}/>
+                      </React.Fragment>
+                    )) : (
+                  <React.Fragment>
+                    This commander is not leading any units.
+                  </React.Fragment>
+                )}
+            </Scrollbars>
+          </Row>
+        </React.Fragment> :
+        <React.Fragment>
+          <Row className='center-text enemy-entity'>
+            <h2>Commander {props.selectedArmy.commander.name}</h2>
+          </Row>
+          <Row className='center-text enemy-entity'>
+            <h5>Level {props.selectedArmy.commander.level}</h5>
+          </Row>
+          <Row className='center-text enemy-entity'>
+            <h5>Units: {props.selectedArmy.units.length}/
+              {selectedArmyMaxSize}</h5>
+          </Row>
+          <Row className='center-text enemy-entity'>
+            This is an enemy Army.
+          </Row>
+        </React.Fragment>}
       </Container>
     </React.Fragment>
   );
@@ -55,10 +86,11 @@ const ArmyInfoPanel = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    mainPanelData: state.game.mainPanelData,
     allUnitsConstants: state.game.gameConstants.allUnits,
     playerOne: state.game.playerOne,
     playerTwo: state.game.playerTwo,
+    ownPlayerNumber: state.game.ownPlayerNumber,
+    selectedArmy: state.game.gameBoard[state.game.selectedTilePosition].army,
   };
 };
 
@@ -67,6 +99,8 @@ ArmyInfoPanel.propTypes = {
   allUnitsConstants: PropTypes.any,
   playerOne: PropTypes.any,
   playerTwo: PropTypes.any,
+  ownPlayerNumber: PropTypes.string,
+  selectedArmy: PropTypes.any,
 };
 
 export default connect(mapStateToProps)(ArmyInfoPanel);

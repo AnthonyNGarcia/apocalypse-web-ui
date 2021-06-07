@@ -57,11 +57,12 @@ const ArmyTab = (props) => {
                   There are no unassigned units in this city.
                 </React.Fragment>
               )}
-            {props.selectedCity.currentRecruitmentQueue.length > 0 ?
+            <p>{props.selectedCity.currentRecruitmentQueue.length > 0 ?
               'An additional ' + props.selectedCity
                   .currentRecruitmentQueue.length +
             ' unit(s) in training account for the total population ' +
             'space in use.': ''}
+            </p>
           </Scrollbars>
         </Row>
       </Col>

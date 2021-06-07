@@ -67,6 +67,11 @@ const PASSIVE_ABILITIES = {
     enum: 'SKIRMISHER',
     displayName: 'Skirmisher',
   },
+  DOUBLE_TAP: {
+    enum: 'DOUBLE_TAP',
+    prefix: 'Double Tap (',
+    suffix: ')',
+  },
 };
 
 export default PASSIVE_ABILITIES;

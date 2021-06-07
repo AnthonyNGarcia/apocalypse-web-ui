@@ -1,0 +1,14 @@
+.army-unit-container {
+  overflow: hidden;
+  background-color: rgb(231, 230, 230);
+  border-radius: 5px;
+  box-shadow: 1px 1px 6px black;
+  margin-bottom: 1vh;
+  text-align: center;
+  height: auto;
+  width: 95%;
+}
+
+.sidebar-unit-text {
+    color: black;
+}

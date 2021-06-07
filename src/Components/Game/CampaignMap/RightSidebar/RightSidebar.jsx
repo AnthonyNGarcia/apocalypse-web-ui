@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import MainInfoPanel from './MainInfoPanel/MainInfoPanel';
 import SupplementalInfoPanel from
   './SupplementalInfoPanel/SupplementalInfoPanel';
-import ArmyActionBar from '../Centerpiece/ArmyActionBar/ArmyActionBar';
+// import ArmyActionBar from '../Centerpiece/ArmyActionBar/ArmyActionBar';
 import './RightSidebar.css';
 
 /**
@@ -18,11 +18,11 @@ const RightSidebar = (props) => {
   return (
     <React.Fragment>
       <Container>
-        <Row>
+        <Row style={{'height': '30vh'}}>
           <MainInfoPanel/>
         </Row>
         <Row>
-          <ArmyActionBar/>
+          {/* <ArmyActionBar/> */}
         </Row>
         <Row>
           <SupplementalInfoPanel/>

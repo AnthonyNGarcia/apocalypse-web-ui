@@ -11,6 +11,7 @@ import gameAC from
   '../../../../../../../../Redux/actionCreators/gameActionCreators';
 import axios from 'axios';
 import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
+import PLAYER from '../../../../../../../Utilities/playerEnums';
 import './UnassignedUnitItem.css';
 
 /**
@@ -41,7 +42,7 @@ const UnassignedUnitItem = (props) => {
     try {
       const removeUnitRequest = {
         tilePosition: props.selectedTilePosition,
-        discardingIndex: props.discardingIndex,
+        unitIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
           apiEndpoints.gameController +
@@ -53,10 +54,36 @@ const UnassignedUnitItem = (props) => {
     }
   };
 
+  const assignUnitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const assignUnitRequest = {
+        tilePosition: props.selectedTilePosition,
+        unitIndex: props.discardingIndex,
+      };
+      console.log(await axios.patch(
+          apiEndpoints.gameController +
+          '/in-memory-army-units-assignment/' + props.gameId,
+          assignUnitRequest));
+    } catch (e) {
+      console.warn('Oops! There was an error trying to assign ' +
+        'an unassigned unit!');
+      console.warn(e);
+    }
+  };
+
   if (props.unit.unitType && fullUnitInfo) {
     return (
       <div className='unit-option-container'>
         <Row onClick={(e) => viewUnitHandler(e)} className='vertically-center'>
+          <Col md={1}>
+            <Button
+              variant='danger'
+              onClick={removeUnitHandler}
+              disabled={!props.isOwnTurn}>
+                x
+            </Button>
+          </Col>
           <Col md={2}>
             <img
               src={fullUnitInfo.unitType + '_ICON.svg'}
@@ -64,7 +91,7 @@ const UnassignedUnitItem = (props) => {
               alt=""
               className='unit-icon'/>
           </Col>
-          <Col md={7}>
+          <Col md={6}>
             <p>
               {fullUnitInfo.displayName} ({
                 props.unit.currentHealth}/{fullUnitInfo
@@ -75,12 +102,15 @@ const UnassignedUnitItem = (props) => {
               /></span>)
             </p>
           </Col>
-          <Col md={3}>
+          <Col md={1}>
             <Button
-              variant='danger'
-              onClick={removeUnitHandler}
-              disabled={!props.isOwnTurn}>
-                x
+              variant='dark'
+              onClick={assignUnitHandler}
+              disabled={!props.isOwnTurn || !props.selectedTile.army ||
+              (props.selectedTile.army &&
+                props.selectedTile.army.units.length >=
+                props.ownPlayerData.currentBaseArmySize)}>
+              {'>>'}
             </Button>
           </Col>
         </Row>
@@ -103,6 +133,9 @@ const mapStateToProps = (state) => {
     allUnits: state.game.gameConstants.allUnits,
     isOwnTurn: state.game.isOwnTurn,
     selectedTilePosition: state.game.selectedTilePosition,
+    selectedTile: state.game.gameBoard[state.game.selectedTilePosition],
+    ownPlayerData: state.game.ownPlayerNumber === PLAYER.ONE ?
+      state.game.playerOne : state.game.playerTwo,
   };
 };
 
@@ -124,6 +157,8 @@ UnassignedUnitItem.propTypes = {
   updateCityMenuSupplementalData: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
   selectedTilePosition: PropTypes.number,
+  ownPlayerData: PropTypes.any,
+  selectedTile: PropTypes.any,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UnassignedUnitItem);

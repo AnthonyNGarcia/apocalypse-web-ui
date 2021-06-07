@@ -29,7 +29,7 @@ const InLobby = (props) => {
   const websocket = useRef(null);
 
   const saveFactionGameData = (playerData) => {
-    switch (playerData.faction) {
+    switch (playerData.factionType) {
       case FACTIONS.HUMANS.NAME:
         props.saveActionBarData(FACTIONS.HUMANS.ACTION_BAR_DATA);
         break;

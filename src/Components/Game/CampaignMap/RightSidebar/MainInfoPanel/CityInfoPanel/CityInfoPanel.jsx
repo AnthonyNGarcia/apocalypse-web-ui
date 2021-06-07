@@ -39,42 +39,57 @@ const CityInfoPanel = (props) => {
     return (
       <React.Fragment>
         <Container>
-          <Row className='center-text'>
-            <footer>{props.selectedCity.name}</footer>
-          </Row>
-          <Row className='center-text'>
-          Tier {props.selectedCity.tier} City
-          </Row>
-          <Row className='center-text'>
-            <Col xs={8}>
-              <Row>
+          {props.ownPlayerNumber === props.selectedCity.owner ?
+          <React.Fragment>
+            <Row className='center-text'>
+              <h2>{props.selectedCity.name}</h2>
+            </Row>
+            <Row className='center-text'>
+              <h5>Tier {props.selectedCity.tier} City</h5>
+            </Row>
+            <Row className='center-text'>
+              <Col xs={8}>
+                <Row>
               Production:
-              </Row>
-              <Row>
+                </Row>
+                <Row>
               Research:
-              </Row>
-              <Row>
+                </Row>
+                <Row>
               Growth:
-              </Row>
-            </Col>
-            <Col xs={4}>
-              <Row>
-                {props.selectedCity.totalBuildingProduction}
-              </Row>
-              <Row>
-                {props.selectedCity.totalResearch}
-              </Row>
-              <Row>
-                {props.selectedCity.currentGrowthStockpile}/250 (+{
-                  props.selectedCity.totalGrowth
-                })
-              </Row>
-            </Col>
-          </Row>
+                </Row>
+              </Col>
+              <Col xs={4}>
+                <Row>
+                  {props.selectedCity.totalBuildingProduction}
+                </Row>
+                <Row>
+                  {props.selectedCity.totalResearch}
+                </Row>
+                <Row>
+                  {props.selectedCity.currentGrowthStockpile}/250 (+{
+                    props.selectedCity.totalGrowth
+                  })
+                </Row>
+              </Col>
+            </Row>
+            <Row className='center-text'>
+              <Button variant="primary"
+                onClick={showCityMenuHandler}>Show City Menu</Button>
+            </Row>
+          </React.Fragment> :
+             <React.Fragment>
+               <Row className='center-text enemy-entity'>
+                 <h2>{props.selectedCity.name}</h2>
+               </Row>
+               <Row className='center-text enemy-entity'>
+                 <h5>Tier {props.selectedCity.tier} City</h5>
+               </Row>
+               <Row className='center-text enemy-entity'>
+                 <p>This is an enemy City.</p>
+               </Row>
+             </React.Fragment>}
           <Row>
-            {props.ownPlayerNumber === props.selectedCity.owner ?
-            <Button variant="primary"
-              onClick={showCityMenuHandler}>Show City Menu</Button> : null}
           </Row>
         </Container>
       </React.Fragment>

@@ -8,7 +8,6 @@
 }
 
 .city-icon {
-  filter: saturate(5);
   z-index: 10;
   display: block;
   margin-top: 15px;
@@ -28,6 +27,14 @@
   bottom: 0;
   width: 60%;
   height: auto;
+}
+
+.own-army {
+  filter: sepia(100%) hue-rotate(80deg) saturate(2.5);
+}
+
+.enemy-army {
+  filter: sepia(100%) hue-rotate(310deg) saturate(5);
 }
 
 .army-is-untapped {
@@ -56,6 +63,6 @@
 
 @keyframes slow-blink {
   30% {
-    filter: brightness(1.4);
+    filter: brightness(1.2) saturate(1.5);
   }
 }

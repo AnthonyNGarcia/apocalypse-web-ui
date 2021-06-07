@@ -14,9 +14,11 @@ import WEBSOCKET_MESSAGE_TYPES from
   '../../../../Utilities/websocketMessageTypes';
 import axios from 'axios';
 import apiEndpoints from '../../../../Utilities/apiEndpoints';
-import './GameBoard.css';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../Utilities/cityMenuSupplementalViews';
+import PLAYER from '../../../../Utilities/playerEnums';
+import FACTIONS from '../../../../Utilities/factions';
+import './GameBoard.css';
 
 /**
  *
@@ -51,14 +53,14 @@ const GameBoard = (props) => {
     // we must accept it immediately, without modifications.
     if (await message.body.gameBoard) {
       await props.updateGameBoard(message.body.gameBoard);
-      console.log('Received websocket message to replace the entire board!');
-      console.log(message.body.gameBoard);
     }
     // Let's identify what kind of message this is, to handle it properly
     if (message.body.messageType) {
       switch (message.body.messageType) {
         case WEBSOCKET_MESSAGE_TYPES.PLAYER_ENDED_TURN:
           resetPlayerView();
+          await props.updatePlayerOne(message.body.playerOne);
+          await props.updatePlayerTwo(message.body.playerTwo);
           await props.updatePlayerWhoseTurnItIs(
               message.body.playerWhoseTurnItIs);
           break;
@@ -103,6 +105,18 @@ const GameBoard = (props) => {
               .city.unassignedUnits = message.body
                   .updatedUnassignedUnits;
           await props.updateGameBoard(gameBoardWithUnassignedUnitsUpdated);
+          break;
+        case WEBSOCKET_MESSAGE_TYPES.ARMY_AND_UNASSIGNED_UNITS_UPDATED:
+          const gameBoardWithArmyAndUnassignedUnitsUpdated = await JSON.parse(
+              JSON.stringify(props.gameBoard));
+          gameBoardWithArmyAndUnassignedUnitsUpdated[message.body.tilePosition]
+              .city.unassignedUnits = message.body
+                  .updatedUnassignedUnits;
+          gameBoardWithArmyAndUnassignedUnitsUpdated[message.body.tilePosition]
+              .army.units = message.body
+                  .updatedArmyUnits;
+          await props
+              .updateGameBoard(gameBoardWithArmyAndUnassignedUnitsUpdated);
           break;
         default:
           logUnexpectedWebsocketMessage(message);
@@ -218,15 +232,50 @@ const GameBoard = (props) => {
         }
       }
       if (item.army) {
-        army = (
-          <img
-            src={'HUMAN_ARMY.png'}
-            alt=""
-            className={'heximage army-icon' +
-              (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
-            onClick={(e) => tileClicked(e, item)}
-          />
-        );
+        const ownerPlayerNumber = item.army.owner;
+        let ownerPlayerData;
+        if (ownerPlayerNumber === PLAYER.ONE) {
+          ownerPlayerData = props.playerOne;
+        } else if (ownerPlayerNumber === PLAYER.TWO) {
+          ownerPlayerData = props.playerTwo;
+        } else {
+          console.warn(
+              'Oops! Unidentified player number for an army to render.');
+        }
+        if (ownerPlayerData) {
+          const armyFaction = ownerPlayerData.factionType;
+          let armyStyling = 'heximage army-icon';
+          if (item.army.owner === props.ownPlayerNumber) {
+            armyStyling += ' own-army';
+          } else {
+            armyStyling += ' enemy-army';
+          }
+          if (armyFaction === FACTIONS.HUMANS.NAME) {
+            army = (
+              <img
+                src={'HUMAN_ARMY.svg'}
+                alt=""
+                className={armyStyling +
+                (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
+                onClick={(e) => tileClicked(e, item)}
+              />
+            );
+          } else if (armyFaction === FACTIONS.INSECTS.NAME) {
+            army = (
+              <img
+                src={'INSECT_ARMY.svg'}
+                alt=""
+                className={armyStyling +
+                (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
+                onClick={(e) => tileClicked(e, item)}
+              />
+            );
+          } else {
+            console.warn(
+                'Oops! Unidentified faction read when trying to render army.',
+            );
+          }
+        }
       }
       if (item.city) {
         city = (
@@ -286,6 +335,8 @@ const mapStateToProps = (state) => {
     ownPlayerNumber: state.game.ownPlayerNumber,
     isOwnTurn: state.game.isOwnTurn,
     viewingArmyInCity: state.game.viewingArmyInCity,
+    playerOne: state.game.playerOne,
+    playerTwo: state.game.playerTwo,
   };
 };
 
@@ -321,6 +372,10 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setCityMenuSupplementalView(view)),
     updateCityMenuSupplementalData: (data) => dispatch(
         gameAC.setCityMenuSupplementalData(data)),
+    updatePlayerOne: (player) => dispatch(
+        gameAC.setPlayerOne(player)),
+    updatePlayerTwo: (player) => dispatch(
+        gameAC.setPlayerTwo(player)),
   };
 };
 
@@ -350,6 +405,10 @@ GameBoard.propTypes = {
   unshowCityModal: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
   updateCityMenuSupplementalData: PropTypes.func,
+  updatePlayerOne: PropTypes.func,
+  updatePlayerTwo: PropTypes.func,
+  playerOne: PropTypes.any,
+  playerTwo: PropTypes.any,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);

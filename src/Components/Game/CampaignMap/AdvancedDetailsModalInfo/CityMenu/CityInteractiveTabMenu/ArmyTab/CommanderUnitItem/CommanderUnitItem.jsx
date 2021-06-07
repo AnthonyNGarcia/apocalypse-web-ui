@@ -11,6 +11,7 @@ import gameAC from
   '../../../../../../../../Redux/actionCreators/gameActionCreators';
 import axios from 'axios';
 import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
+import PLAYER from '../../../../../../../Utilities/playerEnums';
 import './CommanderUnitItem.css';
 
 /**
@@ -41,13 +42,32 @@ const CommanderUnitItem = (props) => {
     try {
       const removeUnitRequest = {
         tilePosition: props.selectedTilePosition,
-        discardingIndex: props.discardingIndex,
+        unitIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
           apiEndpoints.gameController +
-          '/in-memory-army-units/' + props.gameId, removeUnitRequest));
+          '/in-memory-army-units-disbanding/' +
+          props.gameId, removeUnitRequest));
     } catch (e) {
       console.warn('Oops! There was an error trying to disband an Army unit!');
+      console.warn(e);
+    }
+  };
+
+  const unassignUnitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const unassignUnitRequest = {
+        tilePosition: props.selectedTilePosition,
+        unitIndex: props.discardingIndex,
+      };
+      console.log(await axios.patch(
+          apiEndpoints.gameController +
+          '/in-memory-army-units-unassignment/' + props.gameId,
+          unassignUnitRequest));
+    } catch (e) {
+      console.warn('Oops! There was an error trying to unassign ' +
+        'an army unit!');
       console.warn(e);
     }
   };
@@ -57,13 +77,23 @@ const CommanderUnitItem = (props) => {
       <div className='unit-option-container'>
         <Row onClick={(e) => viewUnitHandler(e)} className='vertically-center'>
           <Col md={2}>
+            <Button
+              variant='dark'
+              onClick={unassignUnitHandler}
+              disabled={!props.isOwnTurn ||
+              (props.selectedTile.city.unassignedUnits.length >=
+                props.ownPlayerData.currentBaseArmySize)}>
+              {'<<'}
+            </Button>
+          </Col>
+          <Col md={2}>
             <img
               src={fullUnitInfo.unitType + '_ICON.svg'}
               onError={(e)=>e.target.src='shield.png'}
               alt=""
               className='unit-icon'/>
           </Col>
-          <Col md={7}>
+          <Col md={6}>
             <p>
               {fullUnitInfo.displayName} ({
                 props.unit.currentHealth}/{fullUnitInfo
@@ -74,7 +104,7 @@ const CommanderUnitItem = (props) => {
               /></span>)
             </p>
           </Col>
-          <Col md={3}>
+          <Col md={1}>
             <Button
               variant='danger'
               onClick={removeUnitHandler}
@@ -102,6 +132,9 @@ const mapStateToProps = (state) => {
     allUnits: state.game.gameConstants.allUnits,
     isOwnTurn: state.game.isOwnTurn,
     selectedTilePosition: state.game.selectedTilePosition,
+    selectedTile: state.game.gameBoard[state.game.selectedTilePosition],
+    ownPlayerData: state.game.ownPlayerNumber === PLAYER.ONE ?
+      state.game.playerOne : state.game.playerTwo,
   };
 };
 
@@ -123,6 +156,8 @@ CommanderUnitItem.propTypes = {
   updateCityMenuSupplementalData: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
   selectedTilePosition: PropTypes.number,
+  ownPlayerData: PropTypes.any,
+  selectedTile: PropTypes.any,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommanderUnitItem);
