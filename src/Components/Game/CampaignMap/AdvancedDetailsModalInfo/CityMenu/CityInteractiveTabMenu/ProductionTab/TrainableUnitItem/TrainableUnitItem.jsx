@@ -11,6 +11,7 @@ import gameAC from
   '../../../../../../../../Redux/actionCreators/gameActionCreators';
 import axios from 'axios';
 import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
+import PLAYER from '../../../../../../../Utilities/playerEnums';
 import './TrainableUnitItem.css';
 
 /**
@@ -28,8 +29,12 @@ const TrainableUnitItem = (props) => {
     const updateCanAddUnitToQueue = (freshFullUnitInfo) => {
       const usableFullUnitInfo = freshFullUnitInfo ?
         freshFullUnitInfo : fullUnitInfo;
+      const cityHasRoom = (props.selectedCity.unassignedUnits.length +
+          props.selectedCity.currentRecruitmentQueue.length) <
+          props.ownPlayerData.currentBaseArmySize;
       if (props.selectedCity.unitProductionRemaining >=
-        usableFullUnitInfo.productionCost) {
+        usableFullUnitInfo.productionCost &&
+        cityHasRoom) {
         setCanAddUnitToQueue(true);
       } else {
         setCanAddUnitToQueue(false);
@@ -71,11 +76,7 @@ const TrainableUnitItem = (props) => {
           <Col md={2}>
             <img
               src={fullUnitInfo.unitType + '_ICON.svg'}
-              onError={(e)=>{
-                if (errorflag) {
-                  errorflag=false; e.target.src='shield.png';
-                }
-              }}
+              onError={(e)=>e.target.src='shield.png'}
               alt=""
               className='unit-icon'/>
           </Col>
@@ -122,6 +123,8 @@ const mapStateToProps = (state) => {
     isOwnTurn: state.game.isOwnTurn,
     selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
     selectedTilePosition: state.game.selectedTilePosition,
+    ownPlayerData: state.game.ownPlayerNumber === PLAYER.ONE ?
+      state.game.playerOne : state.game.playerTwo,
   };
 };
 
@@ -146,6 +149,7 @@ TrainableUnitItem.propTypes = {
   updateCityMenuSupplementalView: PropTypes.func,
   updateCurrentCityRecruitmentQueue: PropTypes.func,
   selectedTilePosition: PropTypes.number,
+  ownPlayerData: PropTypes.any,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TrainableUnitItem);

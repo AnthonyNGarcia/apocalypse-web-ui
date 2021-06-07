@@ -87,7 +87,22 @@ const GameBoard = (props) => {
               .city.unitProductionRemaining = message.body
                   .updatedRemainingUnitProduction;
           await props.updateGameBoard(gameBoardWithRecruitmentQueueUpdated);
-
+          break;
+        case WEBSOCKET_MESSAGE_TYPES.ARMY_UNITS_UPDATED:
+          const gameBoardWithArmyUnitsUpdated = await JSON.parse(
+              JSON.stringify(props.gameBoard));
+          gameBoardWithArmyUnitsUpdated[message.body.armyTilePosition]
+              .army.units = message.body
+                  .updatedArmyUnits;
+          await props.updateGameBoard(gameBoardWithArmyUnitsUpdated);
+          break;
+        case WEBSOCKET_MESSAGE_TYPES.UNASSIGNED_UNITS_UPDATED:
+          const gameBoardWithUnassignedUnitsUpdated = await JSON.parse(
+              JSON.stringify(props.gameBoard));
+          gameBoardWithUnassignedUnitsUpdated[message.body.cityTilePosition]
+              .city.unassignedUnits = message.body
+                  .updatedUnassignedUnits;
+          await props.updateGameBoard(gameBoardWithUnassignedUnitsUpdated);
           break;
         default:
           logUnexpectedWebsocketMessage(message);

@@ -40,14 +40,14 @@ const CommanderUnitItem = (props) => {
     e.preventDefault();
     try {
       const removeUnitRequest = {
-        armyTilePosition: props.selectedTilePosition,
+        tilePosition: props.selectedTilePosition,
         discardingIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
           apiEndpoints.gameController +
           '/in-memory-army-units/' + props.gameId, removeUnitRequest));
     } catch (e) {
-      console.warn('Oops! There was an error trying to recruit a unit!');
+      console.warn('Oops! There was an error trying to disband an Army unit!');
       console.warn(e);
     }
   };

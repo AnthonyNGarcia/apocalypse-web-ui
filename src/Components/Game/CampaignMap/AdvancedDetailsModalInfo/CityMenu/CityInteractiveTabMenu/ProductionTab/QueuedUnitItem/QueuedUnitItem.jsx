@@ -40,7 +40,7 @@ const QueuedUnitItem = (props) => {
     e.preventDefault();
     try {
       const removeUnitRequest = {
-        cityTilePosition: props.selectedTilePosition,
+        tilePosition: props.selectedTilePosition,
         discardingIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
@@ -59,11 +59,7 @@ const QueuedUnitItem = (props) => {
           <Col md={2}>
             <img
               src={fullUnitInfo.unitType + '_ICON.svg'}
-              onError={(e)=>{
-                if (errorflag) {
-                  errorflag=false; e.target.src='shield.png';
-                }
-              }}
+              onError={(e)=>e.target.src='shield.png'}
               alt=""
               className='unit-icon'/>
           </Col>

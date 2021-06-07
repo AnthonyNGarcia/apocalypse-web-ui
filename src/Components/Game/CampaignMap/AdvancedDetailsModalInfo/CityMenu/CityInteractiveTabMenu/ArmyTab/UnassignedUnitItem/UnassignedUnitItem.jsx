@@ -40,14 +40,15 @@ const UnassignedUnitItem = (props) => {
     e.preventDefault();
     try {
       const removeUnitRequest = {
-        cityTilePosition: props.selectedTilePosition,
+        tilePosition: props.selectedTilePosition,
         discardingIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
           apiEndpoints.gameController +
           '/in-memory-unassigned-units/' + props.gameId, removeUnitRequest));
     } catch (e) {
-      console.warn('Oops! There was an error trying to recruit a unit!');
+      console.warn('Oops! There was an error trying to disband ' +
+        'an unassigned unit!');
       console.warn(e);
     }
   };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
@@ -8,6 +8,7 @@ import AvailableBuildingItem from
   './AvailableBuildingItem/AvailableBuildingItem';
 import QueuedUnitItem from './QueuedUnitItem/QueuedUnitItem';
 import TrainableUnitItem from './TrainableUnitItem/TrainableUnitItem';
+import PLAYER from '../../../../../../Utilities/playerEnums';
 import './ProductionTab.css';
 /**
  *
@@ -17,6 +18,15 @@ import './ProductionTab.css';
  * @return {JSX} to render
  */
 const ProductionTab = (props) => {
+  const [unitPopLabel, setUnitPopLabel] = useState('');
+
+  useEffect(() => {
+    const currentPopCount = props.selectedCity.unassignedUnits.length +
+      props.selectedCity.currentRecruitmentQueue.length;
+    setUnitPopLabel('' + currentPopCount + '/' +
+      props.ownPlayerData.currentBaseArmySize);
+  }, [props]);
+
   return (
     <React.Fragment>
       {/* First col is for building*/}
@@ -54,6 +64,10 @@ const ProductionTab = (props) => {
             {props.selectedCity.unitProductionRemaining}/{
               props.selectedCity.totalUnitProduction}<span><img
               src={'hammer.png'}
+              alt=""
+              className={'tiny-hammer-icon'}
+            /></span>, {unitPopLabel} <span><img
+              src={'unit_count.svg'}
               alt=""
               className={'tiny-hammer-icon'}
             /></span>)
@@ -112,11 +126,14 @@ const ProductionTab = (props) => {
 const mapStateToProps = (state) => {
   return {
     selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
+    ownPlayerData: state.game.ownPlayerNumber === PLAYER.ONE ?
+      state.game.playerOne : state.game.playerTwo,
   };
 };
 
 ProductionTab.propTypes = {
   selectedCity: PropTypes.any,
+  ownPlayerData: PropTypes.any,
 };
 
 export default connect(mapStateToProps)(ProductionTab);
