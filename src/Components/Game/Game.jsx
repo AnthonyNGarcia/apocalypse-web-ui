@@ -18,6 +18,8 @@ import apiEndpoints from '../Utilities/apiEndpoints';
 import axios from 'axios';
 import {useBeforeunload} from 'react-beforeunload';
 import PLAYER from '../Utilities/playerEnums';
+import WEBSOCKET_MESSAGE_TYPES from '../Utilities/websocketMessageTypes';
+import BattleMap from './BattleMap/BattleMap';
 import './Game.css';
 
 /**
@@ -60,17 +62,51 @@ const Game = (props) => {
     props.clearLobbyPlayerOneUsername();
     props.clearLobbyPlayerTwoUsername();
     props.updateLobbyViewToBrowseLobbies();
-    props.updateMainViewToLobby();
+    props.updateMainView(MAIN_VIEWS.LOBBY_VIEW);
+  };
+
+  const navigateToBattleMap = () => {
+    props.updateGameView(GAME_VIEWS.BATTLE_MAP_VIEW);
+  };
+
+  const navigateToCampaignMap = async (battleResults) => {
+    const gameBoardWithArmiesUpdated = await JSON.parse(
+        JSON.stringify(props.gameBoard));
+    gameBoardWithArmiesUpdated[battleResults.attackingArmyStartingTilePosition]
+        .army = null;
+    gameBoardWithArmiesUpdated[battleResults.defendingArmyStartingTilePosition]
+        .army = null;
+    gameBoardWithArmiesUpdated[battleResults.attackingArmyEndingTilePosition]
+        .army = battleResults.attackingArmy;
+    gameBoardWithArmiesUpdated[battleResults.defendingArmyEndingTilePosition]
+        .army = battleResults.defendingArmy;
+    await props.updateGameBoard(gameBoardWithArmiesUpdated);
+    await props.updateGameView(GAME_VIEWS.CAMPAIGN_MAP_VIEW);
   };
 
   const onReceiveMessage = (message) => {
     console.log(message);
-    const playerOneUsername = message.body.playerOneUsername;
-    const playerTwoUsername = message.body.playerTwoUsername;
-    if (!playerOneUsername || !playerTwoUsername) {
-      console.log('A player has left! Closing game...');
-      gameCleanup();
-      navigateToBrowseLobbies();
+    const messageType = message.body.messageType;
+    switch (messageType) {
+      case WEBSOCKET_MESSAGE_TYPES.PLAYER_LEFT_GAME:
+        const playerUsername = message.body.leavingPlayerUsername;
+        console.log('Player ' + playerUsername + ' has left! Closing game...');
+        gameCleanup();
+        navigateToBrowseLobbies();
+        break;
+      case WEBSOCKET_MESSAGE_TYPES.BATTLE_STARTED:
+        console.log('A battle has started! Changing to battle view...');
+        console.log(message.body);
+        navigateToBattleMap();
+        break;
+      case WEBSOCKET_MESSAGE_TYPES.BATTLE_ENDED:
+        console.log('A battle has ended! Changing to campaign view...');
+        console.log(message.body);
+        navigateToCampaignMap(message.body);
+        break;
+      default:
+        console.warn('Received unexpected websocket message for ' +
+          'the general Game component!');
     }
   };
 
@@ -105,7 +141,7 @@ const Game = (props) => {
         <Row>
           {props.gameView === GAME_VIEWS.CAMPAIGN_MAP_VIEW ?
           <CampaignMap/> : props.gameView === GAME_VIEWS.BATTLE_MAP_VIEW ?
-          <p>Battle Map Pending...</p> :
+          <BattleMap/> :
           <p>Oops! An invalid game view was rendered!</p>}
         </Row>
         <Row>
@@ -127,13 +163,14 @@ const mapStateToProps = (state) => {
       state.game.playerTwo.username : 'error',
     playerWhoseTurnItIs: state.game.playerWhoseTurnItIs,
     ownPlayerNumber: state.game.ownPlayerNumber,
+    gameBoard: state.game.gameBoard,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateMainViewToLobby: () => dispatch(
-        generalAC.setMainView(MAIN_VIEWS.LOBBY_VIEW)),
+    updateMainView: (mainView) => dispatch(
+        generalAC.setMainView(mainView)),
     updateLobbyViewToBrowseLobbies: () => dispatch(
         lobbyAC.setLobbyView(LOBBY_VIEWS.BROWSE_LOBBIES_VIEW)),
     clearPlayerOne: () => dispatch(
@@ -148,6 +185,10 @@ const mapDispatchToProps = (dispatch) => {
         lobbyAC.setPlayerTwoUsername(null)),
     clearLobbyId: () => dispatch(
         lobbyAC.setLobbyId(null)),
+    updateGameView: (gameView) => dispatch(
+        gameAC.setGameView(gameView)),
+    updateGameBoard: (gameBoard) => dispatch(
+        gameAC.setGameBoard(gameBoard)),
   };
 };
 
@@ -157,7 +198,7 @@ Game.propTypes = {
   ownUsername: PropTypes.string,
   playerOneUsername: PropTypes.string,
   playerTwoUsername: PropTypes.string,
-  updateMainViewToLobby: PropTypes.func,
+  updateMainView: PropTypes.func,
   updateLobbyViewToBrowseLobbies: PropTypes.func,
   clearPlayerOne: PropTypes.func,
   clearPlayerTwo: PropTypes.func,
@@ -167,6 +208,9 @@ Game.propTypes = {
   saveGameId: PropTypes.func,
   playerWhoseTurnItIs: PropTypes.oneOf(flattenObject(PLAYER)),
   ownPlayerNumber: PropTypes.oneOf(flattenObject(PLAYER)),
+  updateGameView: PropTypes.func,
+  updateGameBoard: PropTypes.func,
+  gameBoard: PropTypes.any,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

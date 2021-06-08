@@ -166,7 +166,7 @@ const GameBoard = (props) => {
 
       if (item.city && !item.army && !props.isMovingArmy) {
         updateToCityView();
-      } else if (item.army) {
+      } else if (item.army && item.army.owner === props.ownPlayerNumber) {
         tileHighlightManager.unhighlightAllTiles();
         if (item.tilePosition !== props.selectedTilePosition) {
           updateToArmyView();
@@ -193,9 +193,10 @@ const GameBoard = (props) => {
               'Select an Army or City to get started.');
           tileHighlightManager.unhighlightAllTiles();
           const request = {
-            primaryArmyAction: ARMY_ACTION_REQUEST_TYPE.MOVE,
-            primaryArmyInitialTile: props.gameBoard[props.selectedTilePosition],
-            primaryArmyDesiredTile: item,
+            primaryArmyActionType: ARMY_ACTION_REQUEST_TYPE.MOVE,
+            primaryTilePosition: props.gameBoard[props.selectedTilePosition]
+                .tilePosition,
+            secondaryTilePosition: item.tilePosition,
           };
           await props.updateAwaitingServerConfirmation(true);
           axios.post(apiEndpoints.gameController + '/in-memory-army-action/' +

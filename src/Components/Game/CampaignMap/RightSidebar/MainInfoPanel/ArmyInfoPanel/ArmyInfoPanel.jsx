@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import {Scrollbars} from 'react-custom-scrollbars-2';
 import ArmyUnitItem from './ArmyUnitItem/ArmyUnitItem';
+import Spinner from 'react-bootstrap/Spinner';
 import './ArmyInfoPanel.css';
 
 /**
@@ -17,21 +18,24 @@ import './ArmyInfoPanel.css';
 const ArmyInfoPanel = (props) => {
   const [selectedArmyMaxSize, setSelectedArmyMaxSize] = useState(0);
   useEffect(() => {
-    let armySize = 0;
-    if (props.selectedArmy.owner === props.playerOne.playerNumber) {
-      armySize += props.playerOne.currentBaseArmySize;
-    } else if (props.selectedArmy.owner === props.playerTwo.playerNumber) {
-      armySize += props.playerTwo.currentBaseArmySize;
-    } else {
-      console.log('Oops! Couldn\'t map this army to a player!');
+    if (props.selectedArmy) {
+      let armySize = 0;
+      if (props.selectedArmy.owner === props.playerOne.playerNumber) {
+        armySize += props.playerOne.currentBaseArmySize;
+      } else if (props.selectedArmy.owner === props.playerTwo.playerNumber) {
+        armySize += props.playerTwo.currentBaseArmySize;
+      } else {
+        console.log('Oops! Couldn\'t map this army to a player!');
+      }
+      armySize += props.selectedArmy.commander.armySizeBonus;
+      setSelectedArmyMaxSize(armySize);
     }
-    armySize += props.selectedArmy.commander.armySizeBonus;
-    setSelectedArmyMaxSize(armySize);
   }, [props]);
-  return (
-    <React.Fragment>
-      <Container>
-        {props.ownPlayerNumber === props.selectedArmy.owner ?
+  if (props.selectedArmy) {
+    return (
+      <React.Fragment>
+        <Container>
+          {props.ownPlayerNumber === props.selectedArmy.owner ?
         <React.Fragment>
           <Row className='center-text'>
             <h2>Commander {props.selectedArmy.commander.name}</h2>
@@ -79,9 +83,18 @@ const ArmyInfoPanel = (props) => {
             This is an enemy Army.
           </Row>
         </React.Fragment>}
-      </Container>
-    </React.Fragment>
-  );
+        </Container>
+      </React.Fragment>
+    );
+  } else {
+    return (
+      <React.Fragment>
+        <Spinner animation="border" role="status">
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+      </React.Fragment>
+    );
+  }
 };
 
 const mapStateToProps = (state) => {
