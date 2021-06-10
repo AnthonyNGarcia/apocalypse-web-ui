@@ -29,8 +29,6 @@ const EnemyMainArmy = (props) => {
       } else {
         setEnemyArmy(attackingArmy);
       }
-
-      console.log(enemyArmy);
     }
   }, [props]);
 

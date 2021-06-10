@@ -16,6 +16,10 @@
     background-color: rgb(247, 185, 185);
 }
 
+.empty-unit-image {
+    background-color: rgb(211, 211, 211);
+}
+
 .unit-label {
     margin: auto;
 }

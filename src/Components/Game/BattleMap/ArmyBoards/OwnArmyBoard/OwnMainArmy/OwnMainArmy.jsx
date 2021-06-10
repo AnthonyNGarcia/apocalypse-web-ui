@@ -29,8 +29,6 @@ const OwnMainArmy = (props) => {
       } else {
         setOwnArmy(defendingArmy);
       }
-
-      console.log(ownArmy);
     }
   }, [props]);
 
@@ -53,6 +51,8 @@ const OwnMainArmy = (props) => {
                                 unit={ownArmy.units[
                                     getIndexFromRowPosition(
                                         ownArmy.armyGrid, row, position)]}
+                                unitIndex={getIndexFromRowPosition(
+                                    ownArmy.armyGrid, row, position)}
                               />
                             </Col>
                           </React.Fragment>
@@ -77,14 +77,12 @@ const OwnMainArmy = (props) => {
 const mapStateToProps = (state) => {
   return {
     battleData: state.game.battleData,
-    allUnits: state.game.gameConstants.allUnits,
     ownPlayerNumber: state.game.ownPlayerNumber,
   };
 };
 
 OwnMainArmy.propTypes = {
   battleData: PropTypes.any,
-  allUnits: PropTypes.any,
   ownPlayerNumber: PropTypes.string,
 };
 

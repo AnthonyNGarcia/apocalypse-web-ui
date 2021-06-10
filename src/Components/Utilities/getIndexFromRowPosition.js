@@ -7,11 +7,9 @@
  * @return {number} unitIndex for the unit in its army.units array
  */
 const getIndexFromRowPosition = (armyGrid, row, position) => {
-  console.log(row, position);
   const positionsPerRow = armyGrid.maxPositions;
   let unitIndex = position;
   unitIndex += row * positionsPerRow;
-  console.log(unitIndex);
   return unitIndex;
 };
 

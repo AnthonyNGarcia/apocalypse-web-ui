@@ -35,6 +35,9 @@ const initialState = {
   cityMenuSupplementalView: CITY_MENU_SUPPLEMENTAL_VIEWS.NONE,
   cityMenuSupplementalData: {},
   battleData: {},
+  showEnemyArmyInBattle: false,
+  ownArmySubmitted: false,
+  selectedBattleUnitIndex: -1,
 };
 
 const setGameView = (state, action) => {
@@ -213,6 +216,27 @@ const setBattleData = (state, action) => {
   };
 };
 
+const setShowEnemyArmyInBattle = (state, action) => {
+  return {
+    ...state,
+    showEnemyArmyInBattle: action.showEnemyArmyInBattle,
+  };
+};
+
+const setOwnArmySubmitted = (state, action) => {
+  return {
+    ...state,
+    ownArmySubmitted: action.ownArmySubmitted,
+  };
+};
+
+const setSelectedBattleUnitIndex = (state, action) => {
+  return {
+    ...state,
+    selectedBattleUnitIndex: action.selectedBattleUnitIndex,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case gameAT.SET_GAME_VIEW: return setGameView(state, action);
@@ -240,6 +264,9 @@ const reducer = (state=initialState, action) => {
     case gameAT.SET_CITY_MENU_SUPPLEMENTAL_VIEW: return setCityMenuSupplementalView(state, action);
     case gameAT.SET_CITY_MENU_SUPPLEMENTAL_DATA: return setCityMenuSupplementalData(state, action);
     case gameAT.SET_BATTLE_DATA: return setBattleData(state, action);
+    case gameAT.SET_SHOW_ENEMY_ARMY_IN_BATTLE: return setShowEnemyArmyInBattle(state, action);
+    case gameAT.SET_OWN_ARMY_SUBMITTED: return setOwnArmySubmitted(state, action);
+    case gameAT.SET_SELECTED_BATTLE_UNIT_INDEX: return setSelectedBattleUnitIndex(state, action);
     default: return state;
   }
 };

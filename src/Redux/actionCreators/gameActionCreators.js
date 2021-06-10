@@ -172,6 +172,24 @@ const actionCreators = {
       battleData: battleData,
     };
   },
+  setShowEnemyArmyInBattle: (showEnemyArmyInBattle) => {
+    return {
+      type: gameAT.SET_SHOW_ENEMY_ARMY_IN_BATTLE,
+      showEnemyArmyInBattle: showEnemyArmyInBattle,
+    };
+  },
+  setOwnArmySubmitted: (ownArmySubmitted) => {
+    return {
+      type: gameAT.SET_OWN_ARMY_SUBMITTED,
+      ownArmySubmitted: ownArmySubmitted,
+    };
+  },
+  setSelectedBattleUnitIndex: (selectedBattleUnitIndex) => {
+    return {
+      type: gameAT.SET_SELECTED_BATTLE_UNIT_INDEX,
+      selectedBattleUnitIndex: selectedBattleUnitIndex,
+    };
+  },
 };
 
 export default actionCreators;

@@ -67,7 +67,14 @@ const Game = (props) => {
 
   const navigateToBattleMap = async (battleData) => {
     await props.saveBattleData(battleData);
+    await props.updateShowEnemyArmyInBattle(false);
+    await props.updateOwnArmySubmitted(false);
     props.updateGameView(GAME_VIEWS.BATTLE_MAP_VIEW);
+  };
+
+  const handleConfigurationsComplete = async (battleData) => {
+    await props.saveBattleData(battleData);
+    props.updateShowEnemyArmyInBattle(true);
   };
 
   const navigateToCampaignMap = async (battleResults) => {
@@ -104,6 +111,11 @@ const Game = (props) => {
         console.log('A battle has ended! Changing to campaign view...');
         console.log(message.body);
         navigateToCampaignMap(message.body);
+        break;
+      case WEBSOCKET_MESSAGE_TYPES.CONFIGURATION_COMPLETE:
+        console.log('Configuration complete! Revealing enemy army...');
+        console.log(message.body);
+        handleConfigurationsComplete(message.body.battleData);
         break;
       default:
         console.warn('Received unexpected websocket message for ' +
@@ -192,6 +204,10 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setGameBoard(gameBoard)),
     saveBattleData: (battleData) => dispatch(
         gameAC.setBattleData(battleData)),
+    updateShowEnemyArmyInBattle: (showEnemyArmyInBattle) => dispatch(
+        gameAC.setShowEnemyArmyInBattle(showEnemyArmyInBattle)),
+    updateOwnArmySubmitted: (ownArmySubmitted) => dispatch(
+        gameAC.setOwnArmySubmitted(ownArmySubmitted)),
   };
 };
 
@@ -215,6 +231,8 @@ Game.propTypes = {
   updateGameBoard: PropTypes.func,
   gameBoard: PropTypes.any,
   saveBattleData: PropTypes.func,
+  updateShowEnemyArmyInBattle: PropTypes.func,
+  updateOwnArmySubmitted: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
