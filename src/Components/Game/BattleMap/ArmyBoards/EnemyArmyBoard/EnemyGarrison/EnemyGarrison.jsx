@@ -11,7 +11,7 @@ import './EnemyGarrison.css';
 const EnemyGarrison = (props) => {
   return (
     <React.Fragment>
-
+      <p>Enemy Garrison Units Pending</p>
     </React.Fragment>
   );
 };

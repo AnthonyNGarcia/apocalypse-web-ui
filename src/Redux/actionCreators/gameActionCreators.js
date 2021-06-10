@@ -166,6 +166,12 @@ const actionCreators = {
       cityMenuSupplementalData: cityMenuSupplementalData,
     };
   },
+  setBattleData: (battleData) => {
+    return {
+      type: gameAT.SET_BATTLE_DATA,
+      battleData: battleData,
+    };
+  },
 };
 
 export default actionCreators;

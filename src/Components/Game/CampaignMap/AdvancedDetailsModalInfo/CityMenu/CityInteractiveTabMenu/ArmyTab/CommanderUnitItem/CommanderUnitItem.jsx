@@ -81,7 +81,8 @@ const CommanderUnitItem = (props) => {
               variant='dark'
               onClick={unassignUnitHandler}
               disabled={!props.isOwnTurn ||
-              (props.selectedTile.city.unassignedUnits.length >=
+              (props.selectedTile.city.unassignedUnits.length +
+                props.selectedTile.city.currentRecruitmentQueue.length >=
                 props.ownPlayerData.currentBaseArmySize)}>
               {'<<'}
             </Button>

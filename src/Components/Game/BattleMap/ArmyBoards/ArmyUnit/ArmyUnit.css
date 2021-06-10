@@ -1,0 +1,21 @@
+.army-unit-image {
+    position: relative;
+    height: 100%;
+    width: auto;
+    margin: auto;
+    border: 1px solid black;
+    box-shadow: 2px 2px 2px black;
+    border-radius: 3px;
+}
+
+.own-unit-image {
+    background-color: rgb(215, 247, 185);
+}
+
+.enemy-unit-image {
+    background-color: rgb(247, 185, 185);
+}
+
+.unit-label {
+    margin: auto;
+}

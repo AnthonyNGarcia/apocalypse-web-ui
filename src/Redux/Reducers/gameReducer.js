@@ -34,6 +34,7 @@ const initialState = {
   cityShowingProductionTab: true,
   cityMenuSupplementalView: CITY_MENU_SUPPLEMENTAL_VIEWS.NONE,
   cityMenuSupplementalData: {},
+  battleData: {},
 };
 
 const setGameView = (state, action) => {
@@ -205,6 +206,13 @@ const setCityMenuSupplementalData = (state, action) => {
   };
 };
 
+const setBattleData = (state, action) => {
+  return {
+    ...state,
+    battleData: action.battleData,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case gameAT.SET_GAME_VIEW: return setGameView(state, action);
@@ -231,6 +239,7 @@ const reducer = (state=initialState, action) => {
     case gameAT.SET_CITY_SHOWING_PRODUCTION_TAB: return setCityShowingProductionTab(state, action);
     case gameAT.SET_CITY_MENU_SUPPLEMENTAL_VIEW: return setCityMenuSupplementalView(state, action);
     case gameAT.SET_CITY_MENU_SUPPLEMENTAL_DATA: return setCityMenuSupplementalData(state, action);
+    case gameAT.SET_BATTLE_DATA: return setBattleData(state, action);
     default: return state;
   }
 };

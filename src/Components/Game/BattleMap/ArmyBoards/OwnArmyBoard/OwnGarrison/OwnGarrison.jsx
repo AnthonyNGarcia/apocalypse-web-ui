@@ -11,7 +11,7 @@ import './OwnGarrison.css';
 const OwnGarrison = (props) => {
   return (
     <React.Fragment>
-
+      <p>Own Garrison Units Pending</p>
     </React.Fragment>
   );
 };

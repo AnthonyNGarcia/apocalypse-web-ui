@@ -1,0 +1,11 @@
+.enemy-entity-title {
+    color: rgb(247, 185, 185);
+    text-align: center;
+    margin: auto;
+}
+
+.own-entity-title {
+    color: rgb(215, 247, 185);
+    text-align: center;
+    margin: auto;
+}

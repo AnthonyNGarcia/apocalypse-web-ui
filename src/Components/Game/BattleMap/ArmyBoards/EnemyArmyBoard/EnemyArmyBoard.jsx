@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import EnemyGarrison from './EnemyGarrison/EnemyGarrison';
+import EnemyMainArmy from './EnemyMainArmy/EnemyMainArmy';
 import './EnemyArmyBoard.css';
 
 /**
@@ -13,11 +15,10 @@ const EnemyArmyBoard = (props) => {
   return (
     <React.Fragment>
       {/* Dynamically map units to rows and columns based on unit positions */}
-      [Enemy Army Board]
       {props.isGarrison ? (
-        <p>Enemy Army Units Pending</p>
+        <EnemyGarrison/>
       ) : (
-        <p>Enemy Garrison Units Pending</p>
+        <EnemyMainArmy/>
       )}
     </React.Fragment>
   );

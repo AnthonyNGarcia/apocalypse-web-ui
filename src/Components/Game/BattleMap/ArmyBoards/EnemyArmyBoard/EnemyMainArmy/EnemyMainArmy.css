@@ -1,0 +1,16 @@
+.enemy-army-container {
+    box-shadow: 0px 10px 10px darkred;
+    border-bottom: 2px solid darkred;
+    border-left: 1px solid darkred;
+    border-right: 1px solid darkred;
+    border-radius: 10px;
+    padding: 0.5vh 0.5vw;
+    margin: 5vh 5vw;
+}
+
+.army-unit-wrapper {
+    width: 3vw;
+    max-width: 3vw;
+    margin: auto;
+    padding: 1vh 0;
+}

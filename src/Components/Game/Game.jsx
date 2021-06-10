@@ -65,7 +65,8 @@ const Game = (props) => {
     props.updateMainView(MAIN_VIEWS.LOBBY_VIEW);
   };
 
-  const navigateToBattleMap = () => {
+  const navigateToBattleMap = async (battleData) => {
+    await props.saveBattleData(battleData);
     props.updateGameView(GAME_VIEWS.BATTLE_MAP_VIEW);
   };
 
@@ -97,7 +98,7 @@ const Game = (props) => {
       case WEBSOCKET_MESSAGE_TYPES.BATTLE_STARTED:
         console.log('A battle has started! Changing to battle view...');
         console.log(message.body);
-        navigateToBattleMap();
+        navigateToBattleMap(message.body.battleData);
         break;
       case WEBSOCKET_MESSAGE_TYPES.BATTLE_ENDED:
         console.log('A battle has ended! Changing to campaign view...');
@@ -189,6 +190,8 @@ const mapDispatchToProps = (dispatch) => {
         gameAC.setGameView(gameView)),
     updateGameBoard: (gameBoard) => dispatch(
         gameAC.setGameBoard(gameBoard)),
+    saveBattleData: (battleData) => dispatch(
+        gameAC.setBattleData(battleData)),
   };
 };
 
@@ -211,6 +214,7 @@ Game.propTypes = {
   updateGameView: PropTypes.func,
   updateGameBoard: PropTypes.func,
   gameBoard: PropTypes.any,
+  saveBattleData: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

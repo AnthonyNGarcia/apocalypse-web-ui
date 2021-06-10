@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import Spinner from 'react-bootstrap/esm/Spinner';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import EnemyArmyBoard from './EnemyArmyBoard/EnemyArmyBoard';
 import OwnArmyBoard from './OwnArmyBoard/OwnArmyBoard';
+import PLAYER from '../../../Utilities/playerEnums';
 import './ArmyBoards.css';
 
 /**
@@ -13,69 +17,125 @@ import './ArmyBoards.css';
  * @return {JSX} to render
  */
 const ArmyBoards = (props) => {
-  return (
-    <React.Fragment>
-      {/* First Row is for enemy Player Name*/}
-      <Row>
-        [Enemy Player Name]
-      </Row>
-      {/* Second Row for the Enemy Army Information */}
-      <Row>
-        {/* First Col is for Enemy Main Army */}
-        <Col md={8}>
-          {/* First Row is for Main Army Commander Name */}
-          <Row>
-            [Enemy Main Commander Name]
-          </Row>
-          {/* Second Row is for the Enemy Main Army Board */}
-          <Row>
-            <EnemyArmyBoard/>
-          </Row>
-        </Col>
-        {/* Second Col is for Enemy Garrison Army (if any) */}
-        <Col nd={4}>
-          {/* First Row is for City Garrison Name */}
-          <Row>
-            [Potential Enemy City Garrison Pending]
-          </Row>
-          {/* Second Row is for City Garrison Units */}
-          <Row>
-            <EnemyArmyBoard isGarrison/>
-          </Row>
-        </Col>
-      </Row>
-      {/* Third Row for Own Army Information */}
-      <Row>
-        {/* First Col for Own Main Army */}
-        <Col>
-          {/* First Row is for own Main Army Units */}
-          <Row>
-            <OwnArmyBoard/>
-          </Row>
-          {/* Second Row is for own Main Army Commander Name */}
-          <Row>
-            [Own Main Commander Name]
-          </Row>
-        </Col>
-        {/* Second Col for Own Garrison Army (if any) */}
-        <Col>
-          {/* First Row is for City Garrison units */}
-          <Row>
-            <OwnArmyBoard isGarrison/>
-          </Row>
-          {/* Second Row is for City Garrison Name */}
-          <Row>
-            [Potential Own City Garrison Pending]
-          </Row>
-        </Col>
-        <OwnArmyBoard/>
-      </Row>
-      {/* Fourth Row for Own Player Name */}
-      <Row>
-        [Own Player Name]
-      </Row>
-    </React.Fragment>
-  );
+  const [ownArmy, setOwnArmy] = useState(null);
+  const [enemyArmy, setEnemyArmy] = useState(null);
+
+  useEffect(() => {
+    if (props.battleData) {
+      const attackingArmy = props.battleData.attackingArmy;
+      const defendingArmy = props.battleData.defendingArmy;
+      console.log(attackingArmy.owner);
+      console.log(props.ownPlayerNumber);
+      if (attackingArmy.owner === props.ownPlayerNumber) {
+        setOwnArmy(attackingArmy);
+        setEnemyArmy(defendingArmy);
+      } else {
+        setOwnArmy(defendingArmy);
+        setEnemyArmy(attackingArmy);
+      }
+      console.log('army-boards');
+      console.log(attackingArmy);
+      console.log(defendingArmy);
+    }
+  }, [props]);
+
+  if (props.battleData && ownArmy && enemyArmy) {
+    return (
+      <React.Fragment>
+        {/* First Row is for enemy Player Name*/}
+        <Row>
+          <h3 className='enemy-entity-title'>{props.enemyUsername}</h3>
+        </Row>
+        {/* Second Row for the Enemy Army Information */}
+        <Row>
+          {/* First Col is for Enemy Main Army */}
+          <Col md={12}>
+            {/* First Row is for Main Army Commander Name */}
+            <Row>
+              <h2 className='enemy-entity-title'>Commander {
+                enemyArmy.commander.name} L.{
+                enemyArmy.commander.level}</h2>
+            </Row>
+            {/* Second Row is for the Enemy Main Army Board */}
+            <Row>
+              <EnemyArmyBoard/>
+            </Row>
+          </Col>
+          {/* Second Col is for Enemy Garrison Army (if any) */}
+          {true ? null :
+          <Col nd={4}>
+            {/* First Row is for City Garrison Name */}
+            <Row>
+            </Row>
+            {/* Second Row is for City Garrison Units */}
+            <Row>
+              <EnemyArmyBoard isGarrison/>
+            </Row>
+          </Col>
+          }
+        </Row>
+        {/* Third Row for Own Army Information */}
+        <Row>
+          {/* First Col for Own Main Army */}
+          <Col md={12}>
+            {/* First Row is for own Main Army Units */}
+            <Row>
+              <OwnArmyBoard/>
+            </Row>
+            {/* Second Row is for own Main Army Commander Name */}
+            <Row>
+              <h2 className='own-entity-title'>Commander {
+                ownArmy.commander.name} L.{
+                ownArmy.commander.level}</h2>
+            </Row>
+          </Col>
+          {/* Second Col for Own Garrison Army (if any) */}
+          {true ? null :
+          <Col>
+            {/* First Row is for City Garrison units */}
+            <Row>
+              <OwnArmyBoard isGarrison/>
+            </Row>
+            {/* Second Row is for City Garrison Name */}
+            <Row>
+            </Row>
+          </Col>
+          }
+        </Row>
+        {/* Fourth Row for Own Player Name */}
+        <Row>
+          <h3 className='own-entity-title'>{props.ownUsername}</h3>
+        </Row>
+      </React.Fragment>
+    );
+  } else {
+    return (
+      <React.Fragment>
+        <Spinner animation="border" role="status">
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+      </React.Fragment>
+    );
+  }
+};
+const mapStateToProps = (state) => {
+  return {
+    ownUsername: state.game.ownPlayerNumber === PLAYER.ONE ?
+      state.game.playerOne.username :
+      state.game.playerTwo.username,
+    enemyUsername: state.game.ownPlayerNumber === PLAYER.ONE ?
+      state.game.playerTwo.username :
+      state.game.playerOne.username,
+    battleData: state.game.battleData,
+    ownPlayerNumber: state.game.ownPlayerNumber,
+  };
 };
 
-export default ArmyBoards;
+ArmyBoards.propTypes = {
+  ownUsername: PropTypes.string,
+  enemyUsername: PropTypes.string,
+  battleData: PropTypes.any,
+  ownPlayerNumber: PropTypes.string,
+};
+
+export default connect(mapStateToProps)(ArmyBoards);

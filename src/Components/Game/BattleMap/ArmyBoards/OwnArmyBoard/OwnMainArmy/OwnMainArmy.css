@@ -1,0 +1,16 @@
+.own-army-container {
+    box-shadow: 0px -10px 10px darkgreen;
+    border-top: 2px solid darkgreen;
+    border-left: 1px solid darkgreen;
+    border-right: 1px solid darkgreen;
+    border-radius: 10px;
+    padding: 0.5vh 0.5vw;
+    margin: 5vh 5vw;
+}
+
+.army-unit-wrapper {
+    width: 3vw;
+    max-width: 3vw;
+    margin: auto;
+    padding: 1vh 0;
+}
