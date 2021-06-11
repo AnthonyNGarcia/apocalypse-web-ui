@@ -62,7 +62,7 @@
 
 
 @keyframes slow-blink {
-  30% {
+  0% {
     filter: brightness(1.2) saturate(1.5);
   }
 }
