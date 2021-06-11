@@ -37,12 +37,12 @@ const EnemyMainArmy = (props) => {
       <React.Fragment>
         <Container fluid className='enemy-army-container'>
           {/* First dynamically generate the correct number of rows */}
-          {Array.from(Array(enemyArmy.armyGrid.maxRows).keys()).reverse()
+          {[...Array(enemyArmy.armyGrid.maxRows + 1).keys()].reverse()
               .map((row) => (
                 <React.Fragment key={row}>
                   <Row noGutters>
                     {/* Now generate the correct number of positions */}
-                    {Array.from(Array(enemyArmy.armyGrid.maxPositions).keys())
+                    {[...Array(enemyArmy.armyGrid.maxPositions + 1).keys()]
                         .map((position) => (
                           <React.Fragment key={'' + row + '-' + position}>
                             <Col className='army-unit-wrapper'>
@@ -51,6 +51,8 @@ const EnemyMainArmy = (props) => {
                                 unit={enemyArmy.units[
                                     getIndexFromRowPosition(
                                         enemyArmy.armyGrid, row, position)]}
+                                unitIndex={getIndexFromRowPosition(
+                                    enemyArmy.armyGrid, row, position)}
                               />
                             </Col>
                           </React.Fragment>

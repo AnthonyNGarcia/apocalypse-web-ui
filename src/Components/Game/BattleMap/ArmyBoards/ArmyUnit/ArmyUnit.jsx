@@ -3,6 +3,9 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import gameAC from '../../../../../Redux/actionCreators/gameActionCreators';
+import apiEndpoints from '../../../../Utilities/apiEndpoints';
+import axios from 'axios';
+import UNIT_ACTION_TYPES from '../../../../Utilities/unitActionTypes';
 import './ArmyUnit.css';
 
 /**
@@ -16,19 +19,26 @@ const ArmyUnit = (props) => {
   const [fullUnitInfo, setFullUnitInfo] = useState(null);
   const [ownArmy, setOwnArmy] = useState(null);
   const [unitImageClasses, setUnitImageClasses] = useState('');
+  const [currentlySelectedOwnUnit, setCurrentlySelectedOwnUnit] =
+    useState(null);
 
   useEffect( () => {
     if (props.unit && props.unit.unitType) {
       const freshFullUnitInfo = props.allUnits[props.unit.unitType];
       setFullUnitInfo(freshFullUnitInfo);
       let calculatedUnitClasses = 'army-unit-image';
-      if (props.selectedBattleUnitIndex === props.unitIndex) {
-        calculatedUnitClasses += ' own-selected-unit';
-      }
       if (props.ownUnit) {
         calculatedUnitClasses += ' own-unit-image';
+        if (props.selectedBattleUnitIndex === props.unitIndex) {
+          calculatedUnitClasses += ' own-selected-unit';
+        }
       } else {
         calculatedUnitClasses += ' enemy-unit-image';
+        if (currentlySelectedOwnUnit &&
+            currentlySelectedOwnUnit.eligibleForCommand &&
+            props.unit.isTargetable) {
+          calculatedUnitClasses += ' targetable-enemy-unit';
+        }
       }
       if (props.unit.isTapped) {
         calculatedUnitClasses += ' unit-is-tapped';
@@ -41,18 +51,27 @@ const ArmyUnit = (props) => {
     if (props.battleData) {
       const attackingArmy = props.battleData.attackingArmy;
       const defendingArmy = props.battleData.defendingArmy;
+      let freshOwnArmy;
       if (attackingArmy.owner === props.ownPlayerNumber) {
-        setOwnArmy(attackingArmy);
+        freshOwnArmy = attackingArmy;
+        setOwnArmy(freshOwnArmy);
       } else {
-        setOwnArmy(defendingArmy);
+        freshOwnArmy = defendingArmy;
+        setOwnArmy(freshOwnArmy);
+      }
+      if (props.selectedBattleUnitIndex >= 0) {
+        const freshCurrentlySelectedOwnUnit =
+          freshOwnArmy.units[props.selectedBattleUnitIndex];
+        setCurrentlySelectedOwnUnit(freshCurrentlySelectedOwnUnit);
+      } else {
+        setCurrentlySelectedOwnUnit(null);
       }
     }
-  }, [props]);
+  }, [props, currentlySelectedOwnUnit]);
 
-  const selectUnitHandler = async (e, justSelectedUnitIndex) => {
+  const selectOwnUnitHandler = async (e, justSelectedUnitIndex) => {
     e.preventDefault();
     console.log('selected a unit at index ' + justSelectedUnitIndex);
-    console.log(props.ownArmySubmitted);
     if (!props.ownArmySubmitted) {
       // Assuming we are still configuring
       const unitAtJustSelectedUnitIndex = ownArmy.units[justSelectedUnitIndex];
@@ -91,14 +110,49 @@ const ArmyUnit = (props) => {
     }
   };
 
+  const selectEnemyUnitHandler = (e, justSelectedUnitIndex) => {
+    e.preventDefault();
+    console.log('Just selected an enemy unit at index ' +
+      justSelectedUnitIndex);
+    if (props.battleData.playerWhoseTurnItIs !== props.ownPlayerNumber) {
+      console.log('Cannot do anything, not this player\'s turn!');
+      return;
+    }
+    if (!currentlySelectedOwnUnit) {
+      console.log('Cannot do anything, currently selected ' +
+        'own unit doesn\'t exist!');
+      return;
+    }
+    if (!currentlySelectedOwnUnit.eligibleForCommand) {
+      console.log('Cannot do anything, currently selected ' +
+        'own unit is not eligible for commands!');
+      return;
+    }
+    if (!props.unit.isTargetable) {
+      console.log('Cannot do anything, enemy is not targetable!');
+      return;
+    }
+    try {
+      props.updateSelectedBattleUnitIndex(-1);
+      const attackTargetRequest = {
+        playerSubmittingAction: props.ownPlayerNumber,
+        unitActionType: UNIT_ACTION_TYPES.ATTACK,
+        indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
+        indexOfTargetUnitOfAction: props.unitIndex,
+      };
+      axios.post(apiEndpoints.gameController +
+        '/in-memory-battle-attack-target/' +
+        props.gameId, attackTargetRequest);
+    } catch (e) {
+      console.warn('There was an error trying to attack a target!');
+      console.warn(e);
+    }
+  };
+
   if (!props.ownUnit && !props.showEnemyArmyInBattle) {
     return (
       <React.Fragment>
-        <Row style={{height: '2.5vh'}} noGutters
-          onClick={props.ownUnit ?
-            (e) => selectUnitHandler(e, props.unitIndex) : null}
-          className={props.selectedBattleUnitIndex === props.unitIndex ?
-                  'own-selected-unit' : ''}>
+        <Row style={{height: '2.5vh'}} noGutters>
           <p className='army-unit-image empty-unit-image'
             style={{width: '1.5vw'}}></p>
         </Row>
@@ -110,9 +164,10 @@ const ArmyUnit = (props) => {
     return (
       <React.Fragment>
         {/* First row is the unit image */}
-        <Row style={{height: '4vh'}} noGutters
+        <Row style={{height: '5vh'}} noGutters
           onClick={props.ownUnit ?
-            (e) => selectUnitHandler(e, props.unitIndex) : null}
+            (e) => selectOwnUnitHandler(e, props.unitIndex) :
+            (e) => selectEnemyUnitHandler(e, props.unitIndex)}
         >
           <img
             src={props.unit.unitType + '_ICON.svg'}
@@ -140,7 +195,7 @@ const ArmyUnit = (props) => {
       <React.Fragment>
         <Row style={{height: '2.5vh'}} noGutters
           onClick={props.ownUnit ?
-            (e) => selectUnitHandler(e, props.unitIndex) : null}>
+            (e) => selectOwnUnitHandler(e, props.unitIndex) : null}>
           <p className='army-unit-image empty-unit-image'
             style={{width: '1.5vw'}}></p>
         </Row>
@@ -157,6 +212,7 @@ const mapStateToProps = (state) => {
     ownPlayerNumber: state.game.ownPlayerNumber,
     battleData: state.game.battleData,
     ownArmySubmitted: state.game.ownArmySubmitted,
+    gameId: state.game.gameId,
   };
 };
 
@@ -181,6 +237,7 @@ ArmyUnit.propTypes = {
   selectedBattleUnitIndex: PropTypes.number,
   updateBattleData: PropTypes.func,
   ownArmySubmitted: PropTypes.bool,
+  gameId: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArmyUnit);

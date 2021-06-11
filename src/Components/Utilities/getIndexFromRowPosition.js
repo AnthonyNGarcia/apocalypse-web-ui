@@ -9,7 +9,7 @@
 const getIndexFromRowPosition = (armyGrid, row, position) => {
   const positionsPerRow = armyGrid.maxPositions;
   let unitIndex = position;
-  unitIndex += row * positionsPerRow;
+  unitIndex += row * (positionsPerRow + 1);
   return unitIndex;
 };
 
