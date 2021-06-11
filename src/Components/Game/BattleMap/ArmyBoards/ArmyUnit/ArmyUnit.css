@@ -23,3 +23,20 @@
 .unit-label {
     margin: auto;
 }
+
+.own-selected-unit {
+    filter: brightness(50%);
+    animation-name: bob;
+    animation-duration: 1.2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes bob {
+  50% {
+    transform: translateY(-20%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}

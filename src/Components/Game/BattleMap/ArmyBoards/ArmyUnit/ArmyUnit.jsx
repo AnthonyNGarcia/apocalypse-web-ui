@@ -65,8 +65,12 @@ const ArmyUnit = (props) => {
         props.updateSelectedBattleUnitIndex(justSelectedUnitIndex);
       }
     } else {
-      console.log('Functionality for unit clicking outside of ' +
-        'configuring one\'s army is still pending!');
+      // Update the selected unit index for giving unit details on the sidebar
+      if (props.selectedBattleUnitIndex === justSelectedUnitIndex) {
+        props.updateSelectedBattleUnitIndex(-1);
+      } else {
+        props.updateSelectedBattleUnitIndex(justSelectedUnitIndex);
+      }
     }
   };
 

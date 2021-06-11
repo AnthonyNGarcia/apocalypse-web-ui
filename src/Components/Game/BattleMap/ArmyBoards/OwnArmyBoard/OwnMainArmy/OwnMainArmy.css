@@ -14,7 +14,3 @@
     margin: auto;
     padding: 1vh 0;
 }
-
-.own-selected-unit {
-    filter: brightness(50%);
-}

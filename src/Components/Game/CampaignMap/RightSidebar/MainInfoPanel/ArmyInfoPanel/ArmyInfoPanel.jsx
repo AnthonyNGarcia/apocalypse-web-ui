@@ -52,7 +52,7 @@ const ArmyInfoPanel = (props) => {
               {props.selectedArmy.units &&
                 props.selectedArmy.units.length > 0 ?
                 props.selectedArmy.units
-                    .map((unit, index) => (
+                    .map((unit, index) => unit ? (
                       <React.Fragment key={index}>
                         <ArmyUnitItem
                           key={index +
@@ -60,7 +60,7 @@ const ArmyInfoPanel = (props) => {
                           unit={{...unit}}
                           discardingIndex={index}/>
                       </React.Fragment>
-                    )) : (
+                    ) : null) : (
                   <React.Fragment>
                     This commander is not leading any units.
                   </React.Fragment>

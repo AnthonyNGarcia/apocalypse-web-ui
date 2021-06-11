@@ -13,3 +13,37 @@
     min-width: 80vw;
     max-width: 80vw;
 }
+
+.player-label {
+    margin: 1vh 1vw;
+    border-radius: 10px;
+    box-shadow: 2px 3px  7px black;
+}
+
+.own-player-label {
+    color: black;
+    
+}
+
+.other-player-label {
+    color: red
+}
+
+.active-turn {
+    background-color: lightgreen;
+    animation-name: blink; 
+    animation-duration: 1.5s; 
+    animation-iteration-count: infinite;
+    transition-timing-function: linear;
+}
+
+.inactive-turn {
+    background-color: white;
+}
+
+@keyframes blink {
+  50% {
+    filter: saturate(2);
+    opacity: 80%;
+  }
+}

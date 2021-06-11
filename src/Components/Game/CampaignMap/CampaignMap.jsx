@@ -10,9 +10,11 @@ import AdvancedDetailsModalInfo from
   './AdvancedDetailsModalInfo/AdvancedDetailsModalInfo';
 import gameAC from '../../../Redux/actionCreators/gameActionCreators';
 import Modal from 'react-bootstrap/Modal';
-import './CampaignMap.css';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../Utilities/cityMenuSupplementalViews';
+import PLAYER from '../../Utilities/playerEnums';
+import flattenObject from '../../Utilities/flattenObjectValuesToArray';
+import './CampaignMap.css';
 
 /**
  *
@@ -36,6 +38,22 @@ const CampaignMap = (props) => {
         dialogClassName='modal-dialog-custom-sizing'>
         <AdvancedDetailsModalInfo/>
       </Modal>
+      <Row style={{width: '90vw'}}>
+        <Col className={(props.playerWhoseTurnItIs === PLAYER.ONE ?
+              'active-turn center-text player-label' :
+              'inactive-turn center-text player-label') + (
+                props.ownPlayerNumber === PLAYER.ONE ? ' own-player-label' :
+                ' other-player-label')}>
+          <h3>{props.playerOneUsername}</h3>
+        </Col>
+        <Col className={(props.playerWhoseTurnItIs === PLAYER.TWO ?
+              'active-turn center-text player-label' :
+              'inactive-turn center-text player-label') + (
+                props.ownPlayerNumber === PLAYER.TWO ? ' own-player-label' :
+                ' other-player-label')}>
+          <h3>{props.playerTwoUsername}</h3>
+        </Col>
+      </Row>
       <div className='campaign-map-container'>
         <Row>
           <Col>
@@ -57,6 +75,12 @@ const mapStateToProps = (state) => {
   return {
     showCityModalInfo: state.game.showCityModalInfo,
     showResearchModalInfo: state.game.showResearchModalInfo,
+    playerOneUsername: state.game.playerOne ?
+      state.game.playerOne.username : 'error',
+    playerTwoUsername: state.game.playerTwo ?
+      state.game.playerTwo.username : 'error',
+    playerWhoseTurnItIs: state.game.playerWhoseTurnItIs,
+    ownPlayerNumber: state.game.ownPlayerNumber,
   };
 };
 
@@ -80,6 +104,10 @@ CampaignMap.propTypes = {
   updateShowResearchModalInfo: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
   updateCityMenuSupplementalData: PropTypes.func,
+  playerOneUsername: PropTypes.string,
+  playerTwoUsername: PropTypes.string,
+  playerWhoseTurnItIs: PropTypes.oneOf(flattenObject(PLAYER)),
+  ownPlayerNumber: PropTypes.oneOf(flattenObject(PLAYER)),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CampaignMap);
