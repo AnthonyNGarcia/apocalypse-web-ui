@@ -31,32 +31,33 @@ const BattleMap = (props) => {
     return (
       <React.Fragment>
         {/* First row shows the players and the unit phase */}
-        <Row style={{width: '100vw', height: '12vh', minHeight: '12vh'}}>
+        <Row style={{width: '100vw', height: '10vh', minHeight: '10vh'}}>
           <Col className={(playerWhoseTurnItIs === PLAYER.ONE ?
                 'active-turn center-text player-label' :
                 'inactive-turn center-text player-label') + (
                   props.ownPlayerNumber === PLAYER.ONE ? ' own-player-label' :
                   ' other-player-label')}>
-            <h3>{props.playerOneUsername}</h3>
+            <h4>{props.playerOneUsername}</h4>
           </Col>
           <Col>
             {props.showEnemyArmyInBattle ? (
-              <h1 className='current-unit-class-title'>{UNIT_CLASSES[
-                  props.battleData.currentUnitClassPhase].displayName}</h1>
+              <h4 className='current-unit-class-title'>{UNIT_CLASSES[
+                  props.battleData.currentUnitClassPhase].displayName}</h4>
             ) : (
-              <h1 className='current-unit-class-title'>Army Setup</h1>
+              <h4 className='current-unit-class-title'>Army Setup Stage</h4>
             )}
+            <p className="center-text">Round: {props.battleData.round}</p>
           </Col>
           <Col className={(playerWhoseTurnItIs === PLAYER.TWO ?
                 'active-turn center-text player-label' :
                 'inactive-turn center-text player-label') + (
                   props.ownPlayerNumber === PLAYER.TWO ? ' own-player-label' :
                   ' other-player-label')}>
-            <h3>{props.playerTwoUsername}</h3>
+            <h4>{props.playerTwoUsername}</h4>
           </Col>
         </Row>
         {/* Second row shoes the army boards and sidebar */}
-        <Row style={{width: '100vw'}}>
+        <Row style={{width: '100vw', paddingTop: '2vh'}}>
           {/* First col contains the boards */}
           <Col md={8}>
             <ArmyBoards/>

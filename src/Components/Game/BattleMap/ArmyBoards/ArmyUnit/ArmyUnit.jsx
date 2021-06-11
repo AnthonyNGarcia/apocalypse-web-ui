@@ -15,11 +15,28 @@ import './ArmyUnit.css';
 const ArmyUnit = (props) => {
   const [fullUnitInfo, setFullUnitInfo] = useState(null);
   const [ownArmy, setOwnArmy] = useState(null);
+  const [unitImageClasses, setUnitImageClasses] = useState('');
 
   useEffect( () => {
     if (props.unit && props.unit.unitType) {
       const freshFullUnitInfo = props.allUnits[props.unit.unitType];
       setFullUnitInfo(freshFullUnitInfo);
+      let calculatedUnitClasses = 'army-unit-image';
+      if (props.selectedBattleUnitIndex === props.unitIndex) {
+        calculatedUnitClasses += ' own-selected-unit';
+      }
+      if (props.ownUnit) {
+        calculatedUnitClasses += ' own-unit-image';
+      } else {
+        calculatedUnitClasses += ' enemy-unit-image';
+      }
+      if (props.unit.isTapped) {
+        calculatedUnitClasses += ' unit-is-tapped';
+      }
+      if (props.unit.eligibleForCommand) {
+        calculatedUnitClasses += ' unit-eligible-for-command';
+      }
+      setUnitImageClasses(calculatedUnitClasses);
     }
     if (props.battleData) {
       const attackingArmy = props.battleData.attackingArmy;
@@ -96,14 +113,12 @@ const ArmyUnit = (props) => {
         <Row style={{height: '4vh'}} noGutters
           onClick={props.ownUnit ?
             (e) => selectUnitHandler(e, props.unitIndex) : null}
-          className={props.selectedBattleUnitIndex === props.unitIndex ?
-                  'own-selected-unit' : ''}>
+        >
           <img
             src={props.unit.unitType + '_ICON.svg'}
             onError={(e)=>e.target.src='shield.png'}
             alt=""
-            className={props.ownUnit ? 'army-unit-image own-unit-image' :
-             'army-unit-image enemy-unit-image'}
+            className={unitImageClasses}
           />
         </Row>
         {/* Second row is the unit name + health */}

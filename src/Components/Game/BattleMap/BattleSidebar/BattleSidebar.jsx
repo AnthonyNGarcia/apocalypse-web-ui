@@ -69,6 +69,7 @@ const BattleSidebar = (props) => {
       <Row>
         {props.showEnemyArmyInBattle ? (
           <Button variant="danger"
+            disabled={!props.isOwnTurn}
             onClick={fullRetreatHandler}>Full Retreat</Button>
         ) : (
           <Button variant="primary" disabled={props.ownArmySubmitted}
@@ -90,6 +91,9 @@ const mapStateToProps = (state) => {
     showEnemyArmyInBattle: state.game.showEnemyArmyInBattle,
     battleData: state.game.battleData,
     ownArmySubmitted: state.game.ownArmySubmitted,
+    isOwnTurn: state.game.battleData ?
+      state.game.battleData.playerWhoseTurnItIs ===
+      state.game.ownPlayerNumber : false,
   };
 };
 
@@ -107,6 +111,7 @@ BattleSidebar.propTypes = {
   battleData: PropTypes.any,
   ownArmySubmitted: PropTypes.bool,
   updateOwnArmySubmitted: PropTypes.func,
+  isOwnTurn: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BattleSidebar);

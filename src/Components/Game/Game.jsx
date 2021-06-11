@@ -115,6 +115,11 @@ const Game = (props) => {
         console.log(message.body);
         handleConfigurationsComplete(message.body.battleData);
         break;
+      case WEBSOCKET_MESSAGE_TYPES.BATTLE_DATA_UPDATED:
+        console.log('Received updated battle data from server! ' +
+          'Updating local state...');
+        props.saveBattleData(message.body.battleData);
+        break;
       default:
         console.warn('Received unexpected websocket message for ' +
           'the general Game component!');

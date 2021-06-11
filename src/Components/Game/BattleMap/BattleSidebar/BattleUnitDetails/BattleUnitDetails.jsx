@@ -4,9 +4,14 @@ import PropTypes from 'prop-types';
 import Spinner from 'react-bootstrap/esm/Spinner';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/esm/Button';
 // eslint-disable-next-line max-len
 import PassiveAbilityItem from '../../../CampaignMap/AdvancedDetailsModalInfo/CityMenu/CitySupplementalInfoBox/SelectedUnitDetails/PassiveAbilityItem/PassiveAbilityItem';
 import UNIT_CLASSES from '../../../../Utilities/unitClasses';
+import apiEndpoints from '../../../../Utilities/apiEndpoints';
+import axios from 'axios';
+import UNIT_ACTION_TYPES from '../../../../Utilities/unitActionTypes';
+import gameAC from '../../../../../Redux/actionCreators/gameActionCreators';
 import './BattleUnitDetails.css';
 
 /**
@@ -31,17 +36,39 @@ const BattleUnitDetails = (props) => {
         const freshSelectedUnit = props.battleData
             .attackingArmy.units[props.selectedBattleUnitIndex];
         setSelectedUnit(freshSelectedUnit);
-        const freshFullUnitData = props.allUnits[freshSelectedUnit.unitType];
-        setFullUnitInfo(freshFullUnitData);
+        if (freshSelectedUnit) {
+          const freshFullUnitData = props.allUnits[freshSelectedUnit.unitType];
+          setFullUnitInfo(freshFullUnitData);
+        }
       } else {
         const freshSelectedUnit = props.battleData
             .defendingArmy.units[props.selectedBattleUnitIndex];
         setSelectedUnit(freshSelectedUnit);
-        const freshFullUnitData = props.allUnits[freshSelectedUnit.unitType];
-        setFullUnitInfo(freshFullUnitData);
+        if (freshSelectedUnit) {
+          const freshFullUnitData = props.allUnits[freshSelectedUnit.unitType];
+          setFullUnitInfo(freshFullUnitData);
+        }
       }
     }
   }, [props]);
+
+  const skipTurnHandler = (e) => {
+    e.preventDefault();
+    try {
+      props.updateSelectedBattleUnitIndex(-1);
+      const skipTurnRequest = {
+        playerSubmittingAction: props.ownPlayerNumber,
+        unitActionType: UNIT_ACTION_TYPES.SKIP,
+        indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
+        indexOfTargetUnitOfAction: -1,
+      };
+      axios.post(apiEndpoints.gameController + '/in-memory-battle-skip-turn/' +
+        props.gameId, skipTurnRequest);
+    } catch (e) {
+      console.warn('There was an error trying to skip turn!');
+      console.warn(e);
+    }
+  };
 
   if (props.battleData) {
     if (fullUnitInfo && selectedUnit) {
@@ -49,8 +76,8 @@ const BattleUnitDetails = (props) => {
         <React.Fragment>
           {/* Unit Name and Tier */}
           <Row noGutters style={{display: 'block'}}>
-            <h1>{fullUnitInfo.displayName}</h1>
-            <h3>{UNIT_CLASSES[fullUnitInfo.unitClass].displayName}</h3>
+            <h2>{fullUnitInfo.displayName}</h2>
+            <h4>{UNIT_CLASSES[fullUnitInfo.unitClass].displayName}</h4>
           </Row>
           {/* Unit Image */}
           <Row noGutters style={{width: '100%', height: '20vh',
@@ -128,6 +155,19 @@ const BattleUnitDetails = (props) => {
                   </span>
                 ))}</p>
           </Row>
+          {/* Action Buttons */}
+          <Row>
+            {/* Skip Button */}
+            <Col>
+              <Button disabled={!props.isOwnTurn ||
+              !selectedUnit.eligibleForCommand || !props.showEnemyArmyInBattle}
+              onClick={skipTurnHandler}>Skip Turn</Button>
+            </Col>
+            {/* Active Ability Button */}
+            <Col>
+              [Active Ability Button Pending...]
+            </Col>
+          </Row>
         </React.Fragment>
       );
     } else {
@@ -150,21 +190,37 @@ const BattleUnitDetails = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    gameId: state.game.gameId,
     allUnits: state.game.gameConstants.allUnits,
     selectedBattleUnitIndex: state.game.selectedBattleUnitIndex,
     battleData: state.game.battleData,
     ownPlayerNumber: state.game.ownPlayerNumber,
     allActiveAbilities: state.game.gameConstants.allActiveAbilities,
+    isOwnTurn: state.game.battleData ?
+      state.game.battleData.playerWhoseTurnItIs ===
+      state.game.ownPlayerNumber : false,
+    showEnemyArmyInBattle: state.game.showEnemyArmyInBattle,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateSelectedBattleUnitIndex: (selectedBattleUnitIndex) => dispatch(
+        gameAC.setSelectedBattleUnitIndex(selectedBattleUnitIndex)),
   };
 };
 
 BattleUnitDetails.propTypes = {
+  gameId: PropTypes.string,
   allUnits: PropTypes.any,
   battleData: PropTypes.any,
   selectedBattleUnitIndex: PropTypes.number,
   ownPlayerNumber: PropTypes.string,
   allActiveAbilities: PropTypes.any,
+  isOwnTurn: PropTypes.bool,
+  showEnemyArmyInBattle: PropTypes.bool,
+  updateSelectedBattleUnitIndex: PropTypes.func,
 };
 
-export default connect(mapStateToProps)(BattleUnitDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(BattleUnitDetails);
 
