@@ -188,6 +188,31 @@ const ArmyUnit = (props) => {
             /></span>
           </p>
         </Row>
+        {/* Third row is the unit Block, if they have any */}
+        {props.unit.activeBlock > 0 ? (
+          <Row>
+            <p className='unit-label'>
+              {props.unit.activeBlock} <span><img
+                src={'active_block.svg'}
+                alt=""
+                className={'tiny-hammer-icon'}
+              /></span>
+            </p>
+          </Row>
+          ) : null}
+        {/* Third row is the unit debuff, if they have any */}
+        {props.unit.currentDebuffs && props.unit.currentDebuffs.length > 0 ?
+          props.unit.currentDebuffs.map((debuff, index) => (
+            <Row key={debuff.debuffType + '-' + index}>
+              <p className='unit-label'>
+                {debuff.value} <span><img
+                  src={'poison_debuff.svg'}
+                  alt=""
+                  className={'tiny-hammer-icon'}
+                /></span>
+              </p>
+            </Row>
+          )) : null}
       </React.Fragment>
     );
   } else {
