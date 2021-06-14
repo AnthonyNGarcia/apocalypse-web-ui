@@ -4,7 +4,7 @@
  * urls for components to start making calls, to reduce redundancy and the
  * associated possibilities for typos/errors.
  */
-const apiBasePath = 'https://apocalypse-testing-nlb-d7c60e558daeb02d.elb.us-west-1.amazonaws.com:9595';
+const apiBasePath = 'https://apocalypse-dev-api-nlb-337c332a0c60c639.elb.us-west-1.amazonaws.com:9595';
 
 const apiEndpoints = {
   basePath: apiBasePath,
