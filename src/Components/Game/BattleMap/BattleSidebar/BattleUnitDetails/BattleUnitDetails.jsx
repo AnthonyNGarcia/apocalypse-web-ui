@@ -70,6 +70,26 @@ const BattleUnitDetails = (props) => {
     }
   };
 
+  const activeAbilityHandler = (e) => {
+    e.preventDefault();
+    console.log('using active ability...');
+    try {
+      props.updateSelectedBattleUnitIndex(-1);
+      const initiateActiveAbilityRequest = {
+        playerSubmittingAction: props.ownPlayerNumber,
+        unitActionType: UNIT_ACTION_TYPES.ACTIVE_ABILITY,
+        indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
+        indexOfTargetUnitOfAction: -1,
+      };
+      axios.post(apiEndpoints.gameController +
+        '/in-memory-battle-initiate-active-ability/' +
+        props.gameId, initiateActiveAbilityRequest);
+    } catch (e) {
+      console.warn('There was an error trying to initiate active ability!');
+      console.warn(e);
+    }
+  };
+
   if (props.battleData) {
     if (fullUnitInfo && selectedUnit) {
       return (
@@ -156,16 +176,24 @@ const BattleUnitDetails = (props) => {
                 ))}</p>
           </Row>
           {/* Action Buttons */}
-          <Row>
+          <Row style={{width: '90%', marginBottom: '2vh'}}>
             {/* Skip Button */}
-            <Col>
+            <Col md={6}>
               <Button disabled={!props.isOwnTurn ||
               !selectedUnit.eligibleForCommand || !props.showEnemyArmyInBattle}
               onClick={skipTurnHandler}>Skip Turn</Button>
             </Col>
             {/* Active Ability Button */}
-            <Col>
-              [Active Ability Button Pending...]
+            <Col md={6}>
+              <Button disabled={!props.isOwnTurn ||
+              !selectedUnit.eligibleForCommand ||
+              !props.showEnemyArmyInBattle ||
+              fullUnitInfo.currentActiveAbilityCharges <= 0}
+              onClick={activeAbilityHandler}>
+                {props.allActiveAbilities[
+                    fullUnitInfo.baseActiveAbility.activeAbilityType]
+                    .displayName}
+              </Button>
             </Col>
           </Row>
         </React.Fragment>
