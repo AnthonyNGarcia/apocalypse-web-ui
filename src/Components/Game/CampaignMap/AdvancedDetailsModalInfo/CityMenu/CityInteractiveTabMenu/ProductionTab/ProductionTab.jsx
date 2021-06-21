@@ -40,7 +40,7 @@ const ProductionTab = (props) => {
           <Scrollbars style={{height: '30vh'}}>
             {props.selectedCity.constructibleBuildings &&
               props.selectedCity.constructibleBuildings.length > 0 ?
-              props.selectedCity.constructibleBuildings
+              props.selectedCity.constructibleBuildings.reverse()
                   .map((bldg, index) => (
                     <React.Fragment key={index}>
                       <AvailableBuildingItem

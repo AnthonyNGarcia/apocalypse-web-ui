@@ -6,6 +6,9 @@ import Row from 'react-bootstrap/Row';
 import {Scrollbars} from 'react-custom-scrollbars-2';
 import ArmyUnitItem from './ArmyUnitItem/ArmyUnitItem';
 import Spinner from 'react-bootstrap/Spinner';
+import Button from 'react-bootstrap/Button';
+import axios from 'axios';
+import apiEndpoints from '../../../../../Utilities/apiEndpoints';
 import './ArmyInfoPanel.css';
 
 /**
@@ -17,6 +20,7 @@ import './ArmyInfoPanel.css';
  */
 const ArmyInfoPanel = (props) => {
   const [selectedArmyMaxSize, setSelectedArmyMaxSize] = useState(0);
+
   useEffect(() => {
     if (props.selectedArmy) {
       let armySize = 0;
@@ -31,6 +35,24 @@ const ArmyInfoPanel = (props) => {
       setSelectedArmyMaxSize(armySize);
     }
   }, [props]);
+
+  const fortifyArmyHandler = (e) => {
+    e.preventDefault();
+    try {
+      const armyActionRequest = {
+        gameId: props.game.gameId,
+        primaryArmyActionType: 'FORTIFY',
+        primaryTilePosition: props.selectedTilePosition,
+        secondaryTilePosition: -1,
+      };
+      axios.post(
+          apiEndpoints.armyController + '/action', armyActionRequest);
+    } catch (error) {
+      console.warn('Failed to fortify army!');
+      console.warn(error);
+    }
+  };
+
   if (props.selectedArmy) {
     return (
       <React.Fragment>
@@ -66,6 +88,14 @@ const ArmyInfoPanel = (props) => {
                   </React.Fragment>
                 )}
             </Scrollbars>
+          </Row>
+          <Row>
+            <Button
+              disabled={props.selectedArmy.remainingActions <= 0 ||
+                props.isOwnTurn == false}
+              onClick={fortifyArmyHandler}>
+            Fortify
+            </Button>
           </Row>
         </React.Fragment> :
         <React.Fragment>
@@ -104,6 +134,8 @@ const mapStateToProps = (state) => {
     playerTwo: state.game.playerTwo,
     ownPlayerNumber: state.game.ownPlayerNumber,
     selectedArmy: state.game.gameBoard[state.game.selectedTilePosition].army,
+    gameId: state.game.gameId,
+    selectedTilePosition: state.game.selectedTilePosition,
   };
 };
 
@@ -114,6 +146,8 @@ ArmyInfoPanel.propTypes = {
   playerTwo: PropTypes.any,
   ownPlayerNumber: PropTypes.string,
   selectedArmy: PropTypes.any,
+  gameId: PropTypes.string,
+  selectedTilePosition: PropTypes.number,
 };
 
 export default connect(mapStateToProps)(ArmyInfoPanel);
