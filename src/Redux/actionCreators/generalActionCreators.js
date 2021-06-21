@@ -13,6 +13,12 @@ const actionCreators = {
       mainView: mainView,
     };
   },
+  setOwnUserId: (userId) => {
+    return {
+      type: generalAT.SET_OWN_USER_ID,
+      userId: userId,
+    };
+  },
 };
 
 export default actionCreators;

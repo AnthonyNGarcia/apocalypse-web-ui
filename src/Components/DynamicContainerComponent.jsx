@@ -22,12 +22,14 @@ import './DynamicContainerComponent.css';
 const DynamicContainerComponent = (props) => {
   useEffect( () => {
     const fetchGuestData = async () => {
-      const url = apiEndpoints.userController + '/random';
+      const url = apiEndpoints.userController + '/guest';
 
       try {
         const response = await axios.get(url);
-        const ownUsername = response.data.randomUsername;
+        const ownUsername = response.data.username;
+        const ownUserId = response.data.userId;
         props.saveOwnUsername(ownUsername);
+        props.saveOwnUserId(ownUserId);
       } catch (error) {
         console.warn('Error getting random username from server! Is it down?');
         console.warn(error);
@@ -67,12 +69,15 @@ const mapStateToProps = (state) => {
 DynamicContainerComponent.propTypes = {
   mainView: PropTypes.oneOf(flattenObject(MAIN_VIEWS)),
   saveOwnUsername: PropTypes.func,
+  saveOwnUserId: PropTypes.func,
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     saveOwnUsername: (username) => dispatch(
         generalAC.setOwnUsername(username)),
+    saveOwnUserId: (userId) => dispatch(
+        generalAC.setOwnUserId(userId)),
   };
 };
 

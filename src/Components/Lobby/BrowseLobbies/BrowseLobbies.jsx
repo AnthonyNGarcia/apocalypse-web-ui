@@ -42,10 +42,13 @@ const BrowseLobbies = (props) => {
     e.preventDefault();
     try {
       const createLobbyRequest = {
-        creatorUsername: props.ownUsername,
+        creator: {
+          username: props.ownUsername,
+          userId: props.ownUserId,
+        },
       };
       const serverResponse = await axios.post(
-          apiEndpoints.lobbyController + '/in-memory', createLobbyRequest);
+          apiEndpoints.lobbyController + '/create', createLobbyRequest);
       await navigateToInLobby(serverResponse.data);
     } catch (error) {
       console.warn('Failed to create a new lobby!');
@@ -61,7 +64,7 @@ const BrowseLobbies = (props) => {
         playerUsername: props.ownUsername,
       };
       const response = await axios.patch(
-          apiEndpoints.lobbyController + '/in-memory-join', joinLobbyRequest);
+          apiEndpoints.lobbyController + '/join', joinLobbyRequest);
       await navigateToInLobby(response.data);
     } catch (error) {
       console.warn('Failed to join Lobby ' + lobbyId + '!');
@@ -72,7 +75,7 @@ const BrowseLobbies = (props) => {
   const refreshLobbiesHandler = async (e) => {
     e.preventDefault();
     const serverResponse = await
-    axios.get(apiEndpoints.lobbyController + '/in-memory');
+    axios.get(apiEndpoints.lobbyController + '/all');
     if (isMounted.current) {
       setCurrentLobbies(serverResponse.data);
     }
@@ -82,7 +85,7 @@ const BrowseLobbies = (props) => {
     isMounted.current = true;
     const fetchCurrentLobbies = async () => {
       const serverResponse = await
-      axios.get(apiEndpoints.lobbyController + '/in-memory');
+      axios.get(apiEndpoints.lobbyController + '/all');
       if (isMounted.current) {
         setCurrentLobbies(serverResponse.data);
       }
@@ -137,6 +140,7 @@ const BrowseLobbies = (props) => {
 const mapStateToProps = (state) => {
   return {
     ownUsername: state.general.ownUsername,
+    ownUserId: state.general.ownUserId,
   };
 };
 
@@ -155,6 +159,7 @@ const mapDispatchToProps = (dispatch) => {
 
 BrowseLobbies.propTypes = {
   ownUsername: PropTypes.string,
+  ownUserId: PropTypes.string,
   saveLobbyId: PropTypes.func,
   savePlayerOneUsername: PropTypes.func,
   savePlayerTwoUsername: PropTypes.func,

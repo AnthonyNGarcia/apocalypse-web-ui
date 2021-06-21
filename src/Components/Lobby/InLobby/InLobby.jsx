@@ -77,7 +77,7 @@ const InLobby = (props) => {
           playerUsername: props.ownUsername,
         };
         axios.patch(
-            apiEndpoints.lobbyController + '/in-memory-leave', leaveRequest);
+            apiEndpoints.lobbyController + '/leave', leaveRequest);
       } catch (e) {
         console.warn('Oops! There was an error trying to leave the lobby!');
         console.warn(e);
@@ -90,6 +90,7 @@ const InLobby = (props) => {
   });
 
   const onReceiveMessage = (message) => {
+    console.log(message);
     const playerOneUsername = message.body.playerOneUsername;
     if (!playerOneUsername) {
       navigateToBrowseLobbies();
