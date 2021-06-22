@@ -19,6 +19,12 @@ const actionCreators = {
       userId: userId,
     };
   },
+  setWebsocketTopics: (websocketTopics) => {
+    return {
+      type: generalAT.SET_WEBSOCKET_TOPICS,
+      websocketTopics: websocketTopics,
+    };
+  },
 };
 
 export default actionCreators;

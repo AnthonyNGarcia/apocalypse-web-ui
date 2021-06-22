@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {Honeycomb, Hexagon} from 'react-honeycomb';
 import PropTypes from 'prop-types';
@@ -7,15 +7,10 @@ import ACTION_BAR_VIEWS from '../../../../Utilities/actionBarViews';
 import TILE_HIGHLIGHT_TYPES from '../../../../Utilities/tileHighlightTypes';
 import gameAC from '../../../../../Redux/actionCreators/gameActionCreators';
 import tileHighlightManager from '../../../../Utilities/tileHighlightManager';
-import AbstractedWebsocket from '../../../../Utilities/AbstractedWebsocket';
 import ARMY_ACTION_REQUEST_TYPE from
   '../../../../Utilities/armyActionRequestTypes';
-import WEBSOCKET_MESSAGE_TYPES from
-  '../../../../Utilities/websocketMessageTypes';
 import axios from 'axios';
 import apiEndpoints from '../../../../Utilities/apiEndpoints';
-import CITY_MENU_SUPPLEMENTAL_VIEWS from
-  '../../../../Utilities/cityMenuSupplementalViews';
 import PLAYER from '../../../../Utilities/playerEnums';
 import FACTIONS from '../../../../Utilities/factions';
 import './GameBoard.css';
@@ -30,101 +25,6 @@ import './GameBoard.css';
 const GameBoard = (props) => {
   const [initialized, setInitialized] = useState(false);
   const [fullHoneycombConfigs, setFullHoneycombConfigs] = useState(null);
-  const websocket = useRef(null);
-
-  const resetPlayerView = () => {
-    props.unshowCityModal();
-    props.updateMainPanelView(MAIN_PANEL_VIEWS.NONE);
-    props.updateMainPanelData({});
-    props.updateCityMenuSupplementalData({});
-    props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.NONE);
-  };
-
-  const logUnexpectedWebsocketMessage = (message) => {
-    console.warn('Client received an unexpected websocket message.');
-    console.warn('---Unexpected message start---');
-    console.warn(message);
-    console.warn('---Unexpected message end---');
-  };
-
-  const onReceiveMessage = async (message) => {
-    props.updateAwaitingServerConfirmation(false);
-    // No matter what, if the server gives us a game board,
-    // we must accept it immediately, without modifications.
-    if (await message.body.gameBoard) {
-      await props.updateGameBoard(message.body.gameBoard);
-    }
-    // Let's identify what kind of message this is, to handle it properly
-    if (message.body.messageType) {
-      switch (message.body.messageType) {
-        case WEBSOCKET_MESSAGE_TYPES.PLAYER_ENDED_TURN:
-          resetPlayerView();
-          await props.updatePlayerOne(message.body.playerOne);
-          await props.updatePlayerTwo(message.body.playerTwo);
-          await props.updatePlayerWhoseTurnItIs(
-              message.body.playerWhoseTurnItIs);
-          break;
-        case WEBSOCKET_MESSAGE_TYPES.ARMY_MOVED_UNCONTESTED:
-          const gameBoardWithArmyMoved = await JSON.parse(
-              JSON.stringify(props.gameBoard));
-          gameBoardWithArmyMoved[message.body.endingTilePosition].army =
-            message.body.army;
-          gameBoardWithArmyMoved[message.body.startingTilePosition].army = null;
-          await props.updateGameBoard(gameBoardWithArmyMoved);
-          break;
-        case WEBSOCKET_MESSAGE_TYPES.ARMY_STANCE_CHANGED:
-          const gameBoardWithArmyStanceChanged = await JSON.parse(
-              JSON.stringify(props.gameBoard));
-          gameBoardWithArmyStanceChanged[message.body.tilePosition].army =
-            message.body.army;
-          await props.updateGameBoard(gameBoardWithArmyStanceChanged);
-          break;
-        case WEBSOCKET_MESSAGE_TYPES.UNIT_RECRUITMENT_QUEUE_UPDATED:
-          const gameBoardWithRecruitmentQueueUpdated = await JSON.parse(
-              JSON.stringify(props.gameBoard));
-          gameBoardWithRecruitmentQueueUpdated[message.body.cityTilePosition]
-              .city.currentRecruitmentQueue = message.body
-                  .updatedUnitRecruitmentQueue;
-          gameBoardWithRecruitmentQueueUpdated[message.body.cityTilePosition]
-              .city.unitProductionRemaining = message.body
-                  .updatedRemainingUnitProduction;
-          await props.updateGameBoard(gameBoardWithRecruitmentQueueUpdated);
-          break;
-        case WEBSOCKET_MESSAGE_TYPES.ARMY_UNITS_UPDATED:
-          const gameBoardWithArmyUnitsUpdated = await JSON.parse(
-              JSON.stringify(props.gameBoard));
-          gameBoardWithArmyUnitsUpdated[message.body.armyTilePosition]
-              .army.units = message.body
-                  .updatedArmyUnits;
-          await props.updateGameBoard(gameBoardWithArmyUnitsUpdated);
-          break;
-        case WEBSOCKET_MESSAGE_TYPES.UNASSIGNED_UNITS_UPDATED:
-          const gameBoardWithUnassignedUnitsUpdated = await JSON.parse(
-              JSON.stringify(props.gameBoard));
-          gameBoardWithUnassignedUnitsUpdated[message.body.cityTilePosition]
-              .city.unassignedUnits = message.body
-                  .updatedUnassignedUnits;
-          await props.updateGameBoard(gameBoardWithUnassignedUnitsUpdated);
-          break;
-        case WEBSOCKET_MESSAGE_TYPES.ARMY_AND_UNASSIGNED_UNITS_UPDATED:
-          const gameBoardWithArmyAndUnassignedUnitsUpdated = await JSON.parse(
-              JSON.stringify(props.gameBoard));
-          gameBoardWithArmyAndUnassignedUnitsUpdated[message.body.tilePosition]
-              .city.unassignedUnits = message.body
-                  .updatedUnassignedUnits;
-          gameBoardWithArmyAndUnassignedUnitsUpdated[message.body.tilePosition]
-              .army.units = message.body
-                  .updatedArmyUnits;
-          await props
-              .updateGameBoard(gameBoardWithArmyAndUnassignedUnitsUpdated);
-          break;
-        default:
-          logUnexpectedWebsocketMessage(message);
-      }
-    } else {
-      logUnexpectedWebsocketMessage(message);
-    }
-  };
 
   useEffect(() => {
     // USE EFFECT SCOPED FUNCTIONS DEFINED HERE
@@ -315,8 +215,6 @@ const GameBoard = (props) => {
 
   return (
     <React.Fragment>
-      <AbstractedWebsocket topics={['/game-board/' + props.gameId]}
-        onReceiveMessage={onReceiveMessage} ref={websocket}/>
       {fullHoneycombConfigs ?
       <Honeycomb {...fullHoneycombConfigs} className='board-sizing' /> : null
       }

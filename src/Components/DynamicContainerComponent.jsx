@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import apiEndpoints from './Utilities/apiEndpoints';
@@ -6,8 +6,11 @@ import MAIN_VIEWS from './Utilities/mainViews';
 import PropTypes from 'prop-types';
 import Lobby from './Lobby/Lobby';
 import Game from './Game/Game';
+import AbstractedWebsocket from './Utilities/websockets/AbstractedWebsocket';
 import generalAC from '../Redux/actionCreators/generalActionCreators';
 import flattenObject from './Utilities/flattenObjectValuesToArray';
+import websocketMessageReceiver from
+  './Utilities/websockets/websocketMessageReceiver';
 import './DynamicContainerComponent.css';
 
 /**
@@ -20,6 +23,17 @@ import './DynamicContainerComponent.css';
  * @return {JSX} to render
  */
 const DynamicContainerComponent = (props) => {
+  const websocket = useRef(null);
+
+  const onReceiveMessage = (message) => {
+    console.log(message);
+    websocketMessageReceiver(message.body);
+  };
+
+  const onDisconnect = () => {
+    console.warn('Disconnected from game websocket!');
+  };
+
   useEffect( () => {
     const fetchGuestData = async () => {
       const url = apiEndpoints.userController + '/guest';
@@ -39,37 +53,41 @@ const DynamicContainerComponent = (props) => {
     fetchGuestData();
   }, []);
 
+  let viewToRender = (
+    <React.Fragment>
+      <p>Oops! An invalid view is being rendered to the screen...</p>
+    </React.Fragment>
+  );
+
   if (props.mainView === MAIN_VIEWS.LOBBY_VIEW) {
-    return (
+    viewToRender = (
       <React.Fragment>
         <Lobby/>
       </React.Fragment>
     );
   } else if (props.mainView === MAIN_VIEWS.GAME_VIEW) {
-    return (
+    viewToRender = (
       <React.Fragment>
         <Game/>
       </React.Fragment>
     );
-  } else {
-    return (
-      <React.Fragment>
-        <p>Oops! An invalid view is being rendered to the screen...</p>
-      </React.Fragment>
-    );
   }
+
+  return (
+    <React.Fragment>
+      <AbstractedWebsocket topics={props.websocketTopics}
+        onReceiveMessage={onReceiveMessage} ref={websocket}
+        onDisconnect={onDisconnect}/>
+      {viewToRender}
+    </React.Fragment>
+  );
 };
 
 const mapStateToProps = (state) => {
   return {
     mainView: state.general.mainView,
+    websocketTopics: state.general.websocketTopics,
   };
-};
-
-DynamicContainerComponent.propTypes = {
-  mainView: PropTypes.oneOf(flattenObject(MAIN_VIEWS)),
-  saveOwnUsername: PropTypes.func,
-  saveOwnUserId: PropTypes.func,
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -79,6 +97,13 @@ const mapDispatchToProps = (dispatch) => {
     saveOwnUserId: (userId) => dispatch(
         generalAC.setOwnUserId(userId)),
   };
+};
+
+DynamicContainerComponent.propTypes = {
+  mainView: PropTypes.oneOf(flattenObject(MAIN_VIEWS)),
+  saveOwnUsername: PropTypes.func,
+  saveOwnUserId: PropTypes.func,
+  websocketTopics: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

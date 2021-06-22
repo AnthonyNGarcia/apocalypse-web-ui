@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import GAME_VIEWS from '../Utilities/gameViews';
@@ -6,7 +6,6 @@ import flattenObject from '../Utilities/flattenObjectValuesToArray';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
-import AbstractedWebsocket from '../Utilities/AbstractedWebsocket';
 import CampaignMap from './CampaignMap/CampaignMap';
 import MAIN_VIEWS from '../Utilities/mainViews';
 import LOBBY_VIEWS from '../Utilities/lobbyViews';
@@ -16,7 +15,6 @@ import lobbyAC from '../../Redux/actionCreators/lobbyActionCreators';
 import apiEndpoints from '../Utilities/apiEndpoints';
 import axios from 'axios';
 import {useBeforeunload} from 'react-beforeunload';
-import WEBSOCKET_MESSAGE_TYPES from '../Utilities/websocketMessageTypes';
 import BattleMap from './BattleMap/BattleMap';
 import './Game.css';
 
@@ -28,8 +26,6 @@ import './Game.css';
  * @return {JSX} to render
  */
 const Game = (props) => {
-  const websocket = useRef(null);
-
   const gameCleanup = () => {
     try {
       const leaveRequest = {
@@ -63,80 +59,8 @@ const Game = (props) => {
     props.updateMainView(MAIN_VIEWS.LOBBY_VIEW);
   };
 
-  const navigateToBattleMap = async (battleData) => {
-    await props.saveBattleData(battleData);
-    await props.updateShowEnemyArmyInBattle(false);
-    await props.updateOwnArmySubmitted(false);
-    props.updateGameView(GAME_VIEWS.BATTLE_MAP_VIEW);
-  };
-
-  const handleConfigurationsComplete = async (battleData) => {
-    await props.saveBattleData(battleData);
-    props.updateShowEnemyArmyInBattle(true);
-  };
-
-  const navigateToCampaignMap = async (battleResults) => {
-    const gameBoardWithArmiesUpdated = await JSON.parse(
-        JSON.stringify(props.gameBoard));
-    gameBoardWithArmiesUpdated[battleResults.attackingArmyStartingTilePosition]
-        .army = null;
-    gameBoardWithArmiesUpdated[battleResults.defendingArmyStartingTilePosition]
-        .army = null;
-    gameBoardWithArmiesUpdated[battleResults.attackingArmyEndingTilePosition]
-        .army = battleResults.attackingArmy;
-    gameBoardWithArmiesUpdated[battleResults.defendingArmyEndingTilePosition]
-        .army = battleResults.defendingArmy;
-    await props.updateGameBoard(gameBoardWithArmiesUpdated);
-    await props.updateGameView(GAME_VIEWS.CAMPAIGN_MAP_VIEW);
-  };
-
-  const onReceiveMessage = (message) => {
-    console.log(message);
-    const messageType = message.body.messageType;
-    switch (messageType) {
-      case WEBSOCKET_MESSAGE_TYPES.PLAYER_LEFT_GAME:
-        const playerUsername = message.body.leavingPlayerUsername;
-        console.log('Player ' + playerUsername + ' has left! Closing game...');
-        gameCleanup();
-        navigateToBrowseLobbies();
-        break;
-      case WEBSOCKET_MESSAGE_TYPES.BATTLE_STARTED:
-        console.log('A battle has started! Changing to battle view...');
-        console.log(message.body);
-        navigateToBattleMap(message.body.battleData);
-        break;
-      case WEBSOCKET_MESSAGE_TYPES.BATTLE_ENDED:
-        console.log('A battle has ended! Changing to campaign view...');
-        console.log(message.body);
-        navigateToCampaignMap(message.body);
-        break;
-      case WEBSOCKET_MESSAGE_TYPES.CONFIGURATION_COMPLETE:
-        console.log('Configuration complete! Revealing enemy army...');
-        console.log(message.body);
-        handleConfigurationsComplete(message.body.battleData);
-        break;
-      case WEBSOCKET_MESSAGE_TYPES.BATTLE_DATA_UPDATED:
-        console.log('Received updated battle data from server! ' +
-          'Updating local state...');
-        props.saveBattleData(message.body.battleData);
-        break;
-      default:
-        console.warn('Received unexpected websocket message for ' +
-          'the general Game component!');
-    }
-  };
-
-  const onDisconnect = () => {
-    console.log('Disconnected from game websocket!');
-    gameCleanup();
-    navigateToBrowseLobbies();
-  };
-
   return (
     <React.Fragment>
-      <AbstractedWebsocket topics={['/game/' + props.gameId]}
-        onReceiveMessage={onReceiveMessage} ref={websocket}
-        onDisconnect={onDisconnect}/>
       <Container className='game-sizing'>
         <Row>
           {props.gameView === GAME_VIEWS.CAMPAIGN_MAP_VIEW ?

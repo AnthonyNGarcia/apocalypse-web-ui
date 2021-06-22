@@ -1,7 +1,7 @@
 import React, {forwardRef, useEffect, useState} from 'react';
 import SockJsClient from 'react-stomp';
 import PropTypes from 'prop-types';
-import apiEndpoints from './apiEndpoints';
+import apiEndpoints from '../apiEndpoints';
 
 /**
  * This wrapper component should be leveraged whenever there is a need for a

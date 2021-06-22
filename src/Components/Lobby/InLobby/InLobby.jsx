@@ -1,20 +1,17 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import AbstractedWebsocket from '../../Utilities/AbstractedWebsocket';
 import LOBBY_VIEWS from '../../Utilities/lobbyViews';
 import lobbyAC from '../../../Redux/actionCreators/lobbyActionCreators';
 import gameAC from '../../../Redux/actionCreators/gameActionCreators';
 import generalAC from '../../../Redux/actionCreators/generalActionCreators';
 import MAIN_VIEWS from '../../Utilities/mainViews';
-import FACTIONS from '../../Utilities/factions';
 import axios from 'axios';
 import apiEndpoints from '../../Utilities/apiEndpoints';
-import PLAYER from '../../Utilities/playerEnums';
 import {useBeforeunload} from 'react-beforeunload';
 import './InLobby.css';
 
@@ -26,49 +23,6 @@ import './InLobby.css';
  * @return {JSX} to render
  */
 const InLobby = (props) => {
-  const websocket = useRef(null);
-
-  const saveFactionGameData = (playerData) => {
-    switch (playerData.factionType) {
-      case FACTIONS.HUMANS.NAME:
-        props.saveActionBarData(FACTIONS.HUMANS.ACTION_BAR_DATA);
-        break;
-      case FACTIONS.INSECTS.NAME:
-        props.saveActionBarData(FACTIONS.INSECTS.ACTION_BAR_DATA);
-        break;
-      default:
-        console.warn('Oops! An invalid faction was parsed!');
-    }
-  };
-
-  const navigateToInGame = (gameData) => {
-    console.log(gameData);
-    const initialGameData = gameData.initialGameData;
-    const gameConstants = gameData.gameConstantsDTO;
-    props.saveGameId(initialGameData.gameId);
-    props.saveGameBoard(initialGameData.gameBoard);
-    props.savePlayerOne(initialGameData.playerOne);
-    props.savePlayerTwo(initialGameData.playerTwo);
-    if (initialGameData.playerOne.username === props.ownUsername) {
-      saveFactionGameData(initialGameData.playerOne);
-      props.saveOwnPlayerNumber(PLAYER.ONE);
-    } else {
-      saveFactionGameData(initialGameData.playerTwo);
-      props.saveOwnPlayerNumber(PLAYER.TWO);
-    }
-    props.updatePlayerWhoseTurnItIs(
-        initialGameData.playerWhoseTurnItIs);
-    props.saveGameConstants(gameConstants);
-    props.updateMainViewToGame();
-  };
-
-  const navigateToBrowseLobbies = () => {
-    props.savePlayerOneUsername(null);
-    props.savePlayerTwoUsername(null);
-    props.saveLobbyId(null);
-    props.updateLobbyViewToBrowseLobbies();
-  };
-
   const lobbyCleanup = () => {
     if (props.lobbyId) {
       try {
@@ -88,33 +42,6 @@ const InLobby = (props) => {
   useBeforeunload(() => {
     lobbyCleanup();
   });
-
-  const onReceiveMessage = (message) => {
-    console.log(message);
-    const playerOneUsername = message.body.playerOneUsername;
-    if (!playerOneUsername) {
-      navigateToBrowseLobbies();
-    }
-    const playerTwoUsername = message.body.playerTwoUsername;
-    if (playerTwoUsername !== props.playerTwoUsername) {
-      if (props.ownUsername === props.playerTwoUsername) {
-        navigateToBrowseLobbies();
-      } else {
-        props.savePlayerTwoUsername(playerTwoUsername);
-      }
-    }
-
-    if (message.body.initialGameData) {
-      lobbyCleanup();
-      navigateToInGame(message.body);
-    }
-  };
-
-  const onDisconnect = () => {
-    console.log('Disconnected from in-lobby websocket!');
-    lobbyCleanup();
-    navigateToBrowseLobbies();
-  };
 
   const leaveLobbyHandler = async (e) => {
     e.preventDefault();
@@ -139,9 +66,6 @@ const InLobby = (props) => {
 
   return (
     <React.Fragment>
-      <AbstractedWebsocket topics={['/lobby/' + props.lobbyId]}
-        onReceiveMessage={onReceiveMessage} ref={websocket}
-        onDisconnect={onDisconnect}/>
       <h3>In Lobby Component</h3>
       <Container>
         <Row>
