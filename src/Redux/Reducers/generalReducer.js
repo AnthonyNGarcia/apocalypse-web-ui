@@ -1,12 +1,14 @@
 /* eslint-disable max-len */
 import generalAT from '../actionTypes/generalActionTypes';
 import MAIN_VIEWS from '../../Components/Utilities/mainViews';
+import WEBSOCKET_TOPICS from '../../Components/Utilities/websockets/websocketTopics';
+
 
 const initialState = {
   ownUsername: 'Default Username',
   ownUserId: 'Default User Id',
   mainView: MAIN_VIEWS.LOBBY_VIEW,
-  websocketTopics: [],
+  websocketTopics: [WEBSOCKET_TOPICS.BROWSE_LOBBIES],
 };
 
 const setOwnUsername = (state, action) => {

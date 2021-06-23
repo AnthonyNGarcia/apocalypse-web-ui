@@ -63,13 +63,13 @@ const Game = (props) => {
     <React.Fragment>
       <Container className='game-sizing'>
         <Row>
-          {props.gameView === GAME_VIEWS.CAMPAIGN_MAP_VIEW ?
+          {props.gameView === GAME_VIEWS.GAME_BOARD_VIEW ?
           <CampaignMap/> : props.gameView === GAME_VIEWS.BATTLE_MAP_VIEW ?
           <BattleMap/> :
           <p>Oops! An invalid game view was rendered!</p>}
         </Row>
         <Row>
-          {props.gameView === GAME_VIEWS.CAMPAIGN_MAP_VIEW ? (
+          {props.gameView === GAME_VIEWS.GAME_BOARD_VIEW ? (
             <Button variant="primary" onClick={leaveGameHandler}>Leave</Button>
           ): null}
         </Row>

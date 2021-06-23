@@ -32,8 +32,8 @@ const LeftSidebar = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    playerOne: state.game.playerOne,
-    playerTwo: state.game.playerTwo,
+    playerOne: state.gamePlayer.playerOne,
+    playerTwo: state.gamePlayer.playerTwo,
   };
 };
 

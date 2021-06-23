@@ -28,6 +28,10 @@
 
 */
 
+import WEBSOCKET_TOPICS from './websocketTopics';
+import lobbyMessageHandler from './messageHandlers/lobbyMessageHandler.js';
+import {store} from '../../../App';
+
 /* IN LOBBY
   const saveFactionGameData = (playerData) => {
     switch (playerData.factionType) {
@@ -193,12 +197,26 @@ const onReceiveMessage = async (message) => {
  * messages from the server and redirect them to more specific logic handlers
  * as necessary for functionality.
  *
- * @param {WebsocketMessage} message containing a WEBSOCKET_MESSAGE_TYPE
+ * @param {Object} message containing the actual message, and potentially
+ * a WEBSOCKET_RESPONSE_MESSAGE_TYPE value, at websocketResponseMessageType.
+ * @param {String} topic that this message came through.
  */
-const websocketMessageReceiver = (message) => {
+const websocketMessageReceiver = (message, topic) => {
   console.log(message);
-  const messageType = message.messageType;
-  console.log(messageType);
+  console.log(topic);
+  const state = store.getState();
+  const lobbyId = state.lobby.lobbyId ? state.lobby.lobbyId : 'na';
+  const specificLobby = WEBSOCKET_TOPICS.lobbyWithId(lobbyId);
+  switch (topic) {
+    case WEBSOCKET_TOPICS.BROWSE_LOBBIES:
+    case specificLobby:
+      lobbyMessageHandler(message);
+      break;
+    default:
+      console.warn('Unidentified websocket topic of incoming message: ' +
+        topic);
+      console.warn(message);
+  }
 //   switch (messageType) {
 //     case WEBSOCKET_MESSAGE_TYPES.PLAYER_LEFT_GAME:
 //       const playerUsername = message.leavingPlayerUsername;

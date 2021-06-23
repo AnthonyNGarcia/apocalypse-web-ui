@@ -90,7 +90,7 @@ const InLobby = (props) => {
             {props.ownUserId === props.lobbyPlayerOne.userId ?
             <Button variant="primary"
               disabled={props.lobbyPlayerOne === null ||
-                props.lobbyPlayerOne === null}
+                props.lobbyPlayerTwo === null}
               onClick={startGameHandler}>Start</Button> :
             null}
           </Col>

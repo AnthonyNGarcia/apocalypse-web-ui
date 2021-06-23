@@ -7,6 +7,12 @@ const actionCreators = {
       lobbyView: lobbyView,
     };
   },
+  setLobbyList: (lobbyList) => {
+    return {
+      type: lobbyAT.SET_LOBBY_LIST,
+      lobbyList: lobbyList,
+    };
+  },
   setLobbyId: (lobbyId) => {
     return {
       type: lobbyAT.SET_LOBBY_ID,

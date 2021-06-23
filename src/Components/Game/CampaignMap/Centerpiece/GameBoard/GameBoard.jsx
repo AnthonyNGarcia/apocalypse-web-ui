@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {Honeycomb, Hexagon} from 'react-honeycomb';
 import PropTypes from 'prop-types';
 import MAIN_PANEL_VIEWS from '../../../../Utilities/gameMainPanelViews';
-import ACTION_BAR_VIEWS from '../../../../Utilities/actionBarViews';
 import TILE_HIGHLIGHT_TYPES from '../../../../Utilities/tileHighlightTypes';
 import gameAC from '../../../../../Redux/actionCreators/gameActionCreators';
 import tileHighlightManager from '../../../../Utilities/tileHighlightManager';
@@ -28,14 +27,6 @@ const GameBoard = (props) => {
 
   useEffect(() => {
     // USE EFFECT SCOPED FUNCTIONS DEFINED HERE
-    const getTileData = (tile) => {
-      return {
-        position: tile.tilePosition,
-        terrainType: tile.terrainType,
-        tileImprovement: tile.tileImprovement,
-        hasAsteroid: tile.hasAsteroid,
-      };
-    };
 
     const tileClicked = async (e, item) => {
       e.preventDefault();
@@ -43,20 +34,14 @@ const GameBoard = (props) => {
       const updateToCityView = () => {
         props.updateIsMovingArmy(false);
         props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
-        props.updateActionBarView(ACTION_BAR_VIEWS.CITY_ACTIONS_VIEW);
-        props.updateMainPanelData(item.city);
       };
 
       const updateToArmyView = () => {
         props.updateMainPanelView(MAIN_PANEL_VIEWS.ARMY_INFO);
-        props.updateActionBarView(ACTION_BAR_VIEWS.ARMY_ACTIONS_VIEW);
-        props.updateMainPanelData(item.army);
         if (!props.isMovingArmy &&
             item.army.owner === props.ownPlayerNumber &&
             props.isOwnTurn && item.army.remainingActions > 0) {
           props.updateIsMovingArmy(true);
-          props.updateActionBarTooltip(
-              'Move this army or have it camp in place.');
           tileHighlightManager.
               highlightAvailableMoveTiles(item.tilePosition);
         } else {
@@ -87,10 +72,7 @@ const GameBoard = (props) => {
         }
       } else {
         if (props.isMovingArmy &&
-          (item.tileHighlightType === TILE_HIGHLIGHT_TYPES.CAN_MOVE_HERE) &&
-          !props.awaitingServerConfirmation) {
-          props.updateActionBarTooltip(
-              'Select an Army or City to get started.');
+          (item.tileHighlightType === TILE_HIGHLIGHT_TYPES.CAN_MOVE_HERE)) {
           tileHighlightManager.unhighlightAllTiles();
           const request = {
             gameId: props.gameId,
@@ -99,14 +81,10 @@ const GameBoard = (props) => {
                 .tilePosition,
             secondaryTilePosition: item.tilePosition,
           };
-          await props.updateAwaitingServerConfirmation(true);
-          axios.post(apiEndpoints.armyController + '/action/' +
-        props.gameId, request);
+          axios.post(apiEndpoints.armyController + '/action', request);
         } else {
           tileHighlightManager.unhighlightAllTiles();
           props.updateMainPanelView(MAIN_PANEL_VIEWS.TILE_INFO);
-          props.updateActionBarView(ACTION_BAR_VIEWS.NONE);
-          props.updateMainPanelData(getTileData(item));
         }
         props.updateIsMovingArmy(false);
       }
@@ -244,34 +222,22 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateMainPanelView: (view) => dispatch(
         gameAC.setMainPanelView(view)),
-    updateMainPanelData: (data) => dispatch(
-        gameAC.setMainPanelData(data)),
     updateSupplementalPanelView: (view) => dispatch(
         gameAC.setSupplementalPanelView(view)),
-    updateSupplementalPanelData: (data) => dispatch(
-        gameAC.setSupplementalPanelData(data)),
-    updateActionBarView: (view) => dispatch(
-        gameAC.setActionBarView(view)),
     updateSelectedTilePosition: (position) => dispatch(
         gameAC.setSelectedTilePosition(position)),
     updateIsMovingArmy: (isMovingArmy) => dispatch(
         gameAC.setIsMovingArmy(isMovingArmy)),
     updateGameBoard: (gameBoard) => dispatch(
         gameAC.setGameBoard(gameBoard)),
-    updateAwaitingServerConfirmation: (awaitingServerConfirmation) => dispatch(
-        gameAC.setAwaitingServerConfirmation(awaitingServerConfirmation)),
     updatePlayerWhoseTurnItIs: (playerWhoseTurnItIs) => dispatch(
         gameAC.setPlayerWhoseTurnItIs(playerWhoseTurnItIs)),
-    updateActionBarTooltip: (tooltip) => dispatch(
-        gameAC.setActionBarTooltip(tooltip)),
     updateViewingArmyInCity: (viewingArmyInCity) => dispatch(
         gameAC.setViewingArmyInCity(viewingArmyInCity)),
     unshowCityModal: () => dispatch(
         gameAC.setShowCityModalInfo(false)),
     updateCityMenuSupplementalView: (view) => dispatch(
         gameAC.setCityMenuSupplementalView(view)),
-    updateCityMenuSupplementalData: (data) => dispatch(
-        gameAC.setCityMenuSupplementalData(data)),
     updatePlayerOne: (player) => dispatch(
         gameAC.setPlayerOne(player)),
     updatePlayerTwo: (player) => dispatch(
@@ -285,21 +251,15 @@ GameBoard.propTypes = {
   isMovingArmy: PropTypes.bool,
   selectedTilePosition: PropTypes.number,
   updateMainPanelView: PropTypes.func,
-  updateMainPanelData: PropTypes.func,
   updateSupplementalPanelView: PropTypes.func,
-  updateSupplementalPanelData: PropTypes.func,
-  updateActionBarView: PropTypes.func,
   updateSelectedTilePosition: PropTypes.func,
   updateIsMovingArmy: PropTypes.func,
   updateGameBoard: PropTypes.func,
   gameId: PropTypes.string,
   ownUsername: PropTypes.string,
-  updateAwaitingServerConfirmation: PropTypes.func,
-  awaitingServerConfirmation: PropTypes.bool,
   updatePlayerWhoseTurnItIs: PropTypes.func,
   ownPlayerNumber: PropTypes.string,
   isOwnTurn: PropTypes.bool,
-  updateActionBarTooltip: PropTypes.func,
   viewingArmyInCity: PropTypes.bool,
   updateViewingArmyInCity: PropTypes.func,
   unshowCityModal: PropTypes.func,

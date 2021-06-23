@@ -3,7 +3,7 @@ import gameAT from '../actionTypes/gameActionTypes';
 import GAME_VIEWS from '../../Components/Utilities/gameViews';
 
 const initialState = {
-  gameView: GAME_VIEWS.CAMPAIGN_MAP_VIEW,
+  gameView: GAME_VIEWS.GAME_BOARD_VIEW,
   gameId: null,
   gameConstants: {},
 };

@@ -1,4 +1,4 @@
-import React, {forwardRef, useEffect, useState} from 'react';
+import React, {forwardRef} from 'react';
 import SockJsClient from 'react-stomp';
 import PropTypes from 'prop-types';
 import apiEndpoints from '../apiEndpoints';
@@ -25,18 +25,10 @@ import apiEndpoints from '../apiEndpoints';
  * @return {JSX} to render
  */
 const AbstractedWebsocket = forwardRef((props, ref) => {
-  const [processedTopics, setProcessedTopics] = useState([]);
-
-  useEffect(() => {
-    const processedTopics =
-        props.topics.map((topic) => (topic = '/subscribe' + topic));
-    setProcessedTopics(processedTopics);
-  }, [props.topics]);
-
   return (
     <React.Fragment>
-      <SockJsClient url={apiEndpoints.websocketPath} topics={processedTopics}
-        onMessage={(msg) => props.onReceiveMessage(msg)} ref={ref}
+      <SockJsClient url={apiEndpoints.websocketPath} topics={props.topics}
+        onMessage={(msg, topic) => props.onReceiveMessage(msg, topic)} ref={ref}
         onDisconnect={props.onDisconnect ? props.onDisconnect : ()=>{}}/>
     </React.Fragment>
   );

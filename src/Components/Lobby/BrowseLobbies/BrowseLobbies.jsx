@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
@@ -9,7 +9,9 @@ import Col from 'react-bootstrap/Col';
 import PropTypes from 'prop-types';
 import LOBBY_VIEWS from '../../Utilities/lobbyViews';
 import lobbyAC from '../../../Redux/actionCreators/lobbyActionCreators';
+import generalAC from '../../../Redux/actionCreators/generalActionCreators';
 import './BrowseLobbies.css';
+import WEBSOCKET_TOPICS from '../../Utilities/websockets/websocketTopics';
 
 /**
  *
@@ -19,10 +21,18 @@ import './BrowseLobbies.css';
  * @return {JSX} to render
  */
 const BrowseLobbies = (props) => {
-  const [currentLobbies, setCurrentLobbies] = useState([]);
   const isMounted = useRef(null);
 
   const navigateToInLobby = async (lobbyData) => {
+    if (isMounted.current) {
+      const oldWebsocketTopics = [...props.websocketTopics];
+      const updatedWebsocketTopics = oldWebsocketTopics.filter(
+          (topic) => topic !== WEBSOCKET_TOPICS.BROWSE_LOBBIES,
+      );
+      updatedWebsocketTopics.push(
+          WEBSOCKET_TOPICS.lobbyWithId(lobbyData.lobbyId));
+      await props.saveWebsocketTopics(updatedWebsocketTopics);
+    }
     if (isMounted.current) {
       await props.saveLobbyPlayerOne(lobbyData.lobbyPlayerOne);
     }
@@ -79,7 +89,7 @@ const BrowseLobbies = (props) => {
     const serverResponse = await
     axios.get(apiEndpoints.lobbyController + '/all');
     if (isMounted.current) {
-      setCurrentLobbies(serverResponse.data);
+      props.saveLobbyList(serverResponse.data);
     }
   };
 
@@ -89,7 +99,7 @@ const BrowseLobbies = (props) => {
       const serverResponse = await
       axios.get(apiEndpoints.lobbyController + '/all');
       if (isMounted.current) {
-        setCurrentLobbies(serverResponse.data);
+        props.saveLobbyList(serverResponse.data);
       }
     };
     fetchCurrentLobbies();
@@ -110,8 +120,8 @@ const BrowseLobbies = (props) => {
               onClick={(e) => refreshLobbiesHandler(e)}>Refresh</Button>
           </Col>
         </Row>
-        {currentLobbies && currentLobbies.length > 0 ?
-          currentLobbies.map((lobby) =>
+        {props.lobbyList && props.lobbyList.length > 0 ?
+          props.lobbyList.map((lobby) =>
             <Row key={lobby.lobbyId}>
               <Col>
                 <p>{lobby.lobbyPlayerOne.username + '\'s Lobby' +
@@ -137,6 +147,8 @@ const mapStateToProps = (state) => {
   return {
     ownUsername: state.general.ownUsername,
     ownUserId: state.general.ownUserId,
+    lobbyList: state.lobby.lobbyList,
+    websocketTopics: state.general.websocketTopics,
   };
 };
 
@@ -146,19 +158,27 @@ const mapDispatchToProps = (dispatch) => {
         lobbyAC.setLobbyView(LOBBY_VIEWS.IN_LOBBY_VIEW)),
     saveLobbyId: (lobbyId) => dispatch(
         lobbyAC.setLobbyId(lobbyId)),
+    saveLobbyList: (lobbyList) => dispatch(
+        lobbyAC.setLobbyList(lobbyList)),
     saveLobbyPlayerOne: (lobbyPlayerOne) => dispatch(
         lobbyAC.setLobbyPlayerOne(lobbyPlayerOne)),
     saveLobbyPlayerTwo: (lobbyPlayerTwo) => dispatch(
         lobbyAC.setLobbyPlayerTwo(lobbyPlayerTwo)),
+    saveWebsocketTopics: (websocketTopics) => dispatch(
+        generalAC.setWebsocketTopics(websocketTopics)),
   };
 };
 
 BrowseLobbies.propTypes = {
   ownUsername: PropTypes.string,
   ownUserId: PropTypes.string,
+  lobbyList: PropTypes.array,
+  websocketTopics: PropTypes.array,
   saveLobbyId: PropTypes.func,
+  saveLobbyList: PropTypes.func,
   saveLobbyPlayerOne: PropTypes.func,
   saveLobbyPlayerTwo: PropTypes.func,
+  saveWebsocketTopics: PropTypes.func,
   updateLobbyViewToInLobby: PropTypes.func,
 };
 

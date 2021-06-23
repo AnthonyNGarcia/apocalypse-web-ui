@@ -28,12 +28,34 @@ import './DynamicContainerComponent.css';
 const DynamicContainerComponent = (props) => {
   const websocket = useRef(null);
 
-  const onReceiveMessage = (message) => {
-    console.log(message);
-    websocketMessageReceiver(message.body);
+  const onReceiveMessage = (message, topic) => {
+    if (message.statusCode === 'OK') {
+      websocketMessageReceiver(message.body, topic);
+    } else {
+      console.warn('Received a not OK websocket message, below:');
+      console.warn(message);
+    }
   };
 
   const onDisconnect = () => {
+    if (props.lobbyId) {
+      const leaveLobbyRequest = {
+        lobbyId: lobbyId,
+        inLobbyPlayer: {
+          userId: props.ownUserId,
+        },
+      };
+      axios.post(apiEndpoints.lobbyController + '/leave', leaveLobbyRequest);
+    }
+    if (props.gameId) {
+      const leaveGameRequest = {
+        gameId: gameId,
+        inGamePlayer: {
+          userId: props.ownUserId,
+        },
+      };
+      axios.post(apiEndpoints.gameController + '/leave', leaveGameRequest);
+    }
     console.warn('Disconnected from game websocket!');
   };
 
@@ -90,6 +112,9 @@ const mapStateToProps = (state) => {
   return {
     mainView: state.general.mainView,
     websocketTopics: state.general.websocketTopics,
+    lobbyId: state.lobby.lobbyId,
+    gameId: state.game.gameId,
+    ownUserId: state.general.ownUserId,
   };
 };
 
@@ -107,6 +132,9 @@ DynamicContainerComponent.propTypes = {
   saveOwnUsername: PropTypes.func,
   saveOwnUserId: PropTypes.func,
   websocketTopics: PropTypes.arrayOf(PropTypes.string),
+  lobbyId: PropTypes.string,
+  gameId: PropTypes.string,
+  ownUserId: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
