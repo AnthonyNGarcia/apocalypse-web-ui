@@ -57,12 +57,13 @@ const TrainableUnitItem = (props) => {
     e.preventDefault();
     try {
       const addUnitRequest = {
+        gameId: props.gameId,
         cityTilePosition: props.selectedTilePosition,
         desiredUnitType: props.unitType,
       };
       await axios.post(
-          apiEndpoints.gameController +
-          '/in-memory-recruitment-queue/' + props.gameId, addUnitRequest);
+          apiEndpoints.cityController +
+          '/enqueue-unit', addUnitRequest);
     } catch (e) {
       console.warn('Oops! There was an error trying to recruit a unit!');
       console.warn(e);

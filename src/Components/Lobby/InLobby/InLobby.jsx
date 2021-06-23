@@ -28,7 +28,8 @@ const InLobby = (props) => {
       try {
         const leaveRequest = {
           lobbyId: props.lobbyId,
-          playerUsername: props.ownUsername,
+          inLobbyPlayer: props.ownUserId === props.lobbyPlayerOne.userId ?
+          props.lobbyPlayerOne : props.lobbyPlayerTwo,
         };
         axios.patch(
             apiEndpoints.lobbyController + '/leave', leaveRequest);
@@ -53,11 +54,11 @@ const InLobby = (props) => {
     try {
       const startGameRequest = {
         lobbyId: props.lobbyId,
-        playerOneUsername: props.playerOneUsername,
-        playerTwoUsername: props.playerTwoUsername,
+        lobbyPlayerOne: props.lobbyPlayerOne,
+        lobbyPlayerTwo: props.lobbyPlayerTwo,
       };
       await axios.post(
-          apiEndpoints.gameController + '/in-memory', startGameRequest);
+          apiEndpoints.gameController + '/start', startGameRequest);
     } catch (e) {
       console.warn('Oops! There was an error trying to create the lobby!');
       console.warn(e);
@@ -73,10 +74,12 @@ const InLobby = (props) => {
         </Row>
         <Row>
           <Col>
-            <h4>Player One: {props.playerOneUsername}</h4>
+            <h4>Player One: {props.lobbyPlayerOne ?
+            props.lobbyPlayerOne.username : ''}</h4>
           </Col>
           <Col>
-            <h4>Player Two: {props.playerTwoUsername}</h4>
+            <h4>Player Two: {props.lobbyPlayerTwo ?
+            props.lobbyPlayerTwo.username : ''}</h4>
           </Col>
         </Row>
         <Row>
@@ -84,10 +87,10 @@ const InLobby = (props) => {
             <Button variant="primary" onClick={leaveLobbyHandler}>Leave</Button>
           </Col>
           <Col>
-            {props.ownUsername === props.playerOneUsername ?
+            {props.ownUserId === props.lobbyPlayerOne.userId ?
             <Button variant="primary"
-              disabled={props.playerOneUsername === null ||
-                props.playerTwoUsername === null}
+              disabled={props.lobbyPlayerOne === null ||
+                props.lobbyPlayerOne === null}
               onClick={startGameHandler}>Start</Button> :
             null}
           </Col>
@@ -100,9 +103,10 @@ const InLobby = (props) => {
 const mapStateToProps = (state) => {
   return {
     ownUsername: state.general.ownUsername,
+    ownUserId: state.general.ownUserId,
     lobbyId: state.lobby.lobbyId,
-    playerOneUsername: state.lobby.playerOneUsername,
-    playerTwoUsername: state.lobby.playerTwoUsername,
+    lobbyPlayerOne: state.lobby.lobbyPlayerOne,
+    lobbyPlayerTwo: state.lobby.lobbyPlayerTwo,
   };
 };
 
@@ -110,10 +114,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateLobbyViewToBrowseLobbies: () => dispatch(
         lobbyAC.setLobbyView(LOBBY_VIEWS.BROWSE_LOBBIES_VIEW)),
-    savePlayerOneUsername: (username) => dispatch(
-        lobbyAC.setPlayerOneUsername(username)),
-    savePlayerTwoUsername: (username) => dispatch(
-        lobbyAC.setPlayerTwoUsername(username)),
+    saveLobbyPlayerOne: (lobbyPlayerOne) => dispatch(
+        lobbyAC.setLobbyPlayerOne(lobbyPlayerOne)),
+    saveLobbyPlayerTwo: (lobbyPlayerTwo) => dispatch(
+        lobbyAC.setLobbyPlayerTwo(lobbyPlayerTwo)),
     saveLobbyId: (lobbyId) => dispatch(
         lobbyAC.setLobbyId(lobbyId)),
     updateMainViewToGame: () => dispatch(
@@ -139,12 +143,13 @@ const mapDispatchToProps = (dispatch) => {
 
 InLobby.propTypes = {
   ownUsername: PropTypes.string,
+  ownUserId: PropTypes.string,
   lobbyId: PropTypes.string,
-  playerOneUsername: PropTypes.string,
-  playerTwoUsername: PropTypes.string,
+  lobbyPlayerOne: PropTypes.any,
+  lobbyPlayerTwo: PropTypes.any,
   updateLobbyViewToBrowseLobbies: PropTypes.func,
-  savePlayerOneUsername: PropTypes.func,
-  savePlayerTwoUsername: PropTypes.func,
+  saveLobbyPlayerOne: PropTypes.func,
+  saveLobbyPlayerTwo: PropTypes.func,
   saveLobbyId: PropTypes.func,
   saveGameId: PropTypes.func,
   updateMainViewToGame: PropTypes.func,

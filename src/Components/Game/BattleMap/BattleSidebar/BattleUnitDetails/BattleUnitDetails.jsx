@@ -57,13 +57,13 @@ const BattleUnitDetails = (props) => {
     try {
       props.updateSelectedBattleUnitIndex(-1);
       const skipTurnRequest = {
+        gameId: props.gameId,
         playerSubmittingAction: props.ownPlayerNumber,
         unitActionType: UNIT_ACTION_TYPES.SKIP,
         indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
         indexOfTargetUnitOfAction: -1,
       };
-      axios.post(apiEndpoints.gameController + '/in-memory-battle-skip-turn/' +
-        props.gameId, skipTurnRequest);
+      axios.post(apiEndpoints.battleController + '/skip', skipTurnRequest);
     } catch (e) {
       console.warn('There was an error trying to skip turn!');
       console.warn(e);
@@ -76,14 +76,14 @@ const BattleUnitDetails = (props) => {
     try {
       props.updateSelectedBattleUnitIndex(-1);
       const initiateActiveAbilityRequest = {
+        gameId: props.gameId,
         playerSubmittingAction: props.ownPlayerNumber,
         unitActionType: UNIT_ACTION_TYPES.ACTIVE_ABILITY,
         indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
         indexOfTargetUnitOfAction: -1,
       };
-      axios.post(apiEndpoints.gameController +
-        '/in-memory-battle-initiate-active-ability/' +
-        props.gameId, initiateActiveAbilityRequest);
+      axios.post(apiEndpoints.battleController +
+        '/active-ability', initiateActiveAbilityRequest);
     } catch (e) {
       console.warn('There was an error trying to initiate active ability!');
       console.warn(e);

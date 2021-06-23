@@ -93,13 +93,14 @@ const GameBoard = (props) => {
               'Select an Army or City to get started.');
           tileHighlightManager.unhighlightAllTiles();
           const request = {
+            gameId: props.gameId,
             primaryArmyActionType: ARMY_ACTION_REQUEST_TYPE.MOVE,
             primaryTilePosition: props.gameBoard[props.selectedTilePosition]
                 .tilePosition,
             secondaryTilePosition: item.tilePosition,
           };
           await props.updateAwaitingServerConfirmation(true);
-          axios.post(apiEndpoints.gameController + '/in-memory-army-action/' +
+          axios.post(apiEndpoints.armyController + '/action/' +
         props.gameId, request);
         } else {
           tileHighlightManager.unhighlightAllTiles();

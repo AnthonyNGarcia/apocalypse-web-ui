@@ -23,6 +23,7 @@ const MainPromptButton = (props) => {
       const tilesOfOwnCities = props.gameBoard.filter( (tile) => tile.city &&
           tile.city.owner === props.ownPlayerNumber);
       const endTurnRequest = {
+        gameId: props.gameId,
         playerEndingTurn: props.ownPlayerNumber,
         playerWhoseTurnItIs: props.ownPlayerNumber === PLAYER.ONE ?
         PLAYER.TWO : PLAYER.ONE,
@@ -30,7 +31,7 @@ const MainPromptButton = (props) => {
       };
       await axios.post(
           apiEndpoints.gameController +
-          '/in-memory-end-turn/' + props.gameId, endTurnRequest);
+          '/end-turn', endTurnRequest);
     } catch (e) {
       props.updateAwaitingServerConfirmation(false);
       console.warn('Oops! There was an error trying to end your turn!');

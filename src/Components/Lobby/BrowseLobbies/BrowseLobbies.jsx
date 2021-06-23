@@ -24,10 +24,10 @@ const BrowseLobbies = (props) => {
 
   const navigateToInLobby = async (lobbyData) => {
     if (isMounted.current) {
-      await props.savePlayerOneUsername(lobbyData.playerOneUsername);
+      await props.saveLobbyPlayerOne(lobbyData.lobbyPlayerOne);
     }
     if (isMounted.current) {
-      await props.savePlayerTwoUsername(lobbyData.playerTwoUsername);
+      await props.saveLobbyPlayerTwo(lobbyData.lobbyPlayerTwo);
     }
     if (isMounted.current) {
       await props.saveLobbyId(lobbyData.lobbyId);
@@ -60,7 +60,10 @@ const BrowseLobbies = (props) => {
     try {
       const joinLobbyRequest = {
         lobbyId: lobbyId,
-        playerUsername: props.ownUsername,
+        inLobbyPlayer: {
+          username: props.ownUsername,
+          userId: props.ownUserId,
+        },
       };
       const response = await axios.patch(
           apiEndpoints.lobbyController + '/join', joinLobbyRequest);
@@ -111,7 +114,7 @@ const BrowseLobbies = (props) => {
           currentLobbies.map((lobby) =>
             <Row key={lobby.lobbyId}>
               <Col>
-                <p>{lobby.playerOneUsername + '\'s Lobby' +
+                <p>{lobby.lobbyPlayerOne.username + '\'s Lobby' +
                 (lobby.playerTwoUsername ? ' (2/2)' : ' (1/2)')}</p>
               </Col>
               <Col>
@@ -143,10 +146,10 @@ const mapDispatchToProps = (dispatch) => {
         lobbyAC.setLobbyView(LOBBY_VIEWS.IN_LOBBY_VIEW)),
     saveLobbyId: (lobbyId) => dispatch(
         lobbyAC.setLobbyId(lobbyId)),
-    savePlayerOneUsername: (username) => dispatch(
-        lobbyAC.setPlayerOneUsername(username)),
-    savePlayerTwoUsername: (username) => dispatch(
-        lobbyAC.setPlayerTwoUsername(username)),
+    saveLobbyPlayerOne: (lobbyPlayerOne) => dispatch(
+        lobbyAC.setLobbyPlayerOne(lobbyPlayerOne)),
+    saveLobbyPlayerTwo: (lobbyPlayerTwo) => dispatch(
+        lobbyAC.setLobbyPlayerTwo(lobbyPlayerTwo)),
   };
 };
 
@@ -154,8 +157,8 @@ BrowseLobbies.propTypes = {
   ownUsername: PropTypes.string,
   ownUserId: PropTypes.string,
   saveLobbyId: PropTypes.func,
-  savePlayerOneUsername: PropTypes.func,
-  savePlayerTwoUsername: PropTypes.func,
+  saveLobbyPlayerOne: PropTypes.func,
+  saveLobbyPlayerTwo: PropTypes.func,
   updateLobbyViewToInLobby: PropTypes.func,
 };
 

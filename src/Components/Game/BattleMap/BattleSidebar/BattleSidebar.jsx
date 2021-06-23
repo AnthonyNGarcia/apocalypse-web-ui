@@ -23,11 +23,12 @@ const BattleSidebar = (props) => {
     console.log('Full Retreat Request initiated...');
     try {
       const retreatRequest = {
+        gameId: props.gameId,
         retreatingPlayer: props.ownPlayerNumber,
       };
       axios.post(
-          apiEndpoints.gameController +
-          '/in-memory-battle-full-retreat/' + props.gameId,
+          apiEndpoints.battleController +
+          '/retreat',
           retreatRequest);
     } catch (e) {
       console.warn('Oops! There was an error trying to submit a ' +
@@ -44,12 +45,13 @@ const BattleSidebar = (props) => {
         props.ownPlayerNumber ? props.battleData.attackingArmy :
         props.battleData.defendingArmy;
       const configurationSubmission = {
+        gameId: props.gameId,
         playerDoneConfiguring: props.ownPlayerNumber,
         configuredArmy: ownArmy,
       };
       axios.post(
-          apiEndpoints.gameController +
-          '/in-memory-battle-configuration-done/' + props.gameId,
+          apiEndpoints.battleController +
+          '/configuration',
           configurationSubmission);
       props.updateOwnArmySubmitted(true);
     } catch (e) {

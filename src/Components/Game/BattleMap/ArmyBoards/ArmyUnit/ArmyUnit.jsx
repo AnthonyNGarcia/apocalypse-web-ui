@@ -135,14 +135,14 @@ const ArmyUnit = (props) => {
     try {
       props.updateSelectedBattleUnitIndex(-1);
       const attackTargetRequest = {
+        gameId: props.gameId,
         playerSubmittingAction: props.ownPlayerNumber,
         unitActionType: UNIT_ACTION_TYPES.ATTACK,
         indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
         indexOfTargetUnitOfAction: props.unitIndex,
       };
-      axios.post(apiEndpoints.gameController +
-        '/in-memory-battle-attack-target/' +
-        props.gameId, attackTargetRequest);
+      axios.post(apiEndpoints.battleController +
+        '/attack', attackTargetRequest);
     } catch (e) {
       console.warn('There was an error trying to attack a target!');
       console.warn(e);

@@ -5,8 +5,8 @@ import LOBBY_VIEWS from '../../Components/Utilities/lobbyViews';
 const initialState = {
   lobbyView: LOBBY_VIEWS.BROWSE_LOBBIES_VIEW,
   lobbyId: null,
-  playerOneUsername: null,
-  playerTwoUsername: null,
+  lobbyPlayerOne: null,
+  lobbyPlayerTwo: null,
 };
 
 const setLobbyView = (state, action) => {
@@ -23,17 +23,17 @@ const setLobbyId = (state, action) => {
   };
 };
 
-const setPlayerOneUsername = (state, action) => {
+const setLobbyPlayerOne = (state, action) => {
   return {
     ...state,
-    playerOneUsername: action.username,
+    lobbyPlayerOne: action.lobbyPlayerOne,
   };
 };
 
-const setPlayerTwoUsername = (state, action) => {
+const setLobbyPlayerTwo = (state, action) => {
   return {
     ...state,
-    playerTwoUsername: action.username,
+    lobbyPlayerTwo: action.lobbyPlayerTwo,
   };
 };
 
@@ -41,8 +41,8 @@ const reducer = (state=initialState, action) => {
   switch (action.type) {
     case lobbyAT.SET_LOBBY_VIEW: return setLobbyView(state, action);
     case lobbyAT.SET_LOBBY_ID: return setLobbyId(state, action);
-    case lobbyAT.SET_PLAYER_ONE_USERNAME: return setPlayerOneUsername(state, action);
-    case lobbyAT.SET_PLAYER_TWO_USERNAME: return setPlayerTwoUsername(state, action);
+    case lobbyAT.SET_LOBBY_PLAYER_ONE: return setLobbyPlayerOne(state, action);
+    case lobbyAT.SET_LOBBY_PLAYER_TWO: return setLobbyPlayerTwo(state, action);
     default: return state;
   }
 };

@@ -41,12 +41,13 @@ const UnassignedUnitItem = (props) => {
     e.preventDefault();
     try {
       const removeUnitRequest = {
+        gameId: props.gameId,
         tilePosition: props.selectedTilePosition,
         unitIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
-          apiEndpoints.gameController +
-          '/in-memory-unassigned-units/' + props.gameId, removeUnitRequest));
+          apiEndpoints.cityController +
+          '/disband-unassigned-unit', removeUnitRequest));
     } catch (e) {
       console.warn('Oops! There was an error trying to disband ' +
         'an unassigned unit!');
@@ -58,12 +59,13 @@ const UnassignedUnitItem = (props) => {
     e.preventDefault();
     try {
       const assignUnitRequest = {
+        gameId: props.gameId,
         tilePosition: props.selectedTilePosition,
         unitIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
-          apiEndpoints.gameController +
-          '/in-memory-army-units-assignment/' + props.gameId,
+          apiEndpoints.cityController +
+          '/assign-army-unit',
           assignUnitRequest));
     } catch (e) {
       console.warn('Oops! There was an error trying to assign ' +

@@ -40,14 +40,16 @@ const QueuedUnitItem = (props) => {
     e.preventDefault();
     try {
       const removeUnitRequest = {
+        gameId: props.gameId,
         tilePosition: props.selectedTilePosition,
         unitIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
-          apiEndpoints.gameController +
-          '/in-memory-recruitment-queue/' + props.gameId, removeUnitRequest));
+          apiEndpoints.cityController +
+          '/dequeue-unit/', removeUnitRequest));
     } catch (e) {
-      console.warn('Oops! There was an error trying to recruit a unit!');
+      console.warn('Oops! There was an error trying to cancel ' +
+        'unit recruitment!');
       console.warn(e);
     }
   };

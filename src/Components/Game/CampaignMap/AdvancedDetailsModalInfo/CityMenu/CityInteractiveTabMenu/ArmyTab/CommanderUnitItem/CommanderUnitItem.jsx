@@ -41,13 +41,13 @@ const CommanderUnitItem = (props) => {
     e.preventDefault();
     try {
       const removeUnitRequest = {
+        gameId: props.gameId,
         tilePosition: props.selectedTilePosition,
         unitIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
-          apiEndpoints.gameController +
-          '/in-memory-army-units-disbanding/' +
-          props.gameId, removeUnitRequest));
+          apiEndpoints.armyController +
+          '/disband-army-unit', removeUnitRequest));
     } catch (e) {
       console.warn('Oops! There was an error trying to disband an Army unit!');
       console.warn(e);
@@ -58,12 +58,13 @@ const CommanderUnitItem = (props) => {
     e.preventDefault();
     try {
       const unassignUnitRequest = {
+        gameId: props.gameId,
         tilePosition: props.selectedTilePosition,
         unitIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
-          apiEndpoints.gameController +
-          '/in-memory-army-units-unassignment/' + props.gameId,
+          apiEndpoints.cityController +
+          '/unassign-army-unit',
           unassignUnitRequest));
     } catch (e) {
       console.warn('Oops! There was an error trying to unassign ' +

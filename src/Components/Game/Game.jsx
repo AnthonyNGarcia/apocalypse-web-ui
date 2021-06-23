@@ -33,7 +33,7 @@ const Game = (props) => {
         playerUsername: props.ownUsername,
       };
       axios.patch(
-          apiEndpoints.gameController + '/in-memory-leave', leaveRequest);
+          apiEndpoints.gameController + '/leave', leaveRequest);
     } catch (e) {
       console.warn('Oops! There was an error trying to leave the game!');
       console.warn(e);
