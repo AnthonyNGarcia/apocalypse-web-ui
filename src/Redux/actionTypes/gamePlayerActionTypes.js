@@ -1,0 +1,8 @@
+const reducerActionTypes = {
+  SET_PLAYER_ONE: 'SET_PLAYER_ONE',
+  SET_PLAYER_TWO: 'SET_PLAYER_TWO',
+  SET_OWN_PLAYER_NUMBER: 'SET_OWN_PLAYER_NUMBER',
+  SET_PLAYER_WHOSE_TURN_IT_IS: 'SET_PLAYER_WHOSE_TURN_IT_IS',
+};
+
+export default reducerActionTypes;

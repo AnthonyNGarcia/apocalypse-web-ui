@@ -16,8 +16,11 @@ import './DynamicContainerComponent.css';
 /**
  *
  * This is the second highest container component in the application, where true
- * dynamic rendering begins to take place. It’s only purpose is to render one of
- * a few other big components based off very simple redux state.
+ * dynamic rendering begins to take place. It’s only purpose is to 1) render one
+ * of a few other big components based off very simple redux state,
+ *
+ * AND 2) to serve as the single websocket connection source, but forwards all
+ * actual websocket message handling to helper functions.
  *
  * @param {Object} props passed from the parent component
  * @return {JSX} to render
