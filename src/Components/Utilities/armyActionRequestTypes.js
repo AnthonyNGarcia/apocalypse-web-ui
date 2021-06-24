@@ -4,7 +4,7 @@
 ;
 
 const ARMY_ACTION_REQUEST_TYPES = {
-  CAMP: 'CAMP',
+  FORTIFY: 'FORTIFY',
   MOVE: 'MOVE',
 };
 

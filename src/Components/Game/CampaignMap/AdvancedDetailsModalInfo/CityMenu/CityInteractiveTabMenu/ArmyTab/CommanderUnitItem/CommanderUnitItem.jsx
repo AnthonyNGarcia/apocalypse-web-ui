@@ -7,8 +7,8 @@ import PropTypes from 'prop-types';
 import Spinner from 'react-bootstrap/esm/Spinner';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../../../../Utilities/cityMenuSupplementalViews';
-import gameAC from
-  '../../../../../../../../Redux/actionCreators/gameActionCreators';
+import cityMenuAC from
+  '../../../../../../../../Redux/actionCreators/cityMenuActionCreators';
 import axios from 'axios';
 import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
 import PLAYER from '../../../../../../../Utilities/playerEnums';
@@ -41,13 +41,13 @@ const CommanderUnitItem = (props) => {
     e.preventDefault();
     try {
       const removeUnitRequest = {
+        gameId: props.gameId,
         tilePosition: props.selectedTilePosition,
         unitIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
-          apiEndpoints.gameController +
-          '/in-memory-army-units-disbanding/' +
-          props.gameId, removeUnitRequest));
+          apiEndpoints.armyController +
+          '/disband-army-unit', removeUnitRequest));
     } catch (e) {
       console.warn('Oops! There was an error trying to disband an Army unit!');
       console.warn(e);
@@ -58,12 +58,13 @@ const CommanderUnitItem = (props) => {
     e.preventDefault();
     try {
       const unassignUnitRequest = {
+        gameId: props.gameId,
         tilePosition: props.selectedTilePosition,
         unitIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
-          apiEndpoints.gameController +
-          '/in-memory-army-units-unassignment/' + props.gameId,
+          apiEndpoints.cityController +
+          '/unassign-army-unit',
           unassignUnitRequest));
     } catch (e) {
       console.warn('Oops! There was an error trying to unassign ' +
@@ -89,7 +90,7 @@ const CommanderUnitItem = (props) => {
           </Col>
           <Col md={2}>
             <img
-              src={fullUnitInfo.unitType + '_ICON.svg'}
+              src={props.unit.unitType + '_ICON.svg'}
               onError={(e)=>e.target.src='shield.png'}
               alt=""
               className='unit-icon'/>
@@ -97,8 +98,8 @@ const CommanderUnitItem = (props) => {
           <Col md={6}>
             <p>
               {fullUnitInfo.displayName} ({
-                props.unit.currentHealth}/{fullUnitInfo
-                  .baseMaxHealth} <span><img
+                props.unit.currentHealth}/{props.unit
+                  .maxHealth} <span><img
                 src={'health.svg'}
                 alt=""
                 className={'tiny-hammer-icon'}
@@ -131,20 +132,22 @@ const mapStateToProps = (state) => {
   return {
     gameId: state.game.gameId,
     allUnits: state.game.gameConstants.allUnits,
-    isOwnTurn: state.game.isOwnTurn,
-    selectedTilePosition: state.game.selectedTilePosition,
-    selectedTile: state.game.gameBoard[state.game.selectedTilePosition],
-    ownPlayerData: state.game.ownPlayerNumber === PLAYER.ONE ?
-      state.game.playerOne : state.game.playerTwo,
+    isOwnTurn: state.gamePlayer.ownPlayerNumber ===
+      state.gamePlayer.playerWhoseTurnItIs,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
+    selectedTile: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition],
+    ownPlayerData: state.gamePlayer.ownPlayerNumber === PLAYER.ONE ?
+      state.gamePlayer.playerOne : state.gamePlayer.playerTwo,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCityMenuSupplementalData: (cityMenuSupplementalData) => dispatch(
-        gameAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
+        cityMenuAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
     updateCityMenuSupplementalView: (cityMenuSupplementalView) => dispatch(
-        gameAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
+        cityMenuAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
   };
 };
 

@@ -6,7 +6,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
-import gameAC from '../../../../../../Redux/actionCreators/gameActionCreators';
+import cityMenuAC from
+  '../../../../../../Redux/actionCreators/cityMenuActionCreators';
 import PLAYER from '../../../../../Utilities/playerEnums';
 import './CityInfoPanel.css';
 
@@ -107,17 +108,18 @@ const CityInfoPanel = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
-    playerOne: state.game.playerOne,
-    playerTwo: state.game.playerTwo,
-    ownPlayerNumber: state.game.ownPlayerNumber,
+    selectedCity: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].city,
+    playerOne: state.gamePlayer.playerOne,
+    playerTwo: state.gamePlayer.playerTwo,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateShowCityModalInfo: (showCityModalInfo) => dispatch(
-        gameAC.setShowCityModalInfo(showCityModalInfo)),
+        cityMenuAC.setShowCityModalInfo(showCityModalInfo)),
   };
 };
 

@@ -99,7 +99,7 @@ const SelectedBuildingDetails = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    building: state.game.cityMenuSupplementalData,
+    building: state.cityMenu.cityMenuSupplementalData,
     allBuildings: state.game.gameConstants.allBuildings,
     allUnits: state.game.gameConstants.allUnits,
   };

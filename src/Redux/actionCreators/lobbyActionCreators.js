@@ -7,22 +7,28 @@ const actionCreators = {
       lobbyView: lobbyView,
     };
   },
+  setLobbyList: (lobbyList) => {
+    return {
+      type: lobbyAT.SET_LOBBY_LIST,
+      lobbyList: lobbyList,
+    };
+  },
   setLobbyId: (lobbyId) => {
     return {
       type: lobbyAT.SET_LOBBY_ID,
       lobbyId: lobbyId,
     };
   },
-  setPlayerOneUsername: (username) => {
+  setLobbyPlayerOne: (lobbyPlayerOne) => {
     return {
-      type: lobbyAT.SET_PLAYER_ONE_USERNAME,
-      username: username,
+      type: lobbyAT.SET_LOBBY_PLAYER_ONE,
+      lobbyPlayerOne: lobbyPlayerOne,
     };
   },
-  setPlayerTwoUsername: (username) => {
+  setLobbyPlayerTwo: (lobbyPlayerTwo) => {
     return {
-      type: lobbyAT.SET_PLAYER_TWO_USERNAME,
-      username: username,
+      type: lobbyAT.SET_LOBBY_PLAYER_TWO,
+      lobbyPlayerTwo: lobbyPlayerTwo,
     };
   },
 };

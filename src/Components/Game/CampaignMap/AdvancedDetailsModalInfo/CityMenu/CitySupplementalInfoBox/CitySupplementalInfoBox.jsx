@@ -32,7 +32,7 @@ const CitySupplementalInfoBox = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    cityMenuSupplementalView: state.game.cityMenuSupplementalView,
+    cityMenuSupplementalView: state.cityMenu.cityMenuSupplementalView,
   };
 };
 

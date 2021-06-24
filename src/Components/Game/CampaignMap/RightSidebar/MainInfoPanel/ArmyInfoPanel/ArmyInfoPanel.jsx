@@ -9,7 +9,11 @@ import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import apiEndpoints from '../../../../../Utilities/apiEndpoints';
+import gameBoardViewAC from
+  '../../../../../../Redux/actionCreators/gameBoardViewActionCreators';
 import './ArmyInfoPanel.css';
+import tileHighlightManager from
+  '../../../../../Utilities/tileHighlightManager';
 
 /**
  *
@@ -38,9 +42,11 @@ const ArmyInfoPanel = (props) => {
 
   const fortifyArmyHandler = (e) => {
     e.preventDefault();
+    props.updateIsMovingArmy(false);
+    tileHighlightManager.unhighlightAllTiles();
     try {
       const armyActionRequest = {
-        gameId: props.game.gameId,
+        gameId: props.gameId,
         primaryArmyActionType: 'FORTIFY',
         primaryTilePosition: props.selectedTilePosition,
         secondaryTilePosition: -1,
@@ -130,12 +136,20 @@ const ArmyInfoPanel = (props) => {
 const mapStateToProps = (state) => {
   return {
     allUnitsConstants: state.game.gameConstants.allUnits,
-    playerOne: state.game.playerOne,
-    playerTwo: state.game.playerTwo,
-    ownPlayerNumber: state.game.ownPlayerNumber,
-    selectedArmy: state.game.gameBoard[state.game.selectedTilePosition].army,
+    playerOne: state.gamePlayer.playerOne,
+    playerTwo: state.gamePlayer.playerTwo,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
+    selectedArmy: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].army,
     gameId: state.game.gameId,
-    selectedTilePosition: state.game.selectedTilePosition,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateIsMovingArmy: (isMovingArmy) => dispatch(
+        gameBoardViewAC.setIsMovingArmy(isMovingArmy)),
   };
 };
 
@@ -148,6 +162,7 @@ ArmyInfoPanel.propTypes = {
   selectedArmy: PropTypes.any,
   gameId: PropTypes.string,
   selectedTilePosition: PropTypes.number,
+  updateIsMovingArmy: PropTypes.func,
 };
 
-export default connect(mapStateToProps)(ArmyInfoPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(ArmyInfoPanel);

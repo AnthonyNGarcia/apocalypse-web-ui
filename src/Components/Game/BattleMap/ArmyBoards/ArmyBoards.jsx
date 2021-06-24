@@ -120,14 +120,14 @@ const ArmyBoards = (props) => {
 };
 const mapStateToProps = (state) => {
   return {
-    ownUsername: state.game.ownPlayerNumber === PLAYER.ONE ?
-      state.game.playerOne.username :
-      state.game.playerTwo.username,
-    enemyUsername: state.game.ownPlayerNumber === PLAYER.ONE ?
-      state.game.playerTwo.username :
-      state.game.playerOne.username,
-    battleData: state.game.battleData,
-    ownPlayerNumber: state.game.ownPlayerNumber,
+    ownUsername: state.gamePlayer.ownPlayerNumber === PLAYER.ONE ?
+      state.gamePlayer.playerOne.username :
+      state.gamePlayer.playerTwo.username,
+    enemyUsername: state.gamePlayer.ownPlayerNumber === PLAYER.ONE ?
+      state.gamePlayer.playerTwo.username :
+      state.gamePlayer.playerOne.username,
+    battleData: state.battleView.battleData,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
   };
 };
 

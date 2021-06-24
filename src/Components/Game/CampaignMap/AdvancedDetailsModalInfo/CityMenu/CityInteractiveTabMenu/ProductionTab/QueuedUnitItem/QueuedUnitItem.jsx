@@ -7,8 +7,8 @@ import PropTypes from 'prop-types';
 import Spinner from 'react-bootstrap/esm/Spinner';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../../../../Utilities/cityMenuSupplementalViews';
-import gameAC from
-  '../../../../../../../../Redux/actionCreators/gameActionCreators';
+import cityMenuAC from
+  '../../../../../../../../Redux/actionCreators/cityMenuActionCreators';
 import axios from 'axios';
 import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
 import './QueuedUnitItem.css';
@@ -24,8 +24,9 @@ const QueuedUnitItem = (props) => {
   const [fullUnitInfo, setFullUnitInfo] = useState(null);
 
   useEffect( () => {
-    if (props.queuedUnit && props.queuedUnit.unitType) {
-      const freshFullUnitInfo = props.allUnits[props.queuedUnit.unitType];
+    if (props.queuedUnit && props.queuedUnit.actualUnitTypeToBeProduced) {
+      const freshFullUnitInfo = props.allUnits[
+          props.queuedUnit.actualUnitTypeToBeProduced];
       setFullUnitInfo(freshFullUnitInfo);
     }
   }, [props]);
@@ -33,32 +34,35 @@ const QueuedUnitItem = (props) => {
   const viewUnitHandler = (e) => {
     e.preventDefault();
     props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.UNIT);
-    props.updateCityMenuSupplementalData(props.queuedUnit.unitType);
+    props.updateCityMenuSupplementalData(
+        props.queuedUnit.actualUnitTypeToBeProduced);
   };
 
   const removeUnitHandler = async (e) => {
     e.preventDefault();
     try {
       const removeUnitRequest = {
+        gameId: props.gameId,
         tilePosition: props.selectedTilePosition,
         unitIndex: props.discardingIndex,
       };
       console.log(await axios.patch(
-          apiEndpoints.gameController +
-          '/in-memory-recruitment-queue/' + props.gameId, removeUnitRequest));
+          apiEndpoints.cityController +
+          '/dequeue-unit/', removeUnitRequest));
     } catch (e) {
-      console.warn('Oops! There was an error trying to recruit a unit!');
+      console.warn('Oops! There was an error trying to cancel ' +
+        'unit recruitment!');
       console.warn(e);
     }
   };
 
-  if (props.queuedUnit.unitType && fullUnitInfo) {
+  if (props.queuedUnit.actualUnitTypeToBeProduced && fullUnitInfo) {
     return (
       <div className='unit-option-container'>
         <Row onClick={(e) => viewUnitHandler(e)} className='vertically-center'>
           <Col md={2}>
             <img
-              src={fullUnitInfo.unitType + '_ICON.svg'}
+              src={props.queuedUnit.actualUnitTypeToBeProduced + '_ICON.svg'}
               onError={(e)=>e.target.src='shield.png'}
               alt=""
               className='unit-icon'/>
@@ -66,7 +70,7 @@ const QueuedUnitItem = (props) => {
           <Col md={7}>
             <p>
               {fullUnitInfo.displayName} ({
-                props.queuedUnit.unitProducerType === 'PAID_TRAINING' ?
+                !props.queuedUnit.free ?
                  <span>{fullUnitInfo.productionCost}<img
                    src={'hammer.png'}
                    alt=""
@@ -106,20 +110,22 @@ const mapStateToProps = (state) => {
   return {
     gameId: state.game.gameId,
     allUnits: state.game.gameConstants.allUnits,
-    isOwnTurn: state.game.isOwnTurn,
-    selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
-    selectedTilePosition: state.game.selectedTilePosition,
+    isOwnTurn: state.gamePlayer.ownPlayerNumber ===
+      state.gamePlayer.playerWhoseTurnItIs,
+    selectedCity: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].city,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCityMenuSupplementalData: (cityMenuSupplementalData) => dispatch(
-        gameAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
+        cityMenuAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
     updateCityMenuSupplementalView: (cityMenuSupplementalView) => dispatch(
-        gameAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
+        cityMenuAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
     updateCurrentCityRecruitmentQueue: (recruitmentQueue) => dispatch(
-        gameAC.setCurrentCityRecruitmentQueue(recruitmentQueue)),
+        cityMenuAC.setCurrentCityRecruitmentQueue(recruitmentQueue)),
   };
 };
 

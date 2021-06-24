@@ -7,7 +7,8 @@ import BattleUnitDetails from './BattleUnitDetails/BattleUnitDetails';
 import BattleChatDialog from './BattleChatDialog/BattleChatDialog';
 import axios from 'axios';
 import apiEndpoints from '../../../Utilities/apiEndpoints';
-import gameAC from '../../../../Redux/actionCreators/gameActionCreators';
+import battleViewAC from
+  '../../../../Redux/actionCreators/battleViewActionCreators';
 import './BattleSidebar.css';
 
 /**
@@ -23,11 +24,12 @@ const BattleSidebar = (props) => {
     console.log('Full Retreat Request initiated...');
     try {
       const retreatRequest = {
+        gameId: props.gameId,
         retreatingPlayer: props.ownPlayerNumber,
       };
       axios.post(
-          apiEndpoints.gameController +
-          '/in-memory-battle-full-retreat/' + props.gameId,
+          apiEndpoints.battleController +
+          '/retreat',
           retreatRequest);
     } catch (e) {
       console.warn('Oops! There was an error trying to submit a ' +
@@ -44,12 +46,13 @@ const BattleSidebar = (props) => {
         props.ownPlayerNumber ? props.battleData.attackingArmy :
         props.battleData.defendingArmy;
       const configurationSubmission = {
+        gameId: props.gameId,
         playerDoneConfiguring: props.ownPlayerNumber,
         configuredArmy: ownArmy,
       };
       axios.post(
-          apiEndpoints.gameController +
-          '/in-memory-battle-configuration-done/' + props.gameId,
+          apiEndpoints.battleController +
+          '/configuration',
           configurationSubmission);
       props.updateOwnArmySubmitted(true);
     } catch (e) {
@@ -87,20 +90,20 @@ const BattleSidebar = (props) => {
 const mapStateToProps = (state) => {
   return {
     gameId: state.game.gameId,
-    ownPlayerNumber: state.game.ownPlayerNumber,
-    showEnemyArmyInBattle: state.game.showEnemyArmyInBattle,
-    battleData: state.game.battleData,
-    ownArmySubmitted: state.game.ownArmySubmitted,
-    isOwnTurn: state.game.battleData ?
-      state.game.battleData.playerWhoseTurnItIs ===
-      state.game.ownPlayerNumber : false,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
+    showEnemyArmyInBattle: state.battleView.showEnemyArmyInBattle,
+    battleData: state.battleView.battleData,
+    ownArmySubmitted: state.battleView.ownArmySubmitted,
+    isOwnTurn: state.battleView.battleData ?
+      state.battleView.battleData.playerWhoseTurnItIs ===
+      state.gamePlayer.ownPlayerNumber : false,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateOwnArmySubmitted: (ownArmySubmitted) => dispatch(
-        gameAC.setOwnArmySubmitted(ownArmySubmitted)),
+        battleViewAC.setOwnArmySubmitted(ownArmySubmitted)),
   };
 };
 

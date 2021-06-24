@@ -5,6 +5,10 @@ import {Provider} from 'react-redux';
 import generalReducer from './Redux/Reducers/generalReducer';
 import lobbyReducer from './Redux/Reducers/lobbyReducer';
 import gameReducer from './Redux/Reducers/gameReducer';
+import gamePlayerReducer from './Redux/Reducers/GamePlayerReducer';
+import gameBoardViewReducer from './Redux/Reducers/gameBoardViewReducer';
+import battleViewReducer from './Redux/Reducers/battleViewReducer';
+import cityMenuReducer from './Redux/Reducers/cityMenuReducer';
 import DynamicContainerComponent from './Components/DynamicContainerComponent';
 import './App.css';
 
@@ -12,6 +16,10 @@ const rootReducer = combineReducers({
   general: generalReducer,
   lobby: lobbyReducer,
   game: gameReducer,
+  gamePlayer: gamePlayerReducer,
+  gameBoardView: gameBoardViewReducer,
+  battleView: battleViewReducer,
+  cityMenu: cityMenuReducer,
 });
 
 export const store = createStore(rootReducer,
@@ -23,10 +31,10 @@ export const store = createStore(rootReducer,
  *
  * This is the root component that is inserted into the DOM at startup. It's
  * only job is to provide all the setup and configuration. For example, redux
- *  and browser-router initialization.
+ * and browser-router initialization.
  *
- * It intends to have only one child and nothing else: the Game component.
- * and that is the Dynamic Container Component.
+ * It intends to have only one child and nothing else: and that is the
+ * Dynamic Container Component.
  *
  * @return {JSX} JSX
  */

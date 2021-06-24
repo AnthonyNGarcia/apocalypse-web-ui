@@ -15,6 +15,7 @@ const apiEndpoints = {
   gameController: apiBasePath + '/game',
   battleController: apiBasePath + '/battle',
   armyController: apiBasePath + '/army',
+  cityController: apiBasePath + '/city',
 };
 
 export default apiEndpoints;

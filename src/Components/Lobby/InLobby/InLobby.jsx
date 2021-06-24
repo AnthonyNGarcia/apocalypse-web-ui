@@ -1,20 +1,17 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import AbstractedWebsocket from '../../Utilities/AbstractedWebsocket';
 import LOBBY_VIEWS from '../../Utilities/lobbyViews';
 import lobbyAC from '../../../Redux/actionCreators/lobbyActionCreators';
 import gameAC from '../../../Redux/actionCreators/gameActionCreators';
 import generalAC from '../../../Redux/actionCreators/generalActionCreators';
 import MAIN_VIEWS from '../../Utilities/mainViews';
-import FACTIONS from '../../Utilities/factions';
 import axios from 'axios';
 import apiEndpoints from '../../Utilities/apiEndpoints';
-import PLAYER from '../../Utilities/playerEnums';
 import {useBeforeunload} from 'react-beforeunload';
 import './InLobby.css';
 
@@ -26,55 +23,13 @@ import './InLobby.css';
  * @return {JSX} to render
  */
 const InLobby = (props) => {
-  const websocket = useRef(null);
-
-  const saveFactionGameData = (playerData) => {
-    switch (playerData.factionType) {
-      case FACTIONS.HUMANS.NAME:
-        props.saveActionBarData(FACTIONS.HUMANS.ACTION_BAR_DATA);
-        break;
-      case FACTIONS.INSECTS.NAME:
-        props.saveActionBarData(FACTIONS.INSECTS.ACTION_BAR_DATA);
-        break;
-      default:
-        console.warn('Oops! An invalid faction was parsed!');
-    }
-  };
-
-  const navigateToInGame = (gameData) => {
-    console.log(gameData);
-    const initialGameData = gameData.initialGameData;
-    const gameConstants = gameData.gameConstantsDTO;
-    props.saveGameId(initialGameData.gameId);
-    props.saveGameBoard(initialGameData.gameBoard);
-    props.savePlayerOne(initialGameData.playerOne);
-    props.savePlayerTwo(initialGameData.playerTwo);
-    if (initialGameData.playerOne.username === props.ownUsername) {
-      saveFactionGameData(initialGameData.playerOne);
-      props.saveOwnPlayerNumber(PLAYER.ONE);
-    } else {
-      saveFactionGameData(initialGameData.playerTwo);
-      props.saveOwnPlayerNumber(PLAYER.TWO);
-    }
-    props.updatePlayerWhoseTurnItIs(
-        initialGameData.playerWhoseTurnItIs);
-    props.saveGameConstants(gameConstants);
-    props.updateMainViewToGame();
-  };
-
-  const navigateToBrowseLobbies = () => {
-    props.savePlayerOneUsername(null);
-    props.savePlayerTwoUsername(null);
-    props.saveLobbyId(null);
-    props.updateLobbyViewToBrowseLobbies();
-  };
-
   const lobbyCleanup = () => {
     if (props.lobbyId) {
       try {
         const leaveRequest = {
           lobbyId: props.lobbyId,
-          playerUsername: props.ownUsername,
+          inLobbyPlayer: props.ownUserId === props.lobbyPlayerOne.userId ?
+          props.lobbyPlayerOne : props.lobbyPlayerTwo,
         };
         axios.patch(
             apiEndpoints.lobbyController + '/leave', leaveRequest);
@@ -89,33 +44,6 @@ const InLobby = (props) => {
     lobbyCleanup();
   });
 
-  const onReceiveMessage = (message) => {
-    console.log(message);
-    const playerOneUsername = message.body.playerOneUsername;
-    if (!playerOneUsername) {
-      navigateToBrowseLobbies();
-    }
-    const playerTwoUsername = message.body.playerTwoUsername;
-    if (playerTwoUsername !== props.playerTwoUsername) {
-      if (props.ownUsername === props.playerTwoUsername) {
-        navigateToBrowseLobbies();
-      } else {
-        props.savePlayerTwoUsername(playerTwoUsername);
-      }
-    }
-
-    if (message.body.initialGameData) {
-      lobbyCleanup();
-      navigateToInGame(message.body);
-    }
-  };
-
-  const onDisconnect = () => {
-    console.log('Disconnected from in-lobby websocket!');
-    lobbyCleanup();
-    navigateToBrowseLobbies();
-  };
-
   const leaveLobbyHandler = async (e) => {
     e.preventDefault();
     lobbyCleanup();
@@ -126,11 +54,11 @@ const InLobby = (props) => {
     try {
       const startGameRequest = {
         lobbyId: props.lobbyId,
-        playerOneUsername: props.playerOneUsername,
-        playerTwoUsername: props.playerTwoUsername,
+        lobbyPlayerOne: props.lobbyPlayerOne,
+        lobbyPlayerTwo: props.lobbyPlayerTwo,
       };
       await axios.post(
-          apiEndpoints.gameController + '/in-memory', startGameRequest);
+          apiEndpoints.gameController + '/start', startGameRequest);
     } catch (e) {
       console.warn('Oops! There was an error trying to create the lobby!');
       console.warn(e);
@@ -139,9 +67,6 @@ const InLobby = (props) => {
 
   return (
     <React.Fragment>
-      <AbstractedWebsocket topics={['/lobby/' + props.lobbyId]}
-        onReceiveMessage={onReceiveMessage} ref={websocket}
-        onDisconnect={onDisconnect}/>
       <h3>In Lobby Component</h3>
       <Container>
         <Row>
@@ -149,10 +74,12 @@ const InLobby = (props) => {
         </Row>
         <Row>
           <Col>
-            <h4>Player One: {props.playerOneUsername}</h4>
+            <h4>Player One: {props.lobbyPlayerOne ?
+            props.lobbyPlayerOne.username : ''}</h4>
           </Col>
           <Col>
-            <h4>Player Two: {props.playerTwoUsername}</h4>
+            <h4>Player Two: {props.lobbyPlayerTwo ?
+            props.lobbyPlayerTwo.username : ''}</h4>
           </Col>
         </Row>
         <Row>
@@ -160,10 +87,10 @@ const InLobby = (props) => {
             <Button variant="primary" onClick={leaveLobbyHandler}>Leave</Button>
           </Col>
           <Col>
-            {props.ownUsername === props.playerOneUsername ?
+            {props.ownUserId === props.lobbyPlayerOne.userId ?
             <Button variant="primary"
-              disabled={props.playerOneUsername === null ||
-                props.playerTwoUsername === null}
+              disabled={props.lobbyPlayerOne === null ||
+                props.lobbyPlayerTwo === null}
               onClick={startGameHandler}>Start</Button> :
             null}
           </Col>
@@ -176,9 +103,10 @@ const InLobby = (props) => {
 const mapStateToProps = (state) => {
   return {
     ownUsername: state.general.ownUsername,
+    ownUserId: state.general.ownUserId,
     lobbyId: state.lobby.lobbyId,
-    playerOneUsername: state.lobby.playerOneUsername,
-    playerTwoUsername: state.lobby.playerTwoUsername,
+    lobbyPlayerOne: state.lobby.lobbyPlayerOne,
+    lobbyPlayerTwo: state.lobby.lobbyPlayerTwo,
   };
 };
 
@@ -186,10 +114,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateLobbyViewToBrowseLobbies: () => dispatch(
         lobbyAC.setLobbyView(LOBBY_VIEWS.BROWSE_LOBBIES_VIEW)),
-    savePlayerOneUsername: (username) => dispatch(
-        lobbyAC.setPlayerOneUsername(username)),
-    savePlayerTwoUsername: (username) => dispatch(
-        lobbyAC.setPlayerTwoUsername(username)),
+    saveLobbyPlayerOne: (lobbyPlayerOne) => dispatch(
+        lobbyAC.setLobbyPlayerOne(lobbyPlayerOne)),
+    saveLobbyPlayerTwo: (lobbyPlayerTwo) => dispatch(
+        lobbyAC.setLobbyPlayerTwo(lobbyPlayerTwo)),
     saveLobbyId: (lobbyId) => dispatch(
         lobbyAC.setLobbyId(lobbyId)),
     updateMainViewToGame: () => dispatch(
@@ -215,12 +143,13 @@ const mapDispatchToProps = (dispatch) => {
 
 InLobby.propTypes = {
   ownUsername: PropTypes.string,
+  ownUserId: PropTypes.string,
   lobbyId: PropTypes.string,
-  playerOneUsername: PropTypes.string,
-  playerTwoUsername: PropTypes.string,
+  lobbyPlayerOne: PropTypes.any,
+  lobbyPlayerTwo: PropTypes.any,
   updateLobbyViewToBrowseLobbies: PropTypes.func,
-  savePlayerOneUsername: PropTypes.func,
-  savePlayerTwoUsername: PropTypes.func,
+  saveLobbyPlayerOne: PropTypes.func,
+  saveLobbyPlayerTwo: PropTypes.func,
   saveLobbyId: PropTypes.func,
   saveGameId: PropTypes.func,
   updateMainViewToGame: PropTypes.func,

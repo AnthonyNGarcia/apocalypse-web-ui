@@ -82,15 +82,15 @@ const BattleMap = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    showCityModalInfo: state.game.showCityModalInfo,
-    showResearchModalInfo: state.game.showResearchModalInfo,
-    playerOneUsername: state.game.playerOne ?
-      state.game.playerOne.username : 'error',
-    playerTwoUsername: state.game.playerTwo ?
-      state.game.playerTwo.username : 'error',
-    ownPlayerNumber: state.game.ownPlayerNumber,
-    battleData: state.game.battleData,
-    showEnemyArmyInBattle: state.game.showEnemyArmyInBattle,
+    showCityModalInfo: state.cityMenu.showCityModalInfo,
+    showResearchModalInfo: state.cityMenu.showResearchModalInfo,
+    playerOneUsername: state.gamePlayer.playerOne ?
+      state.gamePlayer.playerOne.username : 'error',
+    playerTwoUsername: state.gamePlayer.playerTwo ?
+      state.gamePlayer.playerTwo.username : 'error',
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
+    battleData: state.battleView.battleData,
+    showEnemyArmyInBattle: state.battleView.showEnemyArmyInBattle,
   };
 };
 

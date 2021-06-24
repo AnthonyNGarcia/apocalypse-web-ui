@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
@@ -9,7 +9,8 @@ import Col from 'react-bootstrap/Col';
 import PropTypes from 'prop-types';
 import LOBBY_VIEWS from '../../Utilities/lobbyViews';
 import lobbyAC from '../../../Redux/actionCreators/lobbyActionCreators';
-import AbstractedWebsocket from '../../Utilities/AbstractedWebsocket';
+import generalAC from '../../../Redux/actionCreators/generalActionCreators';
+import WEBSOCKET_TOPICS from '../../Utilities/websockets/websocketTopics';
 import './BrowseLobbies.css';
 
 /**
@@ -20,15 +21,23 @@ import './BrowseLobbies.css';
  * @return {JSX} to render
  */
 const BrowseLobbies = (props) => {
-  const [currentLobbies, setCurrentLobbies] = useState([]);
   const isMounted = useRef(null);
 
   const navigateToInLobby = async (lobbyData) => {
     if (isMounted.current) {
-      await props.savePlayerOneUsername(lobbyData.playerOneUsername);
+      const oldWebsocketTopics = [...props.websocketTopics];
+      const updatedWebsocketTopics = oldWebsocketTopics.filter(
+          (topic) => topic !== WEBSOCKET_TOPICS.BROWSE_LOBBIES,
+      );
+      updatedWebsocketTopics.push(
+          WEBSOCKET_TOPICS.specificLobbyWithId(lobbyData.lobbyId));
+      await props.saveWebsocketTopics(updatedWebsocketTopics);
     }
     if (isMounted.current) {
-      await props.savePlayerTwoUsername(lobbyData.playerTwoUsername);
+      await props.saveLobbyPlayerOne(lobbyData.lobbyPlayerOne);
+    }
+    if (isMounted.current) {
+      await props.saveLobbyPlayerTwo(lobbyData.lobbyPlayerTwo);
     }
     if (isMounted.current) {
       await props.saveLobbyId(lobbyData.lobbyId);
@@ -61,7 +70,10 @@ const BrowseLobbies = (props) => {
     try {
       const joinLobbyRequest = {
         lobbyId: lobbyId,
-        playerUsername: props.ownUsername,
+        inLobbyPlayer: {
+          username: props.ownUsername,
+          userId: props.ownUserId,
+        },
       };
       const response = await axios.patch(
           apiEndpoints.lobbyController + '/join', joinLobbyRequest);
@@ -77,7 +89,7 @@ const BrowseLobbies = (props) => {
     const serverResponse = await
     axios.get(apiEndpoints.lobbyController + '/all');
     if (isMounted.current) {
-      setCurrentLobbies(serverResponse.data);
+      props.saveLobbyList(serverResponse.data);
     }
   };
 
@@ -87,7 +99,7 @@ const BrowseLobbies = (props) => {
       const serverResponse = await
       axios.get(apiEndpoints.lobbyController + '/all');
       if (isMounted.current) {
-        setCurrentLobbies(serverResponse.data);
+        props.saveLobbyList(serverResponse.data);
       }
     };
     fetchCurrentLobbies();
@@ -96,14 +108,8 @@ const BrowseLobbies = (props) => {
     };
   }, []);
 
-  const onReceiveMessage = (message) => {
-    setCurrentLobbies(message.body);
-  };
-
   return (
     <React.Fragment>
-      <AbstractedWebsocket topics={['/browse-lobbies']}
-        onReceiveMessage={onReceiveMessage}/>
       <Container>
         <Row>
           <Col xs={8}>
@@ -114,16 +120,16 @@ const BrowseLobbies = (props) => {
               onClick={(e) => refreshLobbiesHandler(e)}>Refresh</Button>
           </Col>
         </Row>
-        {currentLobbies && currentLobbies.length > 0 ?
-          currentLobbies.map((lobby) =>
+        {props.lobbyList && props.lobbyList.length > 0 ?
+          props.lobbyList.map((lobby) =>
             <Row key={lobby.lobbyId}>
               <Col>
-                <p>{lobby.playerOneUsername + '\'s Lobby' +
-                (lobby.playerTwoUsername ? ' (2/2)' : ' (1/2)')}</p>
+                <p>{lobby.lobbyPlayerOne.username + '\'s Lobby' +
+                (lobby.lobbyPlayerTwo ? ' (2/2)' : ' (1/2)')}</p>
               </Col>
               <Col>
                 <Button variant="primary"
-                  disabled={lobby.playerTwoUsername && lobby.playerTwoUsername}
+                  disabled={lobby.lobbyPlayerOne && lobby.lobbyPlayerTwo}
                   onClick={(e) => joinLobbyHandler(e, lobby.lobbyId)}>
                   Join</Button>
               </Col>
@@ -141,6 +147,8 @@ const mapStateToProps = (state) => {
   return {
     ownUsername: state.general.ownUsername,
     ownUserId: state.general.ownUserId,
+    lobbyList: state.lobby.lobbyList,
+    websocketTopics: state.general.websocketTopics,
   };
 };
 
@@ -150,19 +158,27 @@ const mapDispatchToProps = (dispatch) => {
         lobbyAC.setLobbyView(LOBBY_VIEWS.IN_LOBBY_VIEW)),
     saveLobbyId: (lobbyId) => dispatch(
         lobbyAC.setLobbyId(lobbyId)),
-    savePlayerOneUsername: (username) => dispatch(
-        lobbyAC.setPlayerOneUsername(username)),
-    savePlayerTwoUsername: (username) => dispatch(
-        lobbyAC.setPlayerTwoUsername(username)),
+    saveLobbyList: (lobbyList) => dispatch(
+        lobbyAC.setLobbyList(lobbyList)),
+    saveLobbyPlayerOne: (lobbyPlayerOne) => dispatch(
+        lobbyAC.setLobbyPlayerOne(lobbyPlayerOne)),
+    saveLobbyPlayerTwo: (lobbyPlayerTwo) => dispatch(
+        lobbyAC.setLobbyPlayerTwo(lobbyPlayerTwo)),
+    saveWebsocketTopics: (websocketTopics) => dispatch(
+        generalAC.setWebsocketTopics(websocketTopics)),
   };
 };
 
 BrowseLobbies.propTypes = {
   ownUsername: PropTypes.string,
   ownUserId: PropTypes.string,
+  lobbyList: PropTypes.array,
+  websocketTopics: PropTypes.array,
   saveLobbyId: PropTypes.func,
-  savePlayerOneUsername: PropTypes.func,
-  savePlayerTwoUsername: PropTypes.func,
+  saveLobbyList: PropTypes.func,
+  saveLobbyPlayerOne: PropTypes.func,
+  saveLobbyPlayerTwo: PropTypes.func,
+  saveWebsocketTopics: PropTypes.func,
   updateLobbyViewToInLobby: PropTypes.func,
 };
 

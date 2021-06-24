@@ -2,7 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
-import gameAC from '../../../../../Redux/actionCreators/gameActionCreators';
+import battleViewAC from
+  '../../../../../Redux/actionCreators/battleViewActionCreators';
 import apiEndpoints from '../../../../Utilities/apiEndpoints';
 import axios from 'axios';
 import UNIT_ACTION_TYPES from '../../../../Utilities/unitActionTypes';
@@ -16,7 +17,6 @@ import './ArmyUnit.css';
  * @return {JSX} to render
  */
 const ArmyUnit = (props) => {
-  const [fullUnitInfo, setFullUnitInfo] = useState(null);
   const [ownArmy, setOwnArmy] = useState(null);
   const [unitImageClasses, setUnitImageClasses] = useState('');
   const [currentlySelectedOwnUnit, setCurrentlySelectedOwnUnit] =
@@ -24,8 +24,6 @@ const ArmyUnit = (props) => {
 
   useEffect( () => {
     if (props.unit && props.unit.unitType) {
-      const freshFullUnitInfo = props.allUnits[props.unit.unitType];
-      setFullUnitInfo(freshFullUnitInfo);
       let calculatedUnitClasses = 'army-unit-image';
       if (props.ownUnit) {
         calculatedUnitClasses += ' own-unit-image';
@@ -135,14 +133,14 @@ const ArmyUnit = (props) => {
     try {
       props.updateSelectedBattleUnitIndex(-1);
       const attackTargetRequest = {
+        gameId: props.gameId,
         playerSubmittingAction: props.ownPlayerNumber,
         unitActionType: UNIT_ACTION_TYPES.ATTACK,
         indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
         indexOfTargetUnitOfAction: props.unitIndex,
       };
-      axios.post(apiEndpoints.gameController +
-        '/in-memory-battle-attack-target/' +
-        props.gameId, attackTargetRequest);
+      axios.post(apiEndpoints.battleController +
+        '/attack', attackTargetRequest);
     } catch (e) {
       console.warn('There was an error trying to attack a target!');
       console.warn(e);
@@ -160,7 +158,7 @@ const ArmyUnit = (props) => {
     );
   }
 
-  if (props.unit && fullUnitInfo) {
+  if (props.unit) {
     return (
       <React.Fragment>
         {/* First row is the unit image */}
@@ -180,8 +178,8 @@ const ArmyUnit = (props) => {
         <Row style={{height: '2vh'}} noGutters>
           <p className='unit-label'>
             {
-              props.unit.currentHealth}/{fullUnitInfo
-                .baseMaxHealth} <span><img
+              props.unit.currentHealth}/{props.unit
+                .maxHealth} <span><img
               src={'health.svg'}
               alt=""
               className={'tiny-hammer-icon'}
@@ -232,11 +230,11 @@ const ArmyUnit = (props) => {
 const mapStateToProps = (state) => {
   return {
     allUnits: state.game.gameConstants.allUnits,
-    showEnemyArmyInBattle: state.game.showEnemyArmyInBattle,
-    selectedBattleUnitIndex: state.game.selectedBattleUnitIndex,
-    ownPlayerNumber: state.game.ownPlayerNumber,
-    battleData: state.game.battleData,
-    ownArmySubmitted: state.game.ownArmySubmitted,
+    showEnemyArmyInBattle: state.battleView.showEnemyArmyInBattle,
+    selectedBattleUnitIndex: state.battleView.selectedBattleUnitIndex,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
+    battleData: state.battleView.battleData,
+    ownArmySubmitted: state.battleView.ownArmySubmitted,
     gameId: state.game.gameId,
   };
 };
@@ -244,9 +242,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateSelectedBattleUnitIndex: (selectedBattleUnitIndex) => dispatch(
-        gameAC.setSelectedBattleUnitIndex(selectedBattleUnitIndex)),
+        battleViewAC.setSelectedBattleUnitIndex(selectedBattleUnitIndex)),
     updateBattleData: (battleData) => dispatch(
-        gameAC.setBattleData(battleData)),
+        battleViewAC.setBattleData(battleData)),
   };
 };
 
