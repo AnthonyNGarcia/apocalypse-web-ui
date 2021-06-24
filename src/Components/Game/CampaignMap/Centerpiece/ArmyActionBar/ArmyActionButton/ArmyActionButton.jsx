@@ -2,7 +2,6 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import gameAC from '../../../../../../Redux/actionCreators/gameActionCreators';
 import ARMY_ACTION_ENUMS from '../../../../../Utilities/armyActionRequestTypes';
 import tileHighlightManager from
   '../../../../../Utilities/tileHighlightManager';
@@ -32,12 +31,11 @@ const ArmyActionButton = (props) => {
         tileHighlightManager.unhighlightAllTiles();
         hideActionTooltip();
         const request = {
-          primaryArmyAction: 'CAMP',
+          primaryArmyActionType: 'FORTIFY',
           primaryArmyInitialTile: props.gameBoard[props.selectedTilePosition],
+          secondaryTilePosition: -1,
         };
-        await props.updateAwaitingServerConfirmation(true);
-        axios.post(apiEndpoints.gameController + '/in-memory-army-action/' +
-        props.gameId, request);
+        axios.post(apiEndpoints.armyController + '/action', request);
         break;
       default:
         console.log('Oops! An Invalid army action was evaluated.');
@@ -56,19 +54,10 @@ const ArmyActionButton = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    selectedTilePosition: state.game.selectedTilePosition,
-    gameBoard: state.game.gameBoard,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
+    gameBoard: state.gameBoardView.gameBoard,
     ownUsername: state.general.ownUsername,
     gameId: state.game.gameId,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateActionBarTooltip: (tooltip) => dispatch(
-        gameAC.setActionBarTooltip(tooltip)),
-    updateAwaitingServerConfirmation: (awaitingServerConfirmation) => dispatch(
-        gameAC.setAwaitingServerConfirmation(awaitingServerConfirmation)),
   };
 };
 
@@ -79,8 +68,7 @@ ArmyActionButton.propTypes = {
   tapped: PropTypes.bool,
   gameBoard: PropTypes.any,
   ownUsername: PropTypes.string,
-  updateAwaitingServerConfirmation: PropTypes.func,
   gameId: PropTypes.string,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArmyActionButton);
+export default connect(mapStateToProps)(ArmyActionButton);

@@ -11,7 +11,8 @@ import UNIT_CLASSES from '../../../../Utilities/unitClasses';
 import apiEndpoints from '../../../../Utilities/apiEndpoints';
 import axios from 'axios';
 import UNIT_ACTION_TYPES from '../../../../Utilities/unitActionTypes';
-import gameAC from '../../../../../Redux/actionCreators/gameActionCreators';
+import battleViewAC from
+  '../../../../../Redux/actionCreators/battleViewActionCreators';
 import './BattleUnitDetails.css';
 
 /**
@@ -220,21 +221,21 @@ const mapStateToProps = (state) => {
   return {
     gameId: state.game.gameId,
     allUnits: state.game.gameConstants.allUnits,
-    selectedBattleUnitIndex: state.game.selectedBattleUnitIndex,
-    battleData: state.game.battleData,
-    ownPlayerNumber: state.game.ownPlayerNumber,
+    selectedBattleUnitIndex: state.battleView.selectedBattleUnitIndex,
+    battleData: state.battleView.battleData,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
     allActiveAbilities: state.game.gameConstants.allActiveAbilities,
-    isOwnTurn: state.game.battleData ?
-      state.game.battleData.playerWhoseTurnItIs ===
-      state.game.ownPlayerNumber : false,
-    showEnemyArmyInBattle: state.game.showEnemyArmyInBattle,
+    isOwnTurn: state.battleView.battleData ?
+      state.battleView.battleData.playerWhoseTurnItIs ===
+      state.gamePlayer.ownPlayerNumber : false,
+    showEnemyArmyInBattle: state.battleView.showEnemyArmyInBattle,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateSelectedBattleUnitIndex: (selectedBattleUnitIndex) => dispatch(
-        gameAC.setSelectedBattleUnitIndex(selectedBattleUnitIndex)),
+        battleViewAC.setSelectedBattleUnitIndex(selectedBattleUnitIndex)),
   };
 };
 

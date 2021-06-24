@@ -7,8 +7,8 @@ import PropTypes from 'prop-types';
 import Spinner from 'react-bootstrap/esm/Spinner';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../../../../Utilities/cityMenuSupplementalViews';
-import gameAC from
-  '../../../../../../../../Redux/actionCreators/gameActionCreators';
+import cityMenuAC from
+  '../../../../../../../../Redux/actionCreators/cityMenuActionCreators';
 import axios from 'axios';
 import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
 import './QueuedUnitItem.css';
@@ -108,20 +108,22 @@ const mapStateToProps = (state) => {
   return {
     gameId: state.game.gameId,
     allUnits: state.game.gameConstants.allUnits,
-    isOwnTurn: state.game.isOwnTurn,
-    selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
-    selectedTilePosition: state.game.selectedTilePosition,
+    isOwnTurn: state.gamePlayer.ownPlayerNumber ===
+      state.gamePlayer.playerWhoseTurnItIs,
+    selectedCity: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].city,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCityMenuSupplementalData: (cityMenuSupplementalData) => dispatch(
-        gameAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
+        cityMenuAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
     updateCityMenuSupplementalView: (cityMenuSupplementalView) => dispatch(
-        gameAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
+        cityMenuAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
     updateCurrentCityRecruitmentQueue: (recruitmentQueue) => dispatch(
-        gameAC.setCurrentCityRecruitmentQueue(recruitmentQueue)),
+        cityMenuAC.setCurrentCityRecruitmentQueue(recruitmentQueue)),
   };
 };
 

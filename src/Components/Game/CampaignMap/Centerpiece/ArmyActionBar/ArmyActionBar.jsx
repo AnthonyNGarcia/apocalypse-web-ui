@@ -4,9 +4,18 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import ArmyActionButton from './ArmyActionButton/ArmyActionButton';
 import PLAYER from '../../../../Utilities/playerEnums';
+import ArmyActionButton from './ArmyActionButton/ArmyActionButton';
 import './ArmyActionBar.css';
+import ARMY_ACTION_REQUEST_TYPES from
+  '../../../../Utilities/armyActionRequestTypes';
+
+const fortifyActionData = {
+  enum: ARMY_ACTION_REQUEST_TYPES.FORTIFY,
+  name: 'Fortify',
+  tooltip: 'Fortify in place for +25% Block now, ' +
+    'and heal 50% max health next turn.',
+};
 
 /**
  *
@@ -16,8 +25,8 @@ import './ArmyActionBar.css';
  * @return {JSX} to render
  */
 const ArmyActionBar = (props) => {
-  const [computedData, setComputedData] = useState();
   const [armyIsTapped, setArmyIsTapped] = useState(false);
+
   useEffect(() => {
     if (props.selectedTilePosition >= 0) {
       const tileData = props.gameBoard[props.selectedTilePosition];
@@ -27,28 +36,25 @@ const ArmyActionBar = (props) => {
           tileData.army.owner === PLAYER.TWO))) {
         setArmyIsTapped(tileData.army.remainingActions <= 0 ||
             !props.isOwnTurn);
-        setComputedData(props.actionBarData);
       } else {
         setComputedData(null);
       }
     } else {
       setComputedData(null);
     }
-  }, [props.actionBarData, props.selectedTilePosition,
+  }, [props.selectedTilePosition,
     props.gameBoard, props.isOwnTurn]);
+
   return (
     <React.Fragment>
       <h5>Action Bar</h5>
       <Container>
         <Row>
-          {computedData && computedData.length > 0 ?
-            computedData.map((action, index) => (
-              <Col key={action.name + '-' + index}>
-                <ArmyActionButton actionData={action} tapped={armyIsTapped}/>
-              </Col>
-            )) : null}
+          <Col>
+            <ArmyActionButton
+              actionData={fortifyActionData} tapped={armyIsTapped}/>
+          </Col>
         </Row>
-        <Row>{props.actionBarTooltip}</Row>
       </Container>
     </React.Fragment>
   );
@@ -56,20 +62,17 @@ const ArmyActionBar = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    actionBarTooltip: state.game.actionBarTooltip,
-    actionBarData: state.game.actionBarData,
-    selectedTilePosition: state.game.selectedTilePosition,
-    gameBoard: state.game.gameBoard,
-    playerOne: state.game.playerOne,
-    playerTwo: state.game.playerTwo,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
+    gameBoard: state.gameBoardView.gameBoard,
+    playerOne: state.gamePlayer.playerOne,
+    playerTwo: state.gamePlayer.playerTwo,
     ownUsername: state.general.ownUsername,
-    isOwnTurn: state.game.isOwnTurn,
+    isOwnTurn: state.gamePlayer.ownPlayerNumber ===
+      state.gamePlayer.playerWhoseTurnItIs,
   };
 };
 
 ArmyActionBar.propTypes = {
-  actionBarTooltip: PropTypes.string,
-  actionBarData: PropTypes.array,
   selectedTilePosition: PropTypes.number,
   gameBoard: PropTypes.any,
   playerOne: PropTypes.any,

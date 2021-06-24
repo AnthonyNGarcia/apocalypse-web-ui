@@ -1,4 +1,5 @@
 import cityMenuAT from '../actionTypes/cityMenuActionTypes';
+import gameBoardViewAT from '../actionTypes/gameBoardViewActionTypes';
 import {store} from '../../App';
 
 const actionCreators = {
@@ -22,18 +23,18 @@ const actionCreators = {
   },
   setCurrentCityConstructionProject: (constructionProject) => {
     const state = store.getState();
-    const newGameBoard = [...state.game.gameBoard];
-    newGameBoard[state.game.selectedTilePosition]
+    const newGameBoard = [...state.gameBoardView.gameBoard];
+    newGameBoard[state.gameBoardView.selectedTilePosition]
         .city.currentConstructionProject = constructionProject;
     return {
-      type: cityMenuAT.SET_GAME_BOARD,
+      type: gameBoardViewAT.SET_GAME_BOARD,
       gameBoard: newGameBoard,
     };
   },
   setCurrentCityRecruitmentQueue: (recruitmentQueue) => {
     const state = store.getState();
-    const newGameBoard = [...state.game.gameBoard];
-    newGameBoard[state.game.selectedTilePosition]
+    const newGameBoard = [...state.gameBoardView.gameBoard];
+    newGameBoard[state.gameBoardView.selectedTilePosition]
         .city.currentRecruitmentQueue = recruitmentQueue;
     return {
       type: cityMenuAT.SET_GAME_BOARD,

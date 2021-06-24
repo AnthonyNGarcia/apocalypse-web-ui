@@ -8,7 +8,7 @@ import Centerpiece from './Centerpiece/Centerpiece';
 import RightSidebar from './RightSidebar/RightSidebar';
 import AdvancedDetailsModalInfo from
   './AdvancedDetailsModalInfo/AdvancedDetailsModalInfo';
-import gameAC from '../../../Redux/actionCreators/gameActionCreators';
+import cityMenuAC from '../../../Redux/actionCreators/cityMenuActionCreators';
 import Modal from 'react-bootstrap/Modal';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../Utilities/cityMenuSupplementalViews';
@@ -73,27 +73,27 @@ const CampaignMap = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    showCityModalInfo: state.game.showCityModalInfo,
-    showResearchModalInfo: state.game.showResearchModalInfo,
-    playerOneUsername: state.game.playerOne ?
-      state.game.playerOne.username : 'error',
-    playerTwoUsername: state.game.playerTwo ?
-      state.game.playerTwo.username : 'error',
-    playerWhoseTurnItIs: state.game.playerWhoseTurnItIs,
-    ownPlayerNumber: state.game.ownPlayerNumber,
+    showCityModalInfo: state.cityMenu.showCityModalInfo,
+    showResearchModalInfo: state.cityMenu.showResearchModalInfo,
+    playerOneUsername: state.gamePlayer.playerOne ?
+      state.gamePlayer.playerOne.username : 'error',
+    playerTwoUsername: state.gamePlayer.playerTwo ?
+      state.gamePlayer.playerTwo.username : 'error',
+    playerWhoseTurnItIs: state.gamePlayer.playerWhoseTurnItIs,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateShowCityModalInfo: (showCityModalInfo) => dispatch(
-        gameAC.setShowCityModalInfo(showCityModalInfo)),
+        cityMenuAC.setShowCityModalInfo(showCityModalInfo)),
     updateShowResearchModalInfo: (showResearchModalInfo) => dispatch(
-        gameAC.setShowResearchModalInfo(showResearchModalInfo)),
+        cityMenuAC.setShowResearchModalInfo(showResearchModalInfo)),
     updateCityMenuSupplementalView: (view) => dispatch(
-        gameAC.setCityMenuSupplementalView(view)),
+        cityMenuAC.setCityMenuSupplementalView(view)),
     updateCityMenuSupplementalData: (data) => dispatch(
-        gameAC.setCityMenuSupplementalData(data)),
+        cityMenuAC.setCityMenuSupplementalData(data)),
   };
 };
 

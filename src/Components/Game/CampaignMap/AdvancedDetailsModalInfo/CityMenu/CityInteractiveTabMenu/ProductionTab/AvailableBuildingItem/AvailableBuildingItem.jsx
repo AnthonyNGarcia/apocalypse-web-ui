@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import gameAC from
-  '../../../../../../../../Redux/actionCreators/gameActionCreators';
+import cityMenuAC from
+  '../../../../../../../../Redux/actionCreators/cityMenuActionCreators';
 import Spinner from 'react-bootstrap/esm/Spinner';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../../../../Utilities/cityMenuSupplementalViews';
@@ -122,20 +122,21 @@ const AvailableBuildingItem = (props) => {
 const mapStateToProps = (state) => {
   return {
     allBuildings: state.game.gameConstants.allBuildings,
-    isOwnTurn: state.game.isOwnTurn,
-    selectedCity: {...state.game
-        .gameBoard[state.game.selectedTilePosition].city},
+    isOwnTurn: state.gamePlayer.ownPlayerNumber ===
+      state.gamePlayer.playerWhoseTurnItIs,
+    selectedCity: {...state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].city},
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCurrentCityConstructionProject: (newConstructionProject) => dispatch(
-        gameAC.setCurrentCityConstructionProject(newConstructionProject)),
+        cityMenuAC.setCurrentCityConstructionProject(newConstructionProject)),
     updateCityMenuSupplementalData: (cityMenuSupplementalData) => dispatch(
-        gameAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
+        cityMenuAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
     updateCityMenuSupplementalView: (cityMenuSupplementalView) => dispatch(
-        gameAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
+        cityMenuAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
   };
 };
 

@@ -37,16 +37,7 @@ const DynamicContainerComponent = (props) => {
     }
   };
 
-  const onDisconnect = () => {
-    if (props.lobbyId) {
-      const leaveLobbyRequest = {
-        lobbyId: lobbyId,
-        inLobbyPlayer: {
-          userId: props.ownUserId,
-        },
-      };
-      axios.post(apiEndpoints.lobbyController + '/leave', leaveLobbyRequest);
-    }
+  const notifyServerOfOwnDisconnect = async () => {
     if (props.gameId) {
       const leaveGameRequest = {
         gameId: gameId,
@@ -54,8 +45,21 @@ const DynamicContainerComponent = (props) => {
           userId: props.ownUserId,
         },
       };
-      axios.post(apiEndpoints.gameController + '/leave', leaveGameRequest);
+      axios.patch(apiEndpoints.gameController + '/leave', leaveGameRequest);
     }
+    if (props.lobbyId) {
+      const leaveLobbyRequest = {
+        lobbyId: lobbyId,
+        inLobbyPlayer: {
+          userId: props.ownUserId,
+        },
+      };
+      axios.patch(apiEndpoints.lobbyController + '/leave', leaveLobbyRequest);
+    }
+  };
+
+  const onDisconnect = async () => {
+    notifyServerOfOwnDisconnect();
     console.warn('Disconnected from game websocket!');
   };
 

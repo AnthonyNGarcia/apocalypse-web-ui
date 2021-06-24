@@ -4,7 +4,12 @@ import {Honeycomb, Hexagon} from 'react-honeycomb';
 import PropTypes from 'prop-types';
 import MAIN_PANEL_VIEWS from '../../../../Utilities/gameMainPanelViews';
 import TILE_HIGHLIGHT_TYPES from '../../../../Utilities/tileHighlightTypes';
-import gameAC from '../../../../../Redux/actionCreators/gameActionCreators';
+import gameBoardViewAC from
+  '../../../../../Redux/actionCreators/gameBoardViewActionCreators';
+import gamePlayerAC from
+  '../../../../../Redux/actionCreators/gamePlayerActionCreators';
+import cityMenuAC from
+  '../../../../../Redux/actionCreators/cityMenuActionCreators';
 import tileHighlightManager from '../../../../Utilities/tileHighlightManager';
 import ARMY_ACTION_REQUEST_TYPE from
   '../../../../Utilities/armyActionRequestTypes';
@@ -203,45 +208,45 @@ const GameBoard = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    gameBoard: state.game.gameBoard,
-    baseHoneycombConfigs: state.game.honeycombConfigs,
-    isMovingArmy: state.game.isMovingArmy,
-    selectedTilePosition: state.game.selectedTilePosition,
+    gameBoard: state.gameBoardView.gameBoard,
+    baseHoneycombConfigs: state.gameBoardView.honeycombConfigs,
+    isMovingArmy: state.gameBoardView.isMovingArmy,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
     gameId: state.game.gameId,
     ownUsername: state.general.ownUsername,
-    awaitingServerConfirmation: state.game.awaitingServerConfirmation,
-    ownPlayerNumber: state.game.ownPlayerNumber,
-    isOwnTurn: state.game.isOwnTurn,
-    viewingArmyInCity: state.game.viewingArmyInCity,
-    playerOne: state.game.playerOne,
-    playerTwo: state.game.playerTwo,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
+    isOwnTurn: state.gamePlayer.ownPlayerNumber ===
+      state.gamePlayer.playerWhoseTurnItIs,
+    viewingArmyInCity: state.gameBoardView.viewingArmyInCity,
+    playerOne: state.gamePlayer.playerOne,
+    playerTwo: state.gamePlayer.playerTwo,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateMainPanelView: (view) => dispatch(
-        gameAC.setMainPanelView(view)),
+        gameBoardViewAC.setMainPanelView(view)),
     updateSupplementalPanelView: (view) => dispatch(
-        gameAC.setSupplementalPanelView(view)),
+        gameBoardViewAC.setSupplementalPanelView(view)),
     updateSelectedTilePosition: (position) => dispatch(
-        gameAC.setSelectedTilePosition(position)),
+        gameBoardViewAC.setSelectedTilePosition(position)),
     updateIsMovingArmy: (isMovingArmy) => dispatch(
-        gameAC.setIsMovingArmy(isMovingArmy)),
+        gameBoardViewAC.setIsMovingArmy(isMovingArmy)),
     updateGameBoard: (gameBoard) => dispatch(
-        gameAC.setGameBoard(gameBoard)),
+        gameBoardViewAC.setGameBoard(gameBoard)),
     updatePlayerWhoseTurnItIs: (playerWhoseTurnItIs) => dispatch(
-        gameAC.setPlayerWhoseTurnItIs(playerWhoseTurnItIs)),
+        gamePlayerAC.setPlayerWhoseTurnItIs(playerWhoseTurnItIs)),
     updateViewingArmyInCity: (viewingArmyInCity) => dispatch(
-        gameAC.setViewingArmyInCity(viewingArmyInCity)),
+        gameBoardViewAC.setViewingArmyInCity(viewingArmyInCity)),
     unshowCityModal: () => dispatch(
-        gameAC.setShowCityModalInfo(false)),
+        cityMenuAC.setShowCityModalInfo(false)),
     updateCityMenuSupplementalView: (view) => dispatch(
-        gameAC.setCityMenuSupplementalView(view)),
+        cityMenuAC.setCityMenuSupplementalView(view)),
     updatePlayerOne: (player) => dispatch(
-        gameAC.setPlayerOne(player)),
+        gamePlayerAC.setPlayerOne(player)),
     updatePlayerTwo: (player) => dispatch(
-        gameAC.setPlayerTwo(player)),
+        gamePlayerAC.setPlayerTwo(player)),
   };
 };
 

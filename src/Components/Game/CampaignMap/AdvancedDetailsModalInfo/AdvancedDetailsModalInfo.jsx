@@ -16,12 +16,11 @@ import './AdvancedDetailsModalInfo.css';
  * @return {JSX} to render
  */
 const AdvancedDetailsModalInfo = (props) => {
-  if (props.mainPanelData) {
+  if (props.mainPanelView === MAIN_PANEL_VIEWS.CITY_INFO) {
     return (
       <React.Fragment>
         <Modal.Header closeButton>
           <Modal.Title>
-            {props.mainPanelData.name}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -42,13 +41,11 @@ const AdvancedDetailsModalInfo = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    mainPanelData: state.game.mainPanelData,
-    mainPanelView: state.game.mainPanelView,
+    mainPanelView: state.gameBoardView.mainPanelView,
   };
 };
 
 AdvancedDetailsModalInfo.propTypes = {
-  mainPanelData: PropTypes.any,
   mainPanelView: PropTypes.oneOf(flattenObject(MAIN_PANEL_VIEWS)),
 };
 

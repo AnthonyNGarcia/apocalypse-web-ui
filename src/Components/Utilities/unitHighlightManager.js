@@ -3,7 +3,7 @@
  * units during a battle.
  */
 import {store} from '../../App';
-import gameAC from '../../Redux/actionCreators/gameActionCreators';
+import battleViewAC from '../../Redux/actionCreators/battleViewActionCreators';
 import UNIT_HIGHLIGHT_TYPES from './unitHighlightTypes';
 
 /*
@@ -37,7 +37,8 @@ export const unhighlightAllUnits = async (battleData) => {
     battleDataCopy = await JSON.parse(JSON.stringify(battleData));
   } else {
     const state = store.getState();
-    battleDataCopy = await JSON.parse(JSON.stringify(state.game.battleData));
+    battleDataCopy = await JSON.parse(JSON.stringify(
+        state.battleView.battleData));
   }
   for (let i = 0; i < battleDataCopy.attackingArmy.units.length; i++) {
     battleDataCopy.attackingArmy.units[
@@ -52,7 +53,7 @@ export const unhighlightAllUnits = async (battleData) => {
   if (battleData) {
     return battleDataCopy;
   } else {
-    store.dispatch(gameAC.setBattleData(battleDataCopy));
+    store.dispatch(battleViewAC.setBattleData(battleDataCopy));
   }
 };
 

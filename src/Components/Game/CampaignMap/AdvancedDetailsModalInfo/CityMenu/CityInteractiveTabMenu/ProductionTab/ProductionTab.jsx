@@ -125,9 +125,10 @@ const ProductionTab = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
-    ownPlayerData: state.game.ownPlayerNumber === PLAYER.ONE ?
-      state.game.playerOne : state.game.playerTwo,
+    selectedCity: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].city,
+    ownPlayerData: state.gamePlayer.ownPlayerNumber === PLAYER.ONE ?
+      state.gamePlayer.playerOne : state.gamePlayer.playerTwo,
   };
 };
 

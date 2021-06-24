@@ -76,8 +76,8 @@ const OwnMainArmy = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    battleData: state.game.battleData,
-    ownPlayerNumber: state.game.ownPlayerNumber,
+    battleData: state.battleView.battleData,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
   };
 };
 

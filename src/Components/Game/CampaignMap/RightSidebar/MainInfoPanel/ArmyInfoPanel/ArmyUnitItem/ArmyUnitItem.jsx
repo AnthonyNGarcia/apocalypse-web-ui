@@ -90,7 +90,8 @@ const mapStateToProps = (state) => {
   return {
     gameId: state.game.gameId,
     allUnits: state.game.gameConstants.allUnits,
-    isOwnTurn: state.game.isOwnTurn,
+    isOwnTurn: state.gamePlayer.ownPlayerNumber ===
+      state.gamePlayer.playerWhoseTurnItIs,
     selectedTilePosition: state.game.selectedTilePosition,
   };
 };

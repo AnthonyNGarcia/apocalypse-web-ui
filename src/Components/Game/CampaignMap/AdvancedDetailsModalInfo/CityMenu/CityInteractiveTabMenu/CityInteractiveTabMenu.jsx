@@ -7,7 +7,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ProductionTab from './ProductionTab/ProductionTab';
 import ArmyTab from './ArmyTab/ArmyTab';
-import gameAC from '../../../../../../Redux/actionCreators/gameActionCreators';
+import cityMenuAC from
+  '../../../../../../Redux/actionCreators/cityMenuActionCreators';
 import './CityInteractiveTabMenu.css';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../../Utilities/cityMenuSupplementalViews';
@@ -71,18 +72,19 @@ const CityInteractiveTabMenu = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    cityShowingProductionTab: state.game.cityShowingProductionTab,
+    cityShowingProductionTab: state.cityMenu.cityShowingProductionTab,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCityShowingProductionTab: (cityShowingProductionTab) => dispatch(
-        gameAC.setCityShowingProductionTab(cityShowingProductionTab)),
+        cityMenuAC.setCityShowingProductionTab(cityShowingProductionTab)),
     clearCityMenuSupplementalData: () => dispatch(
-        gameAC.setCityMenuSupplementalData({})),
+        cityMenuAC.setCityMenuSupplementalData({})),
     clearCityMenuSupplementalView: () => dispatch(
-        gameAC.setCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.NONE)),
+        cityMenuAC.setCityMenuSupplementalView(
+            CITY_MENU_SUPPLEMENTAL_VIEWS.NONE)),
   };
 };
 

@@ -130,12 +130,13 @@ const ArmyInfoPanel = (props) => {
 const mapStateToProps = (state) => {
   return {
     allUnitsConstants: state.game.gameConstants.allUnits,
-    playerOne: state.game.playerOne,
-    playerTwo: state.game.playerTwo,
-    ownPlayerNumber: state.game.ownPlayerNumber,
-    selectedArmy: state.game.gameBoard[state.game.selectedTilePosition].army,
+    playerOne: state.gamePlayer.playerOne,
+    playerTwo: state.gamePlayer.playerTwo,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
+    selectedArmy: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].army,
     gameId: state.game.gameId,
-    selectedTilePosition: state.game.selectedTilePosition,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
   };
 };
 

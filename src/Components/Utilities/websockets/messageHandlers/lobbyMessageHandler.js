@@ -66,7 +66,8 @@ const leavingLobbyCleanup = (leavingPlayerNumber) => {
       return;
     }
   }
-  const topicForThisLobby = WEBSOCKET_TOPICS.lobbyWithId(state.lobby.lobbyId);
+  const topicForThisLobby = WEBSOCKET_TOPICS.specificLobbyWithId(
+      state.lobby.lobbyId);
   const oldWebsocketTopics = [...state.general.websocketTopics];
   const updatedWebsocketTopics = oldWebsocketTopics.filter((topic) =>
     topic !== topicForThisLobby);
@@ -91,11 +92,13 @@ const startGameCleanup = async (message) => {
     ownId === playerTwoId ? PLAYER.TWO :
     'UNRECOGNIZED_PLAYER_NUMBER';
 
-  const topicForThisLobby = WEBSOCKET_TOPICS.lobbyWithId(state.lobby.lobbyId);
+  const topicForThisLobby = WEBSOCKET_TOPICS.specificLobbyWithId(
+      state.lobby.lobbyId);
   const oldWebsocketTopics = [...state.general.websocketTopics];
   const updatedWebsocketTopics = oldWebsocketTopics.filter((topic) =>
     topic !== topicForThisLobby);
-  updatedWebsocketTopics.push(WEBSOCKET_TOPICS.gameWithId(gameData.gameId));
+  updatedWebsocketTopics.push(WEBSOCKET_TOPICS.specificGameWithId(
+      gameData.gameId));
 
   await store.dispatch(generalAC.setWebsocketTopics(updatedWebsocketTopics));
   await store.dispatch(lobbyAC.setLobbyView(LOBBY_VIEWS.BROWSE_LOBBIES_VIEW));

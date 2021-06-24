@@ -19,14 +19,14 @@ const TileInfoPanel = (props) => {
   const [asteroid, setAsteroid] = useState(null);
   const [terrainInfo, setTerrainInfo] = useState(null);
   useEffect(() => {
-    if (props.mainPanelData && props.mainPanelData.tileImprovement) {
+    if (props.selectedTileData && props.selectedTileData.tileImprovement) {
       setTileImprovement((
         <Row>
           <Col>
             <p>Tile Improvement: </p>
           </Col>
           <Col>
-            <p>{props.mainPanelData.tileImprovement}</p>
+            <p>{props.selectedTileData.tileImprovement}</p>
           </Col>
         </Row>
       ));
@@ -38,7 +38,7 @@ const TileInfoPanel = (props) => {
       ));
     }
 
-    if (props.mainPanelData && props.mainPanelData.asteroid) {
+    if (props.selectedTileData && props.selectedTileData.asteroid) {
       setAsteroid((
         <Row>
           <p>This tile has been struck by a mysterious asteroid!</p>
@@ -50,9 +50,9 @@ const TileInfoPanel = (props) => {
     }
 
     const terrainName =
-      TERRAIN_STATIC_TEXT[props.mainPanelData.terrainType].name;
+      TERRAIN_STATIC_TEXT[props.selectedTileData.terrainType].name;
     const terrainDescription =
-      TERRAIN_STATIC_TEXT[props.mainPanelData.terrainType].description;
+      TERRAIN_STATIC_TEXT[props.selectedTileData.terrainType].description;
     setTerrainInfo((
       <React.Fragment>
         <Row>
@@ -67,7 +67,7 @@ const TileInfoPanel = (props) => {
         </Row>
       </React.Fragment>
     ));
-  }, [props.mainPanelData]);
+  }, [props.selectedTileData]);
 
   return (
     <React.Fragment>
@@ -80,14 +80,29 @@ const TileInfoPanel = (props) => {
   );
 };
 
+const getTileDataFromState = (state) => {
+  const selectedTilePosition = state.gameBoardView.selectedTilePosition;
+  const gameBoard = state.gameBoardView.gameBoard;
+  if (!selectedTilePosition || selectedTilePosition < 0) {
+    return null;
+  }
+  if (!gameBoard) {
+    return null;
+  }
+  if (selectedTilePosition >= gameBoard.length) {
+    return null;
+  }
+  return gameBoard[selectedTilePosition];
+};
+
 const mapStateToProps = (state) => {
   return {
-    mainPanelData: state.game.mainPanelData,
+    selectedTileData: getTileDataFromState(state),
   };
 };
 
 TileInfoPanel.propTypes = {
-  mainPanelData: PropTypes.any,
+  selectedTileData: PropTypes.any,
 };
 
 export default connect(mapStateToProps)(TileInfoPanel);

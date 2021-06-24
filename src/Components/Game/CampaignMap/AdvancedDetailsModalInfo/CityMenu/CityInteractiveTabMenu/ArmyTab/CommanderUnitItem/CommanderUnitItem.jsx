@@ -7,8 +7,8 @@ import PropTypes from 'prop-types';
 import Spinner from 'react-bootstrap/esm/Spinner';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../../../../Utilities/cityMenuSupplementalViews';
-import gameAC from
-  '../../../../../../../../Redux/actionCreators/gameActionCreators';
+import cityMenuAC from
+  '../../../../../../../../Redux/actionCreators/cityMenuActionCreators';
 import axios from 'axios';
 import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
 import PLAYER from '../../../../../../../Utilities/playerEnums';
@@ -132,20 +132,22 @@ const mapStateToProps = (state) => {
   return {
     gameId: state.game.gameId,
     allUnits: state.game.gameConstants.allUnits,
-    isOwnTurn: state.game.isOwnTurn,
-    selectedTilePosition: state.game.selectedTilePosition,
-    selectedTile: state.game.gameBoard[state.game.selectedTilePosition],
-    ownPlayerData: state.game.ownPlayerNumber === PLAYER.ONE ?
-      state.game.playerOne : state.game.playerTwo,
+    isOwnTurn: state.gamePlayer.ownPlayerNumber ===
+      state.gamePlayer.playerWhoseTurnItIs,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
+    selectedTile: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition],
+    ownPlayerData: state.gamePlayer.ownPlayerNumber === PLAYER.ONE ?
+      state.gamePlayer.playerOne : state.gamePlayer.playerTwo,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCityMenuSupplementalData: (cityMenuSupplementalData) => dispatch(
-        gameAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
+        cityMenuAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
     updateCityMenuSupplementalView: (cityMenuSupplementalView) => dispatch(
-        gameAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
+        cityMenuAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
   };
 };
 

@@ -76,9 +76,9 @@ const EnemyMainArmy = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    battleData: state.game.battleData,
+    battleData: state.battleView.battleData,
     allUnits: state.game.gameConstants.allUnits,
-    ownPlayerNumber: state.game.ownPlayerNumber,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
   };
 };
 

@@ -33,7 +33,7 @@ const MainInfoPanel = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    mainPanelView: state.game.mainPanelView,
+    mainPanelView: state.gameBoardView.mainPanelView,
   };
 };
 

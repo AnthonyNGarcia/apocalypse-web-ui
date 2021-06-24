@@ -30,7 +30,7 @@ const BrowseLobbies = (props) => {
           (topic) => topic !== WEBSOCKET_TOPICS.BROWSE_LOBBIES,
       );
       updatedWebsocketTopics.push(
-          WEBSOCKET_TOPICS.lobbyWithId(lobbyData.lobbyId));
+          WEBSOCKET_TOPICS.specificLobbyWithId(lobbyData.lobbyId));
       await props.saveWebsocketTopics(updatedWebsocketTopics);
     }
     if (isMounted.current) {

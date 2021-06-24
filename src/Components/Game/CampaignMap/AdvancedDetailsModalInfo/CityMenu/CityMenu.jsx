@@ -56,10 +56,11 @@ const CityMenu = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    ownPlayerNumber: state.game.ownPlayerNumber,
-    playerOne: state.game.playerOne,
-    playerTwo: state.game.playerTwo,
-    selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
+    playerOne: state.gamePlayer.playerOne,
+    playerTwo: state.gamePlayer.playerTwo,
+    selectedCity: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].city,
   };
 };
 

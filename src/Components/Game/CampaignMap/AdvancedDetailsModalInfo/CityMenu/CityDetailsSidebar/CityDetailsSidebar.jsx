@@ -7,7 +7,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import FACTIONS from '../../../../../Utilities/factions';
 import Spinner from 'react-bootstrap/esm/Spinner';
-import gameAC from '../../../../../../Redux/actionCreators/gameActionCreators';
+import cityMenuAC from
+  '../../../../../../Redux/actionCreators/cityMenuActionCreators';
 import './CityDetailsSidebar.css';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../../Utilities/cityMenuSupplementalViews';
@@ -169,16 +170,17 @@ const mapStateToProps = (state) => {
   return {
     allBuildings: state.game.gameConstants.allBuildings,
     allUnits: state.game.gameConstants.allUnits,
-    selectedCity: state.game.gameBoard[state.game.selectedTilePosition].city,
+    selectedCity: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].city,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCityMenuSupplementalData: (cityMenuSupplementalData) => dispatch(
-        gameAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
+        cityMenuAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
     updateCityMenuSupplementalView: (cityMenuSupplementalView) => dispatch(
-        gameAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
+        cityMenuAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
   };
 };
 

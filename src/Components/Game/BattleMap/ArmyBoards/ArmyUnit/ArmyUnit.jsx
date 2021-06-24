@@ -2,7 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
-import gameAC from '../../../../../Redux/actionCreators/gameActionCreators';
+import battleViewAC from
+  '../../../../../Redux/actionCreators/battleViewActionCreators';
 import apiEndpoints from '../../../../Utilities/apiEndpoints';
 import axios from 'axios';
 import UNIT_ACTION_TYPES from '../../../../Utilities/unitActionTypes';
@@ -232,11 +233,11 @@ const ArmyUnit = (props) => {
 const mapStateToProps = (state) => {
   return {
     allUnits: state.game.gameConstants.allUnits,
-    showEnemyArmyInBattle: state.game.showEnemyArmyInBattle,
-    selectedBattleUnitIndex: state.game.selectedBattleUnitIndex,
-    ownPlayerNumber: state.game.ownPlayerNumber,
-    battleData: state.game.battleData,
-    ownArmySubmitted: state.game.ownArmySubmitted,
+    showEnemyArmyInBattle: state.battleView.showEnemyArmyInBattle,
+    selectedBattleUnitIndex: state.battleView.selectedBattleUnitIndex,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
+    battleData: state.battleView.battleData,
+    ownArmySubmitted: state.battleView.ownArmySubmitted,
     gameId: state.game.gameId,
   };
 };
@@ -244,9 +245,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateSelectedBattleUnitIndex: (selectedBattleUnitIndex) => dispatch(
-        gameAC.setSelectedBattleUnitIndex(selectedBattleUnitIndex)),
+        battleViewAC.setSelectedBattleUnitIndex(selectedBattleUnitIndex)),
     updateBattleData: (battleData) => dispatch(
-        gameAC.setBattleData(battleData)),
+        battleViewAC.setBattleData(battleData)),
   };
 };
 

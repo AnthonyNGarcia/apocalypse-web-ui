@@ -140,7 +140,7 @@ const SelectedUnitDetails = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    unitType: state.game.cityMenuSupplementalData,
+    unitType: state.cityMenu.cityMenuSupplementalData,
     allUnits: state.game.gameConstants.allUnits,
     allActiveAbilities: state.game.gameConstants.allActiveAbilities,
   };
