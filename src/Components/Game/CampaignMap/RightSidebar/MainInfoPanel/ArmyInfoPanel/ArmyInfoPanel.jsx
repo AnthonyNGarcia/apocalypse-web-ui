@@ -40,7 +40,7 @@ const ArmyInfoPanel = (props) => {
     e.preventDefault();
     try {
       const armyActionRequest = {
-        gameId: props.game.gameId,
+        gameId: props.gameId,
         primaryArmyActionType: 'FORTIFY',
         primaryTilePosition: props.selectedTilePosition,
         secondaryTilePosition: -1,
