@@ -1,6 +1,7 @@
 import WEBSOCKET_TOPICS from './websocketTopics';
 import lobbyMessageHandler from './messageHandlers/lobbyMessageHandler.js';
 import gameMessageHandler from './messageHandlers/gameMessageHandler';
+import gameBoardMessageHandler from './messageHandlers/gameBoardMessageHandler';
 import {store} from '../../../App';
 
 /**
@@ -32,8 +33,7 @@ const websocketMessageReceiver = (message, topic) => {
       gameMessageHandler(message);
       break;
     case gameBoard:
-      console.log('Received game board message!');
-      console.log(message);
+      gameBoardMessageHandler(message);
       break;
     case city:
       console.log('Received city message!');

@@ -17,7 +17,8 @@ import MAIN_VIEWS from '../../mainViews';
  * This is the Lobby Message Handler.
  * It handles all logic for updating lobby state from websocket messages.
  *
- * @param {Object} message websocket message body
+ * @param {Object} message containing the actual message as well as the
+ * WEBSOCKET_RESPONSE_MESSAGE_TYPE value, at websocketResponseMessageType.
  */
 const messageHandler = (message) => {
   const messageType = message.websocketResponseMessageType;

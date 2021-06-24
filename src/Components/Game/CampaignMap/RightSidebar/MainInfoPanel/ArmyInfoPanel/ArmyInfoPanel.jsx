@@ -9,7 +9,11 @@ import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import apiEndpoints from '../../../../../Utilities/apiEndpoints';
+import gameBoardViewAC from
+  '../../../../../../Redux/actionCreators/gameBoardViewActionCreators';
 import './ArmyInfoPanel.css';
+import tileHighlightManager from
+  '../../../../../Utilities/tileHighlightManager';
 
 /**
  *
@@ -38,6 +42,8 @@ const ArmyInfoPanel = (props) => {
 
   const fortifyArmyHandler = (e) => {
     e.preventDefault();
+    props.updateIsMovingArmy(false);
+    tileHighlightManager.unhighlightAllTiles();
     try {
       const armyActionRequest = {
         gameId: props.gameId,
@@ -140,6 +146,13 @@ const mapStateToProps = (state) => {
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateIsMovingArmy: (isMovingArmy) => dispatch(
+        gameBoardViewAC.setIsMovingArmy(isMovingArmy)),
+  };
+};
+
 ArmyInfoPanel.propTypes = {
   mainPanelData: PropTypes.any,
   allUnitsConstants: PropTypes.any,
@@ -149,6 +162,7 @@ ArmyInfoPanel.propTypes = {
   selectedArmy: PropTypes.any,
   gameId: PropTypes.string,
   selectedTilePosition: PropTypes.number,
+  updateIsMovingArmy: PropTypes.func,
 };
 
-export default connect(mapStateToProps)(ArmyInfoPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(ArmyInfoPanel);
