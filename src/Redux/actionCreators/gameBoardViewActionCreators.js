@@ -25,12 +25,6 @@ const actionCreators = {
       isMovingArmy: isMovingArmy,
     };
   },
-  setViewingArmyInCity: (viewingArmyInCity) => {
-    return {
-      type: gameBoardViewAT.SET_VIEWING_ARMY_IN_CITY,
-      viewingArmyInCity: viewingArmyInCity,
-    };
-  },
   setSelectedTilePosition: (selectedTilePosition) => {
     return {
       type: gameBoardViewAT.SET_SELECTED_TILE_POSITION,

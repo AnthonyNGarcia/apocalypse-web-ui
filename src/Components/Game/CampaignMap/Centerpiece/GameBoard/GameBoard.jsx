@@ -36,49 +36,32 @@ const GameBoard = (props) => {
     const tileClicked = async (e, item) => {
       e.preventDefault();
 
-      const updateToCityView = () => {
-        props.updateIsMovingArmy(false);
-        props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
-      };
-
-      const updateToArmyView = () => {
+      // tileClicked Helper Methods:
+      const selectArmy = () => {
         props.updateMainPanelView(MAIN_PANEL_VIEWS.ARMY_INFO);
-        if (!props.isMovingArmy &&
-            item.army.owner === props.ownPlayerNumber &&
-            props.isOwnTurn && item.army.remainingActions > 0) {
+        if (item.army.owner === props.ownPlayerNumber &&
+              item.army.remainingActions > 0 && props.isOwnTurn) {
+          // It is our own army and we can move it.
+          tileHighlightManager.highlightAvailableMoveTiles(item.tilePosition);
           props.updateIsMovingArmy(true);
-          tileHighlightManager.
-              highlightAvailableMoveTiles(item.tilePosition);
         } else {
-          props.updateIsMovingArmy(false);
+          // It is an enemy army, but we can get some info on it.
+          props.updateMainPanelView(MAIN_PANEL_VIEWS.ARMY_INFO);
         }
       };
 
-      if (item.city && !item.army && !props.isMovingArmy) {
-        updateToCityView();
-      } else if (item.army && item.army.owner === props.ownPlayerNumber) {
-        tileHighlightManager.unhighlightAllTiles();
-        if (item.tilePosition !== props.selectedTilePosition) {
-          updateToArmyView();
-          props.updateViewingArmyInCity(true);
+      // Begin tileClicked logic below:
+      tileHighlightManager.unhighlightAllTiles();
+      // The biggest differential of logic is whether we are moving.
+      if (props.isMovingArmy) {
+        props.updateIsMovingArmy(false);
+        // The only two options are selecting a non-self and self tile.
+        if (item.tilePosition === props.selectedTilePosition && item.city) {
+          // We selected self, and there's a city, so swap to that.
+          props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
         } else {
-          if (item.city) {
-            if (props.viewingArmyInCity) {
-              updateToCityView();
-              props.updateViewingArmyInCity(false);
-            } else {
-              updateToArmyView();
-              props.updateViewingArmyInCity(true);
-            }
-          } else {
-            updateToArmyView();
-            props.updateViewingArmyInCity(true);
-          }
-        }
-      } else {
-        if (props.isMovingArmy &&
-          (item.tileHighlightType === TILE_HIGHLIGHT_TYPES.CAN_MOVE_HERE)) {
-          tileHighlightManager.unhighlightAllTiles();
+          // We did not select self, meaning we can try a move command.
+          // We will simply request it and let the server decide the outcome.
           const request = {
             gameId: props.gameId,
             primaryArmyActionType: ARMY_ACTION_REQUEST_TYPE.MOVE,
@@ -86,13 +69,30 @@ const GameBoard = (props) => {
                 .tilePosition,
             secondaryTilePosition: item.tilePosition,
           };
-          console.log(request);
           axios.post(apiEndpoints.armyController + '/action', request);
-        } else {
-          tileHighlightManager.unhighlightAllTiles();
-          props.updateMainPanelView(MAIN_PANEL_VIEWS.TILE_INFO);
         }
-        props.updateIsMovingArmy(false);
+      } else {
+        // We are not moving an army, so select something.
+        if (item.army && !item.city) {
+          // We straight-forward select an army with no city.
+          selectArmy();
+        } else if (!item.army && item.city) {
+          // We may select the city if there is no army.
+          props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
+        } else if (item.army && item.city) {
+          // For a tile having both an army and a city, we alternate.
+          switch (props.mainPanelView) {
+            case MAIN_PANEL_VIEWS.NONE:
+              selectArmy();
+              break;
+            case MAIN_PANEL_VIEWS.CITY_INFO:
+              selectArmy();
+              break;
+            case MAIN_PANEL_VIEWS.ARMY_INFO:
+              props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
+              break;
+          }
+        }
       }
       props.updateSelectedTilePosition(item.tilePosition);
     };
@@ -218,9 +218,9 @@ const mapStateToProps = (state) => {
     ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
     isOwnTurn: state.gamePlayer.ownPlayerNumber ===
       state.gamePlayer.playerWhoseTurnItIs,
-    viewingArmyInCity: state.gameBoardView.viewingArmyInCity,
     playerOne: state.gamePlayer.playerOne,
     playerTwo: state.gamePlayer.playerTwo,
+    mainPanelView: state.gameBoardView.mainPanelView,
   };
 };
 
@@ -238,8 +238,6 @@ const mapDispatchToProps = (dispatch) => {
         gameBoardViewAC.setGameBoard(gameBoard)),
     updatePlayerWhoseTurnItIs: (playerWhoseTurnItIs) => dispatch(
         gamePlayerAC.setPlayerWhoseTurnItIs(playerWhoseTurnItIs)),
-    updateViewingArmyInCity: (viewingArmyInCity) => dispatch(
-        gameBoardViewAC.setViewingArmyInCity(viewingArmyInCity)),
     unshowCityModal: () => dispatch(
         cityMenuAC.setShowCityModalInfo(false)),
     updateCityMenuSupplementalView: (view) => dispatch(
@@ -266,7 +264,6 @@ GameBoard.propTypes = {
   updatePlayerWhoseTurnItIs: PropTypes.func,
   ownPlayerNumber: PropTypes.string,
   isOwnTurn: PropTypes.bool,
-  viewingArmyInCity: PropTypes.bool,
   updateViewingArmyInCity: PropTypes.func,
   unshowCityModal: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
@@ -275,6 +272,7 @@ GameBoard.propTypes = {
   updatePlayerTwo: PropTypes.func,
   playerOne: PropTypes.any,
   playerTwo: PropTypes.any,
+  mainPanelView: PropTypes.any,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);

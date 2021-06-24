@@ -46,7 +46,7 @@
 
 .highlight-tile {
   animation-name: slow-blink;
-  animation-duration: 1.1s;
+  animation-duration: 1.5s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
@@ -63,6 +63,13 @@
 
 @keyframes slow-blink {
   0% {
+    opacity: 100%;
+  }
+  25% {
+    opacity: 50%
+  }
+  50% {
     filter: brightness(1.2) saturate(1.5);
+    opacity: 100%;
   }
 }
