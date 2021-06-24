@@ -17,7 +17,6 @@ import './ArmyUnit.css';
  * @return {JSX} to render
  */
 const ArmyUnit = (props) => {
-  const [fullUnitInfo, setFullUnitInfo] = useState(null);
   const [ownArmy, setOwnArmy] = useState(null);
   const [unitImageClasses, setUnitImageClasses] = useState('');
   const [currentlySelectedOwnUnit, setCurrentlySelectedOwnUnit] =
@@ -25,8 +24,6 @@ const ArmyUnit = (props) => {
 
   useEffect( () => {
     if (props.unit && props.unit.unitType) {
-      const freshFullUnitInfo = props.allUnits[props.unit.unitType];
-      setFullUnitInfo(freshFullUnitInfo);
       let calculatedUnitClasses = 'army-unit-image';
       if (props.ownUnit) {
         calculatedUnitClasses += ' own-unit-image';
@@ -161,7 +158,7 @@ const ArmyUnit = (props) => {
     );
   }
 
-  if (props.unit && fullUnitInfo) {
+  if (props.unit) {
     return (
       <React.Fragment>
         {/* First row is the unit image */}
@@ -181,8 +178,8 @@ const ArmyUnit = (props) => {
         <Row style={{height: '2vh'}} noGutters>
           <p className='unit-label'>
             {
-              props.unit.currentHealth}/{fullUnitInfo
-                .baseMaxHealth} <span><img
+              props.unit.currentHealth}/{props.unit
+                .maxHealth} <span><img
               src={'health.svg'}
               alt=""
               className={'tiny-hammer-icon'}

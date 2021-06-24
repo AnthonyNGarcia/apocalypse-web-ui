@@ -19,6 +19,9 @@ import GAME_VIEWS from '../../gameViews';
 const messageHandler = (message) => {
   const messageType = message.websocketResponseMessageType;
   switch (messageType) {
+    case WEBSOCKET_MESSAGE_TYPES.BATTLE_INITIATED:
+      battleInitiated(message);
+      break;
     case WEBSOCKET_MESSAGE_TYPES.BATTLE_STARTED:
       battleStarted(message);
       break;
@@ -35,12 +38,19 @@ const messageHandler = (message) => {
   }
 };
 
-const battleStarted = async (message) => {
+const battleInitiated = async (message) => {
   await store.dispatch(battleViewAC.setBattleData(message.battleData));
   await store.dispatch(battleViewAC.setOwnArmySubmitted(false));
   await store.dispatch(battleViewAC.setSelectedBattleUnitIndex(-1));
   await store.dispatch(battleViewAC.setShowEnemyArmyInBattle(false));
   await store.dispatch(gameAC.setGameView(GAME_VIEWS.BATTLE_MAP_VIEW));
+};
+
+const battleStarted = async (message) => {
+  await store.dispatch(battleViewAC.setOwnArmySubmitted(true));
+  await store.dispatch(battleViewAC.setSelectedBattleUnitIndex(-1));
+  await store.dispatch(battleViewAC.setBattleData(message.battleData));
+  await store.dispatch(battleViewAC.setShowEnemyArmyInBattle(true));
 };
 
 const battleDataUpdated = (message) => {

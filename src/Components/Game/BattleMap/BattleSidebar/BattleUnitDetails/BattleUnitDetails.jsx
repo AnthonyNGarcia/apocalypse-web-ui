@@ -98,13 +98,13 @@ const BattleUnitDetails = (props) => {
           {/* Unit Name and Tier */}
           <Row noGutters style={{display: 'block'}}>
             <h2>{fullUnitInfo.displayName}</h2>
-            <h4>{UNIT_CLASSES[fullUnitInfo.unitClass].displayName}</h4>
+            <h4>{UNIT_CLASSES[selectedUnit.unitClass].displayName}</h4>
           </Row>
           {/* Unit Image */}
           <Row noGutters style={{width: '100%', height: '20vh',
             display: 'block'}}>
             <img
-              src={fullUnitInfo.unitType + '.svg'}
+              src={selectedUnit.unitType + '.svg'}
               onError={(e)=>e.target.src='shield.png'}
               alt=""
               className='unit-details-image'/>
@@ -119,7 +119,7 @@ const BattleUnitDetails = (props) => {
                   className={'tiny-hammer-icon'}
                 />
                 {' ' + selectedUnit.currentHealth + '/' +
-                fullUnitInfo.baseMaxHealth}
+                selectedUnit.maxHealth}
               </span>
             </Col>
             <Col>
@@ -129,7 +129,7 @@ const BattleUnitDetails = (props) => {
                   alt=""
                   className={'tiny-hammer-icon'}
                 />
-                {' ' + fullUnitInfo.baseArmor}
+                {' ' + selectedUnit.armor}
               </span>
             </Col>
             <Col>
@@ -139,19 +139,19 @@ const BattleUnitDetails = (props) => {
                   alt=""
                   className={'tiny-hammer-icon'}
                 />
-                {' ' + (fullUnitInfo.baseDamage)}
+                {' ' + (selectedUnit.damage)}
               </span>
             </Col>
           </Row>
           {/* Passive Abilities*/}
           <Row noGutters style={{'width': '90%', 'maxWidth': '90%'}}>
             <h6>Passive Abilities:
-              {fullUnitInfo.basePassiveAbilities &&
-                    fullUnitInfo.basePassiveAbilities.length > 0 ?
-                    fullUnitInfo.basePassiveAbilities.map((passive, index) => (
+              {selectedUnit.passiveAbilities &&
+                    selectedUnit.passiveAbilities.length > 0 ?
+                    selectedUnit.passiveAbilities.map((passive, index) => (
                       <span key={passive.passiveAbilityType + index}>
                         {index === 0 ? ' ' :
-                        index < fullUnitInfo.basePassiveAbilities.length ?
+                        index < selectedUnit.passiveAbilities.length ?
                           ', ' : null}
                         <PassiveAbilityItem
                           passiveAbility={passive}/>
@@ -162,16 +162,16 @@ const BattleUnitDetails = (props) => {
           {/* Active Ability */}
           <Row noGutters style={{'width': '90%', 'maxWidth': '90%'}}>
             <h6>Active Ability: {props.allActiveAbilities[
-                fullUnitInfo.baseActiveAbility.activeAbilityType]
+                selectedUnit.activeAbility.activeAbilityType]
                 .displayName} - {
-              fullUnitInfo.baseActiveAbilityCharges} charge(s)</h6>
+              selectedUnit.currentActiveAbilityCharges} charge(s)</h6>
             <p>{props.allActiveAbilities[
-                fullUnitInfo.baseActiveAbility.activeAbilityType]
+                selectedUnit.activeAbility.activeAbilityType]
                 .descriptionFragments.map((fragment, index) => (
                   <span key={fragment + index}>
                     {fragment +
-                      (fullUnitInfo.baseActiveAbility.abilityValues[index] ?
-                        fullUnitInfo.baseActiveAbility.abilityValues[index] :
+                      (selectedUnit.activeAbility.abilityValues[index] ?
+                        selectedUnit.activeAbility.abilityValues[index] :
                         '')}
                   </span>
                 ))}</p>
@@ -189,10 +189,10 @@ const BattleUnitDetails = (props) => {
               <Button disabled={!props.isOwnTurn ||
               !selectedUnit.eligibleForCommand ||
               !props.showEnemyArmyInBattle ||
-              fullUnitInfo.currentActiveAbilityCharges <= 0}
+              selectedUnit.currentActiveAbilityCharges <= 0}
               onClick={activeAbilityHandler}>
                 {props.allActiveAbilities[
-                    fullUnitInfo.baseActiveAbility.activeAbilityType]
+                    selectedUnit.activeAbility.activeAbilityType]
                     .displayName}
               </Button>
             </Col>

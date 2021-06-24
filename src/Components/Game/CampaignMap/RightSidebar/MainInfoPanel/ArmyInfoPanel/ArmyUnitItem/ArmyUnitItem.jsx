@@ -50,15 +50,15 @@ const ArmyUnitItem = (props) => {
         <Row>
           <Col md={1}>
             <img
-              src={fullUnitInfo.unitType + '_ICON.svg'}
+              src={props.unit.unitType + '_ICON.svg'}
               onError={(e)=>e.target.src='shield.png'}
               alt=""
               className='unit-icon'/>
           </Col>
           <Col md={8}>
             {fullUnitInfo.displayName} ({
-              props.unit.currentHealth}/{fullUnitInfo
-                .baseMaxHealth} <span><img
+              props.unit.currentHealth}/{props.unit
+                .maxHealth} <span><img
               src={'health.svg'}
               alt=""
               className={'tiny-hammer-icon'}

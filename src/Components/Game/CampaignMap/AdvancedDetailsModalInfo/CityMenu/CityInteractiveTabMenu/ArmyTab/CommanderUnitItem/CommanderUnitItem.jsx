@@ -90,7 +90,7 @@ const CommanderUnitItem = (props) => {
           </Col>
           <Col md={2}>
             <img
-              src={fullUnitInfo.unitType + '_ICON.svg'}
+              src={props.unit.unitType + '_ICON.svg'}
               onError={(e)=>e.target.src='shield.png'}
               alt=""
               className='unit-icon'/>
@@ -98,8 +98,8 @@ const CommanderUnitItem = (props) => {
           <Col md={6}>
             <p>
               {fullUnitInfo.displayName} ({
-                props.unit.currentHealth}/{fullUnitInfo
-                  .baseMaxHealth} <span><img
+                props.unit.currentHealth}/{props.unit
+                  .maxHealth} <span><img
                 src={'health.svg'}
                 alt=""
                 className={'tiny-hammer-icon'}

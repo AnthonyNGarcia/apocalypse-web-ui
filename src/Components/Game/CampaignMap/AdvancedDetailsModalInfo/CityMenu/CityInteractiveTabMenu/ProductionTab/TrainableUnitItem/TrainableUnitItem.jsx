@@ -76,7 +76,7 @@ const TrainableUnitItem = (props) => {
         <Row onClick={(e) => viewUnitHandler(e)} className='vertically-center'>
           <Col md={2}>
             <img
-              src={fullUnitInfo.unitType + '_ICON.svg'}
+              src={props.unitType + '_ICON.svg'}
               onError={(e)=>e.target.src='shield.png'}
               alt=""
               className='unit-icon'/>
