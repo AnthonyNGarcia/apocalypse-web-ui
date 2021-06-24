@@ -45,7 +45,7 @@ const TrainableUnitItem = (props) => {
       setFullUnitInfo(freshFullUnitInfo);
       updateCanAddUnitToQueue(freshFullUnitInfo);
     }
-  }, [props]);
+  }, [props, props.selectedCity]);
 
   const viewUnitHandler = (e) => {
     e.preventDefault();
@@ -123,8 +123,8 @@ const mapStateToProps = (state) => {
     allUnits: state.game.gameConstants.allUnits,
     isOwnTurn: state.gamePlayer.ownPlayerNumber ===
       state.gamePlayer.playerWhoseTurnItIs,
-    selectedCity: state.gameBoardView.gameBoard[
-        state.gameBoardView.selectedTilePosition].city,
+    selectedCity: {...state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].city},
     selectedTilePosition: state.gameBoardView.selectedTilePosition,
     ownPlayerData: state.gamePlayer.ownPlayerNumber === PLAYER.ONE ?
       state.gamePlayer.playerOne : state.gamePlayer.playerTwo,

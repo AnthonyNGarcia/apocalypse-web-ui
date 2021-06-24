@@ -24,8 +24,9 @@ const QueuedUnitItem = (props) => {
   const [fullUnitInfo, setFullUnitInfo] = useState(null);
 
   useEffect( () => {
-    if (props.queuedUnit && props.queuedUnit.unitType) {
-      const freshFullUnitInfo = props.allUnits[props.queuedUnit.unitType];
+    if (props.queuedUnit && props.queuedUnit.actualUnitTypeToBeProduced) {
+      const freshFullUnitInfo = props.allUnits[
+          props.queuedUnit.actualUnitTypeToBeProduced];
       setFullUnitInfo(freshFullUnitInfo);
     }
   }, [props]);
@@ -33,7 +34,8 @@ const QueuedUnitItem = (props) => {
   const viewUnitHandler = (e) => {
     e.preventDefault();
     props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.UNIT);
-    props.updateCityMenuSupplementalData(props.queuedUnit.unitType);
+    props.updateCityMenuSupplementalData(
+        props.queuedUnit.actualUnitTypeToBeProduced);
   };
 
   const removeUnitHandler = async (e) => {
@@ -54,7 +56,7 @@ const QueuedUnitItem = (props) => {
     }
   };
 
-  if (props.queuedUnit.unitType && fullUnitInfo) {
+  if (props.queuedUnit.actualUnitTypeToBeProduced && fullUnitInfo) {
     return (
       <div className='unit-option-container'>
         <Row onClick={(e) => viewUnitHandler(e)} className='vertically-center'>
@@ -68,7 +70,7 @@ const QueuedUnitItem = (props) => {
           <Col md={7}>
             <p>
               {fullUnitInfo.displayName} ({
-                props.queuedUnit.unitProducerType === 'PAID_TRAINING' ?
+                !props.queuedUnit.free ?
                  <span>{fullUnitInfo.productionCost}<img
                    src={'hammer.png'}
                    alt=""

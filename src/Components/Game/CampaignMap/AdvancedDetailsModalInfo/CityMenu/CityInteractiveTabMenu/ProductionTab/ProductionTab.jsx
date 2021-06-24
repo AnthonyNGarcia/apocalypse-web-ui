@@ -25,7 +25,13 @@ const ProductionTab = (props) => {
       props.selectedCity.currentRecruitmentQueue.length;
     setUnitPopLabel('' + currentPopCount + '/' +
       props.ownPlayerData.currentBaseArmySize);
-  }, [props]);
+  }, [props, props.selectedCity.currentRecruitmentQueue]);
+
+  const returnReversed = (array) => {
+    const reversedArray = [...array];
+    reversedArray.reverse();
+    return reversedArray;
+  };
 
   return (
     <React.Fragment>
@@ -40,7 +46,7 @@ const ProductionTab = (props) => {
           <Scrollbars style={{height: '30vh'}}>
             {props.selectedCity.constructibleBuildings &&
               props.selectedCity.constructibleBuildings.length > 0 ?
-              props.selectedCity.constructibleBuildings.reverse()
+              returnReversed(props.selectedCity.constructibleBuildings)
                   .map((bldg, index) => (
                     <React.Fragment key={index}>
                       <AvailableBuildingItem
@@ -125,8 +131,8 @@ const ProductionTab = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    selectedCity: state.gameBoardView.gameBoard[
-        state.gameBoardView.selectedTilePosition].city,
+    selectedCity: {...state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].city},
     ownPlayerData: state.gamePlayer.ownPlayerNumber === PLAYER.ONE ?
       state.gamePlayer.playerOne : state.gamePlayer.playerTwo,
   };

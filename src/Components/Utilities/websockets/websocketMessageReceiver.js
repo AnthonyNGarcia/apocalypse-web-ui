@@ -1,7 +1,11 @@
 import WEBSOCKET_TOPICS from './websocketTopics';
 import lobbyMessageHandler from './messageHandlers/lobbyMessageHandler.js';
 import gameMessageHandler from './messageHandlers/gameMessageHandler';
-import gameBoardMessageHandler from './messageHandlers/gameBoardMessageHandler';
+import gameBoardViewMessageHandler from
+  './messageHandlers/gameBoardViewMessageHandler';
+import cityMenuMessageHandler from './messageHandlers/cityMenuMessageHandler';
+import battleViewMessagHandler from
+  './messageHandlers/battleViewMessageHandler';
 import {store} from '../../../App';
 
 /**
@@ -33,15 +37,13 @@ const websocketMessageReceiver = (message, topic) => {
       gameMessageHandler(message);
       break;
     case gameBoard:
-      gameBoardMessageHandler(message);
+      gameBoardViewMessageHandler(message);
       break;
     case city:
-      console.log('Received city message!');
-      console.log(message);
+      cityMenuMessageHandler(message);
       break;
     case battle:
-      console.log('Received battle message!');
-      console.log(message);
+      battleViewMessagHandler(message);
       break;
     default:
       console.warn('Unidentified websocket topic for incoming message: ' +

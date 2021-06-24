@@ -15,6 +15,7 @@ import MAIN_VIEWS from '../../mainViews';
 
 /**
  * This is the Lobby Message Handler.
+ *
  * It handles all logic for updating lobby state from websocket messages.
  *
  * @param {Object} message containing the actual message as well as the

@@ -16,6 +16,7 @@ import MAIN_PANEL_VIEWS from '../../gameMainPanelViews';
 
 /**
  * This is the Game Message Handler.
+ *
  * It handles all logic for updating overall game state from websocket messages.
  *
  * @param {Object} message containing the actual message as well as the

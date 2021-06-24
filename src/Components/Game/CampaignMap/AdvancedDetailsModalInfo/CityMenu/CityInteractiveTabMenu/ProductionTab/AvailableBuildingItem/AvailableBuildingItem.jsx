@@ -9,6 +9,8 @@ import cityMenuAC from
 import Spinner from 'react-bootstrap/esm/Spinner';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../../../../Utilities/cityMenuSupplementalViews';
+import axios from 'axios';
+import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
 import './AvailableBuildingItem.css';
 
 /**
@@ -32,11 +34,19 @@ const AvailableBuildingItem = (props) => {
 
   const constructBuildingHandler = async (e) => {
     e.preventDefault();
-    if (!isBuildingThis) {
-      // Outsource the logic to change the current construction project
-      // We basically have to change the main panel data....
-      await props.updateCurrentCityConstructionProject(props.bldg.buildingType);
-      forceUpdate();
+
+    try {
+      const updateCurrentConstructionRequest = {
+        gameId: props.gameId,
+        cityTilePosition: props.selectedTilePosition,
+        desiredConstructionProject: props.bldg.buildingType,
+      };
+      axios.put(apiEndpoints.cityController + '/current-construction-project',
+          updateCurrentConstructionRequest);
+    } catch (e) {
+      console.warn('There was an error trying to update the current ' +
+      'construction project!');
+      console.warn(e);
     }
   };
 
@@ -70,13 +80,14 @@ const AvailableBuildingItem = (props) => {
       } else {
         setIsBuildingThis(false);
       }
+
       forceUpdate();
     } else {
       console.log('no selected city...');
     }
   }, [props.selectedCity.totalBuildingProduction,
-    props.selectedCity.currentConstructionProject, isBuildingThis,
-    props.bldg.buildingType]);
+    props.selectedCity.currentConstructionProject,
+    props.bldg.buildingType, isBuildingThis]);
   if (props.selectedCity) {
     return (
       <div className='building-option-container'>
@@ -121,6 +132,8 @@ const AvailableBuildingItem = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    gameId: state.game.gameId,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
     allBuildings: state.game.gameConstants.allBuildings,
     isOwnTurn: state.gamePlayer.ownPlayerNumber ===
       state.gamePlayer.playerWhoseTurnItIs,
@@ -131,8 +144,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateCurrentCityConstructionProject: (newConstructionProject) => dispatch(
-        cityMenuAC.setCurrentCityConstructionProject(newConstructionProject)),
     updateCityMenuSupplementalData: (cityMenuSupplementalData) => dispatch(
         cityMenuAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
     updateCityMenuSupplementalView: (cityMenuSupplementalView) => dispatch(
@@ -142,8 +153,9 @@ const mapDispatchToProps = (dispatch) => {
 
 AvailableBuildingItem.propTypes = {
   allBuildings: PropTypes.any,
+  gameId: PropTypes.string,
+  selectedTilePosition: PropTypes.number,
   bldg: PropTypes.any,
-  updateCurrentCityConstructionProject: PropTypes.func,
   isOwnTurn: PropTypes.bool,
   selectedCity: PropTypes.any,
   updateCityMenuSupplementalData: PropTypes.func,

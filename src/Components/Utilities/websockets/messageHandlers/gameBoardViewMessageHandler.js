@@ -5,6 +5,7 @@ import gameBoardViewAC from
 
 /**
  * This is the Game Board Message Handler.
+ *
  * It handles all logic for updating the game board from websocket messages.
  *
  * @param {Object} message containing the actual message as well as the
@@ -18,6 +19,9 @@ const messageHandler = (message) => {
       break;
     case WEBSOCKET_MESSAGE_TYPES.ARMY_STANCE_CHANGED:
       armyStanceChanged(message);
+      break;
+    case WEBSOCKET_MESSAGE_TYPES.ARMY_UNITS_UPDATED:
+      armyUnitsChanged(message);
       break;
     default:
       console.warn('Unrecognized message type for Game Board topic!');
@@ -38,6 +42,14 @@ const armyStanceChanged = (message) => {
   const state = store.getState();
   const updatedGameBoard = [...state.gameBoardView.gameBoard];
   updatedGameBoard[message.tilePosition].army = message.army;
+  store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
+};
+
+const armyUnitsChanged = (message) => {
+  const state = store.getState();
+  const updatedGameBoard = [...state.gameBoardView.gameBoard];
+  updatedGameBoard[message.armyTilePosition].army.units =
+    message.updatedArmyUnits;
   store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
 };
 

@@ -24,7 +24,7 @@ const ArmyTab = (props) => {
       props.selectedCity.currentRecruitmentQueue.length;
     setUnitPopLabel('' + currentPopCount + '/' +
       props.ownPlayerData.currentBaseArmySize);
-  }, [props]);
+  }, [props, props.selectedCity]);
   return (
     <React.Fragment>
       {/* First col is for unassigned*/}
@@ -114,8 +114,8 @@ const ArmyTab = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    selectedCity: state.gameBoardView.gameBoard[
-        state.gameBoardView.selectedTilePosition].city,
+    selectedCity: {...state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].city},
     selectedTile: state.gameBoardView.gameBoard[
         state.gameBoardView.selectedTilePosition],
     ownPlayerData: state.gamePlayer.ownPlayerNumber === PLAYER.ONE ?
