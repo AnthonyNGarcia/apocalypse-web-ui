@@ -40,7 +40,7 @@ const DynamicContainerComponent = (props) => {
   const notifyServerOfOwnDisconnect = async () => {
     if (props.gameId) {
       const leaveGameRequest = {
-        gameId: gameId,
+        gameId: props.gameId,
         inGamePlayer: {
           userId: props.ownUserId,
         },
@@ -49,7 +49,7 @@ const DynamicContainerComponent = (props) => {
     }
     if (props.lobbyId) {
       const leaveLobbyRequest = {
-        lobbyId: lobbyId,
+        lobbyId: props.lobbyId,
         inLobbyPlayer: {
           userId: props.ownUserId,
         },

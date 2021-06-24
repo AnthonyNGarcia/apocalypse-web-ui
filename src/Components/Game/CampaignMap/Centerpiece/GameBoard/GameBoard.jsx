@@ -86,6 +86,7 @@ const GameBoard = (props) => {
                 .tilePosition,
             secondaryTilePosition: item.tilePosition,
           };
+          console.log(request);
           axios.post(apiEndpoints.armyController + '/action', request);
         } else {
           tileHighlightManager.unhighlightAllTiles();

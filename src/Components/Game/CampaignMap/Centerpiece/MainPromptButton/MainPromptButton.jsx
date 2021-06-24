@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import apiEndpoints from '../../../../Utilities/apiEndpoints';
-import PLAYER from '../../../../Utilities/playerEnums';
 import './MainPromptButton.css';
 
 /**
@@ -18,18 +17,12 @@ const MainPromptButton = (props) => {
   const endTurnHandler = async (e) => {
     e.preventDefault();
     try {
-      const tilesOfOwnCities = props.gameBoard.filter( (tile) => tile.city &&
-          tile.city.owner === props.ownPlayerNumber);
       const endTurnRequest = {
         gameId: props.gameId,
         playerEndingTurn: props.ownPlayerNumber,
-        playerWhoseTurnItIs: props.ownPlayerNumber === PLAYER.ONE ?
-        PLAYER.TWO : PLAYER.ONE,
-        cityTilesOfPlayerEndingTurn: tilesOfOwnCities,
       };
-      await axios.post(
-          apiEndpoints.gameController +
-          '/end-turn', endTurnRequest);
+      await axios.post(apiEndpoints.gameController + '/end-turn',
+          endTurnRequest);
     } catch (e) {
       console.warn('Oops! There was an error trying to end your turn!');
       console.warn(e);
@@ -51,7 +44,6 @@ const mapStateToProps = (state) => {
       state.gamePlayer.playerWhoseTurnItIs,
     gameId: state.game.gameId,
     ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
-    gameBoard: state.gameBoardView.gameBoard,
   };
 };
 
@@ -59,7 +51,6 @@ MainPromptButton.propTypes = {
   isOwnTurn: PropTypes.bool,
   gameId: PropTypes.string,
   ownPlayerNumber: PropTypes.string,
-  gameBoard: PropTypes.any,
 };
 
 export default connect(mapStateToProps)(MainPromptButton);

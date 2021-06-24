@@ -27,7 +27,6 @@ const messageHandler = (message) => {
       break;
     case WEBSOCKET_MESSAGE_TYPES.LOBBY_PLAYER_CHANGED:
       const changingPlayerNumber = message.inLobbyPlayer.playerNumber;
-      console.log(changingPlayerNumber);
       if (changingPlayerNumber === PLAYER.ONE) {
         store.dispatch(lobbyAC.setLobbyPlayerOne(message.inLobbyPlayer));
       } else {
@@ -81,7 +80,6 @@ const leavingLobbyCleanup = (leavingPlayerNumber) => {
 };
 
 const startGameCleanup = async (message) => {
-  console.log(message);
   const gameData = message.initialGameData;
   const state = store.getState();
   const playerOneId = gameData.playerOne.userId;
@@ -98,6 +96,12 @@ const startGameCleanup = async (message) => {
   const updatedWebsocketTopics = oldWebsocketTopics.filter((topic) =>
     topic !== topicForThisLobby);
   updatedWebsocketTopics.push(WEBSOCKET_TOPICS.specificGameWithId(
+      gameData.gameId));
+  updatedWebsocketTopics.push(WEBSOCKET_TOPICS.gameBoardWithGameId(
+      gameData.gameId));
+  updatedWebsocketTopics.push(WEBSOCKET_TOPICS.cityWithGameId(
+      gameData.gameId));
+  updatedWebsocketTopics.push(WEBSOCKET_TOPICS.battleWithGameId(
       gameData.gameId));
 
   await store.dispatch(generalAC.setWebsocketTopics(updatedWebsocketTopics));

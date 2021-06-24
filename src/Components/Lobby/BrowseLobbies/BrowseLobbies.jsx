@@ -10,8 +10,8 @@ import PropTypes from 'prop-types';
 import LOBBY_VIEWS from '../../Utilities/lobbyViews';
 import lobbyAC from '../../../Redux/actionCreators/lobbyActionCreators';
 import generalAC from '../../../Redux/actionCreators/generalActionCreators';
-import './BrowseLobbies.css';
 import WEBSOCKET_TOPICS from '../../Utilities/websockets/websocketTopics';
+import './BrowseLobbies.css';
 
 /**
  *
@@ -125,11 +125,11 @@ const BrowseLobbies = (props) => {
             <Row key={lobby.lobbyId}>
               <Col>
                 <p>{lobby.lobbyPlayerOne.username + '\'s Lobby' +
-                (lobby.playerTwoUsername ? ' (2/2)' : ' (1/2)')}</p>
+                (lobby.lobbyPlayerTwo ? ' (2/2)' : ' (1/2)')}</p>
               </Col>
               <Col>
                 <Button variant="primary"
-                  disabled={lobby.playerTwoUsername && lobby.playerTwoUsername}
+                  disabled={lobby.lobbyPlayerOne && lobby.lobbyPlayerTwo}
                   onClick={(e) => joinLobbyHandler(e, lobby.lobbyId)}>
                   Join</Button>
               </Col>
