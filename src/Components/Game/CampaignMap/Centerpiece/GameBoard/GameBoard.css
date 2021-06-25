@@ -17,6 +17,22 @@
   height: auto;
 }
 
+.asteroid-icon {
+  z-index: 20;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 60%;
+  height: auto;
+  animation-name: purple-blink;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
 .army-icon {
   z-index: 20;
   position: absolute;
@@ -71,5 +87,19 @@
   50% {
     filter: brightness(1.2) saturate(1.5);
     opacity: 100%;
+  }
+}
+
+@keyframes purple-blink {
+  25% {
+    box-shadow: 0px 0px 8px 8px purple;
+    border-radius: 100%;
+  }
+  50% {
+    filter: brightness(1.2) saturate(1.5);
+  }
+  75% {
+    box-shadow: none;
+    border-radius: 0%;
   }
 }

@@ -103,7 +103,9 @@ const GameBoard = (props) => {
     const renderTile = (item) => {
       let army = null;
       let city = null;
+      let asteroid = null;
       let extraStyling = '';
+
       if (item.tileIsHighlighted) {
         switch (item.tileHighlightType) {
           case TILE_HIGHLIGHT_TYPES.NONE:
@@ -120,6 +122,7 @@ const GameBoard = (props) => {
             console.warn('Oops! An invalid tile highlight type was provided!');
         }
       }
+
       if (item.army) {
         const ownerPlayerNumber = item.army.owner;
         let ownerPlayerData;
@@ -166,6 +169,7 @@ const GameBoard = (props) => {
           }
         }
       }
+
       if (item.city) {
         city = (
           <img
@@ -176,6 +180,18 @@ const GameBoard = (props) => {
           />
         );
       }
+
+      if (item.hasAsteroid) {
+        asteroid = (
+          <img
+            src={'ASTEROID.svg'}
+            alt=""
+            className={'heximage asteroid-icon'}
+            onClick={(e) => tileClicked(e, item)}
+          />
+        );
+      }
+
       return (
         <Hexagon>
           <img
@@ -186,6 +202,7 @@ const GameBoard = (props) => {
                 (e) => tileClicked(e, item) : null}/>
           {army ? army : null}
           {city ? city : null}
+          {asteroid ? asteroid: null}
         </Hexagon>
       );
     };
