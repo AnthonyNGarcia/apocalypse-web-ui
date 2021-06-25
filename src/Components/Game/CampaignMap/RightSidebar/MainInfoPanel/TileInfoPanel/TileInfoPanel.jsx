@@ -18,7 +18,6 @@ const TileInfoPanel = (props) => {
   const [asteroid, setAsteroid] = useState(null);
   const [terrainInfo, setTerrainInfo] = useState(null);
   useEffect(() => {
-    console.log(props.selectedTileData);
     if (props.selectedTileData && props.selectedTileData.tileImprovement) {
       setTileImprovement((
         <Row>
@@ -287,7 +286,7 @@ const TileInfoPanel = (props) => {
 const getTileDataFromState = (state) => {
   const selectedTilePosition = state.gameBoardView.selectedTilePosition;
   const gameBoard = state.gameBoardView.gameBoard;
-  if (!selectedTilePosition || selectedTilePosition < 0) {
+  if (selectedTilePosition < 0) {
     return null;
   }
   if (!gameBoard) {
@@ -302,7 +301,7 @@ const getTileDataFromState = (state) => {
 const getTerrainDataFromState = (state) => {
   const selectedTilePosition = state.gameBoardView.selectedTilePosition;
   const gameBoard = state.gameBoardView.gameBoard;
-  if (!selectedTilePosition || selectedTilePosition < 0) {
+  if (selectedTilePosition < 0) {
     return null;
   }
   if (!gameBoard) {

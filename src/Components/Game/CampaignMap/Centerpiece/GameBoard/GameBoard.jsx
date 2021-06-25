@@ -83,9 +83,8 @@ const GameBoard = (props) => {
           // For a tile having both an army and a city, we alternate.
           switch (props.mainPanelView) {
             case MAIN_PANEL_VIEWS.NONE:
-              selectArmy();
-              break;
             case MAIN_PANEL_VIEWS.CITY_INFO:
+            case MAIN_PANEL_VIEWS.TILE_INFO:
               selectArmy();
               break;
             case MAIN_PANEL_VIEWS.ARMY_INFO:
