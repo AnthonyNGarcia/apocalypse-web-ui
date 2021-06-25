@@ -103,6 +103,7 @@ const GameBoard = (props) => {
       let army = null;
       let city = null;
       let asteroid = null;
+      let settler = null;
       let extraStyling = '';
 
       if (item.tileIsHighlighted) {
@@ -191,6 +192,37 @@ const GameBoard = (props) => {
         );
       }
 
+      if (item.settler) {
+        const ownerPlayerNumber = item.settler.owner;
+        let ownerPlayerData;
+        if (ownerPlayerNumber === PLAYER.ONE) {
+          ownerPlayerData = props.playerOne;
+        } else if (ownerPlayerNumber === PLAYER.TWO) {
+          ownerPlayerData = props.playerTwo;
+        } else {
+          console.warn(
+              'Oops! Unidentified player number for an army to render.');
+        }
+        if (ownerPlayerData) {
+          let settlerStyling = 'heximage settler-icon';
+          if (item.settler.owner === props.ownPlayerNumber) {
+            settlerStyling += ' own-settler';
+          } else {
+            settlerStyling += ' enemy-settler';
+          }
+          settler = (
+            <img
+              src={'SETTLER.svg'}
+              alt=""
+              className={settlerStyling +
+                (item.settler.remainingActions > 0 ?
+                  ' settler-is-untapped' : '')}
+              onClick={(e) => tileClicked(e, item)}
+            />
+          );
+        }
+      }
+
       return (
         <Hexagon>
           <img
@@ -201,7 +233,8 @@ const GameBoard = (props) => {
                 (e) => tileClicked(e, item) : null}/>
           {army ? army : null}
           {city ? city : null}
-          {asteroid ? asteroid: null}
+          {asteroid ? asteroid : null}
+          {settler ? settler: null}
         </Hexagon>
       );
     };

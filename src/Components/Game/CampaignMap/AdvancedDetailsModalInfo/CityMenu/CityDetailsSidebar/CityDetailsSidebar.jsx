@@ -5,13 +5,17 @@ import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import FACTIONS from '../../../../../Utilities/factions';
 import Spinner from 'react-bootstrap/esm/Spinner';
 import cityMenuAC from
   '../../../../../../Redux/actionCreators/cityMenuActionCreators';
-import './CityDetailsSidebar.css';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../../Utilities/cityMenuSupplementalViews';
+import PLAYER from '../../../../../Utilities/playerEnums';
+import axios from 'axios';
+import apiEndpoints from '../../../../../Utilities/apiEndpoints';
+import './CityDetailsSidebar.css';
 
 /**
  *
@@ -33,6 +37,21 @@ const CityDetailsSidebar = (props) => {
     e.preventDefault();
     props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.UNIT);
     props.updateCityMenuSupplementalData(unitType);
+  };
+
+  const trainSettlerHandler = (e) => {
+    e.preventDefault();
+    try {
+      const request = {
+        gameId: props.gameId,
+        cityTilePosition: props.selectedTilePosition,
+        isTrainingSettler: true,
+      };
+      axios.put(apiEndpoints.cityController + '/settler-training', request);
+    } catch (error) {
+      console.warn('Error trying to train settler!');
+      console.warn(error);
+    }
   };
 
   useEffect(() => {
@@ -90,6 +109,40 @@ const CityDetailsSidebar = (props) => {
                 {props.selectedCity.totalGrowth})
               </Row>
             </Col>
+          </Row>
+          <Row>
+            <Button
+              variant='primary'
+              disabled={!props.isOwnTurn ||
+                props.selectedCity.isTrainingSettler ||
+                props.selectedTile.settler ||
+                props.ownPlayerData
+                    .astridiumCollectionRequirementToNextSettler >
+                props.ownPlayerData
+                    .astridiumCollected}
+              onClick={trainSettlerHandler}
+              style={{fontSize: 'small', margin: 'auto'}}
+            >{
+                props.selectedCity.isTrainingSettler ?
+                ( 'Training Settler (' +
+                  (props.selectedCity.turnsRemainingToTrainSettler !== 1 ?
+                  props.selectedCity.turnsRemainingToTrainSettler + ' Turns ' :
+                  props.selectedCity.turnsRemainingToTrainSettler + ' Turn'
+                  ) + ')'
+                ) : (props.ownPlayerData
+                    .astridiumCollectionRequirementToNextSettler >
+                props.ownPlayerData
+                    .astridiumCollected ?
+                    'Collect ' + (props.ownPlayerData
+                        .astridiumCollectionRequirementToNextSettler -
+                        props.ownPlayerData
+                            .astridiumCollected) +
+                            ' More Astridium to Unlock the Next Settler!':
+                    'Ready To Train New Settler!')} {
+                      props.selectedTile.settler ?
+                      ' (Cannot Train While Another Settler is in this City)' :
+                      ''
+              }</Button>
           </Row>
           <Row>
             <h5>Current Buildings</h5>
@@ -168,10 +221,18 @@ const CityDetailsSidebar = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    gameId: state.game.gameId,
     allBuildings: state.game.gameConstants.allBuildings,
     allUnits: state.game.gameConstants.allUnits,
     selectedCity: state.gameBoardView.gameBoard[
         state.gameBoardView.selectedTilePosition].city,
+    isOwnTurn: state.gamePlayer.ownPlayerNumber ===
+      state.gamePlayer.playerWhoseTurnItIs,
+    ownPlayerData: state.gamePlayer.ownPlayerNumber ===
+    PLAYER.ONE ? state.gamePlayer.playerOne : state.gamePlayer.playerTwo,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
+    selectedTile: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition],
   };
 };
 
@@ -185,11 +246,16 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 CityDetailsSidebar.propTypes = {
+  gameId: PropTypes.string,
   allBuildings: PropTypes.any,
   allUnits: PropTypes.any,
   selectedCity: PropTypes.any,
   updateCityMenuSupplementalData: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
+  isOwnTurn: PropTypes.bool,
+  ownPlayerData: PropTypes.any,
+  selectedTilePosition: PropTypes.number,
+  selectedTile: PropTypes.any,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CityDetailsSidebar);
