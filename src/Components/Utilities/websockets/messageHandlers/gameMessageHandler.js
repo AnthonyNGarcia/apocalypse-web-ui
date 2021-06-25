@@ -77,7 +77,7 @@ const nextTurnUpdate = (message) => {
   store.dispatch(gamePlayerAC.setPlayerTwo(message.updatedGameData.playerTwo));
   store.dispatch(gamePlayerAC.setPlayerWhoseTurnItIs(
       message.updatedGameData.playerWhoseTurnItIs));
-
+  store.dispatch(gameAC.setGameRound(message.updatedGameData.round));
   // Reset Game View
   store.dispatch(gameAC.setGameView(GAME_VIEWS.GAME_BOARD_VIEW));
   store.dispatch(cityMenuAC.setShowCityModalInfo(false));

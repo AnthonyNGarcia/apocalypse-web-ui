@@ -1,7 +1,10 @@
 import WEBSOCKET_MESSAGE_TYPES from '../websocketResponseMessageTypes';
 import {store} from '../../../../App';
+import PLAYER from '../../playerEnums';
 import gameBoardViewAC from
   '../../../../Redux/actionCreators/gameBoardViewActionCreators';
+import gamePlayerAC from
+  '../../../../Redux/actionCreators/gamePlayerActionCreators';
 
 /**
  * This is the Game Board Message Handler.
@@ -35,7 +38,20 @@ const armyMovedUncontested = (message) => {
   const updatedGameBoard = [...state.gameBoardView.gameBoard];
   updatedGameBoard[message.startingTilePosition].army = null;
   updatedGameBoard[message.endingTilePosition].army = message.army;
+  updatedGameBoard[message.endingTilePosition].hasAsteroid = false;
   store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
+
+  if (message.army.owner === PLAYER.ONE) {
+    const updatedPlayerOne = {...state.gamePlayer.playerOne};
+    updatedPlayerOne.astridiumCollected = message.updatedAstridiumCollected;
+    updatedPlayerOne.currentAstridium = message.updatedCurrentAstridium;
+    store.dispatch(gamePlayerAC.setPlayerOne(updatedPlayerOne));
+  } else {
+    const updatedPlayerTwo = {...state.gamePlayer.playerTwo};
+    updatedPlayerTwo.astridiumCollected = message.updatedAstridiumCollected;
+    updatedPlayerTwo.currentAstridium = message.updatedCurrentAstridium;
+    store.dispatch(gamePlayerAC.setPlayerTwo(updatedPlayerTwo));
+  }
 };
 
 const armyStanceChanged = (message) => {

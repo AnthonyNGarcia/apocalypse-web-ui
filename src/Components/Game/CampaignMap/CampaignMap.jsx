@@ -38,15 +38,18 @@ const CampaignMap = (props) => {
         dialogClassName='modal-dialog-custom-sizing'>
         <AdvancedDetailsModalInfo/>
       </Modal>
-      <Row style={{width: '90vw'}}>
-        <Col className={(props.playerWhoseTurnItIs === PLAYER.ONE ?
+      <Row style={{width: '90vw'}} noGutters>
+        <Col md={5} className={(props.playerWhoseTurnItIs === PLAYER.ONE ?
               'active-turn center-text player-label' :
               'inactive-turn center-text player-label') + (
                 props.ownPlayerNumber === PLAYER.ONE ? ' own-player-label' :
                 ' other-player-label')}>
           <h3>{props.playerOneUsername}</h3>
         </Col>
-        <Col className={(props.playerWhoseTurnItIs === PLAYER.TWO ?
+        <Col md={1} className='center-text'>
+          <h5>Round: {props.round}</h5>
+        </Col>
+        <Col md={5} className={(props.playerWhoseTurnItIs === PLAYER.TWO ?
               'active-turn center-text player-label' :
               'inactive-turn center-text player-label') + (
                 props.ownPlayerNumber === PLAYER.TWO ? ' own-player-label' :
@@ -81,6 +84,7 @@ const mapStateToProps = (state) => {
       state.gamePlayer.playerTwo.username : 'error',
     playerWhoseTurnItIs: state.gamePlayer.playerWhoseTurnItIs,
     ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
+    round: state.game.gameRound,
   };
 };
 
@@ -108,6 +112,7 @@ CampaignMap.propTypes = {
   playerTwoUsername: PropTypes.string,
   playerWhoseTurnItIs: PropTypes.oneOf(flattenObject(PLAYER)),
   ownPlayerNumber: PropTypes.oneOf(flattenObject(PLAYER)),
+  round: PropTypes.number,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CampaignMap);

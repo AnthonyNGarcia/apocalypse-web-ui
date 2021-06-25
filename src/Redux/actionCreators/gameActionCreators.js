@@ -19,6 +19,12 @@ const actionCreators = {
       gameConstants: gameConstants,
     };
   },
+  setGameRound: (gameRound) => {
+    return {
+      type: gameAT.SET_GAME_ROUND,
+      gameRound: gameRound,
+    };
+  },
 };
 
 export default actionCreators;
