@@ -60,10 +60,20 @@ const battleDataUpdated = (message) => {
 const battleEnded = async (message) => {
   const state = store.getState();
   const updatedGameBoard = [...state.gameBoardView.gameBoard];
-  updatedGameBoard[message.attackingArmyEndingTilePosition]
-      .army = message.attackingArmy;
-  updatedGameBoard[message.defendingArmyEndingTilePosition]
-      .army = message.defendingArmy;
+
+  updatedGameBoard[message.attackingArmyStartingTilePosition]
+      .army = null;
+  updatedGameBoard[message.defendingArmyStartingTilePosition]
+      .army = null;
+  if (message.attackingArmyEndingTilePosition >= 0) {
+    updatedGameBoard[message.attackingArmyEndingTilePosition]
+        .army = message.attackingArmy;
+  }
+  if (message.defendingArmyEndingTilePosition >= 0) {
+    updatedGameBoard[message.defendingArmyEndingTilePosition]
+        .army = message.defendingArmy;
+  }
+
   await store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
   await store.dispatch(gameAC.setGameView(GAME_VIEWS.GAME_BOARD_VIEW));
   await store.dispatch(battleViewAC.setBattleData(null));

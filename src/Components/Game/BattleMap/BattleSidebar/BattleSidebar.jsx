@@ -72,7 +72,11 @@ const BattleSidebar = (props) => {
       <Row>
         {props.showEnemyArmyInBattle ? (
           <Button variant="danger"
-            disabled={!props.isOwnTurn}
+            disabled={!props.isOwnTurn || (
+              (!props.battleData.tilePositionsThatDefenderCanRetreatTo ||
+              props.battleData.tilePositionsThatDefenderCanRetreatTo
+                  .length <= 0) && props.battleData.defendingArmy.owner ===
+                  props.ownPlayerNumber)}
             onClick={fullRetreatHandler}>Full Retreat</Button>
         ) : (
           <Button variant="primary" disabled={props.ownArmySubmitted}
