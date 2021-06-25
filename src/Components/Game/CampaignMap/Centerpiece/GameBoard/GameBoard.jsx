@@ -92,6 +92,9 @@ const GameBoard = (props) => {
               props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
               break;
           }
+        } else if (!item.army && !item.city) {
+          // The city has neither an army nor a city, so just view tile info.
+          props.updateMainPanelView(MAIN_PANEL_VIEWS.TILE_INFO);
         }
       }
       props.updateSelectedTilePosition(item.tilePosition);
