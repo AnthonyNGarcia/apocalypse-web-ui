@@ -40,11 +40,11 @@ const armyMovedUncontested = (message) => {
   const state = store.getState();
   const updatedGameBoard = [...state.gameBoardView.gameBoard];
   updatedGameBoard[message.startingTilePosition].army = null;
-  updatedGameBoard[message.endingTilePosition].army = message.army;
-  updatedGameBoard[message.endingTilePosition].hasAsteroid = false;
+  updatedGameBoard[message.endingTilePosition] = message.updatedTile;
+  console.log(updatedGameBoard[message.endingTilePosition]);
   store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
 
-  if (message.army.owner === PLAYER.ONE) {
+  if (message.updatedTile.army.owner === PLAYER.ONE) {
     const updatedPlayerOne = {...state.gamePlayer.playerOne};
     updatedPlayerOne.astridiumCollected = message.updatedAstridiumCollected;
     updatedPlayerOne.currentAstridium = message.updatedCurrentAstridium;

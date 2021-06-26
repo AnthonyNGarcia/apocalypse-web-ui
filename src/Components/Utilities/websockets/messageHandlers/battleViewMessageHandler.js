@@ -73,6 +73,8 @@ const battleEnded = async (message) => {
     updatedGameBoard[message.defendingArmyEndingTilePosition]
         .army = message.defendingArmy;
   }
+  updatedGameBoard[message.defendingArmyStartingTilePosition] =
+     message.updatedDefenderTile;
 
   await store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
   await store.dispatch(gameAC.setGameView(GAME_VIEWS.GAME_BOARD_VIEW));
