@@ -4,6 +4,13 @@ import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
+import Button from 'react-bootstrap/Button';
+import axios from 'axios';
+import apiEndpoints from '../../../../../Utilities/apiEndpoints';
+import gameBoardViewAC from
+  '../../../../../../Redux/actionCreators/gameBoardViewActionCreators';
+import tileHighlightManager from
+  '../../../../../Utilities/tileHighlightManager';
 import './SettlerInfoPanel.css';
 
 /**
@@ -14,6 +21,23 @@ import './SettlerInfoPanel.css';
  * @return {JSX} to render
  */
 const SettlerInfoPanel = (props) => {
+  const settleCityHandler = (e) => {
+    e.preventDefault();
+    props.updateIsMovingSettler(false);
+    tileHighlightManager.unhighlightAllTiles();
+    try {
+      const request = {
+        gameId: props.gameId,
+        primaryTilePosition: props.selectedTilePosition,
+      };
+      axios.post(
+          apiEndpoints.settlerController + '/settle', request);
+    } catch (error) {
+      console.warn('Failed to settle city!');
+      console.warn(error);
+    }
+  };
+
   if (props.selectedSettler) {
     return (
       <React.Fragment>
@@ -29,6 +53,15 @@ const SettlerInfoPanel = (props) => {
               {'This unit can be used to create new Cities! However, ' +
               ' it will be killed immediately if captured by an enemy!'}
             </p>
+          </Row>
+          <Row>
+            <Button
+              disabled={props.selectedSettler.remainingActions <= 0 ||
+                !props.selectedSettler.canSettleCity ||
+                props.isOwnTurn == false}
+              onClick={settleCityHandler}>
+            Settle City
+            </Button>
           </Row>
         </React.Fragment> :
         <React.Fragment>
@@ -57,6 +90,8 @@ const SettlerInfoPanel = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    gameId: state.game.gameId,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
     selectedSettler: state.gameBoardView.gameBoard[
         state.gameBoardView.selectedTilePosition].settler,
     ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
@@ -64,10 +99,20 @@ const mapStateToProps = (state) => {
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateIsMovingSettler: (isMovingSettler) => dispatch(
+        gameBoardViewAC.setIsMovingSettler(isMovingSettler)),
+  };
+};
+
 SettlerInfoPanel.propTypes = {
+  gameId: PropTypes.string,
   selectedSettler: PropTypes.any,
   ownPlayerNumber: PropTypes.any,
   allFactions: PropTypes.any,
+  updateIsMovingSettler: PropTypes.func,
+  selectedTilePosition: PropTypes.number,
 };
 
-export default connect(mapStateToProps)(SettlerInfoPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(SettlerInfoPanel);
