@@ -49,8 +49,16 @@
   filter: sepia(100%) hue-rotate(80deg) saturate(2.5);
 }
 
+.own-army-hidden {
+  opacity: 50%;
+}
+
 .enemy-army {
   filter: sepia(100%) hue-rotate(310deg) saturate(5);
+}
+
+.enemy-army-hidden {
+  opacity: 0%;
 }
 
 .army-is-untapped {

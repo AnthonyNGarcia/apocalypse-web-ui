@@ -4,6 +4,8 @@ import battleViewAC from
   '../../../../Redux/actionCreators/battleViewActionCreators';
 import gameBoardViewAC from
   '../../../../Redux/actionCreators/gameBoardViewActionCreators';
+import gamePlayerAC from
+  '../../../../Redux/actionCreators/gamePlayerActionCreators';
 import gameAC from '../../../../Redux/actionCreators/gameActionCreators';
 import GAME_VIEWS from '../../gameViews';
 
@@ -76,6 +78,20 @@ const battleEnded = async (message) => {
   updatedGameBoard[message.defendingArmyStartingTilePosition] =
      message.updatedDefenderTile;
 
+  const updatedPlayerOne = {...state.gamePlayer.playerOne};
+  updatedPlayerOne.currentAstridium =
+    message.updatedPlayerOneCurrentAstridium;
+  updatedPlayerOne.astridiumCollected =
+    message.updatedPlayerOneAstridiumCollected;
+
+  const updatedPlayerTwo = {...state.gamePlayer.playerTwo};
+  updatedPlayerTwo.currentAstridium =
+    message.updatedPlayerTwoCurrentAstridium;
+  updatedPlayerTwo.astridiumCollected =
+    message.updatedPlayerTwoAstridiumCollected;
+
+  await store.dispatch(gamePlayerAC.setPlayerOne(updatedPlayerOne));
+  await store.dispatch(gamePlayerAC.setPlayerTwo(updatedPlayerTwo));
   await store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
   await store.dispatch(gameAC.setGameView(GAME_VIEWS.GAME_BOARD_VIEW));
   await store.dispatch(battleViewAC.setBattleData(null));

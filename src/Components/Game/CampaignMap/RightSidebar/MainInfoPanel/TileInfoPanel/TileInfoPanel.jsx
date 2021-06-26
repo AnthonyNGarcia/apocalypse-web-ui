@@ -232,37 +232,37 @@ const TileInfoPanel = (props) => {
           <h5>Yield Bonuses to City</h5>
         </Row>
         <Row className='center-text'>
-          <h5>(On | Adjacent)</h5>
+          <h5>(On | Adjacent to City)</h5>
         </Row>
         {growthBonusLabel || productionBonusLabel || researchBonusLabel ? (
           <React.Fragment>
             {growthBonusLabel ? (
            <Row>
-             <Col xs={4}>
-          Growth:
-             </Col>
              <Col xs={8}>
                {growthBonusLabel}
+             </Col>
+             <Col xs={4}>
+                Growth
              </Col>
            </Row>
         ): null}
             {productionBonusLabel ? (
            <Row>
-             <Col xs={4}>
-          Production:
-             </Col>
              <Col xs={8}>
                {productionBonusLabel}
+             </Col>
+             <Col xs={4}>
+                Production
              </Col>
            </Row>
         ): null}
             {researchBonusLabel ? (
            <Row>
-             <Col xs={4}>
-          Research:
-             </Col>
              <Col xs={8}>
                {researchBonusLabel}
+             </Col>
+             <Col xs={4}>
+                Research
              </Col>
            </Row>
         ): null}

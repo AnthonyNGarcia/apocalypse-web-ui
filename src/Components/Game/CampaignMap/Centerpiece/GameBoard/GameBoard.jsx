@@ -38,6 +38,11 @@ const GameBoard = (props) => {
 
       // tileClicked Helper Methods:
       const selectArmy = () => {
+        if (item.army.owner !== props.ownPlayerNumber &&
+          item.army.isHidden) {
+          // We cannot select an army which is hidden to us!
+          return false;
+        }
         props.updateMainPanelView(MAIN_PANEL_VIEWS.ARMY_INFO);
         if (item.army.owner === props.ownPlayerNumber &&
               item.army.remainingActions > 0 && props.isOwnTurn) {
@@ -45,6 +50,7 @@ const GameBoard = (props) => {
           tileHighlightManager.highlightAvailableMoveTiles(item.tilePosition);
           props.updateIsMovingArmy(true);
         }
+        return true;
       };
 
       const selectSettler = () => {
@@ -60,7 +66,10 @@ const GameBoard = (props) => {
       const selectTile = () => {
         if (item.army && !item.city && !item.settler) {
           // We straight-forward select an army with no city or settler.
-          selectArmy();
+          const wasAbleToSelectArmy = selectArmy();
+          if (!wasAbleToSelectArmy) {
+            props.updateMainPanelView(MAIN_PANEL_VIEWS.TILE_INFO);
+          }
         } else if (!item.army && item.city && !item.settler) {
           // We may select the city if there is no army or settler.
           props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
@@ -77,7 +86,18 @@ const GameBoard = (props) => {
             case MAIN_PANEL_VIEWS.CITY_INFO:
             case MAIN_PANEL_VIEWS.TILE_INFO:
               if (item.army) {
-                selectArmy();
+                const wasAbleToSelectArmyFromNoneCityTileInfo = selectArmy();
+                if (!wasAbleToSelectArmyFromNoneCityTileInfo) {
+                  // Has army, but can't select it, so skip to other units.
+                  if (item.settler) {
+                    selectSettler();
+                  } else if (item.city) {
+                    // Has army, but no settler, so stick on city if one exists.
+                    props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
+                  } else {
+                    // Has army, but no settler or city, so stay on tile info
+                  }
+                }
               } else if (item.settler) {
                 selectSettler();
               } else {
@@ -99,7 +119,10 @@ const GameBoard = (props) => {
               if (item.city) {
                 props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
               } else if (item.army) {
-                selectArmy();
+                const wasAbleToSelectArmyFromSettlerInfo = selectArmy();
+                if (!wasAbleToSelectArmyFromSettlerInfo) {
+                  // No city, but can't see army, so stay on settler
+                }
               } else {
                 // The tile has neither an army, city, nor settler -> tile info!
                 props.updateMainPanelView(MAIN_PANEL_VIEWS.TILE_INFO);
@@ -215,8 +238,14 @@ const GameBoard = (props) => {
           let armyStyling = 'heximage army-icon';
           if (item.army.owner === props.ownPlayerNumber) {
             armyStyling += ' own-army';
+            if (item.army.isHidden) {
+              armyStyling += ' own-army-hidden';
+            }
           } else {
             armyStyling += ' enemy-army';
+            if (item.army.isHidden) {
+              armyStyling += ' enemy-army-hidden';
+            }
           }
           if (armyFaction === FACTIONS.HUMANS.NAME) {
             army = (
