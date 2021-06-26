@@ -57,58 +57,7 @@ const GameBoard = (props) => {
         }
       };
 
-      // Begin tileClicked logic below:
-      tileHighlightManager.unhighlightAllTiles();
-      // The biggest differential of logic is whether we are moving.
-      if (props.isMovingArmy) {
-        props.updateIsMovingArmy(false);
-        // The only two options are selecting a non-self and self tile.
-        if (item.tilePosition === props.selectedTilePosition) {
-          // We selected self
-          if (item.settler) {
-            // And there is a settler, so select it instead.
-            selectSettler();
-          } else if (item.city) {
-            // There wasn't a settler, but there was a city, so select it.
-            props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
-          }
-        } else {
-          // We did not select self, meaning we can try a move command.
-          // We will simply request it and let the server decide the outcome.
-          const request = {
-            gameId: props.gameId,
-            primaryArmyActionType: ARMY_ACTION_REQUEST_TYPE.MOVE,
-            primaryTilePosition: props.gameBoard[props.selectedTilePosition]
-                .tilePosition,
-            secondaryTilePosition: item.tilePosition,
-          };
-          axios.post(apiEndpoints.armyController + '/action', request);
-        }
-      } else if (props.isMovingSettler) {
-        props.updateIsMovingSettler(false);
-        // The only two options are selecting a non-self and self tile.
-        if (item.tilePosition === props.selectedTilePosition) {
-          // We selected self
-          if (item.city) {
-            // And there is a city, so select it instead.
-            props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
-          } else if (item.army) {
-            // There wasn't a city, but there was an army, so select it.
-            selectArmy();
-          }
-        } else {
-          // We did not select self, meaning we can try a move command.
-          // We will simply request it and let the server decide the outcome.
-          const request = {
-            gameId: props.gameId,
-            primaryTilePosition: props.gameBoard[props.selectedTilePosition]
-                .tilePosition,
-            secondaryTilePosition: item.tilePosition,
-          };
-          axios.post(apiEndpoints.settlerController + '/move', request);
-        }
-      } else {
-        // We are not moving an army or settler, so select something.
+      const selectTile = () => {
         if (item.army && !item.city && !item.settler) {
           // We straight-forward select an army with no city or settler.
           selectArmy();
@@ -157,6 +106,71 @@ const GameBoard = (props) => {
               }
           }
         }
+      };
+
+      // Begin tileClicked logic below:
+      tileHighlightManager.unhighlightAllTiles();
+      // The biggest differential of logic is whether we are moving.
+      if (props.isMovingArmy) {
+        props.updateIsMovingArmy(false);
+        // The only two options are selecting a non-self and self tile.
+        if (item.tilePosition === props.selectedTilePosition) {
+          // We selected self
+          if (item.settler) {
+            // And there is a settler, so select it instead.
+            selectSettler();
+          } else if (item.city) {
+            // There wasn't a settler, but there was a city, so select it.
+            props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
+          }
+        } else {
+          // We did not select self, meaning we can try a move command.
+          if (item.tileHighlightType === TILE_HIGHLIGHT_TYPES.CAN_MOVE_HERE) {
+            // We will simply request it and let the server decide the outcome.
+            const request = {
+              gameId: props.gameId,
+              primaryArmyActionType: ARMY_ACTION_REQUEST_TYPE.MOVE,
+              primaryTilePosition: props.gameBoard[props.selectedTilePosition]
+                  .tilePosition,
+              secondaryTilePosition: item.tilePosition,
+            };
+            axios.post(apiEndpoints.armyController + '/action', request);
+          } else {
+            // An invalid tile to move to was selected. Just select new tile.
+            selectTile();
+          }
+        }
+      } else if (props.isMovingSettler) {
+        props.updateIsMovingSettler(false);
+        // The only two options are selecting a non-self and self tile.
+        if (item.tilePosition === props.selectedTilePosition) {
+          // We selected self
+          if (item.city) {
+            // And there is a city, so select it instead.
+            props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
+          } else if (item.army) {
+            // There wasn't a city, but there was an army, so select it.
+            selectArmy();
+          }
+        } else {
+          // We did not select self, meaning we can try a move command.
+          if (item.tileHighlightType === TILE_HIGHLIGHT_TYPES.CAN_MOVE_HERE) {
+            // We will simply request it and let the server decide the outcome.
+            const request = {
+              gameId: props.gameId,
+              primaryTilePosition: props.gameBoard[props.selectedTilePosition]
+                  .tilePosition,
+              secondaryTilePosition: item.tilePosition,
+            };
+            axios.post(apiEndpoints.settlerController + '/move', request);
+          } else {
+            // An invalid tile to move to was selected. Just select new tile.
+            selectTile();
+          }
+        }
+      } else {
+        // We are not moving an army or settler, so select something.
+        selectTile();
       }
       props.updateSelectedTilePosition(item.tilePosition);
     };
