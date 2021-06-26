@@ -8,6 +8,9 @@ import PropTypes from 'prop-types';
 import PLAYER from '../../Utilities/playerEnums';
 import flattenObject from '../../Utilities/flattenObjectValuesToArray';
 import Spinner from 'react-bootstrap/esm/Spinner';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
+import Button from 'react-bootstrap/Button';
 import UNIT_CLASSES from '../../Utilities/unitClasses';
 import './BattleMap.css';
 
@@ -20,6 +23,26 @@ import './BattleMap.css';
  */
 const BattleMap = (props) => {
   const [playerWhoseTurnItIs, setPlayerWhoseTurnItIs] = useState(null);
+
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Title as="h3">Defender Ambushing!</Popover.Title>
+      <Popover.Content>
+      The defending army of this tile has pulled off an <strong>ambush</strong>!
+        <br></br>
+        {'For the first round of battle, all ambushing units will go first' +
+      '- no alternating! After the first round, combat resumes to normal, ' +
+      'with the exception that the ambushing army has priority on going ' +
+      'first for each unit class.'}
+      </Popover.Content>
+    </Popover>
+  );
+
+  const ambushTitle = (
+    <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
+      <Button variant="danger" className='ambush-title'>AMBUSH!!</Button>
+    </OverlayTrigger>
+  );
 
   useEffect(() => {
     if (props.battleData) {
@@ -40,6 +63,8 @@ const BattleMap = (props) => {
             <h4>{props.playerOneUsername}</h4>
           </Col>
           <Col>
+            {props.battleData.defenderPulledOffAmbush ?
+            ambushTitle : null}
             {props.showEnemyArmyInBattle ? (
               <h4 className='current-unit-class-title'>{UNIT_CLASSES[
                   props.battleData.currentUnitClassPhase].displayName}</h4>
