@@ -2,6 +2,7 @@ import React from 'react';
 import ArmyInfoPanel from './ArmyInfoPanel/ArmyInfoPanel';
 import CityInfoPanel from './CityInfoPanel/CityInfoPanel';
 import TileInfoPanel from './TileInfoPanel/TileInfoPanel';
+import SettlerInfoPanel from './SettlerInfoPanel/SettlerInfoPanel';
 import MAIN_PANEL_VIEWS from '../../../../Utilities/gameMainPanelViews';
 import flattenObject from '../../../../Utilities/flattenObjectValuesToArray';
 import {connect} from 'react-redux';
@@ -24,6 +25,8 @@ const MainInfoPanel = (props) => {
         <CityInfoPanel/> :
         props.mainPanelView === MAIN_PANEL_VIEWS.TILE_INFO ?
         <TileInfoPanel/> :
+        props.mainPanelView === MAIN_PANEL_VIEWS.SETTLER_INFO ?
+        <SettlerInfoPanel/> :
         props.mainPanelView === MAIN_PANEL_VIEWS.NONE ?
         <p>Nothing to view. Select a unit or tile for details.</p> :
         <p>Oops! An Invalid main panel view was rendered</p>}

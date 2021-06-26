@@ -18,7 +18,7 @@
 }
 
 .asteroid-icon {
-  z-index: 20;
+  z-index: 11;
   position: absolute;
   margin: auto;
   left: 0;
@@ -61,14 +61,14 @@
 }
 
 .settler-icon {
-  z-index: 20;
+  z-index: 15;
   position: absolute;
   margin: auto;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
-  width: 60%;
+  width: 75%;
   height: auto;
 }
 

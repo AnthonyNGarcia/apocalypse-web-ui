@@ -33,12 +33,17 @@ const TileInfoPanel = (props) => {
       setTileImprovement(null);
     }
 
-    if (props.selectedTileData && props.selectedTileData.asteroid) {
+    if (props.selectedTileData && props.selectedTileData.hasAsteroid) {
       setAsteroid((
-        <Row>
-          <p>This tile has been struck by a mysterious asteroid!</p>
-          <p>Explore this tile for a random event... if you dare!</p>
-        </Row>
+        <React.Fragment>
+          <Row style={{marginTop: '4vh', color: 'plum'}}>
+            <h4>This tile has been struck by a mysterious asteroid!</h4>
+          </Row>
+          <Row>
+            <p>March an Army or Settler into this tile to collect
+            the rare and powerful Astridium!</p>
+          </Row>
+        </React.Fragment>
       ));
     } else {
       setAsteroid(null);

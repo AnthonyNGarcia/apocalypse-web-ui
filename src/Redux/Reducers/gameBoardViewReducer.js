@@ -10,6 +10,7 @@ const initialState = {
   mainPanelView: MAIN_PANEL_VIEWS.NONE,
   supplementalPanelView: SUPPLEMENTAL_PANEL_VIEWS.NONE,
   isMovingArmy: false,
+  isMovingSettler: false,
   selectedTilePosition: -1,
 };
 
@@ -41,6 +42,13 @@ const setIsMovingArmy = (state, action) => {
   };
 };
 
+const setIsMovingSettler = (state, action) => {
+  return {
+    ...state,
+    isMovingSettler: action.isMovingSettler,
+  };
+};
+
 const setSelectedTilePosition = (state, action) => {
   return {
     ...state,
@@ -54,6 +62,7 @@ const reducer = (state=initialState, action) => {
     case gameBoardViewAT.SET_MAIN_PANEL_VIEW: return setMainPanelView(state, action);
     case gameBoardViewAT.SET_SUPPLEMENTAL_PANEL_VIEW: return setSupplementalPanelView(state, action);
     case gameBoardViewAT.SET_IS_MOVING_ARMY: return setIsMovingArmy(state, action);
+    case gameBoardViewAT.SET_IS_MOVING_SETTLER: return setIsMovingSettler(state, action);
     case gameBoardViewAT.SET_SELECTED_TILE_POSITION: return setSelectedTilePosition(state, action);
     default: return state;
   }

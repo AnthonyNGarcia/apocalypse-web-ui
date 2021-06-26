@@ -44,9 +44,16 @@ const GameBoard = (props) => {
           // It is our own army and we can move it.
           tileHighlightManager.highlightAvailableMoveTiles(item.tilePosition);
           props.updateIsMovingArmy(true);
-        } else {
-          // It is an enemy army, but we can get some info on it.
-          props.updateMainPanelView(MAIN_PANEL_VIEWS.ARMY_INFO);
+        }
+      };
+
+      const selectSettler = () => {
+        props.updateMainPanelView(MAIN_PANEL_VIEWS.SETTLER_INFO);
+        if (item.settler.owner === props.ownPlayerNumber &&
+              item.settler.remainingActions > 0 && props.isOwnTurn) {
+          // It is our own settler and we can move it.
+          tileHighlightManager.highlightAvailableMoveTiles(item.tilePosition);
+          props.updateIsMovingSettler(true);
         }
       };
 
@@ -56,9 +63,15 @@ const GameBoard = (props) => {
       if (props.isMovingArmy) {
         props.updateIsMovingArmy(false);
         // The only two options are selecting a non-self and self tile.
-        if (item.tilePosition === props.selectedTilePosition && item.city) {
-          // We selected self, and there's a city, so swap to that.
-          props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
+        if (item.tilePosition === props.selectedTilePosition) {
+          // We selected self
+          if (item.settler) {
+            // And there is a settler, so select it instead.
+            selectSettler();
+          } else if (item.city) {
+            // There wasn't a settler, but there was a city, so select it.
+            props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
+          }
         } else {
           // We did not select self, meaning we can try a move command.
           // We will simply request it and let the server decide the outcome.
@@ -71,29 +84,78 @@ const GameBoard = (props) => {
           };
           axios.post(apiEndpoints.armyController + '/action', request);
         }
+      } else if (props.isMovingSettler) {
+        props.updateIsMovingSettler(false);
+        // The only two options are selecting a non-self and self tile.
+        if (item.tilePosition === props.selectedTilePosition) {
+          // We selected self
+          if (item.city) {
+            // And there is a city, so select it instead.
+            props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
+          } else if (item.army) {
+            // There wasn't a city, but there was an army, so select it.
+            selectArmy();
+          }
+        } else {
+          // We did not select self, meaning we can try a move command.
+          // We will simply request it and let the server decide the outcome.
+          const request = {
+            gameId: props.gameId,
+            primaryTilePosition: props.gameBoard[props.selectedTilePosition]
+                .tilePosition,
+            secondaryTilePosition: item.tilePosition,
+          };
+          axios.post(apiEndpoints.settlerController + '/move', request);
+        }
       } else {
-        // We are not moving an army, so select something.
-        if (item.army && !item.city) {
-          // We straight-forward select an army with no city.
+        // We are not moving an army or settler, so select something.
+        if (item.army && !item.city && !item.settler) {
+          // We straight-forward select an army with no city or settler.
           selectArmy();
-        } else if (!item.army && item.city) {
-          // We may select the city if there is no army.
+        } else if (!item.army && item.city && !item.settler) {
+          // We may select the city if there is no army or settler.
           props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
-        } else if (item.army && item.city) {
-          // For a tile having both an army and a city, we alternate.
+        } else if (!item.army && !item.city && item.settler) {
+          // We may select the settler if there is no army or city.
+          selectSettler();
+        } else if (!item.army && !item.city && item.settler) {
+          // The tile has neither an army, city, nor settler -> tile info!
+          props.updateMainPanelView(MAIN_PANEL_VIEWS.TILE_INFO);
+        } else {
+          // We must be having 2 more or of settler/army/city -> alternate!
           switch (props.mainPanelView) {
             case MAIN_PANEL_VIEWS.NONE:
             case MAIN_PANEL_VIEWS.CITY_INFO:
             case MAIN_PANEL_VIEWS.TILE_INFO:
-              selectArmy();
+              if (item.army) {
+                selectArmy();
+              } else if (item.settler) {
+                selectSettler();
+              } else {
+                // The tile has neither an army, city, nor settler -> tile info!
+                props.updateMainPanelView(MAIN_PANEL_VIEWS.TILE_INFO);
+              }
               break;
             case MAIN_PANEL_VIEWS.ARMY_INFO:
-              props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
+              if (item.settler) {
+                selectSettler();
+              } else if (item.city) {
+                props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
+              } else {
+                // The tile has neither an army, city, nor settler -> tile info!
+                props.updateMainPanelView(MAIN_PANEL_VIEWS.TILE_INFO);
+              }
               break;
+            case MAIN_PANEL_VIEWS.SETTLER_INFO:
+              if (item.city) {
+                props.updateMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO);
+              } else if (item.army) {
+                selectArmy();
+              } else {
+                // The tile has neither an army, city, nor settler -> tile info!
+                props.updateMainPanelView(MAIN_PANEL_VIEWS.TILE_INFO);
+              }
           }
-        } else if (!item.army && !item.city) {
-          // The city has neither an army nor a city, so just view tile info.
-          props.updateMainPanelView(MAIN_PANEL_VIEWS.TILE_INFO);
         }
       }
       props.updateSelectedTilePosition(item.tilePosition);
@@ -264,6 +326,7 @@ const mapStateToProps = (state) => {
     gameBoard: state.gameBoardView.gameBoard,
     baseHoneycombConfigs: state.gameBoardView.honeycombConfigs,
     isMovingArmy: state.gameBoardView.isMovingArmy,
+    isMovingSettler: state.gameBoardView.isMovingSettler,
     selectedTilePosition: state.gameBoardView.selectedTilePosition,
     gameId: state.game.gameId,
     ownUsername: state.general.ownUsername,
@@ -286,6 +349,8 @@ const mapDispatchToProps = (dispatch) => {
         gameBoardViewAC.setSelectedTilePosition(position)),
     updateIsMovingArmy: (isMovingArmy) => dispatch(
         gameBoardViewAC.setIsMovingArmy(isMovingArmy)),
+    updateIsMovingSettler: (isMovingSettler) => dispatch(
+        gameBoardViewAC.setIsMovingSettler(isMovingSettler)),
     updateGameBoard: (gameBoard) => dispatch(
         gameBoardViewAC.setGameBoard(gameBoard)),
     updatePlayerWhoseTurnItIs: (playerWhoseTurnItIs) => dispatch(
@@ -305,11 +370,13 @@ GameBoard.propTypes = {
   gameBoard: PropTypes.array,
   baseHoneycombConfigs: PropTypes.any,
   isMovingArmy: PropTypes.bool,
+  isMovingSettler: PropTypes.bool,
   selectedTilePosition: PropTypes.number,
   updateMainPanelView: PropTypes.func,
   updateSupplementalPanelView: PropTypes.func,
   updateSelectedTilePosition: PropTypes.func,
   updateIsMovingArmy: PropTypes.func,
+  updateIsMovingSettler: PropTypes.func,
   updateGameBoard: PropTypes.func,
   gameId: PropTypes.string,
   ownUsername: PropTypes.string,

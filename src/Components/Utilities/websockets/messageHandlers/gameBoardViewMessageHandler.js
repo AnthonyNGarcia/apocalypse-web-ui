@@ -20,6 +20,9 @@ const messageHandler = (message) => {
     case WEBSOCKET_MESSAGE_TYPES.ARMY_MOVED_UNCONTESTED:
       armyMovedUncontested(message);
       break;
+    case WEBSOCKET_MESSAGE_TYPES.SETTLER_MOVED_UNCONTESTED:
+      settlerMovedUncontested(message);
+      break;
     case WEBSOCKET_MESSAGE_TYPES.ARMY_STANCE_CHANGED:
       armyStanceChanged(message);
       break;
@@ -42,6 +45,27 @@ const armyMovedUncontested = (message) => {
   store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
 
   if (message.army.owner === PLAYER.ONE) {
+    const updatedPlayerOne = {...state.gamePlayer.playerOne};
+    updatedPlayerOne.astridiumCollected = message.updatedAstridiumCollected;
+    updatedPlayerOne.currentAstridium = message.updatedCurrentAstridium;
+    store.dispatch(gamePlayerAC.setPlayerOne(updatedPlayerOne));
+  } else {
+    const updatedPlayerTwo = {...state.gamePlayer.playerTwo};
+    updatedPlayerTwo.astridiumCollected = message.updatedAstridiumCollected;
+    updatedPlayerTwo.currentAstridium = message.updatedCurrentAstridium;
+    store.dispatch(gamePlayerAC.setPlayerTwo(updatedPlayerTwo));
+  }
+};
+
+const settlerMovedUncontested = (message) => {
+  const state = store.getState();
+  const updatedGameBoard = [...state.gameBoardView.gameBoard];
+  updatedGameBoard[message.startingTilePosition].settler = null;
+  updatedGameBoard[message.endingTilePosition].settler = message.settler;
+  updatedGameBoard[message.endingTilePosition].hasAsteroid = false;
+  store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
+
+  if (message.settler.owner === PLAYER.ONE) {
     const updatedPlayerOne = {...state.gamePlayer.playerOne};
     updatedPlayerOne.astridiumCollected = message.updatedAstridiumCollected;
     updatedPlayerOne.currentAstridium = message.updatedCurrentAstridium;
