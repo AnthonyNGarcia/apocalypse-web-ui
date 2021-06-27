@@ -15,10 +15,10 @@ const actionCreators = {
       showResearchModalInfo: showResearchModalInfo,
     };
   },
-  setCityShowingProductionTab: (cityShowingProductionTab) => {
+  setCityMenuTab: (cityMenuTab) => {
     return {
-      type: cityMenuAT.SET_CITY_SHOWING_PRODUCTION_TAB,
-      cityShowingProductionTab: cityShowingProductionTab,
+      type: cityMenuAT.SET_CITY_MENU_TAB,
+      cityMenuTab: cityMenuTab,
     };
   },
   setCurrentCityConstructionProject: (constructionProject) => {

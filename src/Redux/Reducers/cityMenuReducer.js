@@ -1,11 +1,12 @@
 /* eslint-disable max-len */
 import cityMenuAT from '../actionTypes/cityMenuActionTypes';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from '../../Components/Utilities/cityMenuSupplementalViews';
+import CITY_MENU_TAB from '../../Components/Utilities/cityMenuTabs';
 
 const initialState = {
   showCityModalInfo: false,
   showResearchModalInfo: false,
-  cityShowingProductionTab: true,
+  cityMenuTab: CITY_MENU_TAB.PRODUCTION,
   cityMenuSupplementalView: CITY_MENU_SUPPLEMENTAL_VIEWS.NONE,
   cityMenuSupplementalData: {},
 };
@@ -24,10 +25,10 @@ const setShowResearchModalInfo = (state, action) => {
   };
 };
 
-const setCityShowingProductionTab = (state, action) => {
+const setCityMenuTab= (state, action) => {
   return {
     ...state,
-    cityShowingProductionTab: action.cityShowingProductionTab,
+    cityMenuTab: action.cityMenuTab,
   };
 };
 
@@ -49,7 +50,7 @@ const reducer = (state=initialState, action) => {
   switch (action.type) {
     case cityMenuAT.SET_SHOW_CITY_MODAL_INFO: return setShowCityModalInfo(state, action);
     case cityMenuAT.SET_SHOW_RESEARCH_MODAL_INFO: return setShowResearchModalInfo(state, action);
-    case cityMenuAT.SET_CITY_SHOWING_PRODUCTION_TAB: return setCityShowingProductionTab(state, action);
+    case cityMenuAT.SET_CITY_MENU_TAB: return setCityMenuTab(state, action);
     case cityMenuAT.SET_CITY_MENU_SUPPLEMENTAL_VIEW: return setCityMenuSupplementalView(state, action);
     case cityMenuAT.SET_CITY_MENU_SUPPLEMENTAL_DATA: return setCityMenuSupplementalData(state, action);
     default: return state;

@@ -47,18 +47,8 @@ const armyMovedUncontested = (message) => {
   updatedGameBoard[message.endingTilePosition] = message.updatedTile;
   console.log(updatedGameBoard[message.endingTilePosition]);
   store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
-
-  if (message.updatedTile.army.owner === PLAYER.ONE) {
-    const updatedPlayerOne = {...state.gamePlayer.playerOne};
-    updatedPlayerOne.astridiumCollected = message.updatedAstridiumCollected;
-    updatedPlayerOne.currentAstridium = message.updatedCurrentAstridium;
-    store.dispatch(gamePlayerAC.setPlayerOne(updatedPlayerOne));
-  } else {
-    const updatedPlayerTwo = {...state.gamePlayer.playerTwo};
-    updatedPlayerTwo.astridiumCollected = message.updatedAstridiumCollected;
-    updatedPlayerTwo.currentAstridium = message.updatedCurrentAstridium;
-    store.dispatch(gamePlayerAC.setPlayerTwo(updatedPlayerTwo));
-  }
+  store.dispatch(gamePlayerAC.setPlayerOne(message.updatedPlayerOne));
+  store.dispatch(gamePlayerAC.setPlayerTwo(message.updatedPlayerTwo));
 };
 
 const settlerMovedUncontested = (message) => {

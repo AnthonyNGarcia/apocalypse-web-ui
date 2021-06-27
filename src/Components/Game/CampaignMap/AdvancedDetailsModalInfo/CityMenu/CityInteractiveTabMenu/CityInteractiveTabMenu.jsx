@@ -7,11 +7,13 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ProductionTab from './ProductionTab/ProductionTab';
 import ArmyTab from './ArmyTab/ArmyTab';
+import CommanderTab from './CommanderTab/CommanderTab';
 import cityMenuAC from
   '../../../../../../Redux/actionCreators/cityMenuActionCreators';
-import './CityInteractiveTabMenu.css';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../../Utilities/cityMenuSupplementalViews';
+import CITY_MENU_TAB from '../../../../../Utilities/cityMenuTabs';
+import './CityInteractiveTabMenu.css';
 
 /**
  *
@@ -29,13 +31,13 @@ const CityInteractiveTabMenu = (props) => {
   const navigateToProductionTab = (e) => {
     e.preventDefault();
     cleanupCityView();
-    props.updateCityShowingProductionTab(true);
+    props.updateCityMenuTab(CITY_MENU_TAB.PRODUCTION);
   };
 
   const navigateToArmyTab = (e) => {
     e.preventDefault();
     cleanupCityView();
-    props.updateCityShowingProductionTab(false);
+    props.updateCityMenuTab(CITY_MENU_TAB.ARMY);
   };
 
   return (
@@ -60,9 +62,13 @@ const CityInteractiveTabMenu = (props) => {
           </Row>
           {/* Second row contains the appropriate tab body */}
           <Row>
-            {props.cityShowingProductionTab ?
+            {props.cityMenuTab === CITY_MENU_TAB.PRODUCTION ?
           <ProductionTab/> :
-          <ArmyTab/>}
+          props.cityMenuTab === CITY_MENU_TAB.ARMY ?
+          <ArmyTab/> :
+          props.cityMenuTab === CITY_MENU_TAB.COMMANDER ?
+          <CommanderTab/> :
+          'Oops! An invalid City Menu Tab was Rendered!'}
           </Row>
         </Container>
       </div>
@@ -72,14 +78,14 @@ const CityInteractiveTabMenu = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    cityShowingProductionTab: state.cityMenu.cityShowingProductionTab,
+    cityMenuTab: state.cityMenu.cityMenuTab,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateCityShowingProductionTab: (cityShowingProductionTab) => dispatch(
-        cityMenuAC.setCityShowingProductionTab(cityShowingProductionTab)),
+    updateCityMenuTab: (cityMenuTab) => dispatch(
+        cityMenuAC.setCityMenuTab(cityMenuTab)),
     clearCityMenuSupplementalData: () => dispatch(
         cityMenuAC.setCityMenuSupplementalData({})),
     clearCityMenuSupplementalView: () => dispatch(
@@ -89,8 +95,8 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 CityInteractiveTabMenu.propTypes = {
-  cityShowingProductionTab: PropTypes.bool,
-  updateCityShowingProductionTab: PropTypes.func,
+  cityMenuTab: PropTypes.any,
+  updateCityMenuTab: PropTypes.func,
   clearCityMenuSupplementalData: PropTypes.func,
   clearCityMenuSupplementalView: PropTypes.func,
 };

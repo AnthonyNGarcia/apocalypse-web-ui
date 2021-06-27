@@ -48,7 +48,7 @@ const BattleSidebar = (props) => {
       const configurationSubmission = {
         gameId: props.gameId,
         playerDoneConfiguring: props.ownPlayerNumber,
-        configuredArmy: ownArmy,
+        configuredArmyUnits: ownArmy.units,
       };
       axios.post(
           apiEndpoints.battleController +

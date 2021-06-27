@@ -15,6 +15,7 @@ import CITY_MENU_SUPPLEMENTAL_VIEWS from
 import PLAYER from '../../../../../Utilities/playerEnums';
 import axios from 'axios';
 import apiEndpoints from '../../../../../Utilities/apiEndpoints';
+import CITY_MENU_TAB from '../../../../../Utilities/cityMenuTabs';
 import './CityDetailsSidebar.css';
 
 /**
@@ -52,6 +53,23 @@ const CityDetailsSidebar = (props) => {
       console.warn('Error trying to train settler!');
       console.warn(error);
     }
+  };
+
+  const showCommanderTabHandler = (e) => {
+    e.preventDefault();
+    props.updateCityMenuTab(CITY_MENU_TAB.COMMANDER);
+  };
+
+  const commanderIsAlive = (commanderInfo) => {
+    for (let i = 0; i < props.ownPlayerData
+        .fallenCommanders.length; i++) {
+      const commander = props.ownPlayerData.fallenCommanders[i];
+      if (commander.commanderInfo.displayName ===
+              commanderInfo.displayName) {
+        return false;
+      }
+    }
+    return true;
   };
 
   useEffect(() => {
@@ -121,7 +139,7 @@ const CityDetailsSidebar = (props) => {
                 props.ownPlayerData
                     .astridiumCollected}
               onClick={trainSettlerHandler}
-              style={{fontSize: 'small', margin: 'auto'}}
+              style={{width: '100%', fontSize: 'small', margin: 'auto'}}
             >{
                 props.selectedCity.isTrainingSettler ?
                 ( 'Training Settler (' +
@@ -143,6 +161,31 @@ const CityDetailsSidebar = (props) => {
                       ' (Cannot Train While Another Settler is in this City)' :
                       ''
               }</Button>
+          </Row>
+          <Row>
+            <Button
+              variant='primary'
+              disabled={!props.isOwnTurn ||
+                (props.selectedCity.assignedCommander &&
+                  commanderIsAlive(props.selectedCity.assignedCommander))}
+              onClick={showCommanderTabHandler}
+              style={{width: '100%', fontSize: 'small',
+                margin: 'auto', marginTop: '1vh'}}
+            >
+              {props.selectedCity.assignedCommander ?
+              (
+                <React.Fragment>
+                  <p style={{margin: '0px', padding: '0px'}}>
+                    {props.selectedCity.assignedCommander
+                        .displayName + ' calls this City home.'}
+                  </p>
+                  <p style={{margin: '0px', padding: '0px'}}>
+                    {'They can respawn here if they fall in battle.'}
+                  </p>
+                </React.Fragment>
+              ) :
+                'Choose a Commander for this City!'}
+            </Button>
           </Row>
           <Row>
             <h5>Current Buildings</h5>
@@ -242,6 +285,8 @@ const mapDispatchToProps = (dispatch) => {
         cityMenuAC.setCityMenuSupplementalData(cityMenuSupplementalData)),
     updateCityMenuSupplementalView: (cityMenuSupplementalView) => dispatch(
         cityMenuAC.setCityMenuSupplementalView(cityMenuSupplementalView)),
+    updateCityMenuTab: (cityMenuTab) => dispatch(
+        cityMenuAC.setCityMenuTab(cityMenuTab)),
   };
 };
 
@@ -256,6 +301,7 @@ CityDetailsSidebar.propTypes = {
   ownPlayerData: PropTypes.any,
   selectedTilePosition: PropTypes.number,
   selectedTile: PropTypes.any,
+  updateCityMenuTab: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CityDetailsSidebar);
