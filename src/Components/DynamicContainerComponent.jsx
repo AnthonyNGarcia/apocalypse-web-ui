@@ -12,12 +12,13 @@ import flattenObject from './Utilities/flattenObjectValuesToArray';
 import websocketMessageReceiver from
   './Utilities/websockets/websocketMessageReceiver';
 import './DynamicContainerComponent.css';
+import ChatManager from './ChatManager/ChatManager';
 
 /**
  *
  * This is the second highest container component in the application, where true
  * dynamic rendering begins to take place. It’s only purpose is to 1) render one
- * of a few other big components based off very simple redux state,
+ * of a few other big components based off very simple redux state (plus chat)
  *
  * AND 2) to serve as the single websocket connection source, but forwards all
  * actual websocket message handling to helper functions.
@@ -108,6 +109,7 @@ const DynamicContainerComponent = (props) => {
         onReceiveMessage={onReceiveMessage} ref={websocket}
         onDisconnect={onDisconnect}/>
       {viewToRender}
+      <ChatManager/>
     </React.Fragment>
   );
 };

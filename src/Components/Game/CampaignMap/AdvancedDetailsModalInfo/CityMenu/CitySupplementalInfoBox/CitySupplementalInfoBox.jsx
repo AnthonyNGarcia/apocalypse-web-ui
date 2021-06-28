@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import SelectedBuildingDetails from
   './SelectedBuildingDetails/SelectedBuildingDetails';
 import SelectedUnitDetails from './SelectedUnitDetails/SelectedUnitDetails';
+import SelectedCommanderDetails from
+  './SelectedCommanderDetails/SelectedCommanderDetails';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../../../../Utilities/cityMenuSupplementalViews';
 import flattenObject from '../../../../../Utilities/flattenObjectValuesToArray';
@@ -24,6 +26,9 @@ const CitySupplementalInfoBox = (props) => {
         <SelectedBuildingDetails/> :
         props.cityMenuSupplementalView === CITY_MENU_SUPPLEMENTAL_VIEWS.UNIT ?
         <SelectedUnitDetails/> :
+        props.cityMenuSupplementalView ===
+        CITY_MENU_SUPPLEMENTAL_VIEWS.COMMANDER ?
+        <SelectedCommanderDetails/> :
         props.cityMenuSupplementalView === CITY_MENU_SUPPLEMENTAL_VIEWS.NONE ?
         <p>Selected items will display more information here.</p> : null}
     </React.Fragment>

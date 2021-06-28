@@ -1,0 +1,38 @@
+.attributions-container {
+    background-color: black;
+    border-radius: 10px 0px 0px 0px;
+    height: 30vh;
+    min-height: 30vh;
+    max-height: 30vh;
+    width: 30vw;
+    min-width: 30vw;
+    max-width: 30vw;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+}
+
+.icon-attributions-header {
+    padding-top: 1vh;
+    padding-left: 1vw;
+}
+
+.attributions-scrollbar-row {
+    padding-left: 1vw;
+    height: 20vh;
+    min-height: 20vh;
+    max-height: 20vh;
+}
+.attributions-container a {
+    color: lightblue;
+}
+
+.attributions-container a:hover {
+    color: cyan;
+}
+
+.tiny-icon-image {
+    background-color: white;
+    height: 2vh;
+    width: auto;
+}

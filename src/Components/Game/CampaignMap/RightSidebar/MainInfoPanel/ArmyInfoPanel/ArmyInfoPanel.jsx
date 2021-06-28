@@ -32,8 +32,6 @@ const ArmyInfoPanel = (props) => {
         armySize += props.playerOne.currentBaseArmySize;
       } else if (props.selectedArmy.owner === props.playerTwo.playerNumber) {
         armySize += props.playerTwo.currentBaseArmySize;
-      } else {
-        console.log('Oops! Couldn\'t map this army to a player!');
       }
       armySize += props.selectedArmy.commander.armySizeBonus;
       setSelectedArmyMaxSize(armySize);
@@ -66,7 +64,7 @@ const ArmyInfoPanel = (props) => {
           {props.ownPlayerNumber === props.selectedArmy.owner ?
         <React.Fragment>
           <Row className='center-text'>
-            <h2>Commander {props.selectedArmy.commander.name}</h2>
+            <h2>{props.selectedArmy.commander.commanderInfo.displayName}</h2>
           </Row>
           <Row className='center-text'>
             <h5>Level {props.selectedArmy.commander.level}</h5>
@@ -98,15 +96,16 @@ const ArmyInfoPanel = (props) => {
           <Row>
             <Button
               disabled={props.selectedArmy.remainingActions <= 0 ||
-                props.isOwnTurn == false}
+                !props.isOwnTurn}
               onClick={fortifyArmyHandler}>
-            Fortify
+              {props.selectedArmy.armyStance === 'NONE' ?
+              'Fortify' : 'Entrench'}
             </Button>
           </Row>
         </React.Fragment> :
         <React.Fragment>
           <Row className='center-text enemy-entity'>
-            <h2>Commander {props.selectedArmy.commander.name}</h2>
+            <h2>{props.selectedArmy.commander.commanderInfo.displayName}</h2>
           </Row>
           <Row className='center-text enemy-entity'>
             <h5>Level {props.selectedArmy.commander.level}</h5>
@@ -135,6 +134,8 @@ const ArmyInfoPanel = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    isOwnTurn: state.gamePlayer.ownPlayerNumber ===
+      state.gamePlayer.playerWhoseTurnItIs,
     allUnitsConstants: state.game.gameConstants.allUnits,
     playerOne: state.gamePlayer.playerOne,
     playerTwo: state.gamePlayer.playerTwo,
@@ -154,6 +155,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 ArmyInfoPanel.propTypes = {
+  isOwnTurn: PropTypes.bool,
   mainPanelData: PropTypes.any,
   allUnitsConstants: PropTypes.any,
   playerOne: PropTypes.any,

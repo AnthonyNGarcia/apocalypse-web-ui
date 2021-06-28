@@ -24,8 +24,6 @@ const ArmyBoards = (props) => {
     if (props.battleData) {
       const attackingArmy = props.battleData.attackingArmy;
       const defendingArmy = props.battleData.defendingArmy;
-      console.log(attackingArmy.owner);
-      console.log(props.ownPlayerNumber);
       if (attackingArmy.owner === props.ownPlayerNumber) {
         setOwnArmy(attackingArmy);
         setEnemyArmy(defendingArmy);
@@ -33,9 +31,6 @@ const ArmyBoards = (props) => {
         setOwnArmy(defendingArmy);
         setEnemyArmy(attackingArmy);
       }
-      console.log('army-boards');
-      console.log(attackingArmy);
-      console.log(defendingArmy);
     }
   }, [props]);
 

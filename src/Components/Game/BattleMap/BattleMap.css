@@ -40,3 +40,14 @@
     animation-iteration-count: infinite;
     transition-timing-function: linear;
 }
+
+.ambush-title {
+    width: 100%;
+    margin-top: 1vh;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px 2px black;
+    animation-name: blink; 
+    animation-duration: 2s; 
+    animation-iteration-count: infinite;
+    transition-timing-function: linear;
+}

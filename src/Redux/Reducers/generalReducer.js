@@ -8,7 +8,7 @@ const initialState = {
   ownUsername: 'Default Username',
   ownUserId: 'Default User Id',
   mainView: MAIN_VIEWS.LOBBY_VIEW,
-  websocketTopics: [WEBSOCKET_TOPICS.BROWSE_LOBBIES],
+  websocketTopics: [WEBSOCKET_TOPICS.BROWSE_LOBBIES, WEBSOCKET_TOPICS.GLOBAL_CHAT],
 };
 
 const setOwnUsername = (state, action) => {

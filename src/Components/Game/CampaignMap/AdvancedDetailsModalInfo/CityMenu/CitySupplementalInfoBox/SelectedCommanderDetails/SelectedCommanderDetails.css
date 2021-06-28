@@ -1,0 +1,10 @@
+.commander-image {
+  display: block;
+  margin: auto;
+  position: absolute;
+  height: 15vh;
+  min-height: 15vh;
+  max-height: 15vh;
+  width: auto;
+  text-align: center;
+}

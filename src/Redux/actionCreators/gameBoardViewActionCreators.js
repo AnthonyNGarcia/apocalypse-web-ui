@@ -25,6 +25,12 @@ const actionCreators = {
       isMovingArmy: isMovingArmy,
     };
   },
+  setIsMovingSettler: (isMovingSettler) => {
+    return {
+      type: gameBoardViewAT.SET_IS_MOVING_SETTLER,
+      isMovingSettler: isMovingSettler,
+    };
+  },
   setSelectedTilePosition: (selectedTilePosition) => {
     return {
       type: gameBoardViewAT.SET_SELECTED_TILE_POSITION,

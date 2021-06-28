@@ -1,21 +1,15 @@
 /**
  * ENUM file.
  */
-import ARMY_ACTIONS from './armyActions';
-
-const HUMANS_NAME = 'HUMANS';
-const HUMANS_ACTION_BAR_DATA = [ARMY_ACTIONS.CAMP];
-const INSECTS_NAME = 'INSECTS';
-const INSECTS_ACTION_BAR_DATA = [ARMY_ACTIONS.CAMP];
 
 const FACTIONS = {
   HUMANS: {
-    NAME: HUMANS_NAME,
-    ACTION_BAR_DATA: HUMANS_ACTION_BAR_DATA,
+    enum: 'HUMANS',
+    displayName: 'Humans',
   },
   INSECTS: {
-    NAME: INSECTS_NAME,
-    ACTION_BAR_DATA: INSECTS_ACTION_BAR_DATA,
+    enum: 'INSECTS',
+    displayName: 'Insects',
   },
 };
 

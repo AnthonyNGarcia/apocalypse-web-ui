@@ -10,7 +10,10 @@ import PropTypes from 'prop-types';
 import LOBBY_VIEWS from '../../Utilities/lobbyViews';
 import lobbyAC from '../../../Redux/actionCreators/lobbyActionCreators';
 import generalAC from '../../../Redux/actionCreators/generalActionCreators';
+import chatAC from '../../../Redux/actionCreators/chatActionCreators';
 import WEBSOCKET_TOPICS from '../../Utilities/websockets/websocketTopics';
+import CHAT_TOPIC from '../../Utilities/chatTopics';
+import IconAttributions from '../IconAttributions/IconAttributions';
 import './BrowseLobbies.css';
 
 /**
@@ -31,6 +34,9 @@ const BrowseLobbies = (props) => {
       );
       updatedWebsocketTopics.push(
           WEBSOCKET_TOPICS.specificLobbyWithId(lobbyData.lobbyId));
+      updatedWebsocketTopics.push(
+          WEBSOCKET_TOPICS.lobbyChatWithId(lobbyData.lobbyId),
+      );
       await props.saveWebsocketTopics(updatedWebsocketTopics);
     }
     if (isMounted.current) {
@@ -41,6 +47,9 @@ const BrowseLobbies = (props) => {
     }
     if (isMounted.current) {
       await props.saveLobbyId(lobbyData.lobbyId);
+    }
+    if (isMounted.current) {
+      await props.updateSelectedChatTopic(CHAT_TOPIC.LOBBY);
     }
     if (isMounted.current) {
       props.updateLobbyViewToInLobby();
@@ -113,7 +122,7 @@ const BrowseLobbies = (props) => {
       <Container>
         <Row>
           <Col xs={8}>
-            <h3>Browsing Lobbies Component</h3>
+            <h3>Open Lobbies</h3>
           </Col>
           <Col xs={4}>
             <Button variant="primary"
@@ -139,6 +148,7 @@ const BrowseLobbies = (props) => {
             onClick={createLobbyHandler}>Create Lobby</Button>
         </Row>
       </Container>
+      <IconAttributions/>
     </React.Fragment>
   );
 };
@@ -166,6 +176,8 @@ const mapDispatchToProps = (dispatch) => {
         lobbyAC.setLobbyPlayerTwo(lobbyPlayerTwo)),
     saveWebsocketTopics: (websocketTopics) => dispatch(
         generalAC.setWebsocketTopics(websocketTopics)),
+    updateSelectedChatTopic: (selectedChatTopic) => dispatch(
+        chatAC.setSelectedChatTopic(selectedChatTopic)),
   };
 };
 
@@ -180,6 +192,7 @@ BrowseLobbies.propTypes = {
   saveLobbyPlayerTwo: PropTypes.func,
   saveWebsocketTopics: PropTypes.func,
   updateLobbyViewToInLobby: PropTypes.func,
+  updateSelectedChatTopic: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BrowseLobbies);

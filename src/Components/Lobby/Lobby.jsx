@@ -23,7 +23,7 @@ const Lobby = (props) => {
       <Container>
         <Row>
           <Col xs={9}>
-            <h1>Lobby Component</h1>
+            <h1>Apocalypse - Final Frontier</h1>
           </Col>
           <Col xs={3} className="center-text">
             <h3>{props.ownUsername}</h3>

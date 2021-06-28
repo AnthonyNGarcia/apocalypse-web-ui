@@ -6,6 +6,8 @@ import gameBoardViewMessageHandler from
 import cityMenuMessageHandler from './messageHandlers/cityMenuMessageHandler';
 import battleViewMessagHandler from
   './messageHandlers/battleViewMessageHandler';
+import chatMessageMessageHandler from
+  './messageHandlers/chatMessageMessageHandler';
 import {store} from '../../../App';
 
 /**
@@ -28,6 +30,8 @@ const websocketMessageReceiver = (message, topic) => {
   const gameBoard = WEBSOCKET_TOPICS.gameBoardWithGameId(gameId);
   const city = WEBSOCKET_TOPICS.cityWithGameId(gameId);
   const battle = WEBSOCKET_TOPICS.battleWithGameId(gameId);
+  const lobbyChat = WEBSOCKET_TOPICS.lobbyChatWithId(lobbyId);
+  const gameChat = WEBSOCKET_TOPICS.gameChatWithId(gameId);
   switch (topic) {
     case WEBSOCKET_TOPICS.BROWSE_LOBBIES:
     case specificLobby:
@@ -44,6 +48,11 @@ const websocketMessageReceiver = (message, topic) => {
       break;
     case battle:
       battleViewMessagHandler(message);
+      break;
+    case WEBSOCKET_TOPICS.GLOBAL_CHAT:
+    case lobbyChat:
+    case gameChat:
+      chatMessageMessageHandler(message);
       break;
     default:
       console.warn('Unidentified websocket topic for incoming message: ' +

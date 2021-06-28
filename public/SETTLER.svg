@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="1.396 0.545 498.096 498.91" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <radialGradient gradientUnits="userSpaceOnUse" cx="242.662" cy="244.198" r="231.717" id="gradient-0">
+      <stop offset="0" style="stop-color: rgba(216, 216, 216, 1)"/>
+      <stop offset="1" style="stop-color: rgba(165, 165, 165, 1)"/>
+    </radialGradient>
+    <filter id="inner-shadow-filter-0" x="-500%" y="-500%" width="1000%" height="1000%" bx:preset="inner-shadow 1 0 0 40 1 rgba(0,0,0,0.7)">
+      <feOffset dx="0" dy="0"/>
+      <feGaussianBlur stdDeviation="40"/>
+      <feComposite operator="out" in="SourceGraphic"/>
+      <feComponentTransfer result="choke">
+        <feFuncA type="linear" slope="2"/>
+      </feComponentTransfer>
+      <feFlood flood-color="rgba(0,0,0,0.7)" result="color"/>
+      <feComposite operator="in" in="color" in2="choke" result="shadow"/>
+      <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <circle style="fill: url(#gradient-0); filter: url(#inner-shadow-filter-0);" cx="242.662" cy="244.198" r="231.717" transform="matrix(1.074794, 0, 0, 1.07655, -10.367285, -12.89136)"/>
+  <g id="Page-1" fill="none" fill-rule="evenodd" transform="matrix(4.493755, 0, 0, 3.942795, 128.32535, 121.663515)" style="">
+    <g id="037---Waypoint-Flag" fill="rgb(0,0,0)" fill-rule="nonzero" transform="translate(0 -1)">
+      <path id="Shape" d="M 10.95 88.795 L 12.942 88.234 C 14.858 87.695 15.978 85.691 15.442 83.761 L -7.332 1.672 C -7.655 0.516 -8.419 -0.468 -9.459 -1.058 C -10.502 -1.649 -11.733 -1.796 -12.883 -1.475 L -13.14 -1.401 C -15.535 -0.725 -16.934 1.774 -16.265 4.187 L 6.511 86.276 C 7.048 88.206 9.032 89.334 10.95 88.795 Z" style=""/>
+      <path id="Shape" d="M 70.302 25.019 C 64.48 22.094 59.094 18.362 54.3 13.93 C 53.899 13.559 53.741 12.99 53.894 12.462 C 56.271 3.413 58.032 -5.787 59.172 -15.077 C 59.353 -16.622 58.526 -17.077 57.653 -16.016 C 40.538 4.599 10.925 -19.789 -6.703 -1.05 C -6.49 -0.652 -6.324 -0.23 -6.206 0.207 L 5.705 43.166 C 23.362 24.655 52.872 48.892 69.956 28.321 C 70.829 27.261 70.994 25.322 70.302 25.019 Z" style=""/>
+    </g>
+  </g>
+</svg>

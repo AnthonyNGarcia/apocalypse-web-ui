@@ -1,0 +1,41 @@
+.expanded-chat-manager-container {
+    position: fixed;
+    height: 50vh;
+    max-height: 50vh;
+    min-height: 50vh;
+    margin: 0px;
+    padding: 0px;
+    left: 1vw;
+    bottom: 1vh;
+    width: 25vw;
+    min-width: 25vw;
+    max-width: 25vw;
+    z-index: 100;
+}
+
+.shrunken-chat-manager-container {
+    position: fixed;
+    height: 5vh;
+    max-height: 5vh;
+    min-height: 5vh;
+    margin: 0px;
+    padding: 0px;
+    left: 1vw;
+    bottom: 0;
+    width: 25vw;
+    min-width: 25vw;
+    max-width: 25vw;
+    z-index: 100;
+}
+
+.chat-navbar {
+    width: 100%;
+    height: 5vh;
+    max-height: 5vh;
+    min-height: 5vh;
+}
+
+.chat-toggle-button {
+    position: absolute;
+    right: 1.5%;
+}

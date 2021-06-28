@@ -38,7 +38,7 @@ const QueuedUnitItem = (props) => {
         props.queuedUnit.actualUnitTypeToBeProduced);
   };
 
-  const removeUnitHandler = async (e) => {
+  const removeUnitHandler = (e) => {
     e.preventDefault();
     try {
       const removeUnitRequest = {
@@ -46,9 +46,9 @@ const QueuedUnitItem = (props) => {
         tilePosition: props.selectedTilePosition,
         unitIndex: props.discardingIndex,
       };
-      console.log(await axios.patch(
+      axios.patch(
           apiEndpoints.cityController +
-          '/dequeue-unit/', removeUnitRequest));
+          '/dequeue-unit/', removeUnitRequest);
     } catch (e) {
       console.warn('Oops! There was an error trying to cancel ' +
         'unit recruitment!');

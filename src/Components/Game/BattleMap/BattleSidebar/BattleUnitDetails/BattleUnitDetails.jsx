@@ -73,7 +73,6 @@ const BattleUnitDetails = (props) => {
 
   const activeAbilityHandler = (e) => {
     e.preventDefault();
-    console.log('using active ability...');
     try {
       props.updateSelectedBattleUnitIndex(-1);
       const initiateActiveAbilityRequest = {

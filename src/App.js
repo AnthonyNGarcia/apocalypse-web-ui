@@ -9,6 +9,7 @@ import gamePlayerReducer from './Redux/Reducers/GamePlayerReducer';
 import gameBoardViewReducer from './Redux/Reducers/gameBoardViewReducer';
 import battleViewReducer from './Redux/Reducers/battleViewReducer';
 import cityMenuReducer from './Redux/Reducers/cityMenuReducer';
+import chatReducer from './Redux/Reducers/chatReducer';
 import DynamicContainerComponent from './Components/DynamicContainerComponent';
 import './App.css';
 
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   gameBoardView: gameBoardViewReducer,
   battleView: battleViewReducer,
   cityMenu: cityMenuReducer,
+  chat: chatReducer,
 });
 
 export const store = createStore(rootReducer,
