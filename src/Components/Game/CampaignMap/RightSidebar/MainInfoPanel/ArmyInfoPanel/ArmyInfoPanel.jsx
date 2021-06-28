@@ -100,7 +100,8 @@ const ArmyInfoPanel = (props) => {
               disabled={props.selectedArmy.remainingActions <= 0 ||
                 !props.isOwnTurn}
               onClick={fortifyArmyHandler}>
-            Fortify
+              {props.selectedArmy.armyStance === 'NONE' ?
+              'Fortify' : 'Entrench'}
             </Button>
           </Row>
         </React.Fragment> :
