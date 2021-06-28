@@ -96,6 +96,7 @@
 }
 
 .highlight-tile {
+  border: 4px solid greenyellow;
   animation-name: slow-blink;
   animation-duration: 1.5s;
   animation-timing-function: linear;
@@ -113,15 +114,8 @@
 
 
 @keyframes slow-blink {
-  0% {
-    opacity: 100%;
-  }
-  25% {
-    opacity: 50%
-  }
   50% {
-    filter: brightness(1.2) saturate(1.5);
-    opacity: 100%;
+    filter: brightness(1.5) saturate(1.4);
   }
 }
 

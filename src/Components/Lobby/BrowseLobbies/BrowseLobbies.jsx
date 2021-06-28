@@ -13,6 +13,7 @@ import generalAC from '../../../Redux/actionCreators/generalActionCreators';
 import chatAC from '../../../Redux/actionCreators/chatActionCreators';
 import WEBSOCKET_TOPICS from '../../Utilities/websockets/websocketTopics';
 import CHAT_TOPIC from '../../Utilities/chatTopics';
+import IconAttributions from '../IconAttributions/IconAttributions';
 import './BrowseLobbies.css';
 
 /**
@@ -147,6 +148,7 @@ const BrowseLobbies = (props) => {
             onClick={createLobbyHandler}>Create Lobby</Button>
         </Row>
       </Container>
+      <IconAttributions/>
     </React.Fragment>
   );
 };
