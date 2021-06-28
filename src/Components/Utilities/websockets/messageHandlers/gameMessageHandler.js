@@ -11,8 +11,10 @@ import gamePlayerAC from
   '../../../../Redux/actionCreators/gamePlayerActionCreators';
 import cityMenuAC from
   '../../../../Redux/actionCreators/cityMenuActionCreators';
+import chatAC from '../../../../Redux/actionCreators/chatActionCreators';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from '../../cityMenuSupplementalViews';
 import MAIN_PANEL_VIEWS from '../../gameMainPanelViews';
+import CHAT_TOPIC from '../../chatTopics';
 
 /**
  * This is the Game Message Handler.
@@ -47,19 +49,23 @@ const leavingGameCleanup = () => {
   const topicForGameBoard = WEBSOCKET_TOPICS.gameBoardWithGameId(gameId);
   const topicForCity = WEBSOCKET_TOPICS.cityWithGameId(gameId);
   const topicForBattle = WEBSOCKET_TOPICS.battleWithGameId(gameId);
+  const topicForChat = WEBSOCKET_TOPICS.gameChatWithId(gameId);
 
   const oldWebsocketTopics = [...state.general.websocketTopics];
   const updatedWebsocketTopics = oldWebsocketTopics
       .filter((topic) => topic !== topicForThisGame)
       .filter((topic) => topic !== topicForGameBoard)
       .filter((topic) => topic !== topicForCity)
-      .filter((topic) => topic !== topicForBattle);
+      .filter((topic) => topic !== topicForBattle)
+      .filter((topic) => topic !== topicForChat);
 
   updatedWebsocketTopics.push(WEBSOCKET_TOPICS.BROWSE_LOBBIES);
 
   store.dispatch(generalAC.setWebsocketTopics(updatedWebsocketTopics));
   store.dispatch(generalAC.setMainView(MAIN_VIEWS.LOBBY_VIEW));
 
+  store.dispatch(chatAC.setGameMessages([]));
+  store.dispatch(chatAC.setSelectedChatTopic(CHAT_TOPIC.GLOBAL));
   store.dispatch(gameAC.setGameConstants(null));
   store.dispatch(gameAC.setGameId(null));
   store.dispatch(gameBoardViewAC.setGameBoard(null));

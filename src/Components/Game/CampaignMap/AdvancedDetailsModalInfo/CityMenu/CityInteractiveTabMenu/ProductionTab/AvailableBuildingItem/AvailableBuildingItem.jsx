@@ -80,10 +80,7 @@ const AvailableBuildingItem = (props) => {
       } else {
         setIsBuildingThis(false);
       }
-
       forceUpdate();
-    } else {
-      console.log('no selected city...');
     }
   }, [props.selectedCity.totalBuildingProduction,
     props.selectedCity.currentConstructionProject,

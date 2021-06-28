@@ -32,8 +32,6 @@ const ArmyInfoPanel = (props) => {
         armySize += props.playerOne.currentBaseArmySize;
       } else if (props.selectedArmy.owner === props.playerTwo.playerNumber) {
         armySize += props.playerTwo.currentBaseArmySize;
-      } else {
-        console.log('Oops! Couldn\'t map this army to a player!');
       }
       armySize += props.selectedArmy.commander.armySizeBonus;
       setSelectedArmyMaxSize(armySize);

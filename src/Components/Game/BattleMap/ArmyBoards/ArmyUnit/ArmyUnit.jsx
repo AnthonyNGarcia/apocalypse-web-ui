@@ -69,7 +69,6 @@ const ArmyUnit = (props) => {
 
   const selectOwnUnitHandler = async (e, justSelectedUnitIndex) => {
     e.preventDefault();
-    console.log('selected a unit at index ' + justSelectedUnitIndex);
     if (!props.ownArmySubmitted) {
       // Assuming we are still configuring
       const unitAtJustSelectedUnitIndex = ownArmy.units[justSelectedUnitIndex];

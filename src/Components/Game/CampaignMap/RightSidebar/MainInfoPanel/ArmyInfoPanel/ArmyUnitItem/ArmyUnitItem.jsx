@@ -26,7 +26,7 @@ const ArmyUnitItem = (props) => {
     }
   }, [props]);
 
-  const removeUnitHandler = async (e) => {
+  const removeUnitHandler = (e) => {
     e.preventDefault();
     try {
       const removeUnitRequest = {
@@ -34,9 +34,8 @@ const ArmyUnitItem = (props) => {
         tilePosition: props.selectedTilePosition,
         unitIndex: props.discardingIndex,
       };
-      console.log(await axios.patch(
-          apiEndpoints.armyController +
-          '/disband-army-unit', removeUnitRequest));
+      axios.patch(apiEndpoints.armyController +
+          '/disband-army-unit', removeUnitRequest);
     } catch (e) {
       console.warn('Oops! There was an error trying to disband an Army unit!');
       console.warn(e);

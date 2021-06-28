@@ -37,7 +37,7 @@ const UnassignedUnitItem = (props) => {
     props.updateCityMenuSupplementalData(props.unit.unitType);
   };
 
-  const removeUnitHandler = async (e) => {
+  const removeUnitHandler = (e) => {
     e.preventDefault();
     try {
       const removeUnitRequest = {
@@ -45,9 +45,8 @@ const UnassignedUnitItem = (props) => {
         tilePosition: props.selectedTilePosition,
         unitIndex: props.discardingIndex,
       };
-      console.log(await axios.patch(
-          apiEndpoints.cityController +
-          '/disband-unassigned-unit', removeUnitRequest));
+      axios.patch(apiEndpoints.cityController +
+          '/disband-unassigned-unit', removeUnitRequest);
     } catch (e) {
       console.warn('Oops! There was an error trying to disband ' +
         'an unassigned unit!');
@@ -55,7 +54,7 @@ const UnassignedUnitItem = (props) => {
     }
   };
 
-  const assignUnitHandler = async (e) => {
+  const assignUnitHandler = (e) => {
     e.preventDefault();
     try {
       const assignUnitRequest = {
@@ -63,10 +62,8 @@ const UnassignedUnitItem = (props) => {
         tilePosition: props.selectedTilePosition,
         unitIndex: props.discardingIndex,
       };
-      console.log(await axios.patch(
-          apiEndpoints.cityController +
-          '/assign-army-unit',
-          assignUnitRequest));
+      axios.patch(apiEndpoints.cityController + '/assign-army-unit',
+          assignUnitRequest);
     } catch (e) {
       console.warn('Oops! There was an error trying to assign ' +
         'an unassigned unit!');

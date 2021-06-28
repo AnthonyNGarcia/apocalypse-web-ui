@@ -32,7 +32,7 @@ const CityInfoPanel = (props) => {
     } else if (props.ownPlayerNumber === PLAYER.TWO) {
       setOwnPlayerData(props.playerTwo);
     } else {
-      console.log('Oops! Couldn\'t identify own player number/data!');
+      console.warn('Oops! Couldn\'t identify own player number/data!');
     }
   }, [props]);
 

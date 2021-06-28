@@ -1,0 +1,6 @@
+.chat-tab-container {
+    max-height: 45vh;
+    min-height: 45vh;
+    height: 45vh;
+    width: 100%;
+}

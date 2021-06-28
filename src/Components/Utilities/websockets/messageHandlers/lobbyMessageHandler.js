@@ -6,12 +6,14 @@ import gameBoardViewAC from
   '../../../../Redux/actionCreators/gameBoardViewActionCreators';
 import gamePlayerAC from
   '../../../../Redux/actionCreators/gamePlayerActionCreators';
+import chatAC from '../../../../Redux/actionCreators/chatActionCreators';
 import {store} from '../../../../App';
 import PLAYER from '../../playerEnums';
 import LOBBY_VIEWS from '../../lobbyViews';
 import WEBSOCKET_TOPICS from '../websocketTopics';
 import GAME_VIEWS from '../../gameViews';
 import MAIN_VIEWS from '../../mainViews';
+import CHAT_TOPIC from '../../chatTopics';
 
 /**
  * This is the Lobby Message Handler.
@@ -69,11 +71,15 @@ const leavingLobbyCleanup = (leavingPlayerNumber) => {
   }
   const topicForThisLobby = WEBSOCKET_TOPICS.specificLobbyWithId(
       state.lobby.lobbyId);
+  const thisLobbyChatTopic = WEBSOCKET_TOPICS.lobbyChatWithId(
+      state.lobby.lobbyId);
   const oldWebsocketTopics = [...state.general.websocketTopics];
   const updatedWebsocketTopics = oldWebsocketTopics.filter((topic) =>
-    topic !== topicForThisLobby);
+    topic !== topicForThisLobby && topic !== thisLobbyChatTopic);
   updatedWebsocketTopics.push(WEBSOCKET_TOPICS.BROWSE_LOBBIES);
 
+  store.dispatch(chatAC.setSelectedChatTopic(CHAT_TOPIC.GLOBAL));
+  store.dispatch(chatAC.setLobbyMessages([]));
   store.dispatch(generalAC.setWebsocketTopics(updatedWebsocketTopics));
   store.dispatch(lobbyAC.setLobbyView(LOBBY_VIEWS.BROWSE_LOBBIES_VIEW));
   store.dispatch(lobbyAC.setLobbyPlayerOne(null));
@@ -94,9 +100,11 @@ const startGameCleanup = async (message) => {
 
   const topicForThisLobby = WEBSOCKET_TOPICS.specificLobbyWithId(
       state.lobby.lobbyId);
+  const thisLobbyChatTopic = WEBSOCKET_TOPICS.lobbyChatWithId(
+      state.lobby.lobbyId);
   const oldWebsocketTopics = [...state.general.websocketTopics];
   const updatedWebsocketTopics = oldWebsocketTopics.filter((topic) =>
-    topic !== topicForThisLobby);
+    topic !== topicForThisLobby && topic !== thisLobbyChatTopic);
   updatedWebsocketTopics.push(WEBSOCKET_TOPICS.specificGameWithId(
       gameData.gameId));
   updatedWebsocketTopics.push(WEBSOCKET_TOPICS.gameBoardWithGameId(
@@ -104,6 +112,8 @@ const startGameCleanup = async (message) => {
   updatedWebsocketTopics.push(WEBSOCKET_TOPICS.cityWithGameId(
       gameData.gameId));
   updatedWebsocketTopics.push(WEBSOCKET_TOPICS.battleWithGameId(
+      gameData.gameId));
+  updatedWebsocketTopics.push(WEBSOCKET_TOPICS.gameChatWithId(
       gameData.gameId));
 
   await store.dispatch(generalAC.setWebsocketTopics(updatedWebsocketTopics));
@@ -120,6 +130,7 @@ const startGameCleanup = async (message) => {
   await store.dispatch(gamePlayerAC.setPlayerWhoseTurnItIs(
       gameData.playerWhoseTurnItIs));
   await store.dispatch(gamePlayerAC.setOwnPlayerNumber(ownPlayerNumber));
+  await store.dispatch(chatAC.setSelectedChatTopic(CHAT_TOPIC.GAME));
   await store.dispatch(gameAC.setGameView(GAME_VIEWS.GAME_BOARD_VIEW));
 
   await store.dispatch(generalAC.setMainView(MAIN_VIEWS.GAME_VIEW));

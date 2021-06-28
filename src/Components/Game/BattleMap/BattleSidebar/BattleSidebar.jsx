@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import BattleUnitDetails from './BattleUnitDetails/BattleUnitDetails';
-import BattleChatDialog from './BattleChatDialog/BattleChatDialog';
 import axios from 'axios';
 import apiEndpoints from '../../../Utilities/apiEndpoints';
 import battleViewAC from
@@ -21,7 +20,6 @@ import './BattleSidebar.css';
 const BattleSidebar = (props) => {
   const fullRetreatHandler = (e) => {
     e.preventDefault();
-    console.log('Full Retreat Request initiated...');
     try {
       const retreatRequest = {
         gameId: props.gameId,
@@ -40,7 +38,6 @@ const BattleSidebar = (props) => {
 
   const submitConfigurationHandler = (e) => {
     e.preventDefault();
-    console.log('Configuration submission initiated...');
     try {
       const ownArmy = props.battleData.attackingArmy.owner ===
         props.ownPlayerNumber ? props.battleData.attackingArmy :
@@ -82,10 +79,6 @@ const BattleSidebar = (props) => {
           <Button variant="primary" disabled={props.ownArmySubmitted}
             onClick={submitConfigurationHandler}>Ready</Button>
         )}
-      </Row>
-      {/* Third Row contains the Battle Chat Dialog */}
-      <Row>
-        <BattleChatDialog/>
       </Row>
     </React.Fragment>
   );

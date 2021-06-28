@@ -49,7 +49,6 @@ const BattleMap = (props) => {
       setPlayerWhoseTurnItIs(props.battleData.playerWhoseTurnItIs);
     }
   }, [props]);
-  console.log(playerWhoseTurnItIs);
   if (props.battleData) {
     return (
       <React.Fragment>
