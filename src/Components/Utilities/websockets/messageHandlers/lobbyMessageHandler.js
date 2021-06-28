@@ -31,7 +31,7 @@ const messageHandler = (message) => {
       const changingPlayerNumber = message.inLobbyPlayer.playerNumber;
       if (changingPlayerNumber === PLAYER.ONE) {
         store.dispatch(lobbyAC.setLobbyPlayerOne(message.inLobbyPlayer));
-      } else {
+      } else if (changingPlayerNumber === PLAYER.TWO) {
         store.dispatch(lobbyAC.setLobbyPlayerTwo(message.inLobbyPlayer));
       }
       break;

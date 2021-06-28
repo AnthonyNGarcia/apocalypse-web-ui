@@ -22,7 +22,7 @@ const SelectedCommanderDetails = (props) => {
         <Row style={{marginTop: '4vh', width: '100%'}} noGutters>
           {/* First col is the image */}
           <Col md={3} style={{paddingRight: '2vw'}}>
-            {props.ownFactionType === FACTIONS.HUMANS.NAME ? (
+            {props.ownFactionType === FACTIONS.HUMANS.enum ? (
               <img
                 src={'HUMAN_ARMY.svg'}
                 alt=""

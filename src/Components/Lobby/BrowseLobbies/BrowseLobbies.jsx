@@ -113,7 +113,7 @@ const BrowseLobbies = (props) => {
       <Container>
         <Row>
           <Col xs={8}>
-            <h3>Browsing Lobbies Component</h3>
+            <h3>Open Lobbies</h3>
           </Col>
           <Col xs={4}>
             <Button variant="primary"

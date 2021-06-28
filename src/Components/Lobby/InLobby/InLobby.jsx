@@ -5,14 +5,10 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import LOBBY_VIEWS from '../../Utilities/lobbyViews';
-import lobbyAC from '../../../Redux/actionCreators/lobbyActionCreators';
-import gameAC from '../../../Redux/actionCreators/gameActionCreators';
-import generalAC from '../../../Redux/actionCreators/generalActionCreators';
-import MAIN_VIEWS from '../../Utilities/mainViews';
 import axios from 'axios';
 import apiEndpoints from '../../Utilities/apiEndpoints';
 import {useBeforeunload} from 'react-beforeunload';
+import InLobbyPlayer from './InLobbyPlayer/InLobbyPlayer';
 import './InLobby.css';
 
 /**
@@ -67,32 +63,56 @@ const InLobby = (props) => {
 
   return (
     <React.Fragment>
-      <h3>In Lobby Component</h3>
       <Container>
-        <Row>
+        <Row className='center-text'
+          style={{marginTop: '2vh'}}>
           <h4>Lobby Id: {props.lobbyId}</h4>
         </Row>
-        <Row>
+        <Row style={{marginTop: '2vh'}} noGutters>
           <Col>
-            <h4>Player One: {props.lobbyPlayerOne ?
-            props.lobbyPlayerOne.username : ''}</h4>
+            {props.lobbyPlayerOne ? (
+            <React.Fragment>
+              <InLobbyPlayer lobbyPlayer={props.lobbyPlayerOne}/>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <Row noGutters className='center-text'>
+                <p>(Empty Slot)</p>
+              </Row>
+            </React.Fragment>
+          )}
           </Col>
           <Col>
-            <h4>Player Two: {props.lobbyPlayerTwo ?
-            props.lobbyPlayerTwo.username : ''}</h4>
+            {props.lobbyPlayerTwo ? (
+            <React.Fragment>
+              <InLobbyPlayer lobbyPlayer={props.lobbyPlayerTwo}/>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <Row noGutters className='center-text'>
+                <p>(Empty Slot)</p>
+              </Row>
+            </React.Fragment>
+          )}
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <Button variant="primary" onClick={leaveLobbyHandler}>Leave</Button>
+        <Row style={{marginTop: '10vh'}}>
+          <Col style={{textAlign: 'center'}}>
+            <Button variant="primary" onClick={leaveLobbyHandler}>
+              {props.lobbyPlayerOne.userId ===
+              props.ownUserId ? 'Close Lobby' : 'Leave Lobby'}
+            </Button>
           </Col>
-          <Col>
+        </Row>
+        <Row style={{marginTop: '2vh'}}>
+          <Col style={{textAlign: 'center'}}>
             {props.ownUserId === props.lobbyPlayerOne.userId ?
             <Button variant="primary"
               disabled={props.lobbyPlayerOne === null ||
                 props.lobbyPlayerTwo === null}
-              onClick={startGameHandler}>Start</Button> :
-            null}
+              onClick={startGameHandler}>Start Game</Button> :
+            <Button variant="primary"
+              disabled={true}>Waiting for Host To Start Game</Button>}
           </Col>
         </Row>
       </Container>
@@ -102,7 +122,6 @@ const InLobby = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    ownUsername: state.general.ownUsername,
     ownUserId: state.general.ownUserId,
     lobbyId: state.lobby.lobbyId,
     lobbyPlayerOne: state.lobby.lobbyPlayerOne,
@@ -110,56 +129,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateLobbyViewToBrowseLobbies: () => dispatch(
-        lobbyAC.setLobbyView(LOBBY_VIEWS.BROWSE_LOBBIES_VIEW)),
-    saveLobbyPlayerOne: (lobbyPlayerOne) => dispatch(
-        lobbyAC.setLobbyPlayerOne(lobbyPlayerOne)),
-    saveLobbyPlayerTwo: (lobbyPlayerTwo) => dispatch(
-        lobbyAC.setLobbyPlayerTwo(lobbyPlayerTwo)),
-    saveLobbyId: (lobbyId) => dispatch(
-        lobbyAC.setLobbyId(lobbyId)),
-    updateMainViewToGame: () => dispatch(
-        generalAC.setMainView(MAIN_VIEWS.GAME_VIEW)),
-    savePlayerOne: (player) => dispatch(
-        gameAC.setPlayerOne(player)),
-    savePlayerTwo: (player) => dispatch(
-        gameAC.setPlayerTwo(player)),
-    saveGameId: (gameId) => dispatch(
-        gameAC.setGameId(gameId)),
-    saveGameBoard: (gameBoard) => dispatch(
-        gameAC.setGameBoard(gameBoard)),
-    saveActionBarData: (data) => dispatch(
-        gameAC.setActionBarData(data)),
-    updatePlayerWhoseTurnItIs: (playerWhoseTurnItIs) => dispatch(
-        gameAC.setPlayerWhoseTurnItIs(playerWhoseTurnItIs)),
-    saveGameConstants: (gameConstants) => dispatch(
-        gameAC.setGameConstants(gameConstants)),
-    saveOwnPlayerNumber: (ownPlayerNumber) => dispatch(
-        gameAC.setOwnPlayerNumber(ownPlayerNumber)),
-  };
-};
-
 InLobby.propTypes = {
-  ownUsername: PropTypes.string,
   ownUserId: PropTypes.string,
   lobbyId: PropTypes.string,
   lobbyPlayerOne: PropTypes.any,
   lobbyPlayerTwo: PropTypes.any,
-  updateLobbyViewToBrowseLobbies: PropTypes.func,
-  saveLobbyPlayerOne: PropTypes.func,
-  saveLobbyPlayerTwo: PropTypes.func,
-  saveLobbyId: PropTypes.func,
-  saveGameId: PropTypes.func,
-  updateMainViewToGame: PropTypes.func,
-  saveGameBoard: PropTypes.func,
-  savePlayerOne: PropTypes.func,
-  savePlayerTwo: PropTypes.func,
-  saveActionBarData: PropTypes.func,
-  updatePlayerWhoseTurnItIs: PropTypes.func,
-  saveGameConstants: PropTypes.func,
-  saveOwnPlayerNumber: PropTypes.func,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(InLobby);
+export default connect(mapStateToProps)(InLobby);

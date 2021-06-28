@@ -247,7 +247,7 @@ const GameBoard = (props) => {
               armyStyling += ' enemy-army-hidden';
             }
           }
-          if (armyFaction === FACTIONS.HUMANS.NAME) {
+          if (armyFaction === FACTIONS.HUMANS.enum) {
             army = (
               <img
                 src={'HUMAN_ARMY.svg'}
@@ -257,7 +257,7 @@ const GameBoard = (props) => {
                 onClick={(e) => tileClicked(e, item)}
               />
             );
-          } else if (armyFaction === FACTIONS.INSECTS.NAME) {
+          } else if (armyFaction === FACTIONS.INSECTS.enum) {
             army = (
               <img
                 src={'INSECT_ARMY.svg'}

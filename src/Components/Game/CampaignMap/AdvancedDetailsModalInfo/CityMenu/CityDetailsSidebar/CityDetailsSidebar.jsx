@@ -74,9 +74,9 @@ const CityDetailsSidebar = (props) => {
 
   useEffect(() => {
     if (props.selectedCity) {
-      if (props.selectedCity.factionType === FACTIONS.HUMANS.NAME) {
+      if (props.selectedCity.factionType === FACTIONS.HUMANS.enum) {
         setCityHeader('Tier ' + props.selectedCity.tier + ' Human Settlement');
-      } else if (props.selectedCity.factionType === FACTIONS.INSECTS.NAME) {
+      } else if (props.selectedCity.factionType === FACTIONS.INSECTS.enum) {
         setCityHeader('Tier ' + props.selectedCity.tier + ' Insect Hive');
       } else {
         console.warn('Oops! Couldn\'t identify this city faction!');
