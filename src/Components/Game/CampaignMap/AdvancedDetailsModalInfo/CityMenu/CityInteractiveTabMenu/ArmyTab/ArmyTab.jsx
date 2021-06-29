@@ -72,9 +72,8 @@ const ArmyTab = (props) => {
         <Row>
           <h5 style={{'margin': 'auto'}}>
             {props.selectedTile.army ?
-              <span>{'Commander ' + props.selectedTile.army.commander.name +
-              ' L.' +
-                props.selectedTile.army.commander.level + ' (' +
+              <span>{props.selectedTile.army.commander
+                  .commanderInfo.displayName + ' (' +
                 props.selectedTile.army.units.length + '/' +
                 props.ownPlayerData.currentBaseArmySize
               } <span><img
