@@ -11,6 +11,7 @@ const lobbyChatPrefix = subscriberPrefix + '/lobbychat';
 const gameChatPrefix = subscriberPrefix + '/gamechat';
 
 const WEBSOCKET_TOPICS = {
+  TEST_TOPIC: subscriberPrefix + '/misc/test',
   BROWSE_LOBBIES: lobbyPrefix + '/browse-lobbies',
   GLOBAL_CHAT: subscriberPrefix + '/globalchat/',
   lobbyChatWithId: (lobbyId) => lobbyChatPrefix + '/' + lobbyId,

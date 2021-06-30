@@ -18,6 +18,6 @@ module.exports = {
     'react',
   ],
   'rules': {
-    'validateLineBreaks': 'CRLF',
+    'linebreak-style': 0,
   },
 };

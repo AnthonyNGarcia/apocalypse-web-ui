@@ -276,14 +276,30 @@ const GameBoard = (props) => {
       }
 
       if (item.city) {
-        city = (
-          <img
-            src={'HUMAN_CITY_TIER_1.png'}
-            alt=""
-            className={'heximage city-icon'}
-            onClick={(e) => tileClicked(e, item)}
-          />
-        );
+        const cityFaction = item.city.factionType;
+        if (cityFaction === FACTIONS.HUMANS.enum) {
+          city = (
+            <img
+              src={'HUMAN_CITY_TIER_1.png'}
+              alt=""
+              className={'heximage city-icon'}
+              onClick={(e) => tileClicked(e, item)}
+            />
+          );
+        } else if (cityFaction === FACTIONS.INSECTS.enum) {
+          city = (
+            <img
+              src={'INSECT_CITY_TIER_1.png'}
+              alt=""
+              className={'heximage city-icon'}
+              onClick={(e) => tileClicked(e, item)}
+            />
+          );
+        } else {
+          console.warn(
+              'Oops! Unidentified faction read when trying to render city.',
+          );
+        }
       }
 
       if (item.hasAsteroid) {
