@@ -49,7 +49,7 @@ const CityInfoPanel = (props) => {
               <h5>Tier {props.selectedCity.tier} City</h5>
             </Row>
             <Row className='center-text'>
-              <Col xs={8}>
+              <Col xs={6}>
                 <Row>
               Production:
                 </Row>
@@ -60,7 +60,7 @@ const CityInfoPanel = (props) => {
               Growth:
                 </Row>
               </Col>
-              <Col xs={4}>
+              <Col xs={6}>
                 <Row>
                   {props.selectedCity.totalBuildingProduction}
                 </Row>
@@ -68,7 +68,8 @@ const CityInfoPanel = (props) => {
                   {props.selectedCity.totalResearch}
                 </Row>
                 <Row>
-                  {props.selectedCity.currentGrowthStockpile}/250 (+{
+                  {props.selectedCity.currentGrowthStockpile}/{
+                    props.selectedCity.growthToNextTier} (+{
                     props.selectedCity.totalGrowth
                   })
                 </Row>

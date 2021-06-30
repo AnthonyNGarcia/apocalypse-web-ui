@@ -123,7 +123,8 @@ const CityDetailsSidebar = (props) => {
                 {props.selectedCity.totalResearch}
               </Row>
               <Row>
-                {props.selectedCity.currentGrowthStockpile}/200 (+
+                {props.selectedCity.currentGrowthStockpile}/{
+                  props.selectedCity.growthToNextTier} (+
                 {props.selectedCity.totalGrowth})
               </Row>
             </Col>
