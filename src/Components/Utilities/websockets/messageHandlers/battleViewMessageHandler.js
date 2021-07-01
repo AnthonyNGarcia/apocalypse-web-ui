@@ -8,6 +8,7 @@ import gamePlayerAC from
   '../../../../Redux/actionCreators/gamePlayerActionCreators';
 import gameAC from '../../../../Redux/actionCreators/gameActionCreators';
 import GAME_VIEWS from '../../gameViews';
+import PLAYER from '../../playerEnums';
 
 /**
  * This is the Battle View Message Handler.
@@ -29,6 +30,9 @@ const messageHandler = (message) => {
       break;
     case WEBSOCKET_MESSAGE_TYPES.BATTLE_DATA_UPDATED:
       battleDataUpdated(message);
+      break;
+    case WEBSOCKET_MESSAGE_TYPES.ORBITAL_FRACTURE_PERFORMED:
+      orbitalFracturePerformed(message);
       break;
     case WEBSOCKET_MESSAGE_TYPES.BATTLE_ENDED:
       battleEnded(message);
@@ -57,6 +61,15 @@ const battleStarted = async (message) => {
 
 const battleDataUpdated = (message) => {
   store.dispatch(battleViewAC.setBattleData(message.battleData));
+};
+
+const orbitalFracturePerformed = (message) => {
+  store.dispatch(battleViewAC.setBattleData(message.updatedBattleData));
+  if (message.updatedPlayer.playerNumber === PLAYER.ONE) {
+    store.dispatch(gamePlayerAC.setPlayerOne(message.updatedPlayer));
+  } else if (message.updatedPlayer.playerNumber === PLAYER.TWO) {
+    store.dispatch(gamePlayerAC.setPlayerTwo(message.updatedPlayer));
+  }
 };
 
 const battleEnded = async (message) => {

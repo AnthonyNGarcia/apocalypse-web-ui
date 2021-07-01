@@ -126,11 +126,11 @@ const ArmyInfoPanel = (props) => {
             </Col>
             <Col md={8}>
               <OverlayTrigger
-                key='astridium-overlay'
+                key='supercharge-overlay'
                 placement='bottom'
                 trigger={['hover', 'focus']}
                 overlay={
-                  <Tooltip id='astridium-tooltip'>
+                  <Tooltip id='supercharge-tooltip'>
                     <strong>{props.supercharge.displayName}</strong> - {
                       props.supercharge.description}
                   </Tooltip>

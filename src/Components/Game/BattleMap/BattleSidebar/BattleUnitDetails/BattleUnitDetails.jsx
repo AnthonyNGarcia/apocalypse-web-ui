@@ -180,7 +180,8 @@ const BattleUnitDetails = (props) => {
             {/* Skip Button */}
             <Col md={6}>
               <Button disabled={!props.isOwnTurn ||
-              !selectedUnit.eligibleForCommand || !props.showEnemyArmyInBattle}
+              !selectedUnit.eligibleForCommand ||
+              !props.showEnemyArmyInBattle}
               onClick={skipTurnHandler}>Skip Turn</Button>
             </Col>
             {/* Active Ability Button */}
@@ -188,7 +189,8 @@ const BattleUnitDetails = (props) => {
               <Button disabled={!props.isOwnTurn ||
               !selectedUnit.eligibleForCommand ||
               !props.showEnemyArmyInBattle ||
-              selectedUnit.currentActiveAbilityCharges <= 0}
+              selectedUnit.currentActiveAbilityCharges <= 0 ||
+              true}
               onClick={activeAbilityHandler}>
                 {props.allActiveAbilities[
                     selectedUnit.activeAbility.activeAbilityType]

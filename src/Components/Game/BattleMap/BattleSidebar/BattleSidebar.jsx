@@ -2,6 +2,9 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import Button from 'react-bootstrap/Button';
 import BattleUnitDetails from './BattleUnitDetails/BattleUnitDetails';
 import axios from 'axios';
@@ -9,6 +12,8 @@ import apiEndpoints from '../../../Utilities/apiEndpoints';
 import battleViewAC from
   '../../../../Redux/actionCreators/battleViewActionCreators';
 import './BattleSidebar.css';
+import ASTRIDIUM_ABILITY_TYPE from '../../../Utilities/astridiumAbilityTypes';
+import PLAYER from '../../../Utilities/playerEnums';
 
 /**
  *
@@ -59,6 +64,20 @@ const BattleSidebar = (props) => {
     }
   };
 
+  const orbitalFractureHandler = (e) => {
+    e.preventDefault();
+    try {
+      const request = {
+        gameId: props.gameId,
+        playerPerformingAction: props.ownPlayerNumber,
+      };
+      axios.post(apiEndpoints.battleController + '/orbital-fracture', request);
+    } catch (error) {
+      console.warn('Error trying to perform Orbital Fracture!');
+      console.warn(error);
+    }
+  };
+
   return (
     <React.Fragment>
       {/* First Row contains the unit details */}
@@ -67,7 +86,8 @@ const BattleSidebar = (props) => {
       </Row>
       {/* Second Row contains a couple battle-wide buttons */}
       <Row>
-        {props.showEnemyArmyInBattle ? (
+        <Col md={4}>
+          {props.showEnemyArmyInBattle ? (
           <Button variant="danger"
             disabled={!props.isOwnTurn || (
               (!props.battleData.tilePositionsThatDefenderCanRetreatTo ||
@@ -79,6 +99,33 @@ const BattleSidebar = (props) => {
           <Button variant="primary" disabled={props.ownArmySubmitted}
             onClick={submitConfigurationHandler}>Ready</Button>
         )}
+        </Col>
+        <Col md={8}>
+          <OverlayTrigger
+            key='orbital-fracture-overlay'
+            placement='bottom'
+            trigger={['hover', 'focus']}
+            overlay={
+              <Tooltip id='orbital-fracture-tooltip'>
+                <strong>{props.orbitalFracture.displayName}</strong> - {
+                  props.orbitalFracture.description}
+              </Tooltip>
+            }>
+            <Button variant="primary"
+              disabled={!props.isOwnTurn || !props.showEnemyArmyInBattle ||
+                (props.ownPlayerData.currentAstridium <
+                  props.orbitalFracture.astridiumCost)}
+              onClick={orbitalFractureHandler}>
+              <span>
+                {props.orbitalFracture.displayName} ({
+                  props.orbitalFracture.astridiumCost} <img
+                  src={'ASTEROID.svg'}
+                  alt=""
+                  className={'tiny-asteroid-icon-battle'}/>)
+              </span>
+            </Button>
+          </OverlayTrigger>
+        </Col>
       </Row>
     </React.Fragment>
   );
@@ -94,6 +141,10 @@ const mapStateToProps = (state) => {
     isOwnTurn: state.battleView.battleData ?
       state.battleView.battleData.playerWhoseTurnItIs ===
       state.gamePlayer.ownPlayerNumber : false,
+    orbitalFracture: state.game.gameConstants.allAstridiumAbilities[
+        ASTRIDIUM_ABILITY_TYPE.ORBITAL_FRACTURE],
+    ownPlayerData: state.gamePlayer.ownPlayerNumber ===
+    PLAYER.ONE ? state.gamePlayer.playerOne : state.gamePlayer.playerTwo,
   };
 };
 
@@ -112,6 +163,8 @@ BattleSidebar.propTypes = {
   ownArmySubmitted: PropTypes.bool,
   updateOwnArmySubmitted: PropTypes.func,
   isOwnTurn: PropTypes.bool,
+  orbitalFracture: PropTypes.any,
+  ownPlayerData: PropTypes.any,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BattleSidebar);
