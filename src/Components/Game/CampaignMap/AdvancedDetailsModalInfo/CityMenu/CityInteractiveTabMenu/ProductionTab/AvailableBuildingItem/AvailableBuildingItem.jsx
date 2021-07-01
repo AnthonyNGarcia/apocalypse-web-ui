@@ -84,6 +84,7 @@ const AvailableBuildingItem = (props) => {
     }
   }, [props.selectedCity.totalBuildingProduction,
     props.selectedCity.currentConstructionProject,
+    props.selectedCity.constructibleBuildings,
     props.bldg.buildingType, isBuildingThis]);
   if (props.selectedCity) {
     return (

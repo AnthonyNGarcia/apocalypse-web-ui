@@ -37,6 +37,9 @@ const messageHandler = (message) => {
     case WEBSOCKET_MESSAGE_TYPES.ARMY_SPAWNED_FROM_CITY:
       armySpawnedFromCity(message);
       break;
+    case WEBSOCKET_MESSAGE_TYPES.TIME_WARP_PERFORMED:
+      timeWarpPerformed(message);
+      break;
     default:
       console.warn('Unrecognized message type for City Menu topic!');
       console.warn(messageType);
@@ -96,6 +99,19 @@ const armySpawnedFromCity = (message) => {
   } else {
     store.dispatch(gamePlayerAC.setPlayerTwo(message.updatedPlayer));
   }
+};
+
+const timeWarpPerformed = (message) => {
+  const state = store.getState();
+  const updatedGameBoard = [...state.gameBoardView.gameBoard];
+  updatedGameBoard[message.updatedCityTile.tilePosition] =
+    message.updatedCityTile;
+  if (message.updatedPlayer.playerNumber === PLAYER.ONE) {
+    store.dispatch(gamePlayerAC.setPlayerOne(message.updatedPlayer));
+  } else if (message.updatedPlayer.playerNumber === PLAYER.TWO) {
+    store.dispatch(gamePlayerAC.setPlayerTwo(message.updatedPlayer));
+  }
+  store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
 };
 
 export default messageHandler;

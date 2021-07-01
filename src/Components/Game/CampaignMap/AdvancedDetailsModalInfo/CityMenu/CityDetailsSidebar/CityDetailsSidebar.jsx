@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Button from 'react-bootstrap/Button';
+import Tooltip from 'react-bootstrap/Tooltip';
 import FACTIONS from '../../../../../Utilities/factions';
 import Spinner from 'react-bootstrap/esm/Spinner';
 import cityMenuAC from
@@ -16,6 +18,8 @@ import PLAYER from '../../../../../Utilities/playerEnums';
 import axios from 'axios';
 import apiEndpoints from '../../../../../Utilities/apiEndpoints';
 import CITY_MENU_TAB from '../../../../../Utilities/cityMenuTabs';
+import ASTRIDIUM_ABILITY_TYPE from
+  '../../../../../Utilities/astridiumAbilityTypes';
 import './CityDetailsSidebar.css';
 
 /**
@@ -58,6 +62,21 @@ const CityDetailsSidebar = (props) => {
   const showCommanderTabHandler = (e) => {
     e.preventDefault();
     props.updateCityMenuTab(CITY_MENU_TAB.COMMANDER);
+  };
+
+  const timeWarpHandler = (e) => {
+    e.preventDefault();
+    try {
+      const request = {
+        gameId: props.gameId,
+        playerPerformingAction: props.ownPlayerNumber,
+        cityTilePosition: props.selectedTilePosition,
+      };
+      axios.post(apiEndpoints.cityController + '/time-warp', request);
+    } catch (error) {
+      console.warn('Error trying to time warp!');
+      console.warn(error);
+    }
   };
 
   const commanderIsAlive = (commanderInfo) => {
@@ -189,6 +208,34 @@ const CityDetailsSidebar = (props) => {
             </Button>
           </Row>
           <Row>
+            <OverlayTrigger
+              key='time-warp-overlay'
+              placement='bottom'
+              trigger='hover'
+              overlay={
+                <Tooltip id='time-warp-tooltip'>
+                  <strong>{props.timeWarp.displayName}</strong> - {
+                    props.timeWarp.description}
+                </Tooltip>
+              }>
+              <Button variant="primary"
+                disabled={!props.isOwnTurn ||
+                (props.ownPlayerData.currentAstridium <
+                  props.timeWarp.astridiumCost)}
+                style={{width: '100%',
+                  margin: 'auto', marginTop: '1vh'}}
+                onClick={timeWarpHandler}>
+                <span>
+                  {props.timeWarp.displayName} ({props.timeWarp.astridiumCost
+                  } <img
+                    src={'ASTEROID.svg'}
+                    alt=""
+                    className={'tiny-asteroid-icon'}/>)
+                </span>
+              </Button>
+            </OverlayTrigger>
+          </Row>
+          <Row>
             <h5>Current Buildings</h5>
           </Row>
           <Row>
@@ -274,9 +321,12 @@ const mapStateToProps = (state) => {
       state.gamePlayer.playerWhoseTurnItIs,
     ownPlayerData: state.gamePlayer.ownPlayerNumber ===
     PLAYER.ONE ? state.gamePlayer.playerOne : state.gamePlayer.playerTwo,
+    ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
     selectedTilePosition: state.gameBoardView.selectedTilePosition,
     selectedTile: state.gameBoardView.gameBoard[
         state.gameBoardView.selectedTilePosition],
+    timeWarp: state.game.gameConstants.allAstridiumAbilities[
+        ASTRIDIUM_ABILITY_TYPE.TIME_WARP],
   };
 };
 

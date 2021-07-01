@@ -36,6 +36,15 @@
   width: auto;
 }
 
+.tiny-asteroid-icon {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 0.3vh;
+  height: 1.8vh;
+  width: auto;
+}
+
 .bold-title {
   font-weight: bold;
 }
