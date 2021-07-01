@@ -6,8 +6,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Button from 'react-bootstrap/Button';
 import Tooltip from 'react-bootstrap/Tooltip';
+import Button from 'react-bootstrap/Button';
 import FACTIONS from '../../../../../Utilities/factions';
 import Spinner from 'react-bootstrap/esm/Spinner';
 import cityMenuAC from
@@ -211,7 +211,7 @@ const CityDetailsSidebar = (props) => {
             <OverlayTrigger
               key='time-warp-overlay'
               placement='bottom'
-              trigger='hover'
+              trigger={['hover', 'focus']}
               overlay={
                 <Tooltip id='time-warp-tooltip'>
                   <strong>{props.timeWarp.displayName}</strong> - {
@@ -353,6 +353,8 @@ CityDetailsSidebar.propTypes = {
   selectedTilePosition: PropTypes.number,
   selectedTile: PropTypes.any,
   updateCityMenuTab: PropTypes.func,
+  ownPlayerNumber: PropTypes.any,
+  timeWarp: PropTypes.any,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CityDetailsSidebar);

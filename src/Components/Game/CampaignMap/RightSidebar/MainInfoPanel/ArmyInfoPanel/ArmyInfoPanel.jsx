@@ -3,17 +3,23 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import {Scrollbars} from 'react-custom-scrollbars-2';
-import ArmyUnitItem from './ArmyUnitItem/ArmyUnitItem';
+import Col from 'react-bootstrap/Col';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
+import {Scrollbars} from 'react-custom-scrollbars-2';
+import ArmyUnitItem from './ArmyUnitItem/ArmyUnitItem';
 import axios from 'axios';
 import apiEndpoints from '../../../../../Utilities/apiEndpoints';
 import gameBoardViewAC from
   '../../../../../../Redux/actionCreators/gameBoardViewActionCreators';
-import './ArmyInfoPanel.css';
 import tileHighlightManager from
   '../../../../../Utilities/tileHighlightManager';
+import ASTRIDIUM_ABILITY_TYPE from
+  '../../../../../Utilities/astridiumAbilityTypes';
+import PLAYER from '../../../../../Utilities/playerEnums';
+import './ArmyInfoPanel.css';
 
 /**
  *
@@ -57,6 +63,21 @@ const ArmyInfoPanel = (props) => {
     }
   };
 
+  const superchargeHandler = (e) => {
+    e.preventDefault();
+    try {
+      const request = {
+        gameId: props.gameId,
+        playerPerformingAction: props.ownPlayerNumber,
+        armyTilePosition: props.selectedTilePosition,
+      };
+      axios.post(apiEndpoints.armyController + '/supercharge', request);
+    } catch (error) {
+      console.warn('Error trying to supercharge!');
+      console.warn(error);
+    }
+  };
+
   if (props.selectedArmy) {
     return (
       <React.Fragment>
@@ -94,13 +115,41 @@ const ArmyInfoPanel = (props) => {
             </Scrollbars>
           </Row>
           <Row>
-            <Button
-              disabled={props.selectedArmy.remainingActions <= 0 ||
+            <Col md={4}>
+              <Button
+                disabled={props.selectedArmy.remainingActions <= 0 ||
                 !props.isOwnTurn}
-              onClick={fortifyArmyHandler}>
-              {props.selectedArmy.armyStance === 'NONE' ?
+                onClick={fortifyArmyHandler}>
+                {props.selectedArmy.armyStance === 'NONE' ?
               'Fortify' : 'Entrench'}
-            </Button>
+              </Button>
+            </Col>
+            <Col md={8}>
+              <OverlayTrigger
+                key='astridium-overlay'
+                placement='bottom'
+                trigger={['hover', 'focus']}
+                overlay={
+                  <Tooltip id='astridium-tooltip'>
+                    <strong>{props.supercharge.displayName}</strong> - {
+                      props.supercharge.description}
+                  </Tooltip>
+                }>
+                <Button variant="primary"
+                  disabled={!props.isOwnTurn ||
+                (props.ownPlayerData.currentAstridium <
+                  props.supercharge.astridiumCost)}
+                  onClick={superchargeHandler}>
+                  <span>
+                    {props.supercharge.displayName} ({
+                      props.supercharge.astridiumCost} <img
+                      src={'ASTEROID.svg'}
+                      alt=""
+                      className={'tiny-asteroid-icon-army'}/>)
+                  </span>
+                </Button>
+              </OverlayTrigger>
+            </Col>
           </Row>
         </React.Fragment> :
         <React.Fragment>
@@ -144,6 +193,10 @@ const mapStateToProps = (state) => {
         state.gameBoardView.selectedTilePosition].army,
     gameId: state.game.gameId,
     selectedTilePosition: state.gameBoardView.selectedTilePosition,
+    ownPlayerData: state.gamePlayer.ownPlayerNumber ===
+    PLAYER.ONE ? state.gamePlayer.playerOne : state.gamePlayer.playerTwo,
+    supercharge: state.game.gameConstants.allAstridiumAbilities[
+        ASTRIDIUM_ABILITY_TYPE.SUPERCHARGE],
   };
 };
 
@@ -165,6 +218,8 @@ ArmyInfoPanel.propTypes = {
   gameId: PropTypes.string,
   selectedTilePosition: PropTypes.number,
   updateIsMovingArmy: PropTypes.func,
+  supercharge: PropTypes.any,
+  ownPlayerData: PropTypes.any,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArmyInfoPanel);

@@ -5,6 +5,7 @@ import gameBoardViewAC from
 import gamePlayerAC from
   '../../../../Redux/actionCreators/gamePlayerActionCreators';
 import MAIN_PANEL_VIEWS from '../../gameMainPanelViews';
+import PLAYER from '../../playerEnums';
 
 /**
  * This is the Game Board Message Handler.
@@ -31,6 +32,9 @@ const messageHandler = (message) => {
       break;
     case WEBSOCKET_MESSAGE_TYPES.SETTLER_CREATED_CITY:
       settlerCreatedCity(message);
+      break;
+    case WEBSOCKET_MESSAGE_TYPES.SUPERCHARGE_PERFORMED:
+      superchargePerformed(message);
       break;
     default:
       console.warn('Unrecognized message type for Game Board topic!');
@@ -88,6 +92,19 @@ const settlerCreatedCity = (message) => {
     store.dispatch(gameBoardViewAC
         .setMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO));
   }
+};
+
+const superchargePerformed = (message) => {
+  const state = store.getState();
+  const updatedGameBoard = [...state.gameBoardView.gameBoard];
+  updatedGameBoard[message.updatedArmyTile.tilePosition] =
+    message.updatedArmyTile;
+  if (message.updatedPlayer.playerNumber === PLAYER.ONE) {
+    store.dispatch(gamePlayerAC.setPlayerOne(message.updatedPlayer));
+  } else if (message.updatedPlayer.playerNumber === PLAYER.TWO) {
+    store.dispatch(gamePlayerAC.setPlayerTwo(message.updatedPlayer));
+  }
+  store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
 };
 
 export default messageHandler;
