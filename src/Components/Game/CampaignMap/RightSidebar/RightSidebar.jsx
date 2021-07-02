@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import MainInfoPanel from './MainInfoPanel/MainInfoPanel';
 import SupplementalInfoPanel from
@@ -16,19 +15,14 @@ import './RightSidebar.css';
  */
 const RightSidebar = (props) => {
   return (
-    <React.Fragment>
-      <Container>
-        <Row style={{'height': '30vh'}}>
-          <MainInfoPanel/>
-        </Row>
-        <Row>
-          {/* <ArmyActionBar/> */}
-        </Row>
-        <Row>
-          <SupplementalInfoPanel/>
-        </Row>
-      </Container>
-    </React.Fragment>
+    <div className='right-sidebar-sizer'>
+      <Row noGutters>
+        <MainInfoPanel/>
+      </Row>
+      <Row noGutters>
+        <SupplementalInfoPanel/>
+      </Row>
+    </div>
   );
 };
 

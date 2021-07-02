@@ -173,20 +173,21 @@ const ArmyUnit = (props) => {
             className={unitImageClasses}
           />
         </Row>
-        {/* Second row is the unit name + health */}
-        <Row style={{height: '2vh'}} noGutters>
-          <p className='unit-label'>
-            {
-              props.unit.currentHealth}/{props.unit
-                .maxHealth} <span><img
-              src={'health.svg'}
-              alt=""
-              className={'tiny-hammer-icon'}
-            /></span>
-          </p>
-        </Row>
-        {/* Third row is the unit Block, if they have any */}
-        {props.unit.activeBlock > 0 ? (
+        <div className='unit-labels-container'>
+          {/* Second row is the unit name + health */}
+          <Row style={{height: '2vh'}} noGutters>
+            <p className='unit-label'>
+              {
+                props.unit.currentHealth}/{props.unit
+                  .maxHealth} <span><img
+                src={'health.svg'}
+                alt=""
+                className={'tiny-hammer-icon'}
+              /></span>
+            </p>
+          </Row>
+          {/* Third row is the unit Block, if they have any */}
+          {props.unit.activeBlock > 0 ? (
           <Row>
             <p className='unit-label'>
               {props.unit.activeBlock} <span><img
@@ -197,8 +198,8 @@ const ArmyUnit = (props) => {
             </p>
           </Row>
           ) : null}
-        {/* Third row is the unit debuff, if they have any */}
-        {props.unit.currentDebuffs && props.unit.currentDebuffs.length > 0 ?
+          {/* Third row is the unit debuff, if they have any */}
+          {props.unit.currentDebuffs && props.unit.currentDebuffs.length > 0 ?
           props.unit.currentDebuffs.map((debuff, index) => (
             <Row key={debuff.debuffType + '-' + index}>
               <p className='unit-label'>
@@ -210,6 +211,7 @@ const ArmyUnit = (props) => {
               </p>
             </Row>
           )) : null}
+        </div>
       </React.Fragment>
     );
   } else {

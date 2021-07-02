@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import './TileInfoPanel.css';
@@ -40,7 +39,7 @@ const TileInfoPanel = (props) => {
             <h4>This tile has been struck by a mysterious asteroid!</h4>
           </Row>
           <Row>
-            <p>March an Army or Settler into this tile to collect
+            <p>March an Army into this tile to collect
             the rare and powerful Astridium!</p>
           </Row>
         </React.Fragment>
@@ -279,11 +278,9 @@ const TileInfoPanel = (props) => {
 
   return (
     <React.Fragment>
-      <Container>
-        {terrainInfo}
-        {tileImprovement}
-        {asteroid}
-      </Container>
+      {terrainInfo}
+      {tileImprovement}
+      {asteroid}
     </React.Fragment>
   );
 };

@@ -38,35 +38,39 @@ const CampaignMap = (props) => {
         dialogClassName='modal-dialog-custom-sizing'>
         <AdvancedDetailsModalInfo/>
       </Modal>
-      <Row style={{width: '90vw'}} noGutters>
-        <Col md={5} className={(props.playerWhoseTurnItIs === PLAYER.ONE ?
-              'active-turn center-text player-label' :
-              'inactive-turn center-text player-label') + (
-                props.ownPlayerNumber === PLAYER.ONE ? ' own-player-label' :
-                ' other-player-label')}>
-          <h3>{props.playerOneUsername}</h3>
-        </Col>
-        <Col md={1} className='center-text'>
-          <h5>Round: {props.round}</h5>
-        </Col>
-        <Col md={5} className={(props.playerWhoseTurnItIs === PLAYER.TWO ?
-              'active-turn center-text player-label' :
-              'inactive-turn center-text player-label') + (
-                props.ownPlayerNumber === PLAYER.TWO ? ' own-player-label' :
-                ' other-player-label')}>
-          <h3>{props.playerTwoUsername}</h3>
-        </Col>
-      </Row>
+      <div className='player-labels-container center-text'>
+        <Row noGutters>
+          <Col
+            className={props.playerWhoseTurnItIs === PLAYER.ONE ?
+              'game-board-active-turn center-text game-board-player-label' :
+              'game-board-inactive-turn center-text game-board-player-label'}>
+            <h3 className={props.ownPlayerNumber === PLAYER.ONE ?
+          'game-board-own-player-label' : 'game-board-other-player-label'}>
+              {props.playerOneUsername}</h3>
+          </Col>
+          <Col className='center-text round-counter'>
+            <h5>Round: {props.round}</h5>
+          </Col>
+          <Col
+            className={props.playerWhoseTurnItIs === PLAYER.TWO ?
+              'game-board-active-turn center-text game-board-player-label' :
+              'game-board-inactive-turn center-text game-board-player-label'}>
+            <h3 className={props.ownPlayerNumber === PLAYER.TWO ?
+          'game-board-own-player-label' : 'game-board-other-player-label'}>
+              {props.playerTwoUsername}</h3>
+          </Col>
+        </Row>
+      </div>
       <div className='campaign-map-container'>
-        <Row>
-          <Col>
-            <LeftSidebar className='left-sidebar'/>
+        <Row noGutters>
+          <Col className='left-sidebar-container'>
+            <LeftSidebar/>
           </Col>
-          <Col>
-            <Centerpiece className='centerpiece'/>
+          <Col className='centerpiece-container'>
+            <Centerpiece/>
           </Col>
-          <Col>
-            <RightSidebar className='right-sidebar'/>
+          <Col className='right-sidebar-container'>
+            <RightSidebar/>
           </Col>
         </Row>
       </div>

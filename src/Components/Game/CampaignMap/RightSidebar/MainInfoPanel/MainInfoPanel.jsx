@@ -18,7 +18,7 @@ import './MainInfoPanel.css';
  */
 const MainInfoPanel = (props) => {
   return (
-    <React.Fragment>
+    <div className='main-info-panel-container'>
       {props.mainPanelView === MAIN_PANEL_VIEWS.ARMY_INFO ?
         <ArmyInfoPanel/> :
         props.mainPanelView === MAIN_PANEL_VIEWS.CITY_INFO ?
@@ -30,7 +30,7 @@ const MainInfoPanel = (props) => {
         props.mainPanelView === MAIN_PANEL_VIEWS.NONE ?
         <p>Nothing to view. Select a unit or tile for details.</p> :
         <p>Oops! An Invalid main panel view was rendered</p>}
-    </React.Fragment>
+    </div>
   );
 };
 

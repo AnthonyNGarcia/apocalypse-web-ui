@@ -1,19 +1,19 @@
-.player-label {
+.battle-player-label {
     margin: 1vh 1vw;
     border-radius: 10px;
     box-shadow: 2px 3px  7px black;
 }
 
-.own-player-label {
+.battle-own-player-label {
     color: black;
     
 }
 
-.other-player-label {
+.battle-other-player-label {
     color: red
 }
 
-.active-turn {
+.battle-active-turn {
     background-color: lightgreen;
     animation-name: blink; 
     animation-duration: 1.5s; 
@@ -21,7 +21,7 @@
     transition-timing-function: linear;
 }
 
-.inactive-turn {
+.battle-inactive-turn {
     background-color: white;
 }
 
@@ -50,4 +50,12 @@
     animation-duration: 2s; 
     animation-iteration-count: infinite;
     transition-timing-function: linear;
+}
+
+.battle-map-container {
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+    background-image: url('./in-battle-background.jpg');
+    background-size: 100% 100%;
 }

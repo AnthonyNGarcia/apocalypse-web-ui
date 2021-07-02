@@ -38,7 +38,7 @@ const Game = (props) => {
 
   return (
     <React.Fragment>
-      <Container className='game-sizing'>
+      <Container className='game-sizing' fluid>
         <Row>
           {props.gameView === GAME_VIEWS.GAME_BOARD_VIEW ?
           <CampaignMap/> : props.gameView === GAME_VIEWS.BATTLE_MAP_VIEW ?

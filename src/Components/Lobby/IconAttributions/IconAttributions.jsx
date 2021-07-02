@@ -16,7 +16,12 @@ const IconAttributions = (props) => {
     <React.Fragment>
       <div className='attributions-container'>
         <Row noGutters className='icon-attributions-header'>
-          <h3>Icon Attributions</h3>
+          <h3>Free Artwork Attributions</h3>
+        </Row>
+        <Row noGutters className='photo-attributions-row'>
+          <h6>Lobby View Background Photo by <a href="https://unsplash.com/@zahdhan?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Ali Zahdhan</a> on <a href="https://unsplash.com/s/photos/galaxy?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></h6>
+          <h6>Game View Background Photo by <a href="https://unsplash.com/@freedomstudios?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Graham Holtshausen</a> on <a href="https://unsplash.com/s/photos/galaxy?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></h6>
+          <h6>Battle View Background Photo by <a href="https://unsplash.com/@mischievous_penguins?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Casey Horner</a> on <a href="https://unsplash.com/s/photos/galaxy?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></h6>
         </Row>
         <Row noGutters className='icon-attributions-header'>
           <h6>

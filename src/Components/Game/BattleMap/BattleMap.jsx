@@ -51,14 +51,14 @@ const BattleMap = (props) => {
   }, [props]);
   if (props.battleData) {
     return (
-      <React.Fragment>
+      <div className='battle-map-container'>
         {/* First row shows the players and the unit phase */}
         <Row style={{width: '100vw', height: '10vh', minHeight: '10vh'}}>
           <Col className={(playerWhoseTurnItIs === PLAYER.ONE ?
-                'active-turn center-text player-label' :
-                'inactive-turn center-text player-label') + (
-                  props.ownPlayerNumber === PLAYER.ONE ? ' own-player-label' :
-                  ' other-player-label')}>
+                'battle-active-turn center-text battle-player-label' :
+                'battle-inactive-turn center-text battle-player-label') + (
+                  props.ownPlayerNumber === PLAYER.ONE ?
+                  ' battle-own-player-label' : ' battle-other-player-label')}>
             <h4>{props.playerOneUsername}</h4>
           </Col>
           <Col>
@@ -73,10 +73,10 @@ const BattleMap = (props) => {
             <p className="center-text">Round: {props.battleData.round}</p>
           </Col>
           <Col className={(playerWhoseTurnItIs === PLAYER.TWO ?
-                'active-turn center-text player-label' :
-                'inactive-turn center-text player-label') + (
-                  props.ownPlayerNumber === PLAYER.TWO ? ' own-player-label' :
-                  ' other-player-label')}>
+                'battle-active-turn center-text battle-player-label' :
+                'battle-inactive-turn center-text battle-player-label') + (
+                  props.ownPlayerNumber === PLAYER.TWO ?
+                  ' battle-own-player-label' : ' battle-other-player-label')}>
             <h4>{props.playerTwoUsername}</h4>
           </Col>
         </Row>
@@ -91,15 +91,15 @@ const BattleMap = (props) => {
             <BattleSidebar/>
           </Col>
         </Row>
-      </React.Fragment>
+      </div>
     );
   } else {
     return (
-      <React.Fragment>
+      <div className='battle-map-container'>
         <Spinner animation="border" role="status">
           <span className="sr-only">Loading...</span>
         </Spinner>
-      </React.Fragment>
+      </div>
     );
   }
 };

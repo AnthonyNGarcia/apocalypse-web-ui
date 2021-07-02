@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -81,16 +80,15 @@ const ArmyInfoPanel = (props) => {
   if (props.selectedArmy) {
     return (
       <React.Fragment>
-        <Container>
-          {props.ownPlayerNumber === props.selectedArmy.owner ?
+        {props.ownPlayerNumber === props.selectedArmy.owner ?
         <React.Fragment>
-          <Row className='center-text'>
+          <Row className='center-text own-army-entity'>
             <h2>{props.selectedArmy.commander.commanderInfo.displayName}</h2>
           </Row>
-          <Row className='center-text'>
+          <Row className='center-text own-army-entity'>
             <h5>Level {props.selectedArmy.commander.level}</h5>
           </Row>
-          <Row className='center-text'>
+          <Row className='center-text own-army-entity'>
             <h5>Units: {props.selectedArmy.units.length}/
               {selectedArmyMaxSize}</h5>
           </Row>
@@ -167,7 +165,6 @@ const ArmyInfoPanel = (props) => {
             This is an enemy Army.
           </Row>
         </React.Fragment>}
-        </Container>
       </React.Fragment>
     );
   } else {

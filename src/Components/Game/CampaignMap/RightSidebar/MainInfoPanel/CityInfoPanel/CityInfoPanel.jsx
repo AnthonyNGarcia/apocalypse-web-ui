@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -39,16 +38,15 @@ const CityInfoPanel = (props) => {
   if (ownPlayerData) {
     return (
       <React.Fragment>
-        <Container>
-          {props.ownPlayerNumber === props.selectedCity.owner ?
+        {props.ownPlayerNumber === props.selectedCity.owner ?
           <React.Fragment>
-            <Row className='center-text'>
+            <Row className='center-text own-city-entity'>
               <h2>{props.selectedCity.name}</h2>
             </Row>
-            <Row className='center-text'>
+            <Row className='center-text own-city-entity'>
               <h5>Tier {props.selectedCity.tier} City</h5>
             </Row>
-            <Row className='center-text'>
+            <Row className='center-text own-city-entity'>
               <Col xs={6}>
                 <Row>
               Production:
@@ -91,9 +89,8 @@ const CityInfoPanel = (props) => {
                  <p>This is an enemy City.</p>
                </Row>
              </React.Fragment>}
-          <Row>
-          </Row>
-        </Container>
+        <Row>
+        </Row>
       </React.Fragment>
     );
   } else {

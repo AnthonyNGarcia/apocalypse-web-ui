@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import GameBoard from './GameBoard/GameBoard';
 import MainPromptButton from './MainPromptButton/MainPromptButton';
@@ -15,14 +14,12 @@ import './Centerpiece.css';
 const Centerpiece = (props) => {
   return (
     <React.Fragment>
-      <Container>
-        <Row>
-          <GameBoard/>
-        </Row>
-        <Row>
-          <MainPromptButton/>
-        </Row>
-      </Container>
+      <Row noGutters className='game-board-container center-text'>
+        <GameBoard/>
+      </Row>
+      <Row noGutters>
+        <MainPromptButton/>
+      </Row>
     </React.Fragment>
   );
 };
