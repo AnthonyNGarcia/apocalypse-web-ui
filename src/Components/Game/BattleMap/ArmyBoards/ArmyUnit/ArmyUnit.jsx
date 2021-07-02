@@ -178,8 +178,7 @@ const ArmyUnit = (props) => {
           <Row style={{height: '2vh'}} noGutters>
             <p className='unit-label'>
               {
-                props.unit.currentHealth}/{props.unit
-                  .maxHealth} <span><img
+                props.unit.currentHealth}<span><img
                 src={'health.svg'}
                 alt=""
                 className={'tiny-hammer-icon'}

@@ -9,10 +9,6 @@ const buildingBonusLabelMaker = (buildingBonus) => {
   if (freeUnitTypeProduced) {
     const fullUnitData = state.game.gameConstants.allUnits[
         freeUnitTypeProduced];
-    if (freeUnitTypeProduced === 'RANDOM_TIER_1_UNIT') {
-      return 'Perpetually trains ' + buildingBonus.value +
-      ' free Random Tier 1 Unit(s) in the queue while there is space';
-    }
     return 'Perpetually trains ' + buildingBonus.value +
     ' free ' + fullUnitData.displayName + ' unit(s) in the queue ' +
     'while there is space';
