@@ -58,6 +58,10 @@ const BrowseLobbies = (props) => {
 
   const createLobbyHandler = async (e) => {
     e.preventDefault();
+    if (props.ownUsername === 'Default Username') {
+      return;
+    }
+
     try {
       const createLobbyRequest = {
         creator: {
