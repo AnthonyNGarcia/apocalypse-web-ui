@@ -16,6 +16,13 @@
     max-width: 40vw;
 }
 
+.modal-dialog-custom-sizing {
+    position: absolute;
+    width: 80vw;
+    min-width: 80vw;
+    max-width: 80vw;
+}
+
 .player-labels-container {
     width: 100%;
     min-width: 100%;
@@ -31,13 +38,6 @@
     border-radius: 15px;
     text-align: center;
     margin: auto 1vw;
-}
-
-.modal-dialog-custom-sizing {
-    position: absolute;
-    width: 80vw;
-    min-width: 80vw;
-    max-width: 80vw;
 }
 
 .game-board-player-label {

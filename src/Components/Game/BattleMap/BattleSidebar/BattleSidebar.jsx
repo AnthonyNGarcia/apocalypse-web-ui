@@ -79,13 +79,13 @@ const BattleSidebar = (props) => {
   };
 
   return (
-    <React.Fragment>
+    <div className='battle-sidebar-container'>
       {/* First Row contains the unit details */}
-      <Row>
+      <Row noGutters>
         <BattleUnitDetails/>
       </Row>
       {/* Second Row contains a couple battle-wide buttons */}
-      <Row>
+      <Row noGutters>
         <Col md={4}>
           {props.showEnemyArmyInBattle ? (
           <Button variant="danger"
@@ -127,7 +127,7 @@ const BattleSidebar = (props) => {
           </OverlayTrigger>
         </Col>
       </Row>
-    </React.Fragment>
+    </div>
   );
 };
 

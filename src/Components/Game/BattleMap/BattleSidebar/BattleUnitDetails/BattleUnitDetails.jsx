@@ -95,7 +95,8 @@ const BattleUnitDetails = (props) => {
       return (
         <React.Fragment>
           {/* Unit Name and Tier */}
-          <Row noGutters style={{display: 'block'}}>
+          <Row noGutters style={{display: 'block', textAlign: 'center',
+            margin: 'auto'}}>
             <h2>{fullUnitInfo.displayName}</h2>
             <h4>{UNIT_CLASSES[selectedUnit.unitClass].displayName}</h4>
           </Row>
@@ -143,7 +144,7 @@ const BattleUnitDetails = (props) => {
             </Col>
           </Row>
           {/* Passive Abilities*/}
-          <Row noGutters style={{'width': '90%', 'maxWidth': '90%'}}>
+          <Row noGutters style={{margin: 'auto', textAlign: 'center'}}>
             <h6>Passive Abilities:
               {selectedUnit.passiveAbilities &&
                     selectedUnit.passiveAbilities.length > 0 ?
@@ -159,11 +160,12 @@ const BattleUnitDetails = (props) => {
             </h6>
           </Row>
           {/* Active Ability */}
-          <Row noGutters style={{'width': '90%', 'maxWidth': '90%'}}>
-            <h6>Active Ability: {props.allActiveAbilities[
-                selectedUnit.activeAbility.activeAbilityType]
-                .displayName} - {
-              selectedUnit.currentActiveAbilityCharges} charge(s)</h6>
+          <Row noGutters>
+            <h6 style={{margin: 'auto', textAlign: 'center'}}>
+              Active Ability: {props.allActiveAbilities[
+                  selectedUnit.activeAbility.activeAbilityType]
+                  .displayName} - {
+                selectedUnit.currentActiveAbilityCharges} charge(s)</h6>
             <p>{props.allActiveAbilities[
                 selectedUnit.activeAbility.activeAbilityType]
                 .descriptionFragments.map((fragment, index) => (
