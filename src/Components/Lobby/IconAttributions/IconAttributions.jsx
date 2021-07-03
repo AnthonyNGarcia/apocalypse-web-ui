@@ -80,6 +80,27 @@ const IconAttributions = (props) => {
                   className='tiny-icon-image'/> <img
                   src={'unit_count.svg'}
                   alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'burning_debuff.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'stunned_debuff.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'SPARK_NINJA_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'CAVALRY_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'MONK_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'GARGANTUAN_SCORPION_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'MONSTROUS_FIRE_ANT_ICON.svg'}
+                  alt=""
                   className='tiny-icon-image'/> made by <a href="https://www.freepik.com" title="Freepik">Freepik</a>
               </span>
             </p>
@@ -100,13 +121,33 @@ const IconAttributions = (props) => {
                   className='tiny-icon-image'/> <img
                   src={'SETTLER.svg'}
                   alt=""
-                  className='tiny-icon-image'/> made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a>
+                  className='tiny-icon-image'/> <img
+                  src={'MUSKETEER_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'HIDEOUS_LURKER_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/>made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a>
               </span>
             </p>
             <p>
               <span>
                 <img
+                  src={'growth.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'CANNON_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
                   src={'GIANT_BEETLE_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/>  made by <a href="https://www.flaticon.com/authors/icongeek26" title="Icongeek26">Icongeek26</a>
+              </span>
+            </p>
+            <p>
+              <span>
+                <img
+                  src={'ARMORED_TITAN_BEETLE_ICON.svg'}
                   alt=""
                   className='tiny-icon-image'/> <img
                   src={'VENOMOUS_SPITTER_ICON.svg'}
@@ -128,14 +169,6 @@ const IconAttributions = (props) => {
                   src={'timer.png'}
                   alt=""
                   className='tiny-icon-image'/>  made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a>
-              </span>
-            </p>
-            <p>
-              <span>
-                <img
-                  src={'growth.svg'}
-                  alt=""
-                  className='tiny-icon-image'/>  made by <a href="https://www.flaticon.com/authors/icongeek26" title="Icongeek26">Icongeek26</a>
               </span>
             </p>
             <p>

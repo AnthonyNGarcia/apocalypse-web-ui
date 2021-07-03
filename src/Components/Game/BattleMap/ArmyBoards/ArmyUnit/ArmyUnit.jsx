@@ -7,6 +7,8 @@ import battleViewAC from
 import apiEndpoints from '../../../../Utilities/apiEndpoints';
 import axios from 'axios';
 import UNIT_ACTION_TYPES from '../../../../Utilities/unitActionTypes';
+import getIfFlanker from '../../../../Utilities/getIfFlanker';
+import getIfStunned from '../../../../Utilities/getIfStunned';
 import './ArmyUnit.css';
 
 /**
@@ -34,7 +36,9 @@ const ArmyUnit = (props) => {
         calculatedUnitClasses += ' enemy-unit-image';
         if (currentlySelectedOwnUnit &&
             currentlySelectedOwnUnit.eligibleForCommand &&
-            props.unit.isTargetable) {
+            !getIfStunned(currentlySelectedOwnUnit) &&
+            (props.unit.isTargetable ||
+              getIfFlanker(currentlySelectedOwnUnit))) {
           calculatedUnitClasses += ' targetable-enemy-unit';
         }
       }
@@ -120,12 +124,17 @@ const ArmyUnit = (props) => {
         'own unit doesn\'t exist!');
       return;
     }
+    if (getIfStunned(currentlySelectedOwnUnit)) {
+      console.log('Cannot do anything, currently selected ' +
+      'own unit is stunned!');
+      return;
+    }
     if (!currentlySelectedOwnUnit.eligibleForCommand) {
       console.log('Cannot do anything, currently selected ' +
         'own unit is not eligible for commands!');
       return;
     }
-    if (!props.unit.isTargetable) {
+    if (!props.unit.isTargetable && !getIfFlanker(currentlySelectedOwnUnit)) {
       console.log('Cannot do anything, enemy is not targetable!');
       return;
     }
@@ -201,13 +210,31 @@ const ArmyUnit = (props) => {
           {props.unit.currentDebuffs && props.unit.currentDebuffs.length > 0 ?
           props.unit.currentDebuffs.map((debuff, index) => (
             <Row key={debuff.debuffType + '-' + index}>
-              <p className='unit-label'>
-                {debuff.value} <span><img
-                  src={'poison_debuff.svg'}
-                  alt=""
-                  className={'tiny-hammer-icon'}
-                /></span>
-              </p>
+              {debuff.debuffType === 'POISONED' ? (
+                <p className='unit-label'>
+                  {debuff.value} <span><img
+                    src={'poison_debuff.svg'}
+                    alt=""
+                    className={'tiny-hammer-icon'}
+                  /></span>
+                </p>
+                ) : debuff.debuffType === 'BURNING' ? (
+                <p className='unit-label'>
+                  {debuff.value} <span><img
+                    src={'burning_debuff.svg'}
+                    alt=""
+                    className={'tiny-hammer-icon'}
+                  /></span>
+                </p>
+                ) : debuff.debuffType === 'STUNNED' ? (
+                <p className='unit-label'>
+                  {debuff.value} <span><img
+                    src={'stunned_debuff.svg'}
+                    alt=""
+                    className={'tiny-hammer-icon'}
+                  /></span>
+                </p>
+                ) : null}
             </Row>
           )) : null}
         </div>
