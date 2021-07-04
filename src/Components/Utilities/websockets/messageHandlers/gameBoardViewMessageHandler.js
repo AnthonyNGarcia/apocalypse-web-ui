@@ -92,6 +92,12 @@ const settlerCreatedCity = (message) => {
     store.dispatch(gameBoardViewAC
         .setMainPanelView(MAIN_PANEL_VIEWS.CITY_INFO));
   }
+  const updatedPlayer = message.updatedPlayer;
+  if (updatedPlayer.playerNumber === PLAYER.ONE) {
+    store.dispatch(gamePlayerAC.setPlayerOne(updatedPlayer));
+  } else if (updatedPlayer.playerNumber === PLAYER.TWO) {
+    store.dispatch(gamePlayerAC.setPlayerTwo(updatedPlayer));
+  }
 };
 
 const superchargePerformed = (message) => {
