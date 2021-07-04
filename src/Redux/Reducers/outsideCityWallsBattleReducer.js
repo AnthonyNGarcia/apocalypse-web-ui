@@ -20,6 +20,8 @@ const initialState = {
   },
   includeOccupyingCommander: false,
   excessDefenders: 0,
+  cityTilePosition: -1,
+  attackingArmyTilePosition: -1,
 };
 
 const setAttackingArmy = (state, action) => {
@@ -64,6 +66,26 @@ const setExcessDefenders = (state, action) => {
   };
 };
 
+const setCityTilePosition = (state, action) => {
+  return {
+    ...state,
+    cityTilePosition: action.cityTilePosition,
+  };
+};
+
+const setAttackingArmyTilePosition = (state, action) => {
+  return {
+    ...state,
+    attackingArmyTilePosition: action.attackingArmyTilePosition,
+  };
+};
+
+const clearOutsideCityWallsBattleReducer = () => {
+  return {
+    ...initialState,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case outsideCityWallsBattleAT.SET_ATTACKING_ARMY: return setAttackingArmy(state, action);
@@ -72,6 +94,9 @@ const reducer = (state=initialState, action) => {
     case outsideCityWallsBattleAT.SET_OCCUPYING_ARMY: return setOccupyingArmy(state, action);
     case outsideCityWallsBattleAT.SET_INCLUDE_OCCUPYING_COMMANDER: return setIncludeOccupyingCommander(state, action);
     case outsideCityWallsBattleAT.SET_EXCESS_DEFENDERS: return setExcessDefenders(state, action);
+    case outsideCityWallsBattleAT.SET_CITY_TILE_POSITION: return setCityTilePosition(state, action);
+    case outsideCityWallsBattleAT.SET_ATTACKING_ARMY_TILE_POSITION: return setAttackingArmyTilePosition(state, action);
+    case outsideCityWallsBattleAT.CLEAR_OUTSIDE_CITY_WALLS_BATTLE_REDUCER: return clearOutsideCityWallsBattleReducer();
     default: return state;
   }
 };

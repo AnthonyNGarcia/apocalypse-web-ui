@@ -17,6 +17,8 @@ import SallyOutForceUnitItem from
 import AttackingForceUnitItem from
   './AttackingForceUnitItem/AttackingForceUnitItem';
 import PLAYER from '../../../../Utilities/playerEnums';
+import apiEndpoints from '../../../../Utilities/apiEndpoints';
+import axios from 'axios';
 import './OutsideCityWallsBattlePrepMenu.css';
 
 /**
@@ -29,7 +31,17 @@ import './OutsideCityWallsBattlePrepMenu.css';
 const OutsideCityWallsBattlePrepMenu = (props) => {
   const stayInsideHandler = (e) => {
     e.preventDefault();
-    console.log('So you have chosen to stay inside...');
+    try {
+      const request = {
+        gameId: props.gameId,
+        attackingArmyTilePosition: props.attackingArmyTilePosition,
+        cityTilePosition: props.cityTilePosition,
+      };
+      axios.post(apiEndpoints.cityController + '/let-enemy-scorch', request);
+    } catch (e) {
+      console.warn(e);
+      console.warn('There was error trying to sally out!');
+    }
   };
 
   const toggleCommanderLeadingSally = (e) => {
@@ -38,7 +50,22 @@ const OutsideCityWallsBattlePrepMenu = (props) => {
 
   const sallyOutHandler = (e) => {
     e.preventDefault();
-    console.log('So you have decided to sally out!');
+    try {
+      const request = {
+        gameId: props.gameId,
+        sallyOutArmyUnits: props.sallyOutForces.units,
+        updatedOccupyingArmyUnits: props.occupyingArmy.units,
+        updatedUnassignedUnits: props.cityUnderAttack.unassignedUnits,
+        attackingArmyTilePosition: props.attackingArmyTilePosition,
+        cityTilePosition: props.cityTilePosition,
+        includeOccupyingCommanderInSally: props.includeOccupyingCommander,
+      };
+      axios.post(apiEndpoints.battleController + '/sally-outside-city-walls',
+          request);
+    } catch (e) {
+      console.warn(e);
+      console.warn('There was error trying to sally out!');
+    }
   };
 
   if (props.cityUnderAttack && props.attackingArmy) {
@@ -277,6 +304,10 @@ const mapStateToProps = (state) => {
     maxArmySize: state.gamePlayer.ownPlayerNumber === PLAYER.ONE ?
       state.gamePlayer.playerOne.currentBaseArmySize :
       state.gamePlayer.playerTwo.currentBaseArmySize,
+    gameId: state.game.gameId,
+    attackingArmyTilePosition: state.outsideCityWallsBattle
+        .attackingArmyTilePosition,
+    cityTilePosition: state.outsideCityWallsBattle.cityTilePosition,
   };
 };
 
@@ -297,7 +328,11 @@ OutsideCityWallsBattlePrepMenu.propTypes = {
   includeOccupyingCommander: PropTypes.bool,
   excessDefenders: PropTypes.number,
   updateIncludeOccupyingCommander: PropTypes.func,
+  clearOutsideCityWallsBattleReducer: PropTypes.func,
   maxArmySize: PropTypes.number,
+  gameId: PropTypes.string,
+  attackingArmyTilePosition: PropTypes.number,
+  cityTilePosition: PropTypes.number,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

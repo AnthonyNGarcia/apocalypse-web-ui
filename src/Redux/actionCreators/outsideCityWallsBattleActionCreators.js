@@ -38,6 +38,23 @@ const actionCreators = {
       excessDefenders: excessDefenders,
     };
   },
+  setCityTilePosition: (cityTilePosition) => {
+    return {
+      type: outsideCityWallsBattleAT.SET_CITY_TILE_POSITION,
+      cityTilePosition: cityTilePosition,
+    };
+  },
+  setAttackingArmyTilePosition: (attackingArmyTilePosition) => {
+    return {
+      type: outsideCityWallsBattleAT.SET_ATTACKING_ARMY_TILE_POSITION,
+      attackingArmyTilePosition: attackingArmyTilePosition,
+    };
+  },
+  clearOutsideCityWallsBattleReducer: () => {
+    return {
+      type: outsideCityWallsBattleAT.CLEAR_OUTSIDE_CITY_WALLS_BATTLE_REDUCER,
+    };
+  },
 };
 
 export default actionCreators;

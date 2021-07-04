@@ -6,9 +6,12 @@ import gameBoardViewAC from
   '../../../../Redux/actionCreators/gameBoardViewActionCreators';
 import gamePlayerAC from
   '../../../../Redux/actionCreators/gamePlayerActionCreators';
+import outsideCityWallsBattleAC from
+  '../../../../Redux/actionCreators/outsideCityWallsBattleActionCreators';
 import gameAC from '../../../../Redux/actionCreators/gameActionCreators';
 import GAME_VIEWS from '../../gameViews';
 import PLAYER from '../../playerEnums';
+import UNCLOSEABLE_MODAL_VIEW from '../../uncloseableModalView';
 
 /**
  * This is the Battle View Message Handler.
@@ -50,6 +53,10 @@ const battleInitiated = async (message) => {
   await store.dispatch(battleViewAC.setSelectedBattleUnitIndex(-1));
   await store.dispatch(battleViewAC.setShowEnemyArmyInBattle(false));
   await store.dispatch(gameAC.setGameView(GAME_VIEWS.BATTLE_MAP_VIEW));
+  await store.dispatch(gameBoardViewAC.setUncloseableModalView(
+      UNCLOSEABLE_MODAL_VIEW.NONE));
+  await store.dispatch(outsideCityWallsBattleAC
+      .clearOutsideCityWallsBattleReducer());
 };
 
 const battleStarted = async (message) => {

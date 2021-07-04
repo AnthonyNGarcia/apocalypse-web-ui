@@ -109,6 +109,14 @@ const CityDetailsSidebar = (props) => {
         <Container>
           <Row>
             <h5>{cityHeader}</h5>
+            <h5>{props.selectedCity.scorchedEarth ? (
+                  <span> - Scorched ({props.selectedCity
+                      .turnsRemainingForScorchedEarth} <span><img
+                    src={'timer.png'}
+                    alt=""
+                    className={'really-tiny-timer-icon'}
+                  /></span>)</span>
+                ) : null}</h5>
           </Row>
           <Row className='center-text' style={{height: '15vh', width: '20vw'}}>
             <Col md={6}>

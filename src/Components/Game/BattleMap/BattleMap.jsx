@@ -22,8 +22,8 @@ import './BattleMap.css';
  * @return {JSX} to render
  */
 const BattleMap = (props) => {
-  const popover = (
-    <Popover id="popover-basic">
+  const ambushPopover = (
+    <Popover id="ambush-popover">
       <Popover.Title as="h3">Defender Ambushing!</Popover.Title>
       <Popover.Content>
       The defending army of this tile has pulled off an <strong>ambush</strong>!
@@ -38,8 +38,39 @@ const BattleMap = (props) => {
 
   const ambushTitle = (
     <div className='battle-view-ambush-title-container'>
-      <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
-        <Button variant="danger" className='ambush-title'>AMBUSH!!</Button>
+      <OverlayTrigger trigger="click" placement="bottom"
+        overlay={ambushPopover}>
+        <Button variant="danger"
+          className='battle-view-ambush-title'>AMBUSH!!</Button>
+      </OverlayTrigger>
+    </div>
+  );
+
+  const outsideCityWallsPopover = (
+    <Popover id="outside-city-walls-popover">
+      <Popover.Title as="h3">Outside the City Walls</Popover.Title>
+      <Popover.Content>
+      The owner of this City has sallied forth <strong>
+        Outside the City Walls</strong>!
+        <br></br>
+        {'This will be a standard battle with the Attacker going first as ' +
+      'usual. The Defender that is sallying out, however, will not be able ' +
+      'to retreat! They must fight to the death to protect their City. If ' +
+      'the defenders perish, then the City will be scorched from the ' +
+      'outside, crippling it severely, and paving the way for the Attackers ' +
+      'to proceed further towards the City Walls.'}
+      </Popover.Content>
+    </Popover>
+  );
+
+  const outsideCityWallsTitle = (
+    <div className='battle-view-outside-city-walls-title-container'>
+      <OverlayTrigger trigger="click" placement="bottom"
+        overlay={outsideCityWallsPopover}>
+        <Button variant="danger"
+          className='battle-view-outside-city-walls-title'>
+          Outside City Walls
+        </Button>
       </OverlayTrigger>
     </div>
   );
@@ -60,6 +91,10 @@ const BattleMap = (props) => {
               {props.battleData.defenderPulledOffAmbush &&
                 props.battleData.defendingArmy.owner === PLAYER.ONE ?
                 ambushTitle : null}
+              {props.battleData.battleType ===
+                'ATTACKING_CITY_OUTSIDE_WALLS' &&
+                props.battleData.defendingArmy.owner === PLAYER.ONE ?
+                outsideCityWallsTitle : null}
             </Col>
             <Col>
               <div className='battle-view-class-round-label'>
@@ -88,6 +123,10 @@ const BattleMap = (props) => {
               {props.battleData.defenderPulledOffAmbush &&
                 props.battleData.defendingArmy.owner === PLAYER.TWO ?
                 ambushTitle : null}
+              {props.battleData.battleType ===
+                'ATTACKING_CITY_OUTSIDE_WALLS' &&
+                props.battleData.defendingArmy.owner === PLAYER.TWO ?
+                outsideCityWallsTitle : null}
               <h3 className={props.ownPlayerNumber === PLAYER.TWO ?
           'battle-view-own-player-label' : 'battle-view-other-player-label'}>
                 {props.playerTwoUsername}</h3>

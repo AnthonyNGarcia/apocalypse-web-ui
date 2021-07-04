@@ -277,6 +277,10 @@ const GameBoard = (props) => {
 
       if (item.city) {
         const cityFaction = item.city.factionType;
+        let cityStyling = 'heximage city-icon';
+        if (item.city.scorchedEarth) {
+          cityStyling += ' city-is-scorched';
+        }
         if (cityFaction === FACTIONS.HUMANS.enum) {
           city = (
             <img
@@ -291,7 +295,7 @@ const GameBoard = (props) => {
             <img
               src={'INSECT_CITY_TIER_1.png'}
               alt=""
-              className={'heximage city-icon'}
+              className={cityStyling}
               onClick={(e) => tileClicked(e, item)}
             />
           );

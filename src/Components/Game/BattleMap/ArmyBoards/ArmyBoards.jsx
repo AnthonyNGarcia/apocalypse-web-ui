@@ -44,7 +44,9 @@ const ArmyBoards = (props) => {
             {/* First Row is for Main Army Commander Name */}
             <Row>
               <h2 className='enemy-entity-title'>{
-                enemyArmy.commander.commanderInfo.displayName}</h2>
+                enemyArmy.commander ?
+              enemyArmy.commander.commanderInfo.displayName :
+              'No Commander Leading These Units'}</h2>
             </Row>
             {/* Second Row is for the Enemy Main Army Board */}
             <Row>
@@ -75,7 +77,9 @@ const ArmyBoards = (props) => {
             {/* Second Row is for own Main Army Commander Name */}
             <Row>
               <h2 className='own-entity-title'>{
-                ownArmy.commander.commanderInfo.displayName}</h2>
+                ownArmy.commander ?
+              ownArmy.commander.commanderInfo.displayName :
+              'No Commander Leading These Units'}</h2>
             </Row>
           </Col>
           {/* Second Col for Own Garrison Army (if any) */}

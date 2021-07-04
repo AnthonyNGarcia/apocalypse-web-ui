@@ -46,6 +46,9 @@ const messageHandler = (message) => {
     case WEBSOCKET_MESSAGE_TYPES.PREPARE_OUTSIDE_CITY_WALLS_PROMPT:
       promptPreparationForOutsideCityWallsBattle(message);
       break;
+    case WEBSOCKET_MESSAGE_TYPES.CITY_SCORCHED:
+      cityScorched(message);
+      break;
     default:
       console.warn('Unrecognized message type for City Menu topic!');
       console.warn(messageType);
@@ -53,21 +56,25 @@ const messageHandler = (message) => {
   }
 };
 
+const cityScorched = (message) => {
+  const updatedCityTile = message.updatedCityTile;
+  const state = store.getState();
+  const updatedGameBoard = [...state.gameBoardView.gameBoard];
+  updatedGameBoard[updatedCityTile.tilePosition] = updatedCityTile;
+  store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
+  store.dispatch(gameBoardViewAC.setUncloseableModalView(
+      UNCLOSEABLE_MODAL_VIEW.NONE));
+  store.dispatch(outsideCityWallsBattleAC
+      .clearOutsideCityWallsBattleReducer());
+};
+
 const promptPreparationForOutsideCityWallsBattle = (message) => {
-  console.log(message);
   const attackingArmy = message.attackingArmy;
   const state = store.getState();
   const updatedGameBoard = [...state.gameBoardView.gameBoard];
   updatedGameBoard[message.attackingArmyTilePosition]
       .army = attackingArmy;
   const cityUnderAttack = updatedGameBoard[message.cityTilePosition].city;
-
-  const ownPlayerNumber = state.gamePlayer.ownPlayerNumber;
-  if (attackingArmy.owner === ownPlayerNumber) {
-    console.log('Waiting for defender to prepare defenses...');
-  } else if (cityUnderAttack.owner === ownPlayerNumber) {
-    console.log('We need to prepare defenses!');
-  }
 
   const occupyingArmy = updatedGameBoard[message.cityTilePosition].army;
 
@@ -86,6 +93,10 @@ const promptPreparationForOutsideCityWallsBattle = (message) => {
       message.excessDefenders));
   store.dispatch(gameBoardViewAC.setUncloseableModalView(
       UNCLOSEABLE_MODAL_VIEW.OUTSIDE_CITY_WALLS_BATTLE_PREP));
+  store.dispatch(outsideCityWallsBattleAC.setCityTilePosition(
+      message.cityTilePosition));
+  store.dispatch(outsideCityWallsBattleAC.setAttackingArmyTilePosition(
+      message.attackingArmyTilePosition));
 };
 
 const cityStateUpdated = (message) => {
