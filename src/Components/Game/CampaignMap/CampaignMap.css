@@ -23,6 +23,11 @@
     max-width: 80vw;
 }
 
+.uncloseable-modal-custom-background .modal-content {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+}
+
 .player-labels-container {
     width: 100%;
     min-width: 100%;

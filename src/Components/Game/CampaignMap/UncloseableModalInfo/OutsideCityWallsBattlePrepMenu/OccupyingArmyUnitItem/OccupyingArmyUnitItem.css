@@ -1,0 +1,28 @@
+.outside-city-walls-occupying-unit-container {
+  overflow: hidden;
+  background-color: rgb(231, 230, 230);
+  border-radius: 5px;
+  box-shadow: 1px 1px 6px black;
+  margin-bottom: 1vh;
+  height: auto;
+  width: 95%;
+  color: black;
+}
+
+.occupying-unit-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.occupying-unit-tiny-health-icon {
+  height: 1.3vh;
+  width: 1.3vh;
+}

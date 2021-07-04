@@ -103,7 +103,8 @@ const ArmyInfoPanel = (props) => {
                           key={index +
                             unit.unitType}
                           unit={{...unit}}
-                          discardingIndex={index}/>
+                          discardingIndex={index}
+                          showRemoveUnit={true}/>
                       </React.Fragment>
                     ) : null) : (
                   <React.Fragment>

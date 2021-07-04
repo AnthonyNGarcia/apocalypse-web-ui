@@ -45,7 +45,7 @@ const IconAttributions = (props) => {
                   src={'BOWMAN_ICON.svg'}
                   alt=""
                   className='tiny-icon-image'/> <img
-                  src={'SWORDSMAN_ICON.svg'}
+                  src={'SHIELD_BEARER_ICON.svg'}
                   alt=""
                   className='tiny-icon-image'/> <img
                   src={'PISTOLIER_ICON.svg'}

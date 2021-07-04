@@ -8,12 +8,15 @@ import Centerpiece from './Centerpiece/Centerpiece';
 import RightSidebar from './RightSidebar/RightSidebar';
 import AdvancedDetailsModalInfo from
   './AdvancedDetailsModalInfo/AdvancedDetailsModalInfo';
+import UncloseableModalInfo from
+  './UncloseableModalInfo/UncloseableModalInfo';
 import cityMenuAC from '../../../Redux/actionCreators/cityMenuActionCreators';
 import Modal from 'react-bootstrap/Modal';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../Utilities/cityMenuSupplementalViews';
 import PLAYER from '../../Utilities/playerEnums';
 import flattenObject from '../../Utilities/flattenObjectValuesToArray';
+import UNCLOSEABLE_MODAL_VIEW from '../../Utilities/uncloseableModalView';
 import './CampaignMap.css';
 
 /**
@@ -37,6 +40,12 @@ const CampaignMap = (props) => {
         onHide={closeAdvancedDetailsModal} size="xl"
         dialogClassName='modal-dialog-custom-sizing'>
         <AdvancedDetailsModalInfo/>
+      </Modal>
+      <Modal show={props.uncloseableModalView !== UNCLOSEABLE_MODAL_VIEW.NONE}
+        size="xl"
+        onHide={() => console.log('Can\'t close this modal!')}
+        className='uncloseable-modal-custom-background'>
+        <UncloseableModalInfo/>
       </Modal>
       <div className='player-labels-container center-text'>
         <Row noGutters>
@@ -89,6 +98,7 @@ const mapStateToProps = (state) => {
     playerWhoseTurnItIs: state.gamePlayer.playerWhoseTurnItIs,
     ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
     round: state.game.gameRound,
+    uncloseableModalView: state.gameBoardView.uncloseableModalView,
   };
 };
 
@@ -117,6 +127,7 @@ CampaignMap.propTypes = {
   playerWhoseTurnItIs: PropTypes.oneOf(flattenObject(PLAYER)),
   ownPlayerNumber: PropTypes.oneOf(flattenObject(PLAYER)),
   round: PropTypes.number,
+  uncloseableModalView: PropTypes.oneOf(flattenObject(UNCLOSEABLE_MODAL_VIEW)),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CampaignMap);

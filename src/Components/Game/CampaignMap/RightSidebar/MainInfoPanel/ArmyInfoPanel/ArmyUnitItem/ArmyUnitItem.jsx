@@ -64,12 +64,15 @@ const ArmyUnitItem = (props) => {
             /></span>)
           </Col>
           <Col md={1}>
+            {props.showRemoveUnit ? (
             <Button
               variant='outline-danger'
               onClick={removeUnitHandler}
               disabled={!props.isOwnTurn}>
-                x
+                            x
             </Button>
+            ) : null}
+
           </Col>
         </Row>
       </div>
@@ -102,6 +105,7 @@ ArmyUnitItem.propTypes = {
   allUnits: PropTypes.any,
   isOwnTurn: PropTypes.bool,
   selectedTilePosition: PropTypes.number,
+  showRemoveUnit: PropTypes.bool,
 };
 
 export default connect(mapStateToProps)(ArmyUnitItem);

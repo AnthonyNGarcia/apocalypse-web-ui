@@ -6,9 +6,12 @@ import cityMenuAC from
   '../../../../Redux/actionCreators/cityMenuActionCreators';
 import gamePlayerAC from
   '../../../../Redux/actionCreators/gamePlayerActionCreators';
+import outsideCityWallsBattleAC from
+  '../../../../Redux/actionCreators/outsideCityWallsBattleActionCreators';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from '../../cityMenuSupplementalViews';
 import CITY_MENU_TAB from '../../cityMenuTabs';
 import PLAYER from '../../playerEnums';
+import UNCLOSEABLE_MODAL_VIEW from '../../uncloseableModalView';
 
 /**
  * This is the City Menu Message Handler.
@@ -40,11 +43,49 @@ const messageHandler = (message) => {
     case WEBSOCKET_MESSAGE_TYPES.TIME_WARP_PERFORMED:
       timeWarpPerformed(message);
       break;
+    case WEBSOCKET_MESSAGE_TYPES.PREPARE_OUTSIDE_CITY_WALLS_PROMPT:
+      promptPreparationForOutsideCityWallsBattle(message);
+      break;
     default:
       console.warn('Unrecognized message type for City Menu topic!');
       console.warn(messageType);
       console.warn(message);
   }
+};
+
+const promptPreparationForOutsideCityWallsBattle = (message) => {
+  console.log(message);
+  const attackingArmy = message.attackingArmy;
+  const state = store.getState();
+  const updatedGameBoard = [...state.gameBoardView.gameBoard];
+  updatedGameBoard[message.attackingArmyTilePosition]
+      .army = attackingArmy;
+  const cityUnderAttack = updatedGameBoard[message.cityTilePosition].city;
+
+  const ownPlayerNumber = state.gamePlayer.ownPlayerNumber;
+  if (attackingArmy.owner === ownPlayerNumber) {
+    console.log('Waiting for defender to prepare defenses...');
+  } else if (cityUnderAttack.owner === ownPlayerNumber) {
+    console.log('We need to prepare defenses!');
+  }
+
+  const occupyingArmy = updatedGameBoard[message.cityTilePosition].army;
+
+  store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
+  store.dispatch(outsideCityWallsBattleAC.setAttackingArmy(attackingArmy));
+  store.dispatch(outsideCityWallsBattleAC.setCityUnderAttack(cityUnderAttack));
+  store.dispatch(outsideCityWallsBattleAC.setSallyOutForces({
+    commander: null,
+    units: [],
+  }));
+  if (occupyingArmy != null) {
+    store.dispatch(outsideCityWallsBattleAC.setOccupyingArmy(occupyingArmy));
+  }
+  store.dispatch(outsideCityWallsBattleAC.setIncludeOccupyingCommander(false));
+  store.dispatch(outsideCityWallsBattleAC.setExcessDefenders(
+      message.excessDefenders));
+  store.dispatch(gameBoardViewAC.setUncloseableModalView(
+      UNCLOSEABLE_MODAL_VIEW.OUTSIDE_CITY_WALLS_BATTLE_PREP));
 };
 
 const cityStateUpdated = (message) => {
