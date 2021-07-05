@@ -10,6 +10,8 @@ import gamePlayerAC from
   '../../../../../Redux/actionCreators/gamePlayerActionCreators';
 import cityMenuAC from
   '../../../../../Redux/actionCreators/cityMenuActionCreators';
+import gameAC from
+  '../../../../../Redux/actionCreators/gameActionCreators';
 import tileHighlightManager from '../../../../Utilities/tileHighlightManager';
 import ARMY_ACTION_REQUEST_TYPE from
   '../../../../Utilities/armyActionRequestTypes';
@@ -18,6 +20,8 @@ import apiEndpoints from '../../../../Utilities/apiEndpoints';
 import PLAYER from '../../../../Utilities/playerEnums';
 import FACTIONS from '../../../../Utilities/factions';
 import './GameBoard.css';
+import ADVANCED_DETAILS_MODAL_VIEW from
+  '../../../../Utilities/advancedDetailsModalViews';
 
 /**
  *
@@ -419,7 +423,7 @@ const mapDispatchToProps = (dispatch) => {
     updatePlayerWhoseTurnItIs: (playerWhoseTurnItIs) => dispatch(
         gamePlayerAC.setPlayerWhoseTurnItIs(playerWhoseTurnItIs)),
     unshowCityModal: () => dispatch(
-        cityMenuAC.setShowCityModalInfo(false)),
+        gameAC.setAdvancedDetailsModalView(ADVANCED_DETAILS_MODAL_VIEW.NONE)),
     updateCityMenuSupplementalView: (view) => dispatch(
         cityMenuAC.setCityMenuSupplementalView(view)),
     updatePlayerOne: (player) => dispatch(
