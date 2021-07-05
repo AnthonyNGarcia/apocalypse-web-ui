@@ -88,13 +88,49 @@ const BattleSidebar = (props) => {
       <Row noGutters>
         <Col md={4}>
           {props.showEnemyArmyInBattle ? (
-          <Button variant="danger"
-            disabled={!props.isOwnTurn || (
-              (!props.battleData.tilePositionsThatDefenderCanRetreatTo ||
+            <OverlayTrigger
+              key='full-retreat-overlay'
+              placement='bottom'
+              trigger={['hover', 'focus']}
+              overlay={
+                <Tooltip id='full-retreat-tooltip'>
+                  <strong>{
+                  (!props.battleData.tilePositionsThatDefenderCanRetreatTo ||
+              props.battleData.tilePositionsThatDefenderCanRetreatTo
+                  .length <= 0 && props.battleData.defendingArmy.owner ===
+                  props.ownPlayerNumber) ? 'Can\'t Retreat!' : 'Full Retreat'
+                  }</strong> - {
+                    (!props.battleData.tilePositionsThatDefenderCanRetreatTo ||
+              props.battleData.tilePositionsThatDefenderCanRetreatTo
+                  .length <= 0 && props.battleData.defendingArmy.owner ===
+                  props.ownPlayerNumber) ? 'You have nowhere to run. ' +
+                        'You must make your stand here!' : !props.isOwnTurn ?
+                      'You must wait for your turn to retreat.' :
+                      'Sometimes it is better to live to fight another day. ' +
+                      'Retreating will save your soldiers and Commander.'}
+                </Tooltip >
+              }>
+              <span>
+                <Button variant="danger"
+                  disabled={!props.isOwnTurn || (
+                    (!props.battleData.tilePositionsThatDefenderCanRetreatTo ||
               props.battleData.tilePositionsThatDefenderCanRetreatTo
                   .length <= 0) && props.battleData.defendingArmy.owner ===
                   props.ownPlayerNumber)}
-            onClick={fullRetreatHandler}>Full Retreat</Button>
+                  onClick={fullRetreatHandler}
+                  style={!props.isOwnTurn || (
+                    (!props.battleData.tilePositionsThatDefenderCanRetreatTo ||
+              props.battleData.tilePositionsThatDefenderCanRetreatTo
+                  .length <= 0) && props.battleData.defendingArmy.owner ===
+                  props.ownPlayerNumber) ?
+                    {pointerEvents: 'none'} : {}}>
+                  {(!props.battleData.tilePositionsThatDefenderCanRetreatTo ||
+              props.battleData.tilePositionsThatDefenderCanRetreatTo
+                  .length <= 0 && props.battleData.defendingArmy.owner ===
+                  props.ownPlayerNumber) ? 'Can\'t Retreat!' : 'Full Retreat'}
+                </Button>
+              </span>
+            </OverlayTrigger>
         ) : (
           <Button variant="primary" disabled={props.ownArmySubmitted}
             onClick={submitConfigurationHandler}>Ready</Button>
@@ -109,21 +145,27 @@ const BattleSidebar = (props) => {
               <Tooltip id='orbital-fracture-tooltip'>
                 <strong>{props.orbitalFracture.displayName}</strong> - {
                   props.orbitalFracture.description}
-              </Tooltip>
+              </Tooltip >
             }>
-            <Button variant="primary"
-              disabled={!props.isOwnTurn || !props.showEnemyArmyInBattle ||
-                (props.ownPlayerData.currentAstridium <
-                  props.orbitalFracture.astridiumCost)}
-              onClick={orbitalFractureHandler}>
-              <span>
-                {props.orbitalFracture.displayName} ({
-                  props.orbitalFracture.astridiumCost} <img
-                  src={'ASTEROID.svg'}
-                  alt=""
-                  className={'tiny-asteroid-icon-battle'}/>)
-              </span>
-            </Button>
+            <span>
+              <Button variant="primary"
+                disabled={!props.isOwnTurn || !props.showEnemyArmyInBattle ||
+                  (props.ownPlayerData.currentAstridium <
+                    props.orbitalFracture.astridiumCost)}
+                onClick={orbitalFractureHandler}
+                style={!props.isOwnTurn || !props.showEnemyArmyInBattle ||
+                  (props.ownPlayerData.currentAstridium <
+                    props.orbitalFracture.astridiumCost) ?
+                    {pointerEvents: 'none'} : {}}>
+                <span>
+                  {props.orbitalFracture.displayName} ({
+                    props.orbitalFracture.astridiumCost} <img
+                    src={'ASTEROID.svg'}
+                    alt=""
+                    className={'tiny-asteroid-icon-battle'}/>)
+                </span>
+              </Button>
+            </span>
           </OverlayTrigger>
         </Col>
       </Row>

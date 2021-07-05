@@ -41,6 +41,9 @@ const SallyOutForceUnitItem = (props) => {
     props.updateCityUnderAttack(updatedCityUnderAttack);
     props.updateSallyOutForces(updatedSallyOutForces);
     props.updateExcessDefenders(props.excessDefenders + 1);
+    if (updatedSallyOutForcesUnits.length <= 0) {
+      props.updateIncludeOccupyingCommander(false);
+    }
   };
 
   if (fullUnitInfo) {
@@ -109,6 +112,8 @@ const mapDispatchToProps = (dispatch) => {
         outsideCityWallsBattleAC.setExcessDefenders(excessDefenders)),
     updateOccupyingArmy: (occupyingArmy) => dispatch(
         outsideCityWallsBattleAC.setOccupyingArmy(occupyingArmy)),
+    updateIncludeOccupyingCommander: (boolean) => dispatch(
+        outsideCityWallsBattleAC.setIncludeOccupyingCommander(boolean)),
   };
 };
 
@@ -125,6 +130,7 @@ SallyOutForceUnitItem.propTypes = {
   updateExcessDefenders: PropTypes.func,
   updateOccupyingArmy: PropTypes.func,
   maxArmySize: PropTypes.number,
+  updateIncludeOccupyingCommander: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

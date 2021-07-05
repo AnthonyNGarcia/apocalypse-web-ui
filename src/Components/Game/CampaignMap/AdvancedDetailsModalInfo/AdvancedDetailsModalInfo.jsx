@@ -38,7 +38,7 @@ const AdvancedDetailsModalInfo = (props) => {
   if (modal) {
     return (
       <React.Fragment>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className='advanced-details-modal-header'>
           <Modal.Title>
           </Modal.Title>
         </Modal.Header>

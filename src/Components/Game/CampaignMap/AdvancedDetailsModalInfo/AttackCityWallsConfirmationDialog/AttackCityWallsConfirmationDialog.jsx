@@ -60,8 +60,8 @@ const AttackCityWallsConfirmationDialog = (props) => {
                 {props.cityUnderAttack.name}</span>!!</h3>
             <p className='city-walls-description'>
               {'The outskirts of this pathetic City have been Scorched! It ' +
-            'is now vulnerable to a direct assault. Dare you proceed to ' +
-            'actually attack the City Walls?'}</p>
+            'is now vulnerable to a direct assault. Do you want to press on, ' +
+            'and attack the City Walls?'}</p>
           </div>
         </Row>
         {/* One big row to start making columns */}
@@ -108,7 +108,8 @@ const AttackCityWallsConfirmationDialog = (props) => {
           </Col>
         </Row>
         {/* Row for Buttons on what to do*/}
-        <Row noGutters>
+        <Row noGutters
+          className='attack-city-walls-options-container'>
           <Col>
             <Button onClick={attackCityWallsHandler}>
               Attack The City Walls!

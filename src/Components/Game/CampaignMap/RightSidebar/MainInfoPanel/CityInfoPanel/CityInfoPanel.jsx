@@ -43,15 +43,25 @@ const CityInfoPanel = (props) => {
         {props.ownPlayerNumber === props.selectedCity.owner ?
           <React.Fragment>
             <Row className='center-text own-city-entity'>
-              <h2>{props.selectedCity.name}{
-                props.selectedCity.scorchedEarth ? (
-                  <span> - Scorched ({props.selectedCity
-                      .turnsRemainingForScorchedEarth} <span><img
-                    src={'timer.svg'}
-                    alt=""
-                    className={'city-panel-timer-icon'}
-                  /></span>)</span>
-                ) : null}</h2>
+              <div>
+                <h2>{props.selectedCity.name}</h2>
+                <h5>{props.selectedCity.scorchedEarth ? (
+                      <span>Scorched ({props.selectedCity
+                          .turnsRemainingForScorchedEarth} <span><img
+                        src={'timer.svg'}
+                        alt=""
+                        className={'tiny-white-timer-icon'}
+                      /></span>)</span>
+                    ) : null}</h5>
+                <h5>{props.selectedCity.wallsDestroyed ? (
+                      <span>Walls Destroyed ({props.selectedCity
+                          .turnsRemainingForDestroyedWalls} <span><img
+                        src={'timer.svg'}
+                        alt=""
+                        className={'tiny-white-timer-icon'}
+                      /></span>)</span>
+                    ) : null}</h5>
+              </div>
             </Row>
             <Row className='center-text own-city-entity'>
               <h5>Tier {props.selectedCity.tier} City</h5>
@@ -90,15 +100,25 @@ const CityInfoPanel = (props) => {
           </React.Fragment> :
              <React.Fragment>
                <Row className='center-text enemy-entity'>
-                 <h2>{props.selectedCity.name}{
-                props.selectedCity.scorchedEarth ? (
-                  <span> - Scorched ({props.selectedCity
-                      .turnsRemainingForScorchedEarth} <span><img
-                    src={'timer.svg'}
-                    alt=""
-                    className={'city-panel-timer-icon'}
-                  /></span>)</span>
-                ) : null}</h2>
+                 <div>
+                   <h2>{props.selectedCity.name}</h2>
+                   <h5>{props.selectedCity.scorchedEarth ? (
+                      <span>Scorched ({props.selectedCity
+                          .turnsRemainingForScorchedEarth} <span><img
+                        src={'timer.svg'}
+                        alt=""
+                        className={'tiny-white-timer-icon'}
+                      /></span>)</span>
+                    ) : null}</h5>
+                   <h5>{props.selectedCity.wallsDestroyed ? (
+                      <span>Walls Destroyed ({props.selectedCity
+                          .turnsRemainingForDestroyedWalls} <span><img
+                        src={'timer.svg'}
+                        alt=""
+                        className={'tiny-white-timer-icon'}
+                      /></span>)</span>
+                    ) : null}</h5>
+                 </div>
                </Row>
                <Row className='center-text enemy-entity'>
                  <h5>Tier {props.selectedCity.tier} City</h5>

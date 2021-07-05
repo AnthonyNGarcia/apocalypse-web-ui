@@ -86,6 +86,10 @@ const PASSIVE_ABILITIES = {
     prefix: 'Double Tap (',
     suffix: ')',
   },
+  STRUCTURE: {
+    enum: 'STRUCTURE',
+    displayName: 'Structure',
+  },
 };
 
 export default PASSIVE_ABILITIES;

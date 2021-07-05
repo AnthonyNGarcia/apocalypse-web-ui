@@ -285,6 +285,9 @@ const GameBoard = (props) => {
         if (item.city.scorchedEarth) {
           cityStyling += ' city-is-scorched';
         }
+        if (item.city.wallsDestroyed) {
+          cityStyling += ' city-walls-destroyed';
+        }
         if (cityFaction === FACTIONS.HUMANS.enum) {
           city = (
             <img

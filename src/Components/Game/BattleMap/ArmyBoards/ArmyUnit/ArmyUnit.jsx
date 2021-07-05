@@ -9,6 +9,7 @@ import axios from 'axios';
 import UNIT_ACTION_TYPES from '../../../../Utilities/unitActionTypes';
 import getIfFlanker from '../../../../Utilities/getIfFlanker';
 import getIfStunned from '../../../../Utilities/getIfStunned';
+import getIfCityWalls from '../../../../Utilities/getIfStructure';
 import './ArmyUnit.css';
 
 /**
@@ -37,6 +38,7 @@ const ArmyUnit = (props) => {
         if (currentlySelectedOwnUnit &&
             currentlySelectedOwnUnit.eligibleForCommand &&
             !getIfStunned(currentlySelectedOwnUnit) &&
+            !getIfCityWalls(currentlySelectedOwnUnit) &&
             (props.unit.isTargetable ||
               getIfFlanker(currentlySelectedOwnUnit))) {
           calculatedUnitClasses += ' targetable-enemy-unit';
@@ -127,6 +129,11 @@ const ArmyUnit = (props) => {
     if (getIfStunned(currentlySelectedOwnUnit)) {
       console.log('Cannot do anything, currently selected ' +
       'own unit is stunned!');
+      return;
+    }
+    if (getIfCityWalls(currentlySelectedOwnUnit)) {
+      console.log('Cannot do anything, currently selected ' +
+      'unit is a wall, which cannot attack!');
       return;
     }
     if (!currentlySelectedOwnUnit.eligibleForCommand) {

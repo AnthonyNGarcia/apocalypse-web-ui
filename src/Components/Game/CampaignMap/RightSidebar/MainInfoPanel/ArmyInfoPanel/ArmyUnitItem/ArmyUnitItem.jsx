@@ -46,8 +46,8 @@ const ArmyUnitItem = (props) => {
   if (props.unit.unitType && fullUnitInfo) {
     return (
       <div className='army-unit-container sidebar-unit-text'>
-        <Row>
-          <Col md={1}>
+        <Row noGutters>
+          <Col md={2}>
             <img
               src={props.unit.unitType + '_ICON.svg'}
               onError={(e)=>e.target.src='shield.svg'}
@@ -63,7 +63,7 @@ const ArmyUnitItem = (props) => {
               className={'black-health-icon'}
             /></span>)
           </Col>
-          <Col md={1}>
+          <Col md={2}>
             {props.showRemoveUnit ? (
             <Button
               variant='outline-danger'

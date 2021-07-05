@@ -41,6 +41,16 @@
   filter: invert();
 }
 
+
+.tiny-white-timer-icon {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 1.8vh;
+  width: auto;
+  filter: invert();
+}
+
 .tiny-asteroid-icon {
   display: inline-block;
   margin-left: auto;

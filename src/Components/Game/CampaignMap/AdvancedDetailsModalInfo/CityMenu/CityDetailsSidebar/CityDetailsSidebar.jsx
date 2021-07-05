@@ -108,15 +108,25 @@ const CityDetailsSidebar = (props) => {
       <React.Fragment>
         <Container>
           <Row noGutters>
-            <h5>{cityHeader}</h5>
-            <h5>{props.selectedCity.scorchedEarth ? (
-                  <span> - Scorched ({props.selectedCity
-                      .turnsRemainingForScorchedEarth} <span><img
-                    src={'timer.svg'}
-                    alt=""
-                    className={'really-tiny-timer-icon'}
-                  /></span>)</span>
-                ) : null}</h5>
+            <div>
+              <h5>{cityHeader}</h5>
+              <h5>{props.selectedCity.scorchedEarth ? (
+                    <span> - Scorched ({props.selectedCity
+                        .turnsRemainingForScorchedEarth} <span><img
+                      src={'timer.svg'}
+                      alt=""
+                      className={'tiny-white-timer-icon'}
+                    /></span>)</span>
+                  ) : null}</h5>
+              <h5>{props.selectedCity.wallsDestroyed ? (
+                    <span> - Walls Destroyed ({props.selectedCity
+                        .turnsRemainingForDestroyedWalls} <span><img
+                      src={'timer.svg'}
+                      alt=""
+                      className={'tiny-white-timer-icon'}
+                    /></span>)</span>
+                  ) : null}</h5>
+            </div>
           </Row>
           <Row className='center-text'
             style={{height: '15vh', width: '20vw'}} noGutters>
@@ -293,7 +303,13 @@ const CityDetailsSidebar = (props) => {
                       className='unit-icon'/>
                   </Col>
                   <Col md={10}>
-                    {props.allUnits[unit.unitType].displayName}
+                    {props.allUnits[unit.unitType].displayName} (
+                    {unit.currentHealth}/{unit.maxHealth} <span><img
+                      src={'health.svg'}
+                      alt=""
+                      className={'black-health-icon'}
+                    /></span>
+                    )
                   </Col>
                 </Row>
               )) : (

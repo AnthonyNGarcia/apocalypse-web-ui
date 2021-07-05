@@ -75,6 +75,39 @@ const BattleMap = (props) => {
     </div>
   );
 
+  const cityWallsPopover = (
+    <Popover id="city-walls-popover">
+      <Popover.Title as="h3">City Walls Battle</Popover.Title>
+      <Popover.Content>
+      This city is under siege at the <strong>City Walls</strong>!
+        <br></br>
+        {'This will be a standard battle with the Attacker going first as ' +
+      'usual. The Defender\'s City Garrison at the City Walls, however, ' +
+      'will not be able to retreat! They must fight to the death to protect ' +
+      'their City from the invaders! If the defenders perish, then the City ' +
+      'Walls will be destroyed, preventing the City Garrison from recovering ' +
+      'for some time, and paving the way for the Attackers to proceed ' +
+      'further towards the City Courtyard, ultimately capturing the City! '}
+        <br></br>
+        {'NOTE: If there are no Defending Army Units or Unassigned Units in ' +
+      'this City for a last-ditch City Courtyard Battle, then a victorious ' +
+      'Attacker will instantly capture this City!'}
+      </Popover.Content>
+    </Popover>
+  );
+
+  const cityWallsTitle = (
+    <div className='battle-view-city-walls-title-container'>
+      <OverlayTrigger trigger="click" placement="bottom"
+        overlay={cityWallsPopover}>
+        <Button variant="danger"
+          className='battle-view-city-walls-title'>
+          City Walls
+        </Button>
+      </OverlayTrigger>
+    </div>
+  );
+
   if (props.battleData) {
     return (
       <div className='battle-view-container'>
@@ -95,6 +128,10 @@ const BattleMap = (props) => {
                 'ATTACKING_CITY_OUTSIDE_WALLS' &&
                 props.battleData.defendingArmy.owner === PLAYER.ONE ?
                 outsideCityWallsTitle : null}
+              {props.battleData.battleType ===
+                'ATTACKING_CITY_WALLS' &&
+                props.battleData.defendingArmy.owner === PLAYER.ONE ?
+                cityWallsTitle : null}
             </Col>
             <Col>
               <div className='battle-view-class-round-label'>
@@ -127,6 +164,10 @@ const BattleMap = (props) => {
                 'ATTACKING_CITY_OUTSIDE_WALLS' &&
                 props.battleData.defendingArmy.owner === PLAYER.TWO ?
                 outsideCityWallsTitle : null}
+              {props.battleData.battleType ===
+                'ATTACKING_CITY_WALLS' &&
+                props.battleData.defendingArmy.owner === PLAYER.TWO ?
+                cityWallsTitle : null}
               <h3 className={props.ownPlayerNumber === PLAYER.TWO ?
           'battle-view-own-player-label' : 'battle-view-other-player-label'}>
                 {props.playerTwoUsername}</h3>

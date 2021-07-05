@@ -8,10 +8,13 @@ import gamePlayerAC from
   '../../../../Redux/actionCreators/gamePlayerActionCreators';
 import outsideCityWallsBattleAC from
   '../../../../Redux/actionCreators/outsideCityWallsBattleActionCreators';
+import cityWallsBattleAC from
+  '../../../../Redux/actionCreators/cityWallsBattleActionCreators';
 import gameAC from '../../../../Redux/actionCreators/gameActionCreators';
 import GAME_VIEWS from '../../gameViews';
 import PLAYER from '../../playerEnums';
 import UNCLOSEABLE_MODAL_VIEW from '../../uncloseableModalView';
+import ADVANCED_DETAILS_MODAL_VIEW from '../../advancedDetailsModalViews';
 
 /**
  * This is the Battle View Message Handler.
@@ -57,6 +60,9 @@ const battleInitiated = async (message) => {
       UNCLOSEABLE_MODAL_VIEW.NONE));
   await store.dispatch(outsideCityWallsBattleAC
       .clearOutsideCityWallsBattleReducer());
+  await store.dispatch(gameAC.setAdvancedDetailsModalView(
+      ADVANCED_DETAILS_MODAL_VIEW.NONE));
+  await store.dispatch(cityWallsBattleAC.clearCityWallsBattleReducer());
 };
 
 const battleStarted = async (message) => {

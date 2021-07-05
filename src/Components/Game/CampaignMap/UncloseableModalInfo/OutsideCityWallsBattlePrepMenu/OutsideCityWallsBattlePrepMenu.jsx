@@ -145,6 +145,7 @@ const OutsideCityWallsBattlePrepMenu = (props) => {
                             .commanderInfo.displayName +
                             ' Lead the Sally Out Force'}
                         onChange={toggleCommanderLeadingSally}
+                        disabled={props.sallyOutForces.units.length <= 0}
                         checked={props.includeOccupyingCommander}/>) :
                       (<Form.Check type="checkbox"
                         label={'No Commander Available to ' +

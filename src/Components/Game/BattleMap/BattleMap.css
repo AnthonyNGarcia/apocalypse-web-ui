@@ -99,6 +99,20 @@
     transition-timing-function: linear;
 }
 
+.battle-view-city-walls-title {
+    position: relative;
+    padding: 0px;
+    height: 80%;
+    max-height: 80%;
+    min-height: 80%;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px 2px black;
+    animation-name: blink; 
+    animation-duration: 2s; 
+    animation-iteration-count: infinite;
+    transition-timing-function: linear;
+}
+
 .battle-view-ambush-title-container {
     position: relative;
     margin: auto;
@@ -106,6 +120,12 @@
 }
 
 .battle-view-outside-city-walls-title-container {
+    position: relative;
+    margin: auto;
+    padding: 0;
+}
+
+.battle-view-city-walls-title-container {
     position: relative;
     margin: auto;
     padding: 0;
