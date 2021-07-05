@@ -314,7 +314,7 @@ const CityDetailsSidebar = (props) => {
                 </Row>
               )) : (
                 <React.Fragment>
-                  ---
+                  {'This city has no garrison'}
                 </React.Fragment>
               )}
             </Scrollbars>
