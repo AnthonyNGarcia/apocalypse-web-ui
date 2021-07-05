@@ -11,12 +11,17 @@ import AdvancedDetailsModalInfo from
 import UncloseableModalInfo from
   './UncloseableModalInfo/UncloseableModalInfo';
 import cityMenuAC from '../../../Redux/actionCreators/cityMenuActionCreators';
+import gameAC from '../../../Redux/actionCreators/gameActionCreators';
 import Modal from 'react-bootstrap/Modal';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../Utilities/cityMenuSupplementalViews';
 import PLAYER from '../../Utilities/playerEnums';
 import flattenObject from '../../Utilities/flattenObjectValuesToArray';
 import UNCLOSEABLE_MODAL_VIEW from '../../Utilities/uncloseableModalView';
+import ADVANCED_DETAILS_MODAL_VIEW from
+  '../../Utilities/advancedDetailsModalViews';
+import cityWallsBattleAC from
+  '../../../Redux/actionCreators/cityWallsBattleActionCreators';
 import './CampaignMap.css';
 
 /**
@@ -28,17 +33,18 @@ import './CampaignMap.css';
  */
 const CampaignMap = (props) => {
   const closeAdvancedDetailsModal = () => {
-    props.updateShowCityModalInfo(false);
-    props.updateShowResearchModalInfo(false);
     props.updateCityMenuSupplementalData({});
     props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.NONE);
+    props.updateAdvancedDetailsModalView(ADVANCED_DETAILS_MODAL_VIEW.NONE);
+    props.clearCityWallsBattleReducer();
   };
 
   return (
     <React.Fragment>
-      <Modal show={props.showCityModalInfo || props.showResearchModalInfo}
-        onHide={closeAdvancedDetailsModal} size="xl"
-        dialogClassName='modal-dialog-custom-sizing'>
+      <Modal show={props.advancedDetailsModalView !==
+      ADVANCED_DETAILS_MODAL_VIEW.NONE}
+      onHide={closeAdvancedDetailsModal} size="xl"
+      className='advanced-details-modal-custom-background'>
         <AdvancedDetailsModalInfo/>
       </Modal>
       <Modal show={props.uncloseableModalView !== UNCLOSEABLE_MODAL_VIEW.NONE}
@@ -89,8 +95,6 @@ const CampaignMap = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    showCityModalInfo: state.cityMenu.showCityModalInfo,
-    showResearchModalInfo: state.cityMenu.showResearchModalInfo,
     playerOneUsername: state.gamePlayer.playerOne ?
       state.gamePlayer.playerOne.username : 'error',
     playerTwoUsername: state.gamePlayer.playerTwo ?
@@ -99,27 +103,24 @@ const mapStateToProps = (state) => {
     ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
     round: state.game.gameRound,
     uncloseableModalView: state.gameBoardView.uncloseableModalView,
+    advancedDetailsModalView: state.game.advancedDetailsModalView,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateShowCityModalInfo: (showCityModalInfo) => dispatch(
-        cityMenuAC.setShowCityModalInfo(showCityModalInfo)),
-    updateShowResearchModalInfo: (showResearchModalInfo) => dispatch(
-        cityMenuAC.setShowResearchModalInfo(showResearchModalInfo)),
     updateCityMenuSupplementalView: (view) => dispatch(
         cityMenuAC.setCityMenuSupplementalView(view)),
     updateCityMenuSupplementalData: (data) => dispatch(
         cityMenuAC.setCityMenuSupplementalData(data)),
+    updateAdvancedDetailsModalView: (view) => dispatch(
+        gameAC.setAdvancedDetailsModalView(view)),
+    clearCityWallsBattleReducer: () => dispatch(
+        cityWallsBattleAC.clearCityWallsBattleReducer()),
   };
 };
 
 CampaignMap.propTypes = {
-  showCityModalInfo: PropTypes.bool,
-  showResearchModalInfo: PropTypes.bool,
-  updateShowCityModalInfo: PropTypes.func,
-  updateShowResearchModalInfo: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
   updateCityMenuSupplementalData: PropTypes.func,
   playerOneUsername: PropTypes.string,
@@ -128,6 +129,10 @@ CampaignMap.propTypes = {
   ownPlayerNumber: PropTypes.oneOf(flattenObject(PLAYER)),
   round: PropTypes.number,
   uncloseableModalView: PropTypes.oneOf(flattenObject(UNCLOSEABLE_MODAL_VIEW)),
+  advancedDetailsModalView: PropTypes.oneOf(
+      flattenObject(ADVANCED_DETAILS_MODAL_VIEW)),
+  updateAdvancedDetailsModalView: PropTypes.func,
+  clearCityWallsBattleReducer: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CampaignMap);

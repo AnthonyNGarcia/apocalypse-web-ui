@@ -4,6 +4,8 @@
     height: auto;
     top: 50%;
     transform: translateY(-50%);
+    background-color: white;
+    border-radius: 10px;
 }
 
 .tiny-hammer-icon {
@@ -20,6 +22,7 @@
   margin-right: auto;
   height: 2vh;
   width: auto;
+  filter: invert();
 }
 
 .unit-stat-title {

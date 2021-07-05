@@ -12,6 +12,7 @@ import cityMenuReducer from './Redux/Reducers/cityMenuReducer';
 import chatReducer from './Redux/Reducers/chatReducer';
 import outsideCityWallsBattleReducer from
   './Redux/Reducers/outsideCityWallsBattleReducer';
+import cityWallsBattleReducer from './Redux/Reducers/cityWallsBattleReducer';
 import DynamicContainerComponent from './Components/DynamicContainerComponent';
 import './App.css';
 
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   cityMenu: cityMenuReducer,
   chat: chatReducer,
   outsideCityWallsBattle: outsideCityWallsBattleReducer,
+  cityWallsBattle: cityWallsBattleReducer,
 });
 
 export const store = createStore(rootReducer,

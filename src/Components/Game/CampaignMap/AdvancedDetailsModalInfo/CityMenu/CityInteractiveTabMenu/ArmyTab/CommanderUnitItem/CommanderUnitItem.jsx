@@ -73,7 +73,8 @@ const CommanderUnitItem = (props) => {
   if (props.unit.unitType && fullUnitInfo) {
     return (
       <div className='unit-option-container'>
-        <Row onClick={(e) => viewUnitHandler(e)} className='vertically-center'>
+        <Row onClick={(e) => viewUnitHandler(e)}
+          className='vertically-center' noGutters>
           <Col md={2}>
             <Button
               variant='dark'
@@ -88,7 +89,7 @@ const CommanderUnitItem = (props) => {
           <Col md={2}>
             <img
               src={props.unit.unitType + '_ICON.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='unit-icon'/>
           </Col>
@@ -99,11 +100,11 @@ const CommanderUnitItem = (props) => {
                   .maxHealth} <span><img
                 src={'health.svg'}
                 alt=""
-                className={'tiny-hammer-icon'}
+                className={'black-health-icon'}
               /></span>)
             </p>
           </Col>
-          <Col md={1}>
+          <Col md={2}>
             <Button
               variant='danger'
               onClick={removeUnitHandler}

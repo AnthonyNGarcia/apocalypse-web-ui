@@ -59,11 +59,12 @@ const QueuedUnitItem = (props) => {
   if (props.queuedUnit.actualUnitTypeToBeProduced && fullUnitInfo) {
     return (
       <div className='unit-option-container'>
-        <Row onClick={(e) => viewUnitHandler(e)} className='vertically-center'>
+        <Row onClick={(e) => viewUnitHandler(e)}
+          className='vertically-center' noGutters>
           <Col md={2}>
             <img
               src={props.queuedUnit.actualUnitTypeToBeProduced + '_ICON.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='unit-icon'/>
           </Col>
@@ -72,13 +73,13 @@ const QueuedUnitItem = (props) => {
               {fullUnitInfo.displayName} ({
                 !props.queuedUnit.free ?
                  <span>{fullUnitInfo.productionCost}<img
-                   src={'hammer.png'}
+                   src={'hammer.svg'}
                    alt=""
                    className={'really-tiny-hammer-icon'}
                  /></span>: <span
                    style={{'fontWeight': 'bold'}}>FREE</span>}, {
                 props.queuedUnit.turnsRemaining} <span><img
-                src={'timer.png'}
+                src={'timer.svg'}
                 alt=""
                 className={'really-tiny-timer-icon'}
               /></span>)

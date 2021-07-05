@@ -5,9 +5,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
-import cityMenuAC from
-  '../../../../../../Redux/actionCreators/cityMenuActionCreators';
+import gameAC from
+  '../../../../../../Redux/actionCreators/gameActionCreators';
 import PLAYER from '../../../../../Utilities/playerEnums';
+import ADVANCED_DETAILS_MODAL_VIEW from
+  '../../../../../Utilities/advancedDetailsModalViews';
 import './CityInfoPanel.css';
 
 /**
@@ -22,7 +24,7 @@ const CityInfoPanel = (props) => {
 
   const showCityMenuHandler = (e) => {
     e.preventDefault();
-    props.updateShowCityModalInfo(true);
+    props.updateAdvancedDetailsModalView(ADVANCED_DETAILS_MODAL_VIEW.CITY_MENU);
   };
 
   useEffect(() => {
@@ -45,7 +47,7 @@ const CityInfoPanel = (props) => {
                 props.selectedCity.scorchedEarth ? (
                   <span> - Scorched ({props.selectedCity
                       .turnsRemainingForScorchedEarth} <span><img
-                    src={'timer.png'}
+                    src={'timer.svg'}
                     alt=""
                     className={'city-panel-timer-icon'}
                   /></span>)</span>
@@ -92,7 +94,7 @@ const CityInfoPanel = (props) => {
                 props.selectedCity.scorchedEarth ? (
                   <span> - Scorched ({props.selectedCity
                       .turnsRemainingForScorchedEarth} <span><img
-                    src={'timer.png'}
+                    src={'timer.svg'}
                     alt=""
                     className={'city-panel-timer-icon'}
                   /></span>)</span>
@@ -132,8 +134,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateShowCityModalInfo: (showCityModalInfo) => dispatch(
-        cityMenuAC.setShowCityModalInfo(showCityModalInfo)),
+    updateAdvancedDetailsModalView: (view) => dispatch(
+        gameAC.setAdvancedDetailsModalView(view)),
   };
 };
 
@@ -142,6 +144,7 @@ CityInfoPanel.propTypes = {
   playerOne: PropTypes.any,
   playerTwo: PropTypes.any,
   ownPlayerNumber: PropTypes.string,
+  updateAdvancedDetailsModalView: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CityInfoPanel);

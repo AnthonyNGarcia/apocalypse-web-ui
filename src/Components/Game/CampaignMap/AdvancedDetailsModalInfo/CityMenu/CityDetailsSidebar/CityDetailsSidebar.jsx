@@ -107,34 +107,35 @@ const CityDetailsSidebar = (props) => {
     return (
       <React.Fragment>
         <Container>
-          <Row>
+          <Row noGutters>
             <h5>{cityHeader}</h5>
             <h5>{props.selectedCity.scorchedEarth ? (
                   <span> - Scorched ({props.selectedCity
                       .turnsRemainingForScorchedEarth} <span><img
-                    src={'timer.png'}
+                    src={'timer.svg'}
                     alt=""
                     className={'really-tiny-timer-icon'}
                   /></span>)</span>
                 ) : null}</h5>
           </Row>
-          <Row className='center-text' style={{height: '15vh', width: '20vw'}}>
+          <Row className='center-text'
+            style={{height: '15vh', width: '20vw'}} noGutters>
             <Col md={6}>
-              <Row>
+              <Row noGutters>
                 <span><img
-                  src={'hammer.png'}
+                  src={'hammer.svg'}
                   alt=""
                   className={'kinda-tiny-hammer-icon'}
                 /></span><span className='bold-title'>Production:</span>
               </Row>
-              <Row>
+              <Row noGutters>
                 <span><img
                   src={'research.svg'}
                   alt=""
                   className={'kinda-tiny-hammer-icon'}
                 /></span><span className='bold-title'>Research:</span>
               </Row>
-              <Row>
+              <Row noGutters>
                 <span><img
                   src={'growth.svg'}
                   alt=""
@@ -143,20 +144,20 @@ const CityDetailsSidebar = (props) => {
               </Row>
             </Col>
             <Col md={6}>
-              <Row>
+              <Row noGutters>
                 {props.selectedCity.totalBuildingProduction}
               </Row>
-              <Row>
+              <Row noGutters>
                 {props.selectedCity.totalResearch}
               </Row>
-              <Row>
+              <Row noGutters>
                 {props.selectedCity.currentGrowthStockpile}/{
                   props.selectedCity.growthToNextTier} (+
                 {props.selectedCity.totalGrowth})
               </Row>
             </Col>
           </Row>
-          <Row>
+          <Row noGutters>
             <Button
               variant='primary'
               disabled={!props.isOwnTurn ||
@@ -190,7 +191,7 @@ const CityDetailsSidebar = (props) => {
                       ''
               }</Button>
           </Row>
-          <Row>
+          <Row noGutters>
             <Button
               variant='primary'
               disabled={!props.isOwnTurn ||
@@ -215,7 +216,7 @@ const CityDetailsSidebar = (props) => {
                 'Choose a Commander for this City!'}
             </Button>
           </Row>
-          <Row>
+          <Row noGutters>
             <OverlayTrigger
               key='time-warp-overlay'
               placement='bottom'
@@ -243,10 +244,10 @@ const CityDetailsSidebar = (props) => {
               </Button>
             </OverlayTrigger>
           </Row>
-          <Row>
+          <Row noGutters>
             <h5>Current Buildings</h5>
           </Row>
-          <Row>
+          <Row noGutters>
             {/* Map completed buildings to generate dynamic, scrollable list */}
             <Scrollbars style={{height: '20vh', width: '20vw'}}>
               {props.selectedCity.completedBuildings &&
@@ -255,10 +256,10 @@ const CityDetailsSidebar = (props) => {
                 <div key={index} style={{overflow: 'hidden'}}
                   onClick={(e) =>
                     viewBuildingHandler(e, building)}>
-                  <Row>
+                  <Row noGutters>
                     <Col xs={2}>
                       <img
-                        src={'tower.png'}
+                        src={'tower.svg'}
                         alt=""
                         className='icon-image'/>
                     </Col>
@@ -274,29 +275,27 @@ const CityDetailsSidebar = (props) => {
               )}
             </Scrollbars>
           </Row>
-          <Row>
+          <Row noGutters>
             <h5>City Garrison</h5>
           </Row>
-          <Row>
+          <Row noGutters>
             {/* Map garrison units to generate dynamic, scrollable list */}
             <Scrollbars style={{height: '20vh', width: '20vw'}}>
               {props.selectedCity.cityGarrison &&
               props.selectedCity.cityGarrison.length > 0 ?
               props.selectedCity.cityGarrison.map((unit, index) => (
-                <div key={index} className='garrison-unit-container'
+                <Row noGutters key={index} className='garrison-unit-container'
                   onClick={(e) => viewUnitHandler(e, unit.unitType)}>
-                  <Row noGutters>
-                    <Col md={2}>
-                      <img
-                        src={'shield.png'}
-                        alt=""
-                        className='unit-icon'/>
-                    </Col>
-                    <Col md={10}>
-                      {props.allUnits[unit.unitType].displayName}
-                    </Col>
-                  </Row>
-                </div>
+                  <Col md={2}>
+                    <img
+                      src={'shield.svg'}
+                      alt=""
+                      className='unit-icon'/>
+                  </Col>
+                  <Col md={10}>
+                    {props.allUnits[unit.unitType].displayName}
+                  </Col>
+                </Row>
               )) : (
                 <React.Fragment>
                   ---

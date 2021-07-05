@@ -50,7 +50,7 @@ const ArmyUnitItem = (props) => {
           <Col md={1}>
             <img
               src={props.unit.unitType + '_ICON.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='unit-icon'/>
           </Col>
@@ -60,7 +60,7 @@ const ArmyUnitItem = (props) => {
                 .maxHealth} <span><img
               src={'health.svg'}
               alt=""
-              className={'tiny-hammer-icon'}
+              className={'black-health-icon'}
             /></span>)
           </Col>
           <Col md={1}>

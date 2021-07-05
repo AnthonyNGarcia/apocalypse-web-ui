@@ -1,0 +1,26 @@
+.city-walls-header-container {
+    margin: auto;
+    text-align: center;
+}
+
+.city-walls-enemy-city-name {
+    color: pink;
+}
+
+.city-walls-own-commander-name {
+    color: lime;
+}
+
+.city-walls-title {
+    display: block;
+    margin: auto;
+}
+
+.city-walls-forces-title {
+    text-align: center;
+}
+
+.city-walls-description {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}

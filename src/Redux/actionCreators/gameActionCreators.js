@@ -25,6 +25,12 @@ const actionCreators = {
       gameRound: gameRound,
     };
   },
+  setAdvancedDetailsModalView: (advancedDetailsModalView) => {
+    return {
+      type: gameAT.SET_ADVANCED_DETAILS_MODAL_VIEW,
+      advancedDetailsModalView: advancedDetailsModalView,
+    };
+  },
 };
 
 export default actionCreators;

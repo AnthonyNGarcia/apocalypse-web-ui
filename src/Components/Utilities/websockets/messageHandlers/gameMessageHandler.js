@@ -15,6 +15,7 @@ import chatAC from '../../../../Redux/actionCreators/chatActionCreators';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from '../../cityMenuSupplementalViews';
 import MAIN_PANEL_VIEWS from '../../gameMainPanelViews';
 import CHAT_TOPIC from '../../chatTopics';
+import ADVANCED_DETAILS_MODAL_VIEW from '../../advancedDetailsModalViews';
 
 /**
  * This is the Game Message Handler.
@@ -86,7 +87,8 @@ const nextTurnUpdate = (message) => {
   store.dispatch(gameAC.setGameRound(message.updatedGameData.round));
   // Reset Game View
   store.dispatch(gameAC.setGameView(GAME_VIEWS.GAME_BOARD_VIEW));
-  store.dispatch(cityMenuAC.setShowCityModalInfo(false));
+  store.dispatch(gameAC.setAdvancedDetailsModalView(
+      ADVANCED_DETAILS_MODAL_VIEW.NONE));
   store.dispatch(gameBoardViewAC.setMainPanelView(MAIN_PANEL_VIEWS.NONE));
   store.dispatch(cityMenuAC.setCityMenuSupplementalData({}));
   store.dispatch(cityMenuAC.setCityMenuSupplementalView(

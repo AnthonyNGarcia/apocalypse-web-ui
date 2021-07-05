@@ -33,10 +33,10 @@ const IconAttributions = (props) => {
             <p>
               <span>
                 <img
-                  src={'shield.png'}
+                  src={'shield.svg'}
                   alt=""
                   className='tiny-icon-image'/> <img
-                  src={'hammer.png'}
+                  src={'hammer.svg'}
                   alt=""
                   className='tiny-icon-image'/> <img
                   src={'SPEARMAN_ICON.svg'}
@@ -158,7 +158,7 @@ const IconAttributions = (props) => {
             <p>
               <span>
                 <img
-                  src={'tower.png'}
+                  src={'tower.svg'}
                   alt=""
                   className='tiny-icon-image'/>  made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a>
               </span>
@@ -166,7 +166,7 @@ const IconAttributions = (props) => {
             <p>
               <span>
                 <img
-                  src={'timer.png'}
+                  src={'timer.svg'}
                   alt=""
                   className='tiny-icon-image'/>  made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a>
               </span>

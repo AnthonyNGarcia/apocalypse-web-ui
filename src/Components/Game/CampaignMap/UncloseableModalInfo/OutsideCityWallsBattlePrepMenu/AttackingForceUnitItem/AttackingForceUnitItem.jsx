@@ -31,7 +31,7 @@ const AttackingForceUnitItem = (props) => {
           <Col md={4}>
             <img
               src={props.unit.unitType + '_ICON.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='outside-city-walls-attacking-unit-icon'/>
           </Col>

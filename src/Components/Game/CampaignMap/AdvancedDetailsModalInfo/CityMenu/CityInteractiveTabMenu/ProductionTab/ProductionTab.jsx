@@ -69,7 +69,7 @@ const ProductionTab = (props) => {
           <h5 style={{'margin': 'auto'}}>Recruitment Queue (
             {props.selectedCity.unitProductionRemaining}/{
               props.selectedCity.totalUnitProduction}<span><img
-              src={'hammer.png'}
+              src={'hammer.svg'}
               alt=""
               className={'tiny-hammer-icon'}
             /></span>, {unitPopLabel} <span><img

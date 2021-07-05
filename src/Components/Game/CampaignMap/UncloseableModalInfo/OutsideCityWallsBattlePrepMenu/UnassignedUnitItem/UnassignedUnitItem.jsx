@@ -73,7 +73,7 @@ const UnassignedUnitItem = (props) => {
           <Col md={2}>
             <img
               src={props.unit.unitType + '_ICON.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='outsite-city-walls-unassigned-unit-icon'/>
           </Col>

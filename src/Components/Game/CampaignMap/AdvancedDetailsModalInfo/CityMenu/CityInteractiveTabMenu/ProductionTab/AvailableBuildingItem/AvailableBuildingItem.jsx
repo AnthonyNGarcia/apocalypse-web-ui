@@ -92,7 +92,7 @@ const AvailableBuildingItem = (props) => {
         <Row onClick={(e) => viewBuildingHandler(e, props.bldg)}>
           <Col md={2}>
             <img
-              src={'tower.png'}
+              src={'tower.svg'}
               alt=""
               className='building-icon'/>
           </Col>
@@ -103,7 +103,7 @@ const AvailableBuildingItem = (props) => {
             {isBuildingThis ?
 
               <img
-                src={'hammer.png'}
+                src={'hammer.svg'}
                 alt=""
                 className={'animated-hammer'}
               /> :

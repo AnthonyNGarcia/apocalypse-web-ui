@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import flattenObject from '../../../Utilities/flattenObjectValuesToArray';
-import MAIN_PANEL_VIEWS from '../../../Utilities/gameMainPanelViews';
-import CityMenu from './CityMenu/CityMenu';
 import Modal from 'react-bootstrap/Modal';
 import Spinner from 'react-bootstrap/Spinner';
+import flattenObject from '../../../Utilities/flattenObjectValuesToArray';
+import CityMenu from './CityMenu/CityMenu';
+import ADVANCED_DETAILS_MODAL_VIEW from
+  '../../../Utilities/advancedDetailsModalViews';
+import AttackCityWallsConfirmationDialog from
+  './AttackCityWallsConfirmationDialog/AttackCityWallsConfirmationDialog';
 import './AdvancedDetailsModalInfo.css';
 
 /**
@@ -16,7 +19,23 @@ import './AdvancedDetailsModalInfo.css';
  * @return {JSX} to render
  */
 const AdvancedDetailsModalInfo = (props) => {
-  if (props.mainPanelView === MAIN_PANEL_VIEWS.CITY_INFO) {
+  const [modal, setModal] = useState(null);
+
+  useEffect(() => {
+    switch (props.advancedDetailsModalView) {
+      case ADVANCED_DETAILS_MODAL_VIEW.CITY_MENU:
+        setModal(<CityMenu/>);
+        break;
+      case ADVANCED_DETAILS_MODAL_VIEW.ATTACK_CITY_WALLS_CONFIRMATION_DIALOG:
+        setModal(<AttackCityWallsConfirmationDialog/>);
+        break;
+      default:
+        setModal(null);
+        break;
+    }
+  }, [props.advancedDetailsModalView]);
+
+  if (modal) {
     return (
       <React.Fragment>
         <Modal.Header closeButton>
@@ -24,7 +43,7 @@ const AdvancedDetailsModalInfo = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CityMenu/>
+          {modal}
         </Modal.Body>
       </React.Fragment>
     );
@@ -41,12 +60,13 @@ const AdvancedDetailsModalInfo = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    mainPanelView: state.gameBoardView.mainPanelView,
+    advancedDetailsModalView: state.game.advancedDetailsModalView,
   };
 };
 
 AdvancedDetailsModalInfo.propTypes = {
-  mainPanelView: PropTypes.oneOf(flattenObject(MAIN_PANEL_VIEWS)),
+  advancedDetailsModalView: PropTypes.oneOf(
+      flattenObject(ADVANCED_DETAILS_MODAL_VIEW)),
 };
 
 export default connect(mapStateToProps)(AdvancedDetailsModalInfo);

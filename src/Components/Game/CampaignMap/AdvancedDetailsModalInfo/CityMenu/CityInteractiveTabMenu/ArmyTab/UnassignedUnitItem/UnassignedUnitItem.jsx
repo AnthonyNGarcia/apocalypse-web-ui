@@ -74,8 +74,9 @@ const UnassignedUnitItem = (props) => {
   if (props.unit.unitType && fullUnitInfo) {
     return (
       <div className='unit-option-container'>
-        <Row onClick={(e) => viewUnitHandler(e)} className='vertically-center'>
-          <Col md={1}>
+        <Row onClick={(e) => viewUnitHandler(e)}
+          className='vertically-center' noGutters>
+          <Col md={2}>
             <Button
               variant='danger'
               onClick={removeUnitHandler}
@@ -86,7 +87,7 @@ const UnassignedUnitItem = (props) => {
           <Col md={2}>
             <img
               src={props.unit.unitType + '_ICON.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='unit-icon'/>
           </Col>
@@ -97,7 +98,7 @@ const UnassignedUnitItem = (props) => {
                   .maxHealth} <span><img
                 src={'health.svg'}
                 alt=""
-                className={'tiny-hammer-icon'}
+                className={'black-health-icon'}
               /></span>)
             </p>
           </Col>

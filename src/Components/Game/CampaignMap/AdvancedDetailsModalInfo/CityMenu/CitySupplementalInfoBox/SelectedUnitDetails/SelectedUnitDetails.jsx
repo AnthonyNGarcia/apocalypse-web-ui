@@ -30,11 +30,11 @@ const SelectedUnitDetails = (props) => {
         <Row>
           <h5>{fullUnitInfo.displayName} ({
             fullUnitInfo.productionCost} <span><img
-            src={'hammer.png'}
+            src={'hammer.svg'}
             alt=""
             className={'tiny-hammer-icon'}
           /></span>, {fullUnitInfo.turnsToTrain} <span><img
-            src={'timer.png'}
+            src={'timer.svg'}
             alt=""
             className={'tiny-timer-icon'}
           /></span>) - Tier {fullUnitInfo.tier}</h5>
@@ -45,7 +45,7 @@ const SelectedUnitDetails = (props) => {
           <Col md={2}>
             <img
               src={fullUnitInfo.unitType + '.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='unit-image'/>
           </Col>

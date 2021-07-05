@@ -115,12 +115,7 @@ const OutsideCityWallsBattlePrepMenu = (props) => {
                 props.attackingArmy.units
                     .map((unit, index) => unit ? (
                       <React.Fragment key={index}>
-                        <AttackingForceUnitItem
-                          key={index +
-                            unit.unitType}
-                          unit={{...unit}}
-                          discardingIndex={index}
-                          showRemoveUnit={false}/>
+                        <AttackingForceUnitItem unit={{...unit}}/>
                       </React.Fragment>
                     ) : null) : (
                   <React.Fragment>

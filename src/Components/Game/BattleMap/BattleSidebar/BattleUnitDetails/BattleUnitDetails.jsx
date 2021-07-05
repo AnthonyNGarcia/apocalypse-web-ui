@@ -105,7 +105,7 @@ const BattleUnitDetails = (props) => {
             display: 'block'}}>
             <img
               src={selectedUnit.unitType + '.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='unit-details-image'/>
           </Row>

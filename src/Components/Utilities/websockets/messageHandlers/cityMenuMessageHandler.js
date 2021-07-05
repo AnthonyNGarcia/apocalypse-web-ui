@@ -6,12 +6,16 @@ import cityMenuAC from
   '../../../../Redux/actionCreators/cityMenuActionCreators';
 import gamePlayerAC from
   '../../../../Redux/actionCreators/gamePlayerActionCreators';
+import gameAC from '../../../../Redux/actionCreators/gameActionCreators';
 import outsideCityWallsBattleAC from
   '../../../../Redux/actionCreators/outsideCityWallsBattleActionCreators';
+import cityWallsBattleAC from
+  '../../../../Redux/actionCreators/cityWallsBattleActionCreators';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from '../../cityMenuSupplementalViews';
 import CITY_MENU_TAB from '../../cityMenuTabs';
 import PLAYER from '../../playerEnums';
 import UNCLOSEABLE_MODAL_VIEW from '../../uncloseableModalView';
+import ADVANCED_DETAILS_MODAL_VIEW from '../../advancedDetailsModalViews';
 
 /**
  * This is the City Menu Message Handler.
@@ -49,10 +53,34 @@ const messageHandler = (message) => {
     case WEBSOCKET_MESSAGE_TYPES.CITY_SCORCHED:
       cityScorched(message);
       break;
+    case WEBSOCKET_MESSAGE_TYPES.CONFIRM_ATTACK_CITY_WALLS_PROMPT:
+      confirmAttackCityWallsPrompt(message);
+      break;
     default:
       console.warn('Unrecognized message type for City Menu topic!');
       console.warn(messageType);
       console.warn(message);
+  }
+};
+
+const confirmAttackCityWallsPrompt = (message) => {
+  const state = store.getState();
+  const updatedGameBoard = [...state.gameBoardView.gameBoard];
+  updatedGameBoard[message.attackingArmyTilePosition]
+      .army = message.attackingArmy;
+  updatedGameBoard[message.cityTilePosition]
+      .city.cityGarrison = message.cityGarrison;
+
+  store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
+
+  store.dispatch(cityWallsBattleAC.setAttackingArmyTilePosition(
+      message.attackingArmyTilePosition));
+  store.dispatch(cityWallsBattleAC.setCityTilePosition(
+      message.cityTilePosition));
+
+  if (message.attackingArmy.owner === state.gamePlayer.ownPlayerNumber) {
+    store.dispatch(gameAC.setAdvancedDetailsModalView(
+        ADVANCED_DETAILS_MODAL_VIEW.ATTACK_CITY_WALLS_CONFIRMATION_DIALOG));
   }
 };
 
