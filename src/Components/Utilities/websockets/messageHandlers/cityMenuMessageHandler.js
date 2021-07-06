@@ -173,7 +173,8 @@ const armySpawnedFromCity = (message) => {
       CITY_MENU_SUPPLEMENTAL_VIEWS.NONE));
   store.dispatch(cityMenuAC.setCityMenuTab(CITY_MENU_TAB.PRODUCTION));
   store.dispatch(cityMenuAC.setCityMenuSupplementalData({}));
-  store.dispatch(cityMenuAC.setShowCityModalInfo(false));
+  store.dispatch(gameAC.setAdvancedDetailsModalView(
+      ADVANCED_DETAILS_MODAL_VIEW.NONE));
   if (message.updatedPlayer.playerNumber === PLAYER.ONE) {
     store.dispatch(gamePlayerAC.setPlayerOne(message.updatedPlayer));
   } else {

@@ -202,8 +202,10 @@ const OutsideCityWallsBattlePrepMenu = (props) => {
                       {props.occupyingArmy ? (
                         <React.Fragment>
                           <h3 className='outside-city-walls-forces-title'>
-                            {props.occupyingArmy.commander
-                                .commanderInfo.displayName} ({
+                            {props.occupyingArmy.commander ?
+                                props.occupyingArmy.commander
+                                    .commanderInfo.displayName :
+                                'There is no Commander in this City.'} ({
                               props.occupyingArmy.units.length}/{
                               props.maxArmySize})
                           </h3>
