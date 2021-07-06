@@ -1,0 +1,8 @@
+/* eslint-disable max-len */
+const reducerActionTypes = {
+  SET_CITY_TILE: 'SET_CITY_TILE',
+  SET_ATTACKING_ARMY_TILE_POSITION: 'SET_ATTACKING_ARMY_TILE_POSITION',
+  CLEAR_CITY_COURTYARD_BATTLE_REDUCER: 'CLEAR_CITY_COURTYARD_BATTLE_REDUCER',
+};
+
+export default reducerActionTypes;

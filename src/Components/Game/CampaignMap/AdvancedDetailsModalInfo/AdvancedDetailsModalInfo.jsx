@@ -9,6 +9,8 @@ import ADVANCED_DETAILS_MODAL_VIEW from
   '../../../Utilities/advancedDetailsModalViews';
 import AttackCityWallsConfirmationDialog from
   './AttackCityWallsConfirmationDialog/AttackCityWallsConfirmationDialog';
+// eslint-disable-next-line max-len
+import AttackCityCourtyardConfirmationDialog from './AttackCityCourtyardConfirmationDialog/AttackCityCourtyardConfirmationDialog';
 import './AdvancedDetailsModalInfo.css';
 
 /**
@@ -28,6 +30,10 @@ const AdvancedDetailsModalInfo = (props) => {
         break;
       case ADVANCED_DETAILS_MODAL_VIEW.ATTACK_CITY_WALLS_CONFIRMATION_DIALOG:
         setModal(<AttackCityWallsConfirmationDialog/>);
+        break;
+      case ADVANCED_DETAILS_MODAL_VIEW
+          .ATTACK_CITY_COURTYARD_CONFIRMATION_DIALOG:
+        setModal(<AttackCityCourtyardConfirmationDialog/>);
         break;
       default:
         setModal(null);

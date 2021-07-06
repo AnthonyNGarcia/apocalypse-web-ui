@@ -11,6 +11,8 @@ import outsideCityWallsBattleAC from
   '../../../../Redux/actionCreators/outsideCityWallsBattleActionCreators';
 import cityWallsBattleAC from
   '../../../../Redux/actionCreators/cityWallsBattleActionCreators';
+import cityCourtyardBattleAC from
+  '../../../../Redux/actionCreators/cityCourtyardBattleActionCreators';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from '../../cityMenuSupplementalViews';
 import CITY_MENU_TAB from '../../cityMenuTabs';
 import PLAYER from '../../playerEnums';
@@ -56,10 +58,33 @@ const messageHandler = (message) => {
     case WEBSOCKET_MESSAGE_TYPES.CONFIRM_ATTACK_CITY_WALLS_PROMPT:
       confirmAttackCityWallsPrompt(message);
       break;
+    case WEBSOCKET_MESSAGE_TYPES.CONFIRM_ATTACK_CITY_COURTYARD_PROMPT:
+      confirmAttackCityCourtyardPrompt(message);
     default:
       console.warn('Unrecognized message type for City Menu topic!');
       console.warn(messageType);
       console.warn(message);
+  }
+};
+
+const confirmAttackCityCourtyardPrompt = (message) => {
+  const state = store.getState();
+  const updatedGameBoard = [...state.gameBoardView.gameBoard];
+  const attackingArmyTilePosition = message.attackingArmyTilePosition;
+  const attackingArmy = message.attackingArmy;
+  updatedGameBoard[attackingArmyTilePosition].army = attackingArmy;
+  const updatedCityTile = message.cityTile;
+  updatedGameBoard[message.cityTile.tilePosition] = updatedCityTile;
+
+  store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
+
+  store.dispatch(cityCourtyardBattleAC.setAttackingArmyTilePosition(
+      attackingArmyTilePosition));
+  store.dispatch(cityCourtyardBattleAC.setCityTile(updatedCityTile));
+
+  if (attackingArmy.owner === state.gamePlayer.ownPlayerNumber) {
+    store.dispatch(gameAC.setAdvancedDetailsModalView(
+        ADVANCED_DETAILS_MODAL_VIEW.ATTACK_CITY_COURTYARD_CONFIRMATION_DIALOG));
   }
 };
 
