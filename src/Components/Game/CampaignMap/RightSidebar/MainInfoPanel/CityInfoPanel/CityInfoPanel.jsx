@@ -69,6 +69,10 @@ const CityInfoPanel = (props) => {
                         className={'tiny-white-timer-icon'}
                       /></span>)</span>
                     ) : null}</h5>
+                <h5>{props.occupyingArmy && (props.occupyingArmy.owner !==
+                  props.selectedCity.owner) ? (
+                      <span>Being Razed!</span>
+                    ) : null}</h5>
               </div>
             </Row>
             <Row className='center-text own-city-entity'>
@@ -135,6 +139,10 @@ const CityInfoPanel = (props) => {
                         className={'tiny-white-timer-icon'}
                       /></span>)</span>
                     ) : null}</h5>
+                   <h5>{props.occupyingArmy && (props.occupyingArmy.owner !==
+                  props.selectedCity.owner) ? (
+                      <span>Being Razed!</span>
+                    ) : null}</h5>
                  </div>
                </Row>
                <Row className='center-text enemy-entity'>
@@ -161,6 +169,8 @@ const CityInfoPanel = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    occupyingArmy: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].army,
     selectedCity: state.gameBoardView.gameBoard[
         state.gameBoardView.selectedTilePosition].city,
     playerOne: state.gamePlayer.playerOne,
