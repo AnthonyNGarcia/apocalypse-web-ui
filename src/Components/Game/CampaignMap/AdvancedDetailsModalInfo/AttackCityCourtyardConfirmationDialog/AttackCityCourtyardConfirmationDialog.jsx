@@ -49,6 +49,7 @@ const AttackCityCourtyardConfirmationDialog = (props) => {
   };
 
   if (props.cityTile.city && props.attackingArmy) {
+    console.log(props.cityTile);
     return (
       <React.Fragment>
         {/* First Row  is for attacker and note */}
@@ -62,9 +63,9 @@ const AttackCityCourtyardConfirmationDialog = (props) => {
                 {props.cityTile.city.name}</span>!!</h3>
             <p className='city-courtyard-description'>
               {'The outskirts of this pathetic City have been Scorched, and ' +
-              'their Walls in shambles! Only these final Defenders stand in ' +
-              'our way from capturing this City. Should we proceed and storm ' +
-              'the City Courtyard?'}</p>
+              'their Walls lie in shambles! Only these final Defenders stand ' +
+              'in our way from capturing this City. Should we proceed and ' +
+              'storm the City Courtyard?'}</p>
           </div>
         </Row>
         {/* One big row to start making columns */}
@@ -146,7 +147,8 @@ const mapStateToProps = (state) => {
     attackingArmy: state.cityCourtyardBattle.attackingArmyTilePosition >= 0 ?
       state.gameBoardView.gameBoard[
           state.cityCourtyardBattle.attackingArmyTilePosition].army : null,
-    cityTile: state.cityCourtyardBattle.cityTile,
+    cityTile: state.gameBoardView.gameBoard[
+        state.cityCourtyardBattle.cityTile.tilePosition],
   };
 };
 

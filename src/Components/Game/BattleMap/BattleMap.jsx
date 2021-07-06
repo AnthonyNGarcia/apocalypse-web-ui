@@ -108,6 +108,33 @@ const BattleMap = (props) => {
     </div>
   );
 
+  const cityCourtyardPopover = (
+    <Popover id="city-courtyard-popover">
+      <Popover.Title as="h3">City Courtyard Battle</Popover.Title>
+      <Popover.Content>
+      This city is under attack at the <strong>City Courtyard</strong>!
+        <br></br>
+        {'This will be a standard battle with the Attacker going first as ' +
+      'usual. The Defender\'s Last Defenders in the City Courtyard, however, ' +
+      'will not be able to retreat! They must fight to the death to protect ' +
+      'their City from the invaders! If the defenders perish, then the City ' +
+      'will be captured by the attackers! '}
+      </Popover.Content>
+    </Popover>
+  );
+
+  const cityCourtyardTitle = (
+    <div className='battle-view-city-courtyard-title-container'>
+      <OverlayTrigger trigger="click" placement="bottom"
+        overlay={cityCourtyardPopover}>
+        <Button variant="danger"
+          className='battle-view-city-courtyard-title'>
+          City Courtyard
+        </Button>
+      </OverlayTrigger>
+    </div>
+  );
+
   if (props.battleData) {
     return (
       <div className='battle-view-container'>
@@ -132,6 +159,10 @@ const BattleMap = (props) => {
                 'ATTACKING_CITY_WALLS' &&
                 props.battleData.defendingArmy.owner === PLAYER.ONE ?
                 cityWallsTitle : null}
+              {props.battleData.battleType ===
+                'ATTACKING_CITY_COURTYARD' &&
+                props.battleData.defendingArmy.owner === PLAYER.ONE ?
+                cityCourtyardTitle : null}
             </Col>
             <Col>
               <div className='battle-view-class-round-label'>
@@ -168,6 +199,10 @@ const BattleMap = (props) => {
                 'ATTACKING_CITY_WALLS' &&
                 props.battleData.defendingArmy.owner === PLAYER.TWO ?
                 cityWallsTitle : null}
+              {props.battleData.battleType ===
+                'ATTACKING_CITY_COURTYARD' &&
+                props.battleData.defendingArmy.owner === PLAYER.TWO ?
+                cityCourtyardTitle : null}
               <h3 className={props.ownPlayerNumber === PLAYER.TWO ?
           'battle-view-own-player-label' : 'battle-view-other-player-label'}>
                 {props.playerTwoUsername}</h3>

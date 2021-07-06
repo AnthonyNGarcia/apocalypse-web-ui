@@ -60,6 +60,7 @@ const messageHandler = (message) => {
       break;
     case WEBSOCKET_MESSAGE_TYPES.CONFIRM_ATTACK_CITY_COURTYARD_PROMPT:
       confirmAttackCityCourtyardPrompt(message);
+      break;
     default:
       console.warn('Unrecognized message type for City Menu topic!');
       console.warn(messageType);
@@ -68,6 +69,7 @@ const messageHandler = (message) => {
 };
 
 const confirmAttackCityCourtyardPrompt = (message) => {
+  console.log(message);
   const state = store.getState();
   const updatedGameBoard = [...state.gameBoardView.gameBoard];
   const attackingArmyTilePosition = message.attackingArmyTilePosition;

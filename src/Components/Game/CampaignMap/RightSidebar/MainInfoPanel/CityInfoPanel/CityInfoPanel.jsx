@@ -37,7 +37,7 @@ const CityInfoPanel = (props) => {
     }
   }, [props]);
 
-  if (ownPlayerData) {
+  if (ownPlayerData && props.selectedCity) {
     return (
       <React.Fragment>
         {props.ownPlayerNumber === props.selectedCity.owner ?
@@ -56,6 +56,14 @@ const CityInfoPanel = (props) => {
                 <h5>{props.selectedCity.wallsDestroyed ? (
                       <span>Walls Destroyed ({props.selectedCity
                           .turnsRemainingForDestroyedWalls} <span><img
+                        src={'timer.svg'}
+                        alt=""
+                        className={'tiny-white-timer-icon'}
+                      /></span>)</span>
+                    ) : null}</h5>
+                <h5>{props.selectedCity.isDevastated ? (
+                      <span>Devastated ({props.selectedCity
+                          .turnsRemainingForDevastation} <span><img
                         src={'timer.svg'}
                         alt=""
                         className={'tiny-white-timer-icon'}
@@ -95,6 +103,7 @@ const CityInfoPanel = (props) => {
             </Row>
             <Row className='center-text'>
               <Button variant="primary"
+                disabled={props.selectedCity.isDevastated}
                 onClick={showCityMenuHandler}>Show City Menu</Button>
             </Row>
           </React.Fragment> :
@@ -113,6 +122,14 @@ const CityInfoPanel = (props) => {
                    <h5>{props.selectedCity.wallsDestroyed ? (
                       <span>Walls Destroyed ({props.selectedCity
                           .turnsRemainingForDestroyedWalls} <span><img
+                        src={'timer.svg'}
+                        alt=""
+                        className={'tiny-white-timer-icon'}
+                      /></span>)</span>
+                    ) : null}</h5>
+                   <h5>{props.selectedCity.isDevastated ? (
+                      <span>Devastated ({props.selectedCity
+                          .turnsRemainingForDevastation} <span><img
                         src={'timer.svg'}
                         alt=""
                         className={'tiny-white-timer-icon'}
