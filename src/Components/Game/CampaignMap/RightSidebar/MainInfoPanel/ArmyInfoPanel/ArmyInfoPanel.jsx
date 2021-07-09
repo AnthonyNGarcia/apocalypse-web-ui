@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+// import useDeepCompareEffect from 'use-deep-compare-effect';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
@@ -31,7 +32,8 @@ const ArmyInfoPanel = (props) => {
   const [selectedArmyMaxSize, setSelectedArmyMaxSize] = useState(0);
 
   useEffect(() => {
-    if (props.selectedArmy) {
+    if (props.selectedArmy && !isEmpty(props.selectedArmy) &&
+    props.selectedArmy.commander) {
       let armySize = 0;
       if (props.selectedArmy.owner === props.playerOne.playerNumber) {
         armySize += props.playerOne.currentBaseArmySize;
@@ -41,7 +43,7 @@ const ArmyInfoPanel = (props) => {
       armySize += props.selectedArmy.commander.armySizeBonus;
       setSelectedArmyMaxSize(armySize);
     }
-  }, [props]);
+  }, [props, props.selectedArmy]);
 
   const fortifyArmyHandler = (e) => {
     e.preventDefault();
@@ -77,17 +79,39 @@ const ArmyInfoPanel = (props) => {
     }
   };
 
-  if (props.selectedArmy) {
+  const isEmpty = (obj) => {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  if (props.selectedArmy && !isEmpty(props.selectedArmy)) {
     return (
       <React.Fragment>
         {props.ownPlayerNumber === props.selectedArmy.owner ?
         <React.Fragment>
-          <Row className='center-text own-army-entity'>
-            <h2>{props.selectedArmy.commander.commanderInfo.displayName}</h2>
-          </Row>
-          <Row className='center-text own-army-entity'>
-            <h5>Level {props.selectedArmy.commander.level}</h5>
-          </Row>
+          {props.selectedArmy.commander ?
+            (
+              <React.Fragment>
+                <Row className='center-text own-army-entity'>
+                  <h2>{props.selectedArmy.commander
+                      .commanderInfo.displayName}</h2>
+                </Row>
+                <Row className='center-text own-army-entity'>
+                  <h5>Level {props.selectedArmy.commander.level}</h5>
+                </Row>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Row className='center-text own-army-entity'>
+                  <h2>No Commander Leads This Army</h2>
+                </Row>
+              </React.Fragment>
+            )}
+
           <Row className='center-text own-army-entity'>
             <h5>Units: {props.selectedArmy.units.length}/
               {selectedArmyMaxSize}</h5>
@@ -152,15 +176,28 @@ const ArmyInfoPanel = (props) => {
           </Row>
         </React.Fragment> :
         <React.Fragment>
+          {props.selectedArmy.commander ?
+            (
+              <React.Fragment>
+                <Row className='center-text enemy-entity'>
+                  <h2>{props.selectedArmy.commander
+                      .commanderInfo.displayName}</h2>
+                </Row>
+                <Row className='center-text enemy-entity'>
+                  <h5>Level {props.selectedArmy.commander.level}</h5>
+                </Row>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Row className='center-text enemy-entity'>
+                  <h2>No Commander Leads This Army</h2>
+                </Row>
+              </React.Fragment>
+            )}
           <Row className='center-text enemy-entity'>
-            <h2>{props.selectedArmy.commander.commanderInfo.displayName}</h2>
-          </Row>
-          <Row className='center-text enemy-entity'>
-            <h5>Level {props.selectedArmy.commander.level}</h5>
-          </Row>
-          <Row className='center-text enemy-entity'>
-            <h5>Units: {props.selectedArmy.units.length}/
-              {selectedArmyMaxSize}</h5>
+            <h5>Units: {props.selectedArmy.units ?
+            props.selectedArmy.units.length : 0}/
+            {selectedArmyMaxSize}</h5>
           </Row>
           <Row className='center-text enemy-entity'>
             This is an enemy Army.
@@ -187,8 +224,8 @@ const mapStateToProps = (state) => {
     playerOne: state.gamePlayer.playerOne,
     playerTwo: state.gamePlayer.playerTwo,
     ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
-    selectedArmy: state.gameBoardView.gameBoard[
-        state.gameBoardView.selectedTilePosition].army,
+    selectedArmy: {...state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].army},
     gameId: state.game.gameId,
     selectedTilePosition: state.gameBoardView.selectedTilePosition,
     ownPlayerData: state.gamePlayer.ownPlayerNumber ===

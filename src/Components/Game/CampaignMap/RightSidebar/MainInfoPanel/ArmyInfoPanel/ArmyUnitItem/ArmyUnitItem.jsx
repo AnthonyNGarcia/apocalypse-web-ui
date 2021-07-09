@@ -94,7 +94,7 @@ const mapStateToProps = (state) => {
     allUnits: state.game.gameConstants.allUnits,
     isOwnTurn: state.gamePlayer.ownPlayerNumber ===
       state.gamePlayer.playerWhoseTurnItIs,
-    selectedTilePosition: state.game.selectedTilePosition,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
   };
 };
 

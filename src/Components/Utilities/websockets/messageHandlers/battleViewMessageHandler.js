@@ -98,6 +98,7 @@ const battleEnded = async (message) => {
         .army = message.attackingArmy;
   }
   if (message.defendingArmyEndingTilePosition >= 0) {
+    console.log('valid defender army index provided');
     updatedGameBoard[message.defendingArmyEndingTilePosition]
         .army = message.defendingArmy;
   }

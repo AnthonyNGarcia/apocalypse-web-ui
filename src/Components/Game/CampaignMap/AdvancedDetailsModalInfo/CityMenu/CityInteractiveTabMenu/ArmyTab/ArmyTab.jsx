@@ -72,11 +72,12 @@ const ArmyTab = (props) => {
         <Row>
           <h5 style={{'margin': 'auto'}}>
             {props.selectedTile.army ?
-              <span>{props.selectedTile.army.commander
-                  .commanderInfo.displayName + ' (' +
+              <span>{props.selectedTile.army.commander ?
+                  props.selectedTile.army.commander
+                      .commanderInfo.displayName + ' (' +
                 props.selectedTile.army.units.length + '/' +
-                props.ownPlayerData.currentBaseArmySize
-              } <span><img
+                props.ownPlayerData.currentBaseArmySize :
+              '(No Commander Leads This Army'} <span><img
                 src={'unit_count.svg'}
                 alt=""
                 className={'tiny-hammer-icon'}

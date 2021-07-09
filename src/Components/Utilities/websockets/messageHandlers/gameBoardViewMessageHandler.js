@@ -46,8 +46,17 @@ const messageHandler = (message) => {
 const armyMoved = (message) => {
   const state = store.getState();
   const updatedGameBoard = [...state.gameBoardView.gameBoard];
-  updatedGameBoard[message.startingTilePosition].army = null;
-  updatedGameBoard[message.updatedTile.tilePosition] = message.updatedTile;
+  const updatedEndingTile = message.updatedEndingTile;
+  const updatedStartingTile = message.updatedStartingTile;
+
+  if (updatedEndingTile) {
+    updatedGameBoard[message.updatedEndingTile.tilePosition] =
+      message.updatedEndingTile;
+  }
+  if (updatedStartingTile) {
+    updatedGameBoard[message.updatedStartingTile.tilePosition] =
+      message.updatedStartingTile;
+  }
 
   store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
   store.dispatch(gamePlayerAC.setPlayerOne(message.updatedPlayerOne));
@@ -76,6 +85,7 @@ const armyStanceChanged = (message) => {
 const armyUnitsChanged = (message) => {
   const state = store.getState();
   const updatedGameBoard = [...state.gameBoardView.gameBoard];
+  console.log(updatedGameBoard === state.gameBoardView.gameBoard);
   updatedGameBoard[message.armyTilePosition].army.units =
     message.updatedArmyUnits;
   store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
