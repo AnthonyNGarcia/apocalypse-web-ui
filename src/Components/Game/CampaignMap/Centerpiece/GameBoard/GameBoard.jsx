@@ -293,7 +293,7 @@ const GameBoard = (props) => {
             <img
               src={'HUMAN_CITY_TIER_1.png'}
               alt=""
-              className={'heximage city-icon'}
+              className={cityStyling}
               onClick={(e) => tileClicked(e, item)}
             />
           );
