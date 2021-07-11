@@ -241,6 +241,22 @@ const GameBoard = (props) => {
           const armyFaction = ownerPlayerData.factionType;
           let armyStyling = 'heximage army-icon';
           if (item.army.owner === props.ownPlayerNumber) {
+            const fullTerrainData = props.allTerrains[item.terrainType];
+            const gettingBonusBlockFromTerrain =
+            fullTerrainData.defensiveBlockBonusAsPercentOfUnitMaxHealth > 0;
+            const sufferingAttritionFromTerrain =
+            fullTerrainData.attritionDamageCausedAsPercentOfUnitMaxHealth > 0;
+            if (item.army.armyStance === 'FORTIFIED') {
+              armyStyling += ' army-fortified-defensive-advantage';
+            } else if (item.army.armyStance === 'ENTRENCHED') {
+              armyStyling += ' army-entrenched-defensive-advantage';
+            }
+            if (gettingBonusBlockFromTerrain) {
+              armyStyling += ' army-terrain-defensive-advantage';
+            }
+            if (sufferingAttritionFromTerrain && !item.city) {
+              armyStyling += ' army-terrain-suffering-attrition';
+            }
             armyStyling += ' own-army';
             if (item.army.isHidden) {
               armyStyling += ' own-army-hidden';
@@ -406,6 +422,7 @@ const mapStateToProps = (state) => {
     playerOne: state.gamePlayer.playerOne,
     playerTwo: state.gamePlayer.playerTwo,
     mainPanelView: state.gameBoardView.mainPanelView,
+    allTerrains: state.game.gameConstants.allTerrains,
   };
 };
 
@@ -462,6 +479,7 @@ GameBoard.propTypes = {
   playerOne: PropTypes.any,
   playerTwo: PropTypes.any,
   mainPanelView: PropTypes.any,
+  allTerrains: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);

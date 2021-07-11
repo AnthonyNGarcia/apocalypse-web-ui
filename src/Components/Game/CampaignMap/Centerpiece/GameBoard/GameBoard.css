@@ -43,6 +43,26 @@
   height: auto;
 }
 
+.army-terrain-suffering-attrition {
+  border-radius: 100%;
+  box-shadow: 0px 0px 5px 8px blue;
+}
+
+.army-terrain-defensive-advantage {
+  border-radius: 100%;
+  box-shadow: 0px 0px 5px 8px green;
+}
+
+.army-fortified-defensive-advantage {
+  border-radius: 10%;
+  box-shadow: 0px 0px 5px 4px yellow;
+}
+
+.army-entrenched-defensive-advantage {
+  border-radius: 10%;
+  box-shadow: 0px 0px 5px 8px yellow;
+}
+
 .own-army {
   filter: sepia(100%) hue-rotate(80deg) saturate(2.5);
 }
