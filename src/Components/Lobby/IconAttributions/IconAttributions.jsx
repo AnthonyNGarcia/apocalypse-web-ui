@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 // import Container from 'react-bootstrap/esm/Container';
@@ -96,10 +97,22 @@ const IconAttributions = (props) => {
                   src={'MONK_ICON.svg'}
                   alt=""
                   className='tiny-icon-image'/> <img
-                  src={'GARGANTUAN_SCORPION_ICON.svg'}
+                  src={'FABLED_SCORPIO_ICON.svg'}
                   alt=""
                   className='tiny-icon-image'/> <img
                   src={'MONSTROUS_FIRE_ANT_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'COMMANDO_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'RM4G_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'SNIPER_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'INFERNAL_ANT_QUEEN_ICON.svg'}
                   alt=""
                   className='tiny-icon-image'/> made by <a href="https://www.freepik.com" title="Freepik">Freepik</a>
               </span>
@@ -127,7 +140,33 @@ const IconAttributions = (props) => {
                   className='tiny-icon-image'/> <img
                   src={'HIDEOUS_LURKER_ICON.svg'}
                   alt=""
-                  className='tiny-icon-image'/>made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a>
+                  className='tiny-icon-image'/> <img
+                  src={'MACHINE_GUNNER_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'ARTILLERY_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'HORRIFIC_OCTOLIMBED_SNAKE_OF_HADES_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a>
+              </span>
+            </p>
+            <p>
+              <span>
+                <img
+                  src={'ARMORED_TITAN_BEETLE_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'VENOMOUS_SPITTER_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'TANK_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'SILENT_MANTIS_OF_DEATH_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> made by <a href="https://www.flaticon.com/authors/eucalyp" title="Eucalyp">Eucalyp</a>
               </span>
             </p>
             <p>
@@ -141,18 +180,7 @@ const IconAttributions = (props) => {
                   className='tiny-icon-image'/> <img
                   src={'GIANT_BEETLE_ICON.svg'}
                   alt=""
-                  className='tiny-icon-image'/>  made by <a href="https://www.flaticon.com/authors/icongeek26" title="Icongeek26">Icongeek26</a>
-              </span>
-            </p>
-            <p>
-              <span>
-                <img
-                  src={'ARMORED_TITAN_BEETLE_ICON.svg'}
-                  alt=""
-                  className='tiny-icon-image'/> <img
-                  src={'VENOMOUS_SPITTER_ICON.svg'}
-                  alt=""
-                  className='tiny-icon-image'/>  made by <a href="https://www.flaticon.com/authors/eucalyp" title="Eucalyp">Eucalyp</a>
+                  className='tiny-icon-image'/> made by <a href="https://www.flaticon.com/authors/icongeek26" title="Icongeek26">Icongeek26</a>
               </span>
             </p>
             <p>
@@ -160,7 +188,7 @@ const IconAttributions = (props) => {
                 <img
                   src={'tower.svg'}
                   alt=""
-                  className='tiny-icon-image'/>  made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a>
+                  className='tiny-icon-image'/> made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a>
               </span>
             </p>
             <p>
@@ -168,7 +196,7 @@ const IconAttributions = (props) => {
                 <img
                   src={'timer.svg'}
                   alt=""
-                  className='tiny-icon-image'/>  made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a>
+                  className='tiny-icon-image'/> made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a>
               </span>
             </p>
             <p>
@@ -176,7 +204,31 @@ const IconAttributions = (props) => {
                 <img
                   src={'GUEST_AVATAR.svg'}
                   alt=""
-                  className='tiny-icon-image'/>  made by <a href="https://creativemarket.com/Becris" title="Becris">Becris</a>
+                  className='tiny-icon-image'/> made by <a href="https://creativemarket.com/Becris" title="Becris">Becris</a>
+              </span>
+            </p>
+            <p>
+              <span>
+                <img
+                  src={'WRETCHED_BEETLE_OVERLORD_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> made by <a href="https://www.flaticon.com/authors/mangsaabguru" title="mangsaabguru">mangsaabguru</a>
+              </span>
+            </p>
+            <p>
+              <span>
+                <img
+                  src={'HORROR_OF_THE_DEPTHS_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> made by <a href="https://www.flaticon.com/authors/surang" title="surang">surang</a>
+              </span>
+            </p>
+            <p>
+              <span>
+                <img
+                  src={'GARGANTUAN_SCORPION_ICON.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> made by <a href="" title="Kiranshastry">Kiranshastry</a>
               </span>
             </p>
           </Scrollbars>

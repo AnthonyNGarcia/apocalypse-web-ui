@@ -90,6 +90,44 @@ const PASSIVE_ABILITIES = {
     enum: 'STRUCTURE',
     displayName: 'Structure',
   },
+  MECHANICAL: {
+    enum: 'MECHANICAL',
+    displayName: 'Mechanical',
+  },
+  LIFE_SAVER: {
+    enum: 'LIFE_SAVER',
+    prefix: 'Life Saver (',
+    suffix: ')',
+  },
+  KILLING_SPREE: {
+    enum: 'KILLING_SPREE',
+    prefix: 'Killing Spree (',
+    suffix: ')',
+  },
+  INVISIBLE: {
+    enum: 'INVISIBLE',
+    displayName: 'Invisible',
+  },
+  CORRUPTION_BOMB: {
+    enum: 'CORRUPTION_BOMB',
+    prefix: 'Corruption Bomb (',
+    suffix: ')',
+  },
+  CORPSE_SHIELD: {
+    enum: 'CORPSE_SHIELD',
+    prefix: 'Corpse Shield (',
+    suffix: '%)',
+  },
+  LIFE_STEAL: {
+    enum: 'LIFE_STEAL',
+    prefix: 'Life Steal (',
+    suffix: '%)',
+  },
+  PERMASTUNNER: {
+    enum: 'PERMASTUNNER',
+    prefix: 'Permastunner (',
+    suffix: '%)',
+  },
 };
 
 export default PASSIVE_ABILITIES;
