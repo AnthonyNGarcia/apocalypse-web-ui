@@ -37,7 +37,14 @@ const SelectedUnitDetails = (props) => {
             src={'timer.svg'}
             alt=""
             className={'tiny-timer-icon'}
-          /></span>) - Tier {fullUnitInfo.tier}</h5>
+          /></span>) - Tier {fullUnitInfo.tier} {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'hero-unit-icon'}
+              /></span>
+            ) : null}</h5>
         </Row>
         {/* Second row is the unit description and stats */}
         <Row>

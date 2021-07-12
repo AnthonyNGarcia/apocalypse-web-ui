@@ -24,6 +24,14 @@
   width: auto;
 }
 
+.black-hero-unit-icon {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 3vh;
+  width: auto;
+}
+
 .really-tiny-timer-icon {
   display: inline-block;
   margin-left: auto;

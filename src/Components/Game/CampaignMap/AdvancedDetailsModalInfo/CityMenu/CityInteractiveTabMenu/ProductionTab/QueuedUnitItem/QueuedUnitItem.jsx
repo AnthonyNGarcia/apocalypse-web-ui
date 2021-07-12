@@ -82,7 +82,14 @@ const QueuedUnitItem = (props) => {
                 src={'timer.svg'}
                 alt=""
                 className={'really-tiny-timer-icon'}
-              /></span>)
+              /></span>) {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'black-hero-unit-icon'}
+              /></span>
+            ) : null}
             </p>
           </Col>
           <Col md={3}>

@@ -117,6 +117,9 @@ const IconAttributions = (props) => {
                   className='tiny-icon-image'/> <img
                   src={'permastunned_debuff.svg'}
                   alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'hero_unit_icon.svg'}
+                  alt=""
                   className='tiny-icon-image'/> made by <a href="https://www.freepik.com" title="Freepik">Freepik</a>
               </span>
             </p>

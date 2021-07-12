@@ -12,6 +12,7 @@ import cityMenuAC from
 import axios from 'axios';
 import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
 import PLAYER from '../../../../../../../Utilities/playerEnums';
+import getHeroUnitCount from '../../../../../../../Utilities/getHeroUnitCount';
 import './CommanderUnitItem.css';
 
 /**
@@ -82,7 +83,12 @@ const CommanderUnitItem = (props) => {
               disabled={!props.isOwnTurn ||
               (props.selectedTile.city.unassignedUnits.length +
                 props.selectedTile.city.currentRecruitmentQueue.length >=
-                props.ownPlayerData.currentBaseArmySize)}>
+                props.ownPlayerData.currentBaseArmySize) ||
+                ((getHeroUnitCount(props.selectedTile.city.unassignedUnits) +
+                getHeroUnitCount(props.selectedTile.city
+                    .currentRecruitmentQueue)) >=
+                props.ownPlayerData.currentBaseTier3HeroUnitsSupported &&
+                fullUnitInfo.tier === 3)}>
               {'<<'}
             </Button>
           </Col>
@@ -101,7 +107,14 @@ const CommanderUnitItem = (props) => {
                 src={'health.svg'}
                 alt=""
                 className={'black-health-icon'}
-              /></span>)
+              /></span>) {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'black-hero-unit-icon'}
+              /></span>
+            ) : null}
             </p>
           </Col>
           <Col md={2}>

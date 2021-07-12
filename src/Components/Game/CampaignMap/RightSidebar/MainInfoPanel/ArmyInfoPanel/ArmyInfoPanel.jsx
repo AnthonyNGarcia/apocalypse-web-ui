@@ -20,6 +20,7 @@ import ASTRIDIUM_ABILITY_TYPE from
   '../../../../../Utilities/astridiumAbilityTypes';
 import PLAYER from '../../../../../Utilities/playerEnums';
 import './ArmyInfoPanel.css';
+import getHeroUnitCount from '../../../../../Utilities/getHeroUnitCount';
 
 /**
  *
@@ -114,7 +115,21 @@ const ArmyInfoPanel = (props) => {
 
           <Row className='center-text own-army-entity'>
             <h5>Units: {props.selectedArmy.units.length}/
-              {selectedArmyMaxSize}</h5>
+              {selectedArmyMaxSize} <span>
+                <img
+                  src={'unit_count.svg'}
+                  alt=""
+                  className={'hero-unit-icon'}
+                /></span></h5>
+          </Row>
+          <Row className='center-text own-army-entity'>
+            <h5>Legendary Units: {getHeroUnitCount(props.selectedArmy.units)}/
+              {props.ownPlayerData.currentBaseTier3HeroUnitsSupported} <span>
+                <img
+                  src={'hero_unit_icon.svg'}
+                  alt=""
+                  className={'hero-unit-icon'}
+                /></span></h5>
           </Row>
           <Row>
             <Scrollbars style={{height: '30vh', width: '95%'}}>

@@ -7,6 +7,7 @@ import {Scrollbars} from 'react-custom-scrollbars-2';
 import UnassignedUnitItem from './UnassignedUnitItem/UnassignedUnitItem';
 import CommanderUnitItem from './CommanderUnitItem/CommanderUnitItem';
 import PLAYER from '../../../../../../Utilities/playerEnums';
+import getHeroUnitCount from '../../../../../../Utilities/getHeroUnitCount';
 import './ArmyTab.css';
 
 /**
@@ -18,13 +19,21 @@ import './ArmyTab.css';
  */
 const ArmyTab = (props) => {
   const [unitPopLabel, setUnitPopLabel] = useState('');
+  const [heroPopLabel, setHeroPopLabel] = useState('');
 
   useEffect(() => {
     const currentPopCount = props.selectedCity.unassignedUnits.length +
       props.selectedCity.currentRecruitmentQueue.length;
+    const currentHeroPopCount = getHeroUnitCount(
+        props.selectedCity.unassignedUnits) + getHeroUnitCount(
+        props.selectedCity.currentRecruitmentQueue);
     setUnitPopLabel('' + currentPopCount + '/' +
       props.ownPlayerData.currentBaseArmySize);
-  }, [props, props.selectedCity]);
+    setHeroPopLabel('' + currentHeroPopCount + '/' +
+      props.ownPlayerData.currentBaseTier3HeroUnitsSupported);
+  }, [props, props.selectedCity.currentRecruitmentQueue,
+    props.selectedCity.unassignedUnits]);
+
   return (
     <React.Fragment>
       {/* First col is for unassigned*/}
@@ -36,6 +45,10 @@ const ArmyTab = (props) => {
               src={'unit_count.svg'}
               alt=""
               className={'tiny-hammer-icon'}
+            /></span>, {heroPopLabel} <span><img
+              src={'hero_unit_icon.svg'}
+              alt=""
+              className={'tiny-hero-unit-icon'}
             /></span>)</h5>
         </Row>
         {/* Second row is the scrollbar */}
@@ -81,6 +94,13 @@ const ArmyTab = (props) => {
                 src={'unit_count.svg'}
                 alt=""
                 className={'tiny-hammer-icon'}
+              /></span>, {
+                getHeroUnitCount(props.selectedTile.army.units) + '/' +
+                props.ownPlayerData.currentBaseTier3HeroUnitsSupported}
+              <span> <img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'tiny-hero-unit-icon'}
               /></span>)</span> : null
             }
           </h5>

@@ -42,7 +42,14 @@ const AttackingForceUnitItem = (props) => {
               src={'health.svg'}
               alt=""
               className={'outside-city-walls-attacking-unit-tiny-health-icon'}
-            /></span>)
+            /></span>) {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'black-hero-unit-icon'}
+              /></span>
+            ) : null}
           </Col>
         </Row>
       </div>

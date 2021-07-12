@@ -25,6 +25,15 @@
   filter: invert();
 }
 
+.hero-unit-icon {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 3vh;
+  width: auto;
+  filter: invert();
+}
+
 .unit-stat-title {
     font-weight: bold;
 }

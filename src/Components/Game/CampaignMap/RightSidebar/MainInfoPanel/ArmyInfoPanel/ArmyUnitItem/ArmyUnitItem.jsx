@@ -61,7 +61,14 @@ const ArmyUnitItem = (props) => {
               src={'health.svg'}
               alt=""
               className={'black-health-icon'}
-            /></span>)
+            /></span>) {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'black-hero-unit-icon'}
+              /></span>
+            ) : null}
           </Col>
           <Col md={2}>
             {props.showRemoveUnit ? (

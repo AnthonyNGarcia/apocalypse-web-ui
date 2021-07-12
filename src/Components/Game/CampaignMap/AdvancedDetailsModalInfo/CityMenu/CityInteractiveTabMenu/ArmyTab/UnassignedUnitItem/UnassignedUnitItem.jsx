@@ -12,6 +12,7 @@ import cityMenuAC from
 import axios from 'axios';
 import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
 import PLAYER from '../../../../../../../Utilities/playerEnums';
+import getHeroUnitCount from '../../../../../../../Utilities/getHeroUnitCount';
 import './UnassignedUnitItem.css';
 
 /**
@@ -99,7 +100,14 @@ const UnassignedUnitItem = (props) => {
                 src={'health.svg'}
                 alt=""
                 className={'black-health-icon'}
-              /></span>)
+              /></span>) {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'black-hero-unit-icon'}
+              /></span>
+            ) : null}
             </p>
           </Col>
           <Col md={1}>
@@ -109,7 +117,10 @@ const UnassignedUnitItem = (props) => {
               disabled={!props.isOwnTurn || !props.selectedTile.army ||
               (props.selectedTile.army &&
                 props.selectedTile.army.units.length >=
-                props.ownPlayerData.currentBaseArmySize)}>
+                props.ownPlayerData.currentBaseArmySize) ||
+                (getHeroUnitCount(props.selectedTile.army.units) >=
+                props.ownPlayerData.currentBaseTier3HeroUnitsSupported &&
+                fullUnitInfo.tier === 3)}>
               {'>>'}
             </Button>
           </Col>

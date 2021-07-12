@@ -84,7 +84,14 @@ const UnassignedUnitItem = (props) => {
               src={'health.svg'}
               alt=""
               className={'outside-city-walls-unassigned-unit-tiny-health-icon'}
-            /></span>)
+            /></span>) {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'black-hero-unit-icon'}
+              /></span>
+            ) : null}
           </Col>
           <Col md={2}>
             <Button
