@@ -11,6 +11,7 @@ import getIfFlanker from '../../../../Utilities/getIfFlanker';
 import getIfStunned from '../../../../Utilities/getIfStunned';
 import getIfCityWalls from '../../../../Utilities/getIfStructure';
 import './ArmyUnit.css';
+import getIfInvisible from '../../../../Utilities/getIfInvisible';
 
 /**
  *
@@ -35,7 +36,8 @@ const ArmyUnit = (props) => {
         }
       } else {
         calculatedUnitClasses += ' enemy-unit-image';
-        if (currentlySelectedOwnUnit &&
+        if (!props.unit.isTargetable && getIfInvisible(props.unit)) {
+        } else if (currentlySelectedOwnUnit &&
             currentlySelectedOwnUnit.eligibleForCommand &&
             !getIfStunned(currentlySelectedOwnUnit) &&
             !getIfCityWalls(currentlySelectedOwnUnit) &&
@@ -139,6 +141,10 @@ const ArmyUnit = (props) => {
     if (!currentlySelectedOwnUnit.eligibleForCommand) {
       console.log('Cannot do anything, currently selected ' +
         'own unit is not eligible for commands!');
+      return;
+    }
+    if (!props.unit.isTargetable && getIfInvisible(props.unit)) {
+      console.log('Cannot target Invisible Enemies.');
       return;
     }
     if (!props.unit.isTargetable && !getIfFlanker(currentlySelectedOwnUnit)) {
