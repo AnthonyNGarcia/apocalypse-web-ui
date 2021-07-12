@@ -141,7 +141,7 @@ const IconAttributions = (props) => {
                   src={'MUSKETEER_ICON.svg'}
                   alt=""
                   className='tiny-icon-image'/> <img
-                  src={'HIDEOUS_LURKER_ICON.svg'}
+                  src={'HORROR_OF_THE_DEPTHS_ICON.svg'}
                   alt=""
                   className='tiny-icon-image'/> <img
                   src={'MACHINE_GUNNER_ICON.svg'}
@@ -221,7 +221,7 @@ const IconAttributions = (props) => {
             <p>
               <span>
                 <img
-                  src={'HORROR_OF_THE_DEPTHS_ICON.svg'}
+                  src={'HIDEOUS_LURKER_ICON.svg'}
                   alt=""
                   className='tiny-icon-image'/> made by <a href="https://www.flaticon.com/authors/surang" title="surang">surang</a>
               </span>
