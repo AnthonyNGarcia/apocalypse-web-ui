@@ -10,8 +10,9 @@ import UNIT_ACTION_TYPES from '../../../../Utilities/unitActionTypes';
 import getIfFlanker from '../../../../Utilities/getIfFlanker';
 import getIfStunned from '../../../../Utilities/getIfStunned';
 import getIfCityWalls from '../../../../Utilities/getIfStructure';
-import './ArmyUnit.css';
 import getIfInvisible from '../../../../Utilities/getIfInvisible';
+import getIfPermastunned from '../../../../Utilities/getIfPermastunned';
+import './ArmyUnit.css';
 
 /**
  *
@@ -40,6 +41,7 @@ const ArmyUnit = (props) => {
         } else if (currentlySelectedOwnUnit &&
             currentlySelectedOwnUnit.eligibleForCommand &&
             !getIfStunned(currentlySelectedOwnUnit) &&
+            !getIfPermastunned(currentlySelectedOwnUnit) &&
             !getIfCityWalls(currentlySelectedOwnUnit) &&
             (props.unit.isTargetable ||
               getIfFlanker(currentlySelectedOwnUnit))) {
@@ -131,6 +133,11 @@ const ArmyUnit = (props) => {
     if (getIfStunned(currentlySelectedOwnUnit)) {
       console.log('Cannot do anything, currently selected ' +
       'own unit is stunned!');
+      return;
+    }
+    if (getIfPermastunned(currentlySelectedOwnUnit)) {
+      console.log('Cannot do anything, currently selected ' +
+      'own unit is permastunned!');
       return;
     }
     if (getIfCityWalls(currentlySelectedOwnUnit)) {
@@ -243,6 +250,14 @@ const ArmyUnit = (props) => {
                 <p className='unit-label'>
                   {debuff.value} <span><img
                     src={'stunned_debuff.svg'}
+                    alt=""
+                    className={'tiny-hammer-icon'}
+                  /></span>
+                </p>
+                ) : debuff.debuffType === 'PERMASTUNNED' ? (
+                <p className='unit-label'>
+                  {'∞'} <span><img
+                    src={'permastunned_debuff.svg'}
                     alt=""
                     className={'tiny-hammer-icon'}
                   /></span>

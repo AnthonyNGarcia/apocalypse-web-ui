@@ -114,6 +114,9 @@ const IconAttributions = (props) => {
                   className='tiny-icon-image'/> <img
                   src={'INFERNAL_ANT_QUEEN_ICON.svg'}
                   alt=""
+                  className='tiny-icon-image'/> <img
+                  src={'permastunned_debuff.svg'}
+                  alt=""
                   className='tiny-icon-image'/> made by <a href="https://www.freepik.com" title="Freepik">Freepik</a>
               </span>
             </p>
