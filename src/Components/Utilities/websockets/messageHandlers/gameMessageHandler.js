@@ -87,6 +87,9 @@ const playerWonGame = (message) => {
   store.dispatch(gamePlayerAC.setPlayerOne(message.updatedGameData.playerOne));
   store.dispatch(gamePlayerAC.setPlayerTwo(message.updatedGameData.playerTwo));
   store.dispatch(gameAC.setGameRound(message.updatedGameData.round));
+  store.dispatch(gameBoardViewAC.setGameBoard(
+      message.updatedGameData.gameBoard));
+  store.dispatch(gameAC.setGameView(GAME_VIEWS.GAME_BOARD_VIEW));
   store.dispatch(gameBoardViewAC.setUncloseableModalView(
       UNCLOSEABLE_MODAL_VIEW.PLAYER_WON_GAME));
 };
