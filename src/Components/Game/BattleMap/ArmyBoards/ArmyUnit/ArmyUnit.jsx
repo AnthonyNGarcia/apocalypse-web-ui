@@ -30,10 +30,16 @@ const ArmyUnit = (props) => {
   useEffect( () => {
     if (props.unit && props.unit.unitType) {
       let calculatedUnitClasses = 'army-unit-image';
+      if (props.unit.eligibleForCommand) {
+        calculatedUnitClasses += ' unit-eligible-for-command';
+      }
       if (props.ownUnit) {
         calculatedUnitClasses += ' own-unit-image';
         if (props.selectedBattleUnitIndex === props.unitIndex) {
           calculatedUnitClasses += ' own-selected-unit';
+        }
+        if (props.unit.isTapped) {
+          calculatedUnitClasses += ' unit-is-tapped';
         }
       } else {
         calculatedUnitClasses += ' enemy-unit-image';
@@ -46,13 +52,9 @@ const ArmyUnit = (props) => {
             (props.unit.isTargetable ||
               getIfFlanker(currentlySelectedOwnUnit))) {
           calculatedUnitClasses += ' targetable-enemy-unit';
+        } else if (props.unit.isTapped) {
+          calculatedUnitClasses += ' unit-is-tapped';
         }
-      }
-      if (props.unit.isTapped) {
-        calculatedUnitClasses += ' unit-is-tapped';
-      }
-      if (props.unit.eligibleForCommand) {
-        calculatedUnitClasses += ' unit-eligible-for-command';
       }
       setUnitImageClasses(calculatedUnitClasses);
     }

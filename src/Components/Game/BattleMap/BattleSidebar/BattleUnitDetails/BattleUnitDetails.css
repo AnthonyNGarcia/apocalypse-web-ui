@@ -7,3 +7,12 @@
     top: 50%;
     transform: translateY(-50%);
 }
+
+.medium-hero-unit-icon {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 5vh;
+  width: auto;
+  filter: invert();
+}

@@ -97,7 +97,14 @@ const BattleUnitDetails = (props) => {
           {/* Unit Name and Tier */}
           <Row noGutters style={{display: 'block', textAlign: 'center',
             margin: 'auto'}}>
-            <h2>{fullUnitInfo.displayName}</h2>
+            <h2>{fullUnitInfo.displayName}  {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'medium-hero-unit-icon'}
+              /></span>
+            ) : null}</h2>
             <h4>{UNIT_CLASSES[selectedUnit.unitClass].displayName}</h4>
           </Row>
           {/* Unit Image */}
