@@ -240,23 +240,12 @@ const GameBoard = (props) => {
         if (ownerPlayerData) {
           const armyFaction = ownerPlayerData.factionType;
           let armyStyling = 'heximage army-icon';
+          const fullTerrainData = props.allTerrains[item.terrainType];
+          const gettingBonusBlockFromTerrain =
+          fullTerrainData.defensiveBlockBonusAsPercentOfUnitMaxHealth > 0;
+          const sufferingAttritionFromTerrain =
+          fullTerrainData.attritionDamageCausedAsPercentOfUnitMaxHealth > 0;
           if (item.army.owner === props.ownPlayerNumber) {
-            const fullTerrainData = props.allTerrains[item.terrainType];
-            const gettingBonusBlockFromTerrain =
-            fullTerrainData.defensiveBlockBonusAsPercentOfUnitMaxHealth > 0;
-            const sufferingAttritionFromTerrain =
-            fullTerrainData.attritionDamageCausedAsPercentOfUnitMaxHealth > 0;
-            if (item.army.armyStance === 'FORTIFIED') {
-              armyStyling += ' army-fortified-defensive-advantage';
-            } else if (item.army.armyStance === 'ENTRENCHED') {
-              armyStyling += ' army-entrenched-defensive-advantage';
-            }
-            if (gettingBonusBlockFromTerrain) {
-              armyStyling += ' army-terrain-defensive-advantage';
-            }
-            if (sufferingAttritionFromTerrain && !item.city) {
-              armyStyling += ' army-terrain-suffering-attrition';
-            }
             armyStyling += ' own-army';
             if (item.army.isHidden) {
               armyStyling += ' own-army-hidden';
@@ -269,23 +258,93 @@ const GameBoard = (props) => {
           }
           if (armyFaction === FACTIONS.HUMANS.enum) {
             army = (
-              <img
-                src={'HUMAN_ARMY.svg'}
-                alt=""
-                className={armyStyling +
-                (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
-                onClick={(e) => tileClicked(e, item)}
-              />
+              <React.Fragment>
+                <img
+                  src={'HUMAN_ARMY.svg'}
+                  alt=""
+                  className={armyStyling +
+                  (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
+                  onClick={(e) => tileClicked(e, item)}
+                />
+                {(item.army.armyStance === 'FORTIFIED' &&
+                !gettingBonusBlockFromTerrain) || (
+                  item.army.armyStance === 'NONE' &&
+                  gettingBonusBlockFromTerrain) ?
+                (<img
+                  src={'shield.svg'}
+                  alt=""
+                  className='small-army-fortified-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : (item.army.armyStance === 'FORTIFIED' &&
+                gettingBonusBlockFromTerrain) || (
+                  item.army.armyStance === 'ENTRENCHED' &&
+                  !gettingBonusBlockFromTerrain) ?
+                (<img
+                  src={'shield.svg'}
+                  alt=""
+                  className='medium-army-fortified-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : (item.army.armyStance === 'ENTRENCHED' &&
+                gettingBonusBlockFromTerrain) ?
+                (<img
+                  src={'shield.svg'}
+                  alt=""
+                  className='large-army-fortified-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : null}
+                {sufferingAttritionFromTerrain && !item.city?
+                (<img
+                  src={'poison_debuff.svg'}
+                  alt=""
+                  className='small-army-attrition-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : null}
+              </React.Fragment>
             );
           } else if (armyFaction === FACTIONS.INSECTS.enum) {
             army = (
-              <img
-                src={'INSECT_ARMY.svg'}
-                alt=""
-                className={armyStyling +
-                (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
-                onClick={(e) => tileClicked(e, item)}
-              />
+              <React.Fragment>
+                <img
+                  src={'INSECT_ARMY.svg'}
+                  alt=""
+                  className={armyStyling +
+                  (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
+                  onClick={(e) => tileClicked(e, item)}
+                />
+                {(item.army.armyStance === 'FORTIFIED' &&
+                !gettingBonusBlockFromTerrain) || (
+                  item.army.armyStance === 'NONE' &&
+                  gettingBonusBlockFromTerrain) ?
+                (<img
+                  src={'shield.svg'}
+                  alt=""
+                  className='small-army-fortified-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : (item.army.armyStance === 'FORTIFIED' &&
+                gettingBonusBlockFromTerrain) || (
+                  item.army.armyStance === 'ENTRENCHED' &&
+                  !gettingBonusBlockFromTerrain) ?
+                (<img
+                  src={'shield.svg'}
+                  alt=""
+                  className='medium-army-fortified-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : (item.army.armyStance === 'ENTRENCHED' &&
+                gettingBonusBlockFromTerrain) ?
+                (<img
+                  src={'shield.svg'}
+                  alt=""
+                  className='large-army-fortified-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : null}
+                {sufferingAttritionFromTerrain && !item.city?
+                (<img
+                  src={'poison_debuff.svg'}
+                  alt=""
+                  className='small-army-attrition-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : null}
+              </React.Fragment>
             );
           } else {
             console.warn(

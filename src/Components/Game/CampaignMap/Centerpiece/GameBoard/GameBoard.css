@@ -43,26 +43,6 @@
   height: auto;
 }
 
-.army-terrain-suffering-attrition {
-  border-radius: 100%;
-  box-shadow: 0px 0px 5px 8px blue;
-}
-
-.army-terrain-defensive-advantage {
-  border-radius: 100%;
-  box-shadow: 0px 0px 5px 8px green;
-}
-
-.army-fortified-defensive-advantage {
-  border-radius: 10%;
-  box-shadow: 0px 0px 5px 4px yellow;
-}
-
-.army-entrenched-defensive-advantage {
-  border-radius: 10%;
-  box-shadow: 0px 0px 5px 8px yellow;
-}
-
 .own-army {
   filter: sepia(100%) hue-rotate(80deg) saturate(2.5);
 }
@@ -77,6 +57,66 @@
 
 .enemy-army-hidden {
   opacity: 0%;
+}
+
+.small-army-attrition-icon {
+  z-index: 50;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 5%;
+  height: 20%;
+  filter: invert(1);
+  animation-name: invert-flicker-transition;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.small-army-fortified-icon {
+  z-index: 25;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 20%;
+  filter: invert(1);
+  animation-name: invert-flicker-transition;
+  animation-duration: 6s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.medium-army-fortified-icon {
+  z-index: 25;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30%;
+  filter: invert(1);
+  animation-name: invert-flicker-transition;
+  animation-duration: 6s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.large-army-fortified-icon {
+  z-index: 25;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 40%;
+  filter: invert(1);
+  animation-name: invert-flicker-transition;
+  animation-duration: 6s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 .army-is-untapped {
@@ -178,6 +218,21 @@
   }
   75% {
     box-shadow: none;
+  }
+}
+
+@keyframes invert-flicker-transition {
+  10% {
+    filter: invert(1);
+  }
+  40% {
+    filter: invert(0);
+  }
+  60% {
+    filter: invert(0);
+  }
+  90% {
+    filter: invert(1);
   }
 }
 
