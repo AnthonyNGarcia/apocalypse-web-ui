@@ -117,20 +117,28 @@ const SelectedUnitDetails = (props) => {
         </Row>
         {/* Active Ability */}
         <Row noGutters style={{'width': '90%', 'maxWidth': '90%'}}>
-          <h6>Active Ability: {props.allActiveAbilities[
-              fullUnitInfo.baseActiveAbility.activeAbilityType]
-              .displayName} - {
-            fullUnitInfo.baseActiveAbilityCharges} charge(s)</h6>
-          <p>{props.allActiveAbilities[
-              fullUnitInfo.baseActiveAbility.activeAbilityType]
-              .descriptionFragments.map((fragment, index) => (
-                <span key={fragment + index}>
-                  {fragment +
+          {fullUnitInfo.baseActiveAbility ? (
+            <React.Fragment>
+              <h6>Active Ability: {props.allActiveAbilities[
+                  fullUnitInfo.baseActiveAbility.activeAbilityType]
+                  .displayName} - {
+                fullUnitInfo.baseActiveAbilityCharges} charge(s)</h6>
+              <p>{props.allActiveAbilities[
+                  fullUnitInfo.baseActiveAbility.activeAbilityType]
+                  .descriptionFragments.map((fragment, index) => (
+                    <span key={fragment + index}>
+                      {fragment +
                       (fullUnitInfo.baseActiveAbility.abilityValues[index] ?
                         fullUnitInfo.baseActiveAbility.abilityValues[index] :
                         '')}
-                </span>
-              ))}</p>
+                    </span>
+                  ))}</p>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              This unit has no active ability.
+            </React.Fragment>
+          )}
         </Row>
       </React.Fragment>
     );

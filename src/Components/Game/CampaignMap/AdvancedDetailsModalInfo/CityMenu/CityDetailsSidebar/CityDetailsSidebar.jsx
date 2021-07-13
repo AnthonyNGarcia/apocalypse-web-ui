@@ -298,7 +298,8 @@ const CityDetailsSidebar = (props) => {
                   onClick={(e) => viewUnitHandler(e, unit.unitType)}>
                   <Col md={2}>
                     <img
-                      src={'shield.svg'}
+                      src={unit.unitType + '_ICON.svg'}
+                      onError={(e)=>e.target.src='shield.svg'}
                       alt=""
                       className='unit-icon'/>
                   </Col>

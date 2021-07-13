@@ -160,22 +160,32 @@ const BattleUnitDetails = (props) => {
             </h6>
           </Row>
           {/* Active Ability */}
-          <Row noGutters>
-            <h6 style={{margin: 'auto', textAlign: 'center'}}>
+          <Row noGutters style={{margin: 'auto'}}>
+            {selectedUnit.activeAbility ? (
+              <React.Fragment>
+                <h6 style={{margin: 'auto', textAlign: 'center'}}>
               Active Ability: {props.allActiveAbilities[
-                  selectedUnit.activeAbility.activeAbilityType]
-                  .displayName} - {
-                selectedUnit.currentActiveAbilityCharges} charge(s)</h6>
-            <p>{props.allActiveAbilities[
-                selectedUnit.activeAbility.activeAbilityType]
-                .descriptionFragments.map((fragment, index) => (
-                  <span key={fragment + index}>
-                    {fragment +
+                      selectedUnit.activeAbility.activeAbilityType]
+                      .displayName} - {
+                    selectedUnit.currentActiveAbilityCharges} charge(s)</h6>
+                <p>{props.allActiveAbilities[
+                    selectedUnit.activeAbility.activeAbilityType]
+                    .descriptionFragments.map((fragment, index) => (
+                      <span key={fragment + index}>
+                        {fragment +
                       (selectedUnit.activeAbility.abilityValues[index] ?
                         selectedUnit.activeAbility.abilityValues[index] :
                         '')}
-                  </span>
-                ))}</p>
+                      </span>
+                    ))}</p>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <h6 style={{margin: 'auto', textAlign: 'center'}}>
+                  This unit has no active ability.
+                </h6>
+              </React.Fragment>
+            )}
           </Row>
           {/* Action Buttons */}
           <Row style={{width: '90%', marginBottom: '2vh'}}>
@@ -187,18 +197,22 @@ const BattleUnitDetails = (props) => {
               onClick={skipTurnHandler}>Skip Turn</Button>
             </Col>
             {/* Active Ability Button */}
-            <Col md={6}>
-              <Button disabled={!props.isOwnTurn ||
+            {selectedUnit.activeAbility ? (
+              <React.Fragment>
+                <Col md={6}>
+                  <Button disabled={!props.isOwnTurn ||
               !selectedUnit.eligibleForCommand ||
               !props.showEnemyArmyInBattle ||
               selectedUnit.currentActiveAbilityCharges <= 0 ||
               true}
-              onClick={activeAbilityHandler}>
-                {props.allActiveAbilities[
-                    selectedUnit.activeAbility.activeAbilityType]
-                    .displayName}
-              </Button>
-            </Col>
+                  onClick={activeAbilityHandler}>
+                    {props.allActiveAbilities[
+                        selectedUnit.activeAbility.activeAbilityType]
+                        .displayName}
+                  </Button>
+                </Col>
+              </React.Fragment>
+            ) : null }
           </Row>
         </React.Fragment>
       );
