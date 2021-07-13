@@ -85,7 +85,6 @@ const armyStanceChanged = (message) => {
 const armyUnitsChanged = (message) => {
   const state = store.getState();
   const updatedGameBoard = [...state.gameBoardView.gameBoard];
-  console.log(updatedGameBoard === state.gameBoardView.gameBoard);
   updatedGameBoard[message.armyTilePosition].army.units =
     message.updatedArmyUnits;
   store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));

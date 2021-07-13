@@ -16,6 +16,7 @@ import CITY_MENU_SUPPLEMENTAL_VIEWS from '../../cityMenuSupplementalViews';
 import MAIN_PANEL_VIEWS from '../../gameMainPanelViews';
 import CHAT_TOPIC from '../../chatTopics';
 import ADVANCED_DETAILS_MODAL_VIEW from '../../advancedDetailsModalViews';
+import UNCLOSEABLE_MODAL_VIEW from '../../uncloseableModalView';
 
 /**
  * This is the Game Message Handler.
@@ -34,6 +35,9 @@ const messageHandler = (message) => {
       break;
     case WEBSOCKET_MESSAGE_TYPES.PLAYER_ENDED_TURN:
       nextTurnUpdate(message);
+      break;
+    case WEBSOCKET_MESSAGE_TYPES.PLAYER_WON_GAME:
+      playerWonGame(message);
       break;
     default:
       console.warn('Unrecognized message type for Game topic!');
@@ -74,7 +78,17 @@ const leavingGameCleanup = () => {
   store.dispatch(gamePlayerAC.setPlayerTwo(null));
   store.dispatch(gamePlayerAC.setPlayerWhoseTurnItIs(null));
   store.dispatch(gamePlayerAC.setOwnPlayerNumber(null));
+  store.dispatch(gamePlayerAC.setWinningPlayer(null));
   store.dispatch(gameAC.setGameView(GAME_VIEWS.GAME_BOARD_VIEW));
+};
+
+const playerWonGame = (message) => {
+  store.dispatch(gamePlayerAC.setWinningPlayer(message.winningPlayer));
+  store.dispatch(gamePlayerAC.setPlayerOne(message.updatedGameData.playerOne));
+  store.dispatch(gamePlayerAC.setPlayerTwo(message.updatedGameData.playerTwo));
+  store.dispatch(gameAC.setGameRound(message.updatedGameData.round));
+  store.dispatch(gameBoardViewAC.setUncloseableModalView(
+      UNCLOSEABLE_MODAL_VIEW.PLAYER_WON_GAME));
 };
 
 const nextTurnUpdate = (message) => {

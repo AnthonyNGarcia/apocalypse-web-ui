@@ -45,6 +45,12 @@ const setLobbyPlayerTwo = (state, action) => {
   };
 };
 
+const clearLobbyReducer = (state, action) => {
+  return {
+    ...initialState,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case lobbyAT.SET_LOBBY_VIEW: return setLobbyView(state, action);
@@ -52,6 +58,7 @@ const reducer = (state=initialState, action) => {
     case lobbyAT.SET_LOBBY_ID: return setLobbyId(state, action);
     case lobbyAT.SET_LOBBY_PLAYER_ONE: return setLobbyPlayerOne(state, action);
     case lobbyAT.SET_LOBBY_PLAYER_TWO: return setLobbyPlayerTwo(state, action);
+    case lobbyAT.CLEAR_LOBBY_REDUCER: return clearLobbyReducer(state, action);
     default: return state;
   }
 };

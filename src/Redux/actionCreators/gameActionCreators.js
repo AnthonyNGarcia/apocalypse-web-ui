@@ -31,6 +31,11 @@ const actionCreators = {
       advancedDetailsModalView: advancedDetailsModalView,
     };
   },
+  clearGameReducer: () => {
+    return {
+      type: gameAT.CLEAR_GAME_REDUCER,
+    };
+  },
 };
 
 export default actionCreators;

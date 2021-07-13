@@ -41,6 +41,11 @@ const actionCreators = {
       cityMenuSupplementalData: cityMenuSupplementalData,
     };
   },
+  clearCityMenuReducer: () => {
+    return {
+      type: cityMenuAT.CLEAR_CITY_MENU_REDUCER,
+    };
+  },
 };
 
 export default actionCreators;

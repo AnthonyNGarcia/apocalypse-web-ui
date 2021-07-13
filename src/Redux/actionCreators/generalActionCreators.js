@@ -25,6 +25,11 @@ const actionCreators = {
       websocketTopics: websocketTopics,
     };
   },
+  clearGeneralReducerExceptUserData: () => {
+    return {
+      type: generalAT.CLEAR_GENERAL_REDUCER_EXCEPT_USER_DATA,
+    };
+  },
 };
 
 export default actionCreators;

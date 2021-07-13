@@ -43,6 +43,11 @@ const actionCreators = {
       uncloseableModalView: uncloseableModalView,
     };
   },
+  clearGameBoardViewReducer: () => {
+    return {
+      type: gameBoardViewAT.CLEAR_GAME_BOARD_VIEW_REDUCER,
+    };
+  },
 };
 
 export default actionCreators;

@@ -25,6 +25,11 @@ const actionCreators = {
       selectedBattleUnitIndex: selectedBattleUnitIndex,
     };
   },
+  clearBattleViewReducer: () => {
+    return {
+      type: battleViewAT.CLEAR_BATTLE_VIEW_REDUCER,
+    };
+  },
 };
 
 export default actionCreators;

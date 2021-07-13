@@ -5,7 +5,7 @@ import {Provider} from 'react-redux';
 import generalReducer from './Redux/Reducers/generalReducer';
 import lobbyReducer from './Redux/Reducers/lobbyReducer';
 import gameReducer from './Redux/Reducers/gameReducer';
-import gamePlayerReducer from './Redux/Reducers/GamePlayerReducer';
+import gamePlayerReducer from './Redux/Reducers/gamePlayerReducer';
 import gameBoardViewReducer from './Redux/Reducers/gameBoardViewReducer';
 import battleViewReducer from './Redux/Reducers/battleViewReducer';
 import cityMenuReducer from './Redux/Reducers/cityMenuReducer';

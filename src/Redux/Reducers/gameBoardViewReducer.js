@@ -65,6 +65,12 @@ const setUncloseableModalView = (state, action) => {
   };
 };
 
+const clearGameBoardViewReducer = (state, action) => {
+  return {
+    ...initialState,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case gameBoardViewAT.SET_GAME_BOARD: return setGameBoard(state, action);
@@ -74,6 +80,7 @@ const reducer = (state=initialState, action) => {
     case gameBoardViewAT.SET_IS_MOVING_SETTLER: return setIsMovingSettler(state, action);
     case gameBoardViewAT.SET_SELECTED_TILE_POSITION: return setSelectedTilePosition(state, action);
     case gameBoardViewAT.SET_UNCLOSEABLE_MODAL_VIEW: return setUncloseableModalView(state, action);
+    case gameBoardViewAT.CLEAR_GAME_BOARD_VIEW_REDUCER: return clearGameBoardViewReducer(state, action);
     default: return state;
   }
 };

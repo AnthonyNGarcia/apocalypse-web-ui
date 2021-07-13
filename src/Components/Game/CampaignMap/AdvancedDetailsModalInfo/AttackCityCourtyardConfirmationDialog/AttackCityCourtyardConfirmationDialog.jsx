@@ -49,7 +49,6 @@ const AttackCityCourtyardConfirmationDialog = (props) => {
   };
 
   if (props.cityTile.city && props.attackingArmy) {
-    console.log(props.cityTile);
     return (
       <React.Fragment>
         {/* First Row  is for attacker and note */}

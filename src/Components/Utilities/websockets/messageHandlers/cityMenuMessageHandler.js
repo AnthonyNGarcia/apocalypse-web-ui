@@ -69,7 +69,6 @@ const messageHandler = (message) => {
 };
 
 const confirmAttackCityCourtyardPrompt = (message) => {
-  console.log(message);
   const state = store.getState();
   const updatedGameBoard = [...state.gameBoardView.gameBoard];
   const attackingArmyTilePosition = message.attackingArmyTilePosition;

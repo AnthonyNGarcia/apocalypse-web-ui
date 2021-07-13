@@ -119,43 +119,28 @@ const ArmyUnit = (props) => {
 
   const selectEnemyUnitHandler = (e, justSelectedUnitIndex) => {
     e.preventDefault();
-    console.log('Just selected an enemy unit at index ' +
-      justSelectedUnitIndex);
     if (props.battleData.playerWhoseTurnItIs !== props.ownPlayerNumber) {
-      console.log('Cannot do anything, not this player\'s turn!');
       return;
     }
     if (!currentlySelectedOwnUnit) {
-      console.log('Cannot do anything, currently selected ' +
-        'own unit doesn\'t exist!');
       return;
     }
     if (getIfStunned(currentlySelectedOwnUnit)) {
-      console.log('Cannot do anything, currently selected ' +
-      'own unit is stunned!');
       return;
     }
     if (getIfPermastunned(currentlySelectedOwnUnit)) {
-      console.log('Cannot do anything, currently selected ' +
-      'own unit is permastunned!');
       return;
     }
     if (getIfCityWalls(currentlySelectedOwnUnit)) {
-      console.log('Cannot do anything, currently selected ' +
-      'unit is a wall, which cannot attack!');
       return;
     }
     if (!currentlySelectedOwnUnit.eligibleForCommand) {
-      console.log('Cannot do anything, currently selected ' +
-        'own unit is not eligible for commands!');
       return;
     }
     if (!props.unit.isTargetable && getIfInvisible(props.unit)) {
-      console.log('Cannot target Invisible Enemies.');
       return;
     }
     if (!props.unit.isTargetable && !getIfFlanker(currentlySelectedOwnUnit)) {
-      console.log('Cannot do anything, enemy is not targetable!');
       return;
     }
     try {

@@ -9,7 +9,7 @@ const initialState = {
   cityMenuSupplementalData: {},
 };
 
-const setCityMenuTab= (state, action) => {
+const setCityMenuTab = (state, action) => {
   return {
     ...state,
     cityMenuTab: action.cityMenuTab,
@@ -30,11 +30,18 @@ const setCityMenuSupplementalData = (state, action) => {
   };
 };
 
+const clearCityMenuReducer = (state, action) => {
+  return {
+    ...initialState,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case cityMenuAT.SET_CITY_MENU_TAB: return setCityMenuTab(state, action);
     case cityMenuAT.SET_CITY_MENU_SUPPLEMENTAL_VIEW: return setCityMenuSupplementalView(state, action);
     case cityMenuAT.SET_CITY_MENU_SUPPLEMENTAL_DATA: return setCityMenuSupplementalData(state, action);
+    case cityMenuAT.CLEAR_CITY_MENU_REDUCER: return clearCityMenuReducer(state, action);
     default: return state;
   }
 };

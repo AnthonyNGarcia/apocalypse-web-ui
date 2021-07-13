@@ -25,6 +25,17 @@ const actionCreators = {
       playerWhoseTurnItIs: playerWhoseTurnItIs,
     };
   },
+  setWinningPlayer: (winningPlayer) => {
+    return {
+      type: gamePlayerAT.SET_WINNING_PLAYER,
+      winningPlayer: winningPlayer,
+    };
+  },
+  clearGamePlayerReducer: () => {
+    return {
+      type: gamePlayerAT.CLEAR_GAME_PLAYER_REDUCER,
+    };
+  },
 };
 
 export default actionCreators;

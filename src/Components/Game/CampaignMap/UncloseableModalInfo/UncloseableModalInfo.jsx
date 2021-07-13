@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 import Spinner from 'react-bootstrap/Spinner';
 import OutsideCityWallsBattlePrepMenu from
   './OutsideCityWallsBattlePrepMenu/OutsideCityWallsBattlePrepMenu';
+import PlayerWonGameModal from './PlayerWonGameModal/PlayerWonGameModal';
 import './UncloseableModalInfo.css';
 
 /**
@@ -23,6 +24,15 @@ const UncloseableModalInfo = (props) => {
       <React.Fragment>
         <Modal.Body>
           <OutsideCityWallsBattlePrepMenu/>
+        </Modal.Body>
+      </React.Fragment>
+    );
+  } if (props.uncloseableModalView ===
+      UNCLOSEABLE_MODAL_VIEW.PLAYER_WON_GAME) {
+    return (
+      <React.Fragment>
+        <Modal.Body>
+          <PlayerWonGameModal/>
         </Modal.Body>
       </React.Fragment>
     );

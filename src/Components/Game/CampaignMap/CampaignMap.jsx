@@ -49,7 +49,7 @@ const CampaignMap = (props) => {
       </Modal>
       <Modal show={props.uncloseableModalView !== UNCLOSEABLE_MODAL_VIEW.NONE}
         size="xl"
-        onHide={() => console.log('Can\'t close this modal!')}
+        onHide={() => {}}
         className='uncloseable-modal-custom-background'>
         <UncloseableModalInfo/>
       </Modal>

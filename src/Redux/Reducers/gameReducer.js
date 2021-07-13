@@ -46,6 +46,12 @@ const setAdvancedDetailsModalView = (state, action) => {
   };
 };
 
+const clearGameReducer = (state, action) => {
+  return {
+    ...initialState,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case gameAT.SET_GAME_VIEW: return setGameView(state, action);
@@ -53,6 +59,7 @@ const reducer = (state=initialState, action) => {
     case gameAT.SET_GAME_CONSTANTS: return setGameConstants(state, action);
     case gameAT.SET_GAME_ROUND: return setGameRound(state, action);
     case gameAT.SET_ADVANCED_DETAILS_MODAL_VIEW: return setAdvancedDetailsModalView(state, action);
+    case gameAT.CLEAR_GAME_REDUCER: return clearGameReducer(state, action);
     default: return state;
   }
 };
