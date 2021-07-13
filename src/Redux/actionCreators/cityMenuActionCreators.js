@@ -3,18 +3,6 @@ import gameBoardViewAT from '../actionTypes/gameBoardViewActionTypes';
 import {store} from '../../App';
 
 const actionCreators = {
-  setShowCityModalInfo: (showCityModalInfo) => {
-    return {
-      type: cityMenuAT.SET_SHOW_CITY_MODAL_INFO,
-      showCityModalInfo: showCityModalInfo,
-    };
-  },
-  setShowResearchModalInfo: (showResearchModalInfo) => {
-    return {
-      type: cityMenuAT.SET_SHOW_RESEARCH_MODAL_INFO,
-      showResearchModalInfo: showResearchModalInfo,
-    };
-  },
   setCityMenuTab: (cityMenuTab) => {
     return {
       type: cityMenuAT.SET_CITY_MENU_TAB,
@@ -51,6 +39,11 @@ const actionCreators = {
     return {
       type: cityMenuAT.SET_CITY_MENU_SUPPLEMENTAL_DATA,
       cityMenuSupplementalData: cityMenuSupplementalData,
+    };
+  },
+  clearCityMenuReducer: () => {
+    return {
+      type: cityMenuAT.CLEAR_CITY_MENU_REDUCER,
     };
   },
 };

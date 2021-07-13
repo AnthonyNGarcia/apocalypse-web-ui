@@ -8,12 +8,20 @@ import Centerpiece from './Centerpiece/Centerpiece';
 import RightSidebar from './RightSidebar/RightSidebar';
 import AdvancedDetailsModalInfo from
   './AdvancedDetailsModalInfo/AdvancedDetailsModalInfo';
+import UncloseableModalInfo from
+  './UncloseableModalInfo/UncloseableModalInfo';
 import cityMenuAC from '../../../Redux/actionCreators/cityMenuActionCreators';
+import gameAC from '../../../Redux/actionCreators/gameActionCreators';
 import Modal from 'react-bootstrap/Modal';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from
   '../../Utilities/cityMenuSupplementalViews';
 import PLAYER from '../../Utilities/playerEnums';
 import flattenObject from '../../Utilities/flattenObjectValuesToArray';
+import UNCLOSEABLE_MODAL_VIEW from '../../Utilities/uncloseableModalView';
+import ADVANCED_DETAILS_MODAL_VIEW from
+  '../../Utilities/advancedDetailsModalViews';
+import cityWallsBattleAC from
+  '../../../Redux/actionCreators/cityWallsBattleActionCreators';
 import './CampaignMap.css';
 
 /**
@@ -25,48 +33,59 @@ import './CampaignMap.css';
  */
 const CampaignMap = (props) => {
   const closeAdvancedDetailsModal = () => {
-    props.updateShowCityModalInfo(false);
-    props.updateShowResearchModalInfo(false);
     props.updateCityMenuSupplementalData({});
     props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.NONE);
+    props.updateAdvancedDetailsModalView(ADVANCED_DETAILS_MODAL_VIEW.NONE);
+    props.clearCityWallsBattleReducer();
   };
 
   return (
     <React.Fragment>
-      <Modal show={props.showCityModalInfo || props.showResearchModalInfo}
-        onHide={closeAdvancedDetailsModal} size="xl"
-        dialogClassName='modal-dialog-custom-sizing'>
+      <Modal show={props.advancedDetailsModalView !==
+      ADVANCED_DETAILS_MODAL_VIEW.NONE}
+      onHide={closeAdvancedDetailsModal} size="xl"
+      className='advanced-details-modal-custom-background'>
         <AdvancedDetailsModalInfo/>
       </Modal>
-      <Row style={{width: '90vw'}} noGutters>
-        <Col md={5} className={(props.playerWhoseTurnItIs === PLAYER.ONE ?
-              'active-turn center-text player-label' :
-              'inactive-turn center-text player-label') + (
-                props.ownPlayerNumber === PLAYER.ONE ? ' own-player-label' :
-                ' other-player-label')}>
-          <h3>{props.playerOneUsername}</h3>
-        </Col>
-        <Col md={1} className='center-text'>
-          <h5>Round: {props.round}</h5>
-        </Col>
-        <Col md={5} className={(props.playerWhoseTurnItIs === PLAYER.TWO ?
-              'active-turn center-text player-label' :
-              'inactive-turn center-text player-label') + (
-                props.ownPlayerNumber === PLAYER.TWO ? ' own-player-label' :
-                ' other-player-label')}>
-          <h3>{props.playerTwoUsername}</h3>
-        </Col>
-      </Row>
+      <Modal show={props.uncloseableModalView !== UNCLOSEABLE_MODAL_VIEW.NONE}
+        size="xl"
+        onHide={() => {}}
+        className='uncloseable-modal-custom-background'>
+        <UncloseableModalInfo/>
+      </Modal>
+      <div className='player-labels-container center-text'>
+        <Row noGutters>
+          <Col
+            className={props.playerWhoseTurnItIs === PLAYER.ONE ?
+              'game-board-active-turn center-text game-board-player-label' :
+              'game-board-inactive-turn center-text game-board-player-label'}>
+            <h3 className={props.ownPlayerNumber === PLAYER.ONE ?
+          'game-board-own-player-label' : 'game-board-other-player-label'}>
+              {props.playerOneUsername}</h3>
+          </Col>
+          <Col className='center-text round-counter'>
+            <h5>Round: {props.round}</h5>
+          </Col>
+          <Col
+            className={props.playerWhoseTurnItIs === PLAYER.TWO ?
+              'game-board-active-turn center-text game-board-player-label' :
+              'game-board-inactive-turn center-text game-board-player-label'}>
+            <h3 className={props.ownPlayerNumber === PLAYER.TWO ?
+          'game-board-own-player-label' : 'game-board-other-player-label'}>
+              {props.playerTwoUsername}</h3>
+          </Col>
+        </Row>
+      </div>
       <div className='campaign-map-container'>
-        <Row>
-          <Col>
-            <LeftSidebar className='left-sidebar'/>
+        <Row noGutters>
+          <Col className='left-sidebar-container'>
+            <LeftSidebar/>
           </Col>
-          <Col>
-            <Centerpiece className='centerpiece'/>
+          <Col className='centerpiece-container'>
+            <Centerpiece/>
           </Col>
-          <Col>
-            <RightSidebar className='right-sidebar'/>
+          <Col className='right-sidebar-container'>
+            <RightSidebar/>
           </Col>
         </Row>
       </div>
@@ -76,8 +95,6 @@ const CampaignMap = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    showCityModalInfo: state.cityMenu.showCityModalInfo,
-    showResearchModalInfo: state.cityMenu.showResearchModalInfo,
     playerOneUsername: state.gamePlayer.playerOne ?
       state.gamePlayer.playerOne.username : 'error',
     playerTwoUsername: state.gamePlayer.playerTwo ?
@@ -85,27 +102,25 @@ const mapStateToProps = (state) => {
     playerWhoseTurnItIs: state.gamePlayer.playerWhoseTurnItIs,
     ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
     round: state.game.gameRound,
+    uncloseableModalView: state.gameBoardView.uncloseableModalView,
+    advancedDetailsModalView: state.game.advancedDetailsModalView,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateShowCityModalInfo: (showCityModalInfo) => dispatch(
-        cityMenuAC.setShowCityModalInfo(showCityModalInfo)),
-    updateShowResearchModalInfo: (showResearchModalInfo) => dispatch(
-        cityMenuAC.setShowResearchModalInfo(showResearchModalInfo)),
     updateCityMenuSupplementalView: (view) => dispatch(
         cityMenuAC.setCityMenuSupplementalView(view)),
     updateCityMenuSupplementalData: (data) => dispatch(
         cityMenuAC.setCityMenuSupplementalData(data)),
+    updateAdvancedDetailsModalView: (view) => dispatch(
+        gameAC.setAdvancedDetailsModalView(view)),
+    clearCityWallsBattleReducer: () => dispatch(
+        cityWallsBattleAC.clearCityWallsBattleReducer()),
   };
 };
 
 CampaignMap.propTypes = {
-  showCityModalInfo: PropTypes.bool,
-  showResearchModalInfo: PropTypes.bool,
-  updateShowCityModalInfo: PropTypes.func,
-  updateShowResearchModalInfo: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
   updateCityMenuSupplementalData: PropTypes.func,
   playerOneUsername: PropTypes.string,
@@ -113,6 +128,11 @@ CampaignMap.propTypes = {
   playerWhoseTurnItIs: PropTypes.oneOf(flattenObject(PLAYER)),
   ownPlayerNumber: PropTypes.oneOf(flattenObject(PLAYER)),
   round: PropTypes.number,
+  uncloseableModalView: PropTypes.oneOf(flattenObject(UNCLOSEABLE_MODAL_VIEW)),
+  advancedDetailsModalView: PropTypes.oneOf(
+      flattenObject(ADVANCED_DETAILS_MODAL_VIEW)),
+  updateAdvancedDetailsModalView: PropTypes.func,
+  clearCityWallsBattleReducer: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CampaignMap);

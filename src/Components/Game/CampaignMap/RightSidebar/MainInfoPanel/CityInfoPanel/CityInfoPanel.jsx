@@ -1,14 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
-import cityMenuAC from
-  '../../../../../../Redux/actionCreators/cityMenuActionCreators';
+import gameAC from
+  '../../../../../../Redux/actionCreators/gameActionCreators';
 import PLAYER from '../../../../../Utilities/playerEnums';
+import ADVANCED_DETAILS_MODAL_VIEW from
+  '../../../../../Utilities/advancedDetailsModalViews';
 import './CityInfoPanel.css';
 
 /**
@@ -23,7 +24,7 @@ const CityInfoPanel = (props) => {
 
   const showCityMenuHandler = (e) => {
     e.preventDefault();
-    props.updateShowCityModalInfo(true);
+    props.updateAdvancedDetailsModalView(ADVANCED_DETAILS_MODAL_VIEW.CITY_MENU);
   };
 
   useEffect(() => {
@@ -36,20 +37,49 @@ const CityInfoPanel = (props) => {
     }
   }, [props]);
 
-  if (ownPlayerData) {
+  if (ownPlayerData && props.selectedCity) {
     return (
       <React.Fragment>
-        <Container>
-          {props.ownPlayerNumber === props.selectedCity.owner ?
+        {props.ownPlayerNumber === props.selectedCity.owner ?
           <React.Fragment>
-            <Row className='center-text'>
-              <h2>{props.selectedCity.name}</h2>
+            <Row className='center-text own-city-entity'>
+              <div>
+                <h2>{props.selectedCity.name}</h2>
+                <h5>{props.selectedCity.scorchedEarth ? (
+                      <span>Scorched ({props.selectedCity
+                          .turnsRemainingForScorchedEarth} <span><img
+                        src={'timer.svg'}
+                        alt=""
+                        className={'tiny-white-timer-icon'}
+                      /></span>)</span>
+                    ) : null}</h5>
+                <h5>{props.selectedCity.wallsDestroyed ? (
+                      <span>Walls Destroyed ({props.selectedCity
+                          .turnsRemainingForDestroyedWalls} <span><img
+                        src={'timer.svg'}
+                        alt=""
+                        className={'tiny-white-timer-icon'}
+                      /></span>)</span>
+                    ) : null}</h5>
+                <h5>{props.selectedCity.isDevastated ? (
+                      <span>Devastated ({props.selectedCity
+                          .turnsRemainingForDevastation} <span><img
+                        src={'timer.svg'}
+                        alt=""
+                        className={'tiny-white-timer-icon'}
+                      /></span>)</span>
+                    ) : null}</h5>
+                <h5>{props.occupyingArmy && (props.occupyingArmy.owner !==
+                  props.selectedCity.owner) ? (
+                      <span>Being Razed!</span>
+                    ) : null}</h5>
+              </div>
             </Row>
-            <Row className='center-text'>
+            <Row className='center-text own-city-entity'>
               <h5>Tier {props.selectedCity.tier} City</h5>
             </Row>
-            <Row className='center-text'>
-              <Col xs={8}>
+            <Row className='center-text own-city-entity'>
+              <Col xs={6}>
                 <Row>
               Production:
                 </Row>
@@ -60,7 +90,7 @@ const CityInfoPanel = (props) => {
               Growth:
                 </Row>
               </Col>
-              <Col xs={4}>
+              <Col xs={6}>
                 <Row>
                   {props.selectedCity.totalBuildingProduction}
                 </Row>
@@ -68,7 +98,8 @@ const CityInfoPanel = (props) => {
                   {props.selectedCity.totalResearch}
                 </Row>
                 <Row>
-                  {props.selectedCity.currentGrowthStockpile}/250 (+{
+                  {props.selectedCity.currentGrowthStockpile}/{
+                    props.selectedCity.growthToNextTier} (+{
                     props.selectedCity.totalGrowth
                   })
                 </Row>
@@ -76,12 +107,43 @@ const CityInfoPanel = (props) => {
             </Row>
             <Row className='center-text'>
               <Button variant="primary"
+                disabled={props.selectedCity.isDevastated}
                 onClick={showCityMenuHandler}>Show City Menu</Button>
             </Row>
           </React.Fragment> :
              <React.Fragment>
                <Row className='center-text enemy-entity'>
-                 <h2>{props.selectedCity.name}</h2>
+                 <div>
+                   <h2>{props.selectedCity.name}</h2>
+                   <h5>{props.selectedCity.scorchedEarth ? (
+                      <span>Scorched ({props.selectedCity
+                          .turnsRemainingForScorchedEarth} <span><img
+                        src={'timer.svg'}
+                        alt=""
+                        className={'tiny-white-timer-icon'}
+                      /></span>)</span>
+                    ) : null}</h5>
+                   <h5>{props.selectedCity.wallsDestroyed ? (
+                      <span>Walls Destroyed ({props.selectedCity
+                          .turnsRemainingForDestroyedWalls} <span><img
+                        src={'timer.svg'}
+                        alt=""
+                        className={'tiny-white-timer-icon'}
+                      /></span>)</span>
+                    ) : null}</h5>
+                   <h5>{props.selectedCity.isDevastated ? (
+                      <span>Devastated ({props.selectedCity
+                          .turnsRemainingForDevastation} <span><img
+                        src={'timer.svg'}
+                        alt=""
+                        className={'tiny-white-timer-icon'}
+                      /></span>)</span>
+                    ) : null}</h5>
+                   <h5>{props.occupyingArmy && (props.occupyingArmy.owner !==
+                  props.selectedCity.owner) ? (
+                      <span>Being Razed!</span>
+                    ) : null}</h5>
+                 </div>
                </Row>
                <Row className='center-text enemy-entity'>
                  <h5>Tier {props.selectedCity.tier} City</h5>
@@ -90,9 +152,8 @@ const CityInfoPanel = (props) => {
                  <p>This is an enemy City.</p>
                </Row>
              </React.Fragment>}
-          <Row>
-          </Row>
-        </Container>
+        <Row>
+        </Row>
       </React.Fragment>
     );
   } else {
@@ -108,6 +169,8 @@ const CityInfoPanel = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    occupyingArmy: state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].army,
     selectedCity: state.gameBoardView.gameBoard[
         state.gameBoardView.selectedTilePosition].city,
     playerOne: state.gamePlayer.playerOne,
@@ -118,8 +181,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateShowCityModalInfo: (showCityModalInfo) => dispatch(
-        cityMenuAC.setShowCityModalInfo(showCityModalInfo)),
+    updateAdvancedDetailsModalView: (view) => dispatch(
+        gameAC.setAdvancedDetailsModalView(view)),
   };
 };
 
@@ -128,6 +191,7 @@ CityInfoPanel.propTypes = {
   playerOne: PropTypes.any,
   playerTwo: PropTypes.any,
   ownPlayerNumber: PropTypes.string,
+  updateAdvancedDetailsModalView: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CityInfoPanel);

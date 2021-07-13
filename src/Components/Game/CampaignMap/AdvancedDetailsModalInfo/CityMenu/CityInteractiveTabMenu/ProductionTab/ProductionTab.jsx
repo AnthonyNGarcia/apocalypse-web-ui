@@ -9,6 +9,7 @@ import AvailableBuildingItem from
 import QueuedUnitItem from './QueuedUnitItem/QueuedUnitItem';
 import TrainableUnitItem from './TrainableUnitItem/TrainableUnitItem';
 import PLAYER from '../../../../../../Utilities/playerEnums';
+import getHeroUnitCount from '../../../../../../Utilities/getHeroUnitCount';
 import './ProductionTab.css';
 /**
  *
@@ -19,13 +20,20 @@ import './ProductionTab.css';
  */
 const ProductionTab = (props) => {
   const [unitPopLabel, setUnitPopLabel] = useState('');
+  const [heroPopLabel, setHeroPopLabel] = useState('');
 
   useEffect(() => {
     const currentPopCount = props.selectedCity.unassignedUnits.length +
       props.selectedCity.currentRecruitmentQueue.length;
+    const currentHeroPopCount = getHeroUnitCount(
+        props.selectedCity.unassignedUnits) + getHeroUnitCount(
+        props.selectedCity.currentRecruitmentQueue);
     setUnitPopLabel('' + currentPopCount + '/' +
       props.ownPlayerData.currentBaseArmySize);
-  }, [props, props.selectedCity.currentRecruitmentQueue]);
+    setHeroPopLabel('' + currentHeroPopCount + '/' +
+      props.ownPlayerData.currentBaseTier3HeroUnitsSupported);
+  }, [props, props.selectedCity.currentRecruitmentQueue,
+    props.selectedCity.unassignedUnits]);
 
   const returnReversed = (array) => {
     const reversedArray = [...array];
@@ -69,13 +77,17 @@ const ProductionTab = (props) => {
           <h5 style={{'margin': 'auto'}}>Recruitment Queue (
             {props.selectedCity.unitProductionRemaining}/{
               props.selectedCity.totalUnitProduction}<span><img
-              src={'hammer.png'}
+              src={'hammer.svg'}
               alt=""
               className={'tiny-hammer-icon'}
             /></span>, {unitPopLabel} <span><img
               src={'unit_count.svg'}
               alt=""
               className={'tiny-hammer-icon'}
+            /></span>, {heroPopLabel} <span><img
+              src={'hero_unit_icon.svg'}
+              alt=""
+              className={'tiny-hero-unit-icon'}
             /></span>)
           </h5>
         </Row>

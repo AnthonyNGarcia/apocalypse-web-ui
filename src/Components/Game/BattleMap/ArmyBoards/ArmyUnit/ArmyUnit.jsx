@@ -7,6 +7,11 @@ import battleViewAC from
 import apiEndpoints from '../../../../Utilities/apiEndpoints';
 import axios from 'axios';
 import UNIT_ACTION_TYPES from '../../../../Utilities/unitActionTypes';
+import getIfFlanker from '../../../../Utilities/getIfFlanker';
+import getIfStunned from '../../../../Utilities/getIfStunned';
+import getIfCityWalls from '../../../../Utilities/getIfStructure';
+import getIfInvisible from '../../../../Utilities/getIfInvisible';
+import getIfPermastunned from '../../../../Utilities/getIfPermastunned';
 import './ArmyUnit.css';
 
 /**
@@ -25,24 +30,31 @@ const ArmyUnit = (props) => {
   useEffect( () => {
     if (props.unit && props.unit.unitType) {
       let calculatedUnitClasses = 'army-unit-image';
+      if (props.unit.eligibleForCommand) {
+        calculatedUnitClasses += ' unit-eligible-for-command';
+      }
       if (props.ownUnit) {
         calculatedUnitClasses += ' own-unit-image';
         if (props.selectedBattleUnitIndex === props.unitIndex) {
           calculatedUnitClasses += ' own-selected-unit';
         }
+        if (props.unit.isTapped) {
+          calculatedUnitClasses += ' unit-is-tapped';
+        }
       } else {
         calculatedUnitClasses += ' enemy-unit-image';
-        if (currentlySelectedOwnUnit &&
+        if (!props.unit.isTargetable && getIfInvisible(props.unit)) {
+        } else if (currentlySelectedOwnUnit &&
             currentlySelectedOwnUnit.eligibleForCommand &&
-            props.unit.isTargetable) {
+            !getIfStunned(currentlySelectedOwnUnit) &&
+            !getIfPermastunned(currentlySelectedOwnUnit) &&
+            !getIfCityWalls(currentlySelectedOwnUnit) &&
+            (props.unit.isTargetable ||
+              getIfFlanker(currentlySelectedOwnUnit))) {
           calculatedUnitClasses += ' targetable-enemy-unit';
+        } else if (props.unit.isTapped) {
+          calculatedUnitClasses += ' unit-is-tapped';
         }
-      }
-      if (props.unit.isTapped) {
-        calculatedUnitClasses += ' unit-is-tapped';
-      }
-      if (props.unit.eligibleForCommand) {
-        calculatedUnitClasses += ' unit-eligible-for-command';
       }
       setUnitImageClasses(calculatedUnitClasses);
     }
@@ -109,24 +121,28 @@ const ArmyUnit = (props) => {
 
   const selectEnemyUnitHandler = (e, justSelectedUnitIndex) => {
     e.preventDefault();
-    console.log('Just selected an enemy unit at index ' +
-      justSelectedUnitIndex);
     if (props.battleData.playerWhoseTurnItIs !== props.ownPlayerNumber) {
-      console.log('Cannot do anything, not this player\'s turn!');
       return;
     }
     if (!currentlySelectedOwnUnit) {
-      console.log('Cannot do anything, currently selected ' +
-        'own unit doesn\'t exist!');
+      return;
+    }
+    if (getIfStunned(currentlySelectedOwnUnit)) {
+      return;
+    }
+    if (getIfPermastunned(currentlySelectedOwnUnit)) {
+      return;
+    }
+    if (getIfCityWalls(currentlySelectedOwnUnit)) {
       return;
     }
     if (!currentlySelectedOwnUnit.eligibleForCommand) {
-      console.log('Cannot do anything, currently selected ' +
-        'own unit is not eligible for commands!');
       return;
     }
-    if (!props.unit.isTargetable) {
-      console.log('Cannot do anything, enemy is not targetable!');
+    if (!props.unit.isTargetable && getIfInvisible(props.unit)) {
+      return;
+    }
+    if (!props.unit.isTargetable && !getIfFlanker(currentlySelectedOwnUnit)) {
       return;
     }
     try {
@@ -168,25 +184,25 @@ const ArmyUnit = (props) => {
         >
           <img
             src={props.unit.unitType + '_ICON.svg'}
-            onError={(e)=>e.target.src='shield.png'}
+            onError={(e)=>e.target.src='shield.svg'}
             alt=""
             className={unitImageClasses}
           />
         </Row>
-        {/* Second row is the unit name + health */}
-        <Row style={{height: '2vh'}} noGutters>
-          <p className='unit-label'>
-            {
-              props.unit.currentHealth}/{props.unit
-                .maxHealth} <span><img
-              src={'health.svg'}
-              alt=""
-              className={'tiny-hammer-icon'}
-            /></span>
-          </p>
-        </Row>
-        {/* Third row is the unit Block, if they have any */}
-        {props.unit.activeBlock > 0 ? (
+        <div className='unit-labels-container'>
+          {/* Second row is the unit name + health */}
+          <Row style={{height: '2vh'}} noGutters>
+            <p className='unit-label'>
+              {
+                props.unit.currentHealth}<span><img
+                src={'health.svg'}
+                alt=""
+                className={'tiny-hammer-icon'}
+              /></span>
+            </p>
+          </Row>
+          {/* Third row is the unit Block, if they have any */}
+          {props.unit.activeBlock > 0 ? (
           <Row>
             <p className='unit-label'>
               {props.unit.activeBlock} <span><img
@@ -197,19 +213,46 @@ const ArmyUnit = (props) => {
             </p>
           </Row>
           ) : null}
-        {/* Third row is the unit debuff, if they have any */}
-        {props.unit.currentDebuffs && props.unit.currentDebuffs.length > 0 ?
+          {/* Third row is the unit debuff, if they have any */}
+          {props.unit.currentDebuffs && props.unit.currentDebuffs.length > 0 ?
           props.unit.currentDebuffs.map((debuff, index) => (
             <Row key={debuff.debuffType + '-' + index}>
-              <p className='unit-label'>
-                {debuff.value} <span><img
-                  src={'poison_debuff.svg'}
-                  alt=""
-                  className={'tiny-hammer-icon'}
-                /></span>
-              </p>
+              {debuff.debuffType === 'POISONED' ? (
+                <p className='unit-label'>
+                  {debuff.value} <span><img
+                    src={'poison_debuff.svg'}
+                    alt=""
+                    className={'tiny-hammer-icon'}
+                  /></span>
+                </p>
+                ) : debuff.debuffType === 'BURNING' ? (
+                <p className='unit-label'>
+                  {debuff.value} <span><img
+                    src={'burning_debuff.svg'}
+                    alt=""
+                    className={'tiny-hammer-icon'}
+                  /></span>
+                </p>
+                ) : debuff.debuffType === 'STUNNED' ? (
+                <p className='unit-label'>
+                  {debuff.value} <span><img
+                    src={'stunned_debuff.svg'}
+                    alt=""
+                    className={'tiny-hammer-icon'}
+                  /></span>
+                </p>
+                ) : debuff.debuffType === 'PERMASTUNNED' ? (
+                <p className='unit-label'>
+                  {'∞'} <span><img
+                    src={'permastunned_debuff.svg'}
+                    alt=""
+                    className={'tiny-hammer-icon'}
+                  /></span>
+                </p>
+                ) : null}
             </Row>
           )) : null}
+        </div>
       </React.Fragment>
     );
   } else {

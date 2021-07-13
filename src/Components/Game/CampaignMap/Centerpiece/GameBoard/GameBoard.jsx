@@ -10,6 +10,8 @@ import gamePlayerAC from
   '../../../../../Redux/actionCreators/gamePlayerActionCreators';
 import cityMenuAC from
   '../../../../../Redux/actionCreators/cityMenuActionCreators';
+import gameAC from
+  '../../../../../Redux/actionCreators/gameActionCreators';
 import tileHighlightManager from '../../../../Utilities/tileHighlightManager';
 import ARMY_ACTION_REQUEST_TYPE from
   '../../../../Utilities/armyActionRequestTypes';
@@ -18,6 +20,8 @@ import apiEndpoints from '../../../../Utilities/apiEndpoints';
 import PLAYER from '../../../../Utilities/playerEnums';
 import FACTIONS from '../../../../Utilities/factions';
 import './GameBoard.css';
+import ADVANCED_DETAILS_MODAL_VIEW from
+  '../../../../Utilities/advancedDetailsModalViews';
 
 /**
  *
@@ -236,6 +240,11 @@ const GameBoard = (props) => {
         if (ownerPlayerData) {
           const armyFaction = ownerPlayerData.factionType;
           let armyStyling = 'heximage army-icon';
+          const fullTerrainData = props.allTerrains[item.terrainType];
+          const gettingBonusBlockFromTerrain =
+          fullTerrainData.defensiveBlockBonusAsPercentOfUnitMaxHealth > 0;
+          const sufferingAttritionFromTerrain =
+          fullTerrainData.attritionDamageCausedAsPercentOfUnitMaxHealth > 0;
           if (item.army.owner === props.ownPlayerNumber) {
             armyStyling += ' own-army';
             if (item.army.isHidden) {
@@ -249,23 +258,109 @@ const GameBoard = (props) => {
           }
           if (armyFaction === FACTIONS.HUMANS.enum) {
             army = (
-              <img
-                src={'HUMAN_ARMY.svg'}
-                alt=""
-                className={armyStyling +
-                (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
-                onClick={(e) => tileClicked(e, item)}
-              />
+              <React.Fragment>
+                <img
+                  src={'HUMAN_ARMY.svg'}
+                  alt=""
+                  className={armyStyling +
+                  (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
+                  onClick={(e) => tileClicked(e, item)}
+                />
+                {(!item.army.isHidden ||
+                  item.army.owner === props.ownPlayerNumber) &&
+                 ((item.army.armyStance === 'FORTIFIED' &&
+                !gettingBonusBlockFromTerrain) || (
+                   item.army.armyStance === 'NONE' &&
+                  gettingBonusBlockFromTerrain)) ?
+                (<img
+                  src={'shield.svg'}
+                  alt=""
+                  className='small-army-fortified-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : (!item.army.isHidden ||
+                item.army.owner === props.ownPlayerNumber) &&
+                ((item.army.armyStance === 'FORTIFIED' &&
+                gettingBonusBlockFromTerrain) || (
+                  item.army.armyStance === 'ENTRENCHED' &&
+                  !gettingBonusBlockFromTerrain)) ?
+                (<img
+                  src={'shield.svg'}
+                  alt=""
+                  className='medium-army-fortified-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : (!item.army.isHidden ||
+                item.army.owner === props.ownPlayerNumber) &&
+                (item.army.armyStance === 'ENTRENCHED' &&
+                gettingBonusBlockFromTerrain) ?
+                (<img
+                  src={'shield.svg'}
+                  alt=""
+                  className='large-army-fortified-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : null}
+                {(!item.army.isHidden ||
+                item.army.owner === props.ownPlayerNumber) &&
+                sufferingAttritionFromTerrain && !item.city?
+                (<img
+                  src={'poison_debuff.svg'}
+                  alt=""
+                  className='small-army-attrition-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : null}
+              </React.Fragment>
             );
           } else if (armyFaction === FACTIONS.INSECTS.enum) {
             army = (
-              <img
-                src={'INSECT_ARMY.svg'}
-                alt=""
-                className={armyStyling +
-                (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
-                onClick={(e) => tileClicked(e, item)}
-              />
+              <React.Fragment>
+                <img
+                  src={'INSECT_ARMY.svg'}
+                  alt=""
+                  className={armyStyling +
+                  (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
+                  onClick={(e) => tileClicked(e, item)}
+                />
+                {(!item.army.isHidden ||
+                  item.army.owner === props.ownPlayerNumber) &&
+                 ((item.army.armyStance === 'FORTIFIED' &&
+                !gettingBonusBlockFromTerrain) || (
+                   item.army.armyStance === 'NONE' &&
+                  gettingBonusBlockFromTerrain)) ?
+                (<img
+                  src={'shield.svg'}
+                  alt=""
+                  className='small-army-fortified-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : (!item.army.isHidden ||
+                item.army.owner === props.ownPlayerNumber) &&
+                ((item.army.armyStance === 'FORTIFIED' &&
+                gettingBonusBlockFromTerrain) || (
+                  item.army.armyStance === 'ENTRENCHED' &&
+                  !gettingBonusBlockFromTerrain)) ?
+                (<img
+                  src={'shield.svg'}
+                  alt=""
+                  className='medium-army-fortified-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : (!item.army.isHidden ||
+                item.army.owner === props.ownPlayerNumber) &&
+                (item.army.armyStance === 'ENTRENCHED' &&
+                gettingBonusBlockFromTerrain) ?
+                (<img
+                  src={'shield.svg'}
+                  alt=""
+                  className='large-army-fortified-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : null}
+                {(!item.army.isHidden ||
+                item.army.owner === props.ownPlayerNumber) &&
+                sufferingAttritionFromTerrain && !item.city?
+                (<img
+                  src={'poison_debuff.svg'}
+                  alt=""
+                  className='small-army-attrition-icon'
+                  onClick={(e) => tileClicked(e, item)}
+                />) : null}
+              </React.Fragment>
             );
           } else {
             console.warn(
@@ -276,14 +371,37 @@ const GameBoard = (props) => {
       }
 
       if (item.city) {
-        city = (
-          <img
-            src={'HUMAN_CITY_TIER_1.png'}
-            alt=""
-            className={'heximage city-icon'}
-            onClick={(e) => tileClicked(e, item)}
-          />
-        );
+        const cityFaction = item.city.factionType;
+        let cityStyling = 'heximage city-icon';
+        if (item.city.scorchedEarth) {
+          cityStyling += ' city-is-scorched';
+        }
+        if (item.city.wallsDestroyed) {
+          cityStyling += ' city-walls-destroyed';
+        }
+        if (cityFaction === FACTIONS.HUMANS.enum) {
+          city = (
+            <img
+              src={'HUMAN_CITY_TIER_1.png'}
+              alt=""
+              className={cityStyling}
+              onClick={(e) => tileClicked(e, item)}
+            />
+          );
+        } else if (cityFaction === FACTIONS.INSECTS.enum) {
+          city = (
+            <img
+              src={'INSECT_CITY_TIER_1.png'}
+              alt=""
+              className={cityStyling}
+              onClick={(e) => tileClicked(e, item)}
+            />
+          );
+        } else {
+          console.warn(
+              'Oops! Unidentified faction read when trying to render city.',
+          );
+        }
       }
 
       if (item.hasAsteroid) {
@@ -379,6 +497,7 @@ const mapStateToProps = (state) => {
     playerOne: state.gamePlayer.playerOne,
     playerTwo: state.gamePlayer.playerTwo,
     mainPanelView: state.gameBoardView.mainPanelView,
+    allTerrains: state.game.gameConstants.allTerrains,
   };
 };
 
@@ -399,7 +518,7 @@ const mapDispatchToProps = (dispatch) => {
     updatePlayerWhoseTurnItIs: (playerWhoseTurnItIs) => dispatch(
         gamePlayerAC.setPlayerWhoseTurnItIs(playerWhoseTurnItIs)),
     unshowCityModal: () => dispatch(
-        cityMenuAC.setShowCityModalInfo(false)),
+        gameAC.setAdvancedDetailsModalView(ADVANCED_DETAILS_MODAL_VIEW.NONE)),
     updateCityMenuSupplementalView: (view) => dispatch(
         cityMenuAC.setCityMenuSupplementalView(view)),
     updatePlayerOne: (player) => dispatch(
@@ -435,6 +554,7 @@ GameBoard.propTypes = {
   playerOne: PropTypes.any,
   playerTwo: PropTypes.any,
   mainPanelView: PropTypes.any,
+  allTerrains: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);

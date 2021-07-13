@@ -36,12 +36,19 @@ const setSelectedBattleUnitIndex = (state, action) => {
   };
 };
 
+const clearBattleViewReducer = (state, action) => {
+  return {
+    ...initialState,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case battleViewAT.SET_BATTLE_DATA: return setBattleData(state, action);
     case battleViewAT.SET_SHOW_ENEMY_ARMY_IN_BATTLE: return setShowEnemyArmyInBattle(state, action);
     case battleViewAT.SET_OWN_ARMY_SUBMITTED: return setOwnArmySubmitted(state, action);
     case battleViewAT.SET_SELECTED_BATTLE_UNIT_INDEX: return setSelectedBattleUnitIndex(state, action);
+    case battleViewAT.CLEAR_BATTLE_VIEW_REDUCER: return clearBattleViewReducer(state, action);
     default: return state;
   }
 };

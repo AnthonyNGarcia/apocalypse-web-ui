@@ -1,0 +1,35 @@
+.advanced-details-modal-header .close {
+  float: right;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  opacity: 1;
+}
+
+.advanced-details-modal-header .close span {
+  float: right;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  opacity: 1;
+}
+
+.advanced-details-modal-header .close :hover {
+  float: right;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  opacity: 1;
+}
+
+.advanced-details-modal-header .close span :hover {
+  float: right;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  opacity: 1;
+}

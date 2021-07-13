@@ -37,19 +37,16 @@ const ArmyBoards = (props) => {
   if (props.battleData && ownArmy && enemyArmy) {
     return (
       <React.Fragment>
-        {/* First Row is for enemy Player Name*/}
-        <Row>
-          <h3 className='enemy-entity-title'>{props.enemyUsername}</h3>
-        </Row>
-        {/* Second Row for the Enemy Army Information */}
+        {/* First Row for the Enemy Army Information */}
         <Row>
           {/* First Col is for Enemy Main Army */}
           <Col md={12}>
             {/* First Row is for Main Army Commander Name */}
             <Row>
-              <h2 className='enemy-entity-title'>Commander {
-                enemyArmy.commander.name} L.{
-                enemyArmy.commander.level}</h2>
+              <h2 className='enemy-entity-title'>{
+                enemyArmy.commander ?
+              enemyArmy.commander.commanderInfo.displayName :
+              'No Commander Leading These Units'}</h2>
             </Row>
             {/* Second Row is for the Enemy Main Army Board */}
             <Row>
@@ -69,7 +66,7 @@ const ArmyBoards = (props) => {
           </Col>
           }
         </Row>
-        {/* Third Row for Own Army Information */}
+        {/* Second Row for Own Army Information */}
         <Row>
           {/* First Col for Own Main Army */}
           <Col md={12}>
@@ -79,9 +76,10 @@ const ArmyBoards = (props) => {
             </Row>
             {/* Second Row is for own Main Army Commander Name */}
             <Row>
-              <h2 className='own-entity-title'>Commander {
-                ownArmy.commander.name} L.{
-                ownArmy.commander.level}</h2>
+              <h2 className='own-entity-title'>{
+                ownArmy.commander ?
+              ownArmy.commander.commanderInfo.displayName :
+              'No Commander Leading These Units'}</h2>
             </Row>
           </Col>
           {/* Second Col for Own Garrison Army (if any) */}
@@ -96,10 +94,6 @@ const ArmyBoards = (props) => {
             </Row>
           </Col>
           }
-        </Row>
-        {/* Fourth Row for Own Player Name */}
-        <Row>
-          <h3 className='own-entity-title'>{props.ownUsername}</h3>
         </Row>
       </React.Fragment>
     );

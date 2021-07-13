@@ -1,9 +1,9 @@
 .attributions-container {
-    background-color: black;
+    background-color: rgba(0, 0, 0, 50%);
     border-radius: 10px 0px 0px 0px;
-    height: 30vh;
-    min-height: 30vh;
-    max-height: 30vh;
+    height: 50vh;
+    min-height: 50vh;
+    max-height: 50vh;
     width: 30vw;
     min-width: 30vw;
     max-width: 30vw;
@@ -19,10 +19,15 @@
 
 .attributions-scrollbar-row {
     padding-left: 1vw;
-    height: 20vh;
-    min-height: 20vh;
-    max-height: 20vh;
+    height: 25vh;
+    min-height: 25vh;
+    max-height: 25vh;
 }
+
+.photo-attributions-row {
+    padding-left: 1vw;
+}
+
 .attributions-container a {
     color: lightblue;
 }

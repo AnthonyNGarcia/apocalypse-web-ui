@@ -37,12 +37,20 @@ const setGameMessages = (state, action) => {
   };
 };
 
+const clearChatReducerExceptGlobalMessages = (state, action) => {
+  return {
+    ...initialState,
+    globalMessages: state.globalMessages,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case chatAT.SET_SELECTED_CHAT_TOPIC: return setSelectedChatTopic(state, action);
     case chatAT.SET_GLOBAL_MESSAGES: return setGlobalMessages(state, action);
     case chatAT.SET_LOBBY_MESSAGES: return setLobbyMessages(state, action);
     case chatAT.SET_GAME_MESSAGES: return setGameMessages(state, action);
+    case chatAT.CLEAR_CHAT_REDUCER_EXCEPT_GLOBAL_MESSAGES: return clearChatReducerExceptGlobalMessages(state, action);
     default: return state;
   }
 };

@@ -46,11 +46,11 @@ const ArmyUnitItem = (props) => {
   if (props.unit.unitType && fullUnitInfo) {
     return (
       <div className='army-unit-container sidebar-unit-text'>
-        <Row>
-          <Col md={1}>
+        <Row noGutters>
+          <Col md={2}>
             <img
               src={props.unit.unitType + '_ICON.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='unit-icon'/>
           </Col>
@@ -60,16 +60,26 @@ const ArmyUnitItem = (props) => {
                 .maxHealth} <span><img
               src={'health.svg'}
               alt=""
-              className={'tiny-hammer-icon'}
-            /></span>)
+              className={'black-health-icon'}
+            /></span>) {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'black-hero-unit-icon'}
+              /></span>
+            ) : null}
           </Col>
-          <Col md={1}>
+          <Col md={2}>
+            {props.showRemoveUnit ? (
             <Button
               variant='outline-danger'
               onClick={removeUnitHandler}
               disabled={!props.isOwnTurn}>
-                x
+                            x
             </Button>
+            ) : null}
+
           </Col>
         </Row>
       </div>
@@ -91,7 +101,7 @@ const mapStateToProps = (state) => {
     allUnits: state.game.gameConstants.allUnits,
     isOwnTurn: state.gamePlayer.ownPlayerNumber ===
       state.gamePlayer.playerWhoseTurnItIs,
-    selectedTilePosition: state.game.selectedTilePosition,
+    selectedTilePosition: state.gameBoardView.selectedTilePosition,
   };
 };
 
@@ -102,6 +112,7 @@ ArmyUnitItem.propTypes = {
   allUnits: PropTypes.any,
   isOwnTurn: PropTypes.bool,
   selectedTilePosition: PropTypes.number,
+  showRemoveUnit: PropTypes.bool,
 };
 
 export default connect(mapStateToProps)(ArmyUnitItem);

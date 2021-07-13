@@ -1,0 +1,31 @@
+.city-courtyard-header-container {
+    margin: auto;
+    text-align: center;
+}
+
+.city-courtyard-enemy-city-name {
+    color: pink;
+}
+
+.city-courtyard-own-commander-name {
+    color: lime;
+}
+
+.city-courtyard-title {
+    display: block;
+    margin: auto;
+}
+
+.city-courtyard-forces-title {
+    text-align: center;
+}
+
+.city-courtyard-description {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.attack-city-courtyard-options-container {
+    margin: auto;
+    text-align: center;
+}

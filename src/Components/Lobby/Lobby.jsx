@@ -19,7 +19,7 @@ import './Lobby.css';
  */
 const Lobby = (props) => {
   return (
-    <React.Fragment>
+    <div className='lobby-sizing'>
       <Container>
         <Row>
           <Col xs={9}>
@@ -37,7 +37,7 @@ const Lobby = (props) => {
           <p>Oops! An invalid lobby view was provided!</p>}
         </Row>
       </Container>
-    </React.Fragment>
+    </div>
   );
 };
 

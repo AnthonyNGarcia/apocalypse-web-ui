@@ -96,7 +96,7 @@ const ChoosableCommander = (props) => {
                 (props.isRecovering &&
                   fullCommanderData.turnsUntilRecovered > 0) ?
                  <span>{fullCommanderData.turnsUntilRecovered} <img
-                   src={'timer.png'}
+                   src={'timer.svg'}
                    alt=""
                    className={'really-tiny-timer-icon'}
                  /></span> : 'READY'})

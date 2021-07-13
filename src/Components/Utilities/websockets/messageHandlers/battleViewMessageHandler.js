@@ -6,8 +6,15 @@ import gameBoardViewAC from
   '../../../../Redux/actionCreators/gameBoardViewActionCreators';
 import gamePlayerAC from
   '../../../../Redux/actionCreators/gamePlayerActionCreators';
+import outsideCityWallsBattleAC from
+  '../../../../Redux/actionCreators/outsideCityWallsBattleActionCreators';
+import cityWallsBattleAC from
+  '../../../../Redux/actionCreators/cityWallsBattleActionCreators';
 import gameAC from '../../../../Redux/actionCreators/gameActionCreators';
 import GAME_VIEWS from '../../gameViews';
+import PLAYER from '../../playerEnums';
+import UNCLOSEABLE_MODAL_VIEW from '../../uncloseableModalView';
+import ADVANCED_DETAILS_MODAL_VIEW from '../../advancedDetailsModalViews';
 
 /**
  * This is the Battle View Message Handler.
@@ -30,6 +37,9 @@ const messageHandler = (message) => {
     case WEBSOCKET_MESSAGE_TYPES.BATTLE_DATA_UPDATED:
       battleDataUpdated(message);
       break;
+    case WEBSOCKET_MESSAGE_TYPES.ORBITAL_FRACTURE_PERFORMED:
+      orbitalFracturePerformed(message);
+      break;
     case WEBSOCKET_MESSAGE_TYPES.BATTLE_ENDED:
       battleEnded(message);
       break;
@@ -46,6 +56,13 @@ const battleInitiated = async (message) => {
   await store.dispatch(battleViewAC.setSelectedBattleUnitIndex(-1));
   await store.dispatch(battleViewAC.setShowEnemyArmyInBattle(false));
   await store.dispatch(gameAC.setGameView(GAME_VIEWS.BATTLE_MAP_VIEW));
+  await store.dispatch(gameBoardViewAC.setUncloseableModalView(
+      UNCLOSEABLE_MODAL_VIEW.NONE));
+  await store.dispatch(outsideCityWallsBattleAC
+      .clearOutsideCityWallsBattleReducer());
+  await store.dispatch(gameAC.setAdvancedDetailsModalView(
+      ADVANCED_DETAILS_MODAL_VIEW.NONE));
+  await store.dispatch(cityWallsBattleAC.clearCityWallsBattleReducer());
 };
 
 const battleStarted = async (message) => {
@@ -57,6 +74,15 @@ const battleStarted = async (message) => {
 
 const battleDataUpdated = (message) => {
   store.dispatch(battleViewAC.setBattleData(message.battleData));
+};
+
+const orbitalFracturePerformed = (message) => {
+  store.dispatch(battleViewAC.setBattleData(message.updatedBattleData));
+  if (message.updatedPlayer.playerNumber === PLAYER.ONE) {
+    store.dispatch(gamePlayerAC.setPlayerOne(message.updatedPlayer));
+  } else if (message.updatedPlayer.playerNumber === PLAYER.TWO) {
+    store.dispatch(gamePlayerAC.setPlayerTwo(message.updatedPlayer));
+  }
 };
 
 const battleEnded = async (message) => {

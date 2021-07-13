@@ -95,8 +95,16 @@ const BattleUnitDetails = (props) => {
       return (
         <React.Fragment>
           {/* Unit Name and Tier */}
-          <Row noGutters style={{display: 'block'}}>
-            <h2>{fullUnitInfo.displayName}</h2>
+          <Row noGutters style={{display: 'block', textAlign: 'center',
+            margin: 'auto'}}>
+            <h2>{fullUnitInfo.displayName}  {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'medium-hero-unit-icon'}
+              /></span>
+            ) : null}</h2>
             <h4>{UNIT_CLASSES[selectedUnit.unitClass].displayName}</h4>
           </Row>
           {/* Unit Image */}
@@ -104,7 +112,7 @@ const BattleUnitDetails = (props) => {
             display: 'block'}}>
             <img
               src={selectedUnit.unitType + '.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='unit-details-image'/>
           </Row>
@@ -143,7 +151,7 @@ const BattleUnitDetails = (props) => {
             </Col>
           </Row>
           {/* Passive Abilities*/}
-          <Row noGutters style={{'width': '90%', 'maxWidth': '90%'}}>
+          <Row noGutters style={{margin: 'auto', textAlign: 'center'}}>
             <h6>Passive Abilities:
               {selectedUnit.passiveAbilities &&
                     selectedUnit.passiveAbilities.length > 0 ?
@@ -159,42 +167,59 @@ const BattleUnitDetails = (props) => {
             </h6>
           </Row>
           {/* Active Ability */}
-          <Row noGutters style={{'width': '90%', 'maxWidth': '90%'}}>
-            <h6>Active Ability: {props.allActiveAbilities[
-                selectedUnit.activeAbility.activeAbilityType]
-                .displayName} - {
-              selectedUnit.currentActiveAbilityCharges} charge(s)</h6>
-            <p>{props.allActiveAbilities[
-                selectedUnit.activeAbility.activeAbilityType]
-                .descriptionFragments.map((fragment, index) => (
-                  <span key={fragment + index}>
-                    {fragment +
+          <Row noGutters style={{margin: 'auto'}}>
+            {selectedUnit.activeAbility ? (
+              <React.Fragment>
+                <h6 style={{margin: 'auto', textAlign: 'center'}}>
+              Active Ability: {props.allActiveAbilities[
+                      selectedUnit.activeAbility.activeAbilityType]
+                      .displayName} - {
+                    selectedUnit.currentActiveAbilityCharges} charge(s)</h6>
+                <p>{props.allActiveAbilities[
+                    selectedUnit.activeAbility.activeAbilityType]
+                    .descriptionFragments.map((fragment, index) => (
+                      <span key={fragment + index}>
+                        {fragment +
                       (selectedUnit.activeAbility.abilityValues[index] ?
                         selectedUnit.activeAbility.abilityValues[index] :
                         '')}
-                  </span>
-                ))}</p>
+                      </span>
+                    ))}</p>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <h6 style={{margin: 'auto', textAlign: 'center'}}>
+                  This unit has no active ability.
+                </h6>
+              </React.Fragment>
+            )}
           </Row>
           {/* Action Buttons */}
           <Row style={{width: '90%', marginBottom: '2vh'}}>
             {/* Skip Button */}
             <Col md={6}>
               <Button disabled={!props.isOwnTurn ||
-              !selectedUnit.eligibleForCommand || !props.showEnemyArmyInBattle}
+              !selectedUnit.eligibleForCommand ||
+              !props.showEnemyArmyInBattle}
               onClick={skipTurnHandler}>Skip Turn</Button>
             </Col>
             {/* Active Ability Button */}
-            <Col md={6}>
-              <Button disabled={!props.isOwnTurn ||
+            {selectedUnit.activeAbility ? (
+              <React.Fragment>
+                <Col md={6}>
+                  <Button disabled={!props.isOwnTurn ||
               !selectedUnit.eligibleForCommand ||
               !props.showEnemyArmyInBattle ||
-              selectedUnit.currentActiveAbilityCharges <= 0}
-              onClick={activeAbilityHandler}>
-                {props.allActiveAbilities[
-                    selectedUnit.activeAbility.activeAbilityType]
-                    .displayName}
-              </Button>
-            </Col>
+              selectedUnit.currentActiveAbilityCharges <= 0 ||
+              true}
+                  onClick={activeAbilityHandler}>
+                    {props.allActiveAbilities[
+                        selectedUnit.activeAbility.activeAbilityType]
+                        .displayName}
+                  </Button>
+                </Col>
+              </React.Fragment>
+            ) : null }
           </Row>
         </React.Fragment>
       );

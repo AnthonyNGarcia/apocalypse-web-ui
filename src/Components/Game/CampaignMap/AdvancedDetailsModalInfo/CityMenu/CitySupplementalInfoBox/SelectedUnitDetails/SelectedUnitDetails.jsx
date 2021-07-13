@@ -30,14 +30,21 @@ const SelectedUnitDetails = (props) => {
         <Row>
           <h5>{fullUnitInfo.displayName} ({
             fullUnitInfo.productionCost} <span><img
-            src={'hammer.png'}
+            src={'hammer.svg'}
             alt=""
             className={'tiny-hammer-icon'}
           /></span>, {fullUnitInfo.turnsToTrain} <span><img
-            src={'timer.png'}
+            src={'timer.svg'}
             alt=""
             className={'tiny-timer-icon'}
-          /></span>) - Tier {fullUnitInfo.tier}</h5>
+          /></span>) - Tier {fullUnitInfo.tier} {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'hero-unit-icon'}
+              /></span>
+            ) : null}</h5>
         </Row>
         {/* Second row is the unit description and stats */}
         <Row>
@@ -45,7 +52,7 @@ const SelectedUnitDetails = (props) => {
           <Col md={2}>
             <img
               src={fullUnitInfo.unitType + '.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='unit-image'/>
           </Col>
@@ -110,20 +117,28 @@ const SelectedUnitDetails = (props) => {
         </Row>
         {/* Active Ability */}
         <Row noGutters style={{'width': '90%', 'maxWidth': '90%'}}>
-          <h6>Active Ability: {props.allActiveAbilities[
-              fullUnitInfo.baseActiveAbility.activeAbilityType]
-              .displayName} - {
-            fullUnitInfo.baseActiveAbilityCharges} charge(s)</h6>
-          <p>{props.allActiveAbilities[
-              fullUnitInfo.baseActiveAbility.activeAbilityType]
-              .descriptionFragments.map((fragment, index) => (
-                <span key={fragment + index}>
-                  {fragment +
+          {fullUnitInfo.baseActiveAbility ? (
+            <React.Fragment>
+              <h6>Active Ability: {props.allActiveAbilities[
+                  fullUnitInfo.baseActiveAbility.activeAbilityType]
+                  .displayName} - {
+                fullUnitInfo.baseActiveAbilityCharges} charge(s)</h6>
+              <p>{props.allActiveAbilities[
+                  fullUnitInfo.baseActiveAbility.activeAbilityType]
+                  .descriptionFragments.map((fragment, index) => (
+                    <span key={fragment + index}>
+                      {fragment +
                       (fullUnitInfo.baseActiveAbility.abilityValues[index] ?
                         fullUnitInfo.baseActiveAbility.abilityValues[index] :
                         '')}
-                </span>
-              ))}</p>
+                    </span>
+                  ))}</p>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              This unit has no active ability.
+            </React.Fragment>
+          )}
         </Row>
       </React.Fragment>
     );

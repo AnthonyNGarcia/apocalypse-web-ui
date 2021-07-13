@@ -7,4 +7,6 @@
   max-height: 15vh;
   width: auto;
   text-align: center;
+  background-color: white;
+  border-radius: 10px;
 }

@@ -12,6 +12,7 @@ import cityMenuAC from
 import axios from 'axios';
 import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
 import PLAYER from '../../../../../../../Utilities/playerEnums';
+import getHeroUnitCount from '../../../../../../../Utilities/getHeroUnitCount';
 import './CommanderUnitItem.css';
 
 /**
@@ -73,7 +74,8 @@ const CommanderUnitItem = (props) => {
   if (props.unit.unitType && fullUnitInfo) {
     return (
       <div className='unit-option-container'>
-        <Row onClick={(e) => viewUnitHandler(e)} className='vertically-center'>
+        <Row onClick={(e) => viewUnitHandler(e)}
+          className='vertically-center' noGutters>
           <Col md={2}>
             <Button
               variant='dark'
@@ -81,14 +83,19 @@ const CommanderUnitItem = (props) => {
               disabled={!props.isOwnTurn ||
               (props.selectedTile.city.unassignedUnits.length +
                 props.selectedTile.city.currentRecruitmentQueue.length >=
-                props.ownPlayerData.currentBaseArmySize)}>
+                props.ownPlayerData.currentBaseArmySize) ||
+                ((getHeroUnitCount(props.selectedTile.city.unassignedUnits) +
+                getHeroUnitCount(props.selectedTile.city
+                    .currentRecruitmentQueue)) >=
+                props.ownPlayerData.currentBaseTier3HeroUnitsSupported &&
+                fullUnitInfo.tier === 3)}>
               {'<<'}
             </Button>
           </Col>
           <Col md={2}>
             <img
               src={props.unit.unitType + '_ICON.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='unit-icon'/>
           </Col>
@@ -99,11 +106,18 @@ const CommanderUnitItem = (props) => {
                   .maxHealth} <span><img
                 src={'health.svg'}
                 alt=""
-                className={'tiny-hammer-icon'}
-              /></span>)
+                className={'black-health-icon'}
+              /></span>) {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'black-hero-unit-icon'}
+              /></span>
+            ) : null}
             </p>
           </Col>
-          <Col md={1}>
+          <Col md={2}>
             <Button
               variant='danger'
               onClick={removeUnitHandler}

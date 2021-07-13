@@ -15,6 +15,8 @@ import chatAC from '../../../../Redux/actionCreators/chatActionCreators';
 import CITY_MENU_SUPPLEMENTAL_VIEWS from '../../cityMenuSupplementalViews';
 import MAIN_PANEL_VIEWS from '../../gameMainPanelViews';
 import CHAT_TOPIC from '../../chatTopics';
+import ADVANCED_DETAILS_MODAL_VIEW from '../../advancedDetailsModalViews';
+import UNCLOSEABLE_MODAL_VIEW from '../../uncloseableModalView';
 
 /**
  * This is the Game Message Handler.
@@ -33,6 +35,9 @@ const messageHandler = (message) => {
       break;
     case WEBSOCKET_MESSAGE_TYPES.PLAYER_ENDED_TURN:
       nextTurnUpdate(message);
+      break;
+    case WEBSOCKET_MESSAGE_TYPES.PLAYER_WON_GAME:
+      playerWonGame(message);
       break;
     default:
       console.warn('Unrecognized message type for Game topic!');
@@ -73,7 +78,20 @@ const leavingGameCleanup = () => {
   store.dispatch(gamePlayerAC.setPlayerTwo(null));
   store.dispatch(gamePlayerAC.setPlayerWhoseTurnItIs(null));
   store.dispatch(gamePlayerAC.setOwnPlayerNumber(null));
+  store.dispatch(gamePlayerAC.setWinningPlayer(null));
   store.dispatch(gameAC.setGameView(GAME_VIEWS.GAME_BOARD_VIEW));
+};
+
+const playerWonGame = (message) => {
+  store.dispatch(gamePlayerAC.setWinningPlayer(message.winningPlayer));
+  store.dispatch(gamePlayerAC.setPlayerOne(message.updatedGameData.playerOne));
+  store.dispatch(gamePlayerAC.setPlayerTwo(message.updatedGameData.playerTwo));
+  store.dispatch(gameAC.setGameRound(message.updatedGameData.round));
+  store.dispatch(gameBoardViewAC.setGameBoard(
+      message.updatedGameData.gameBoard));
+  store.dispatch(gameAC.setGameView(GAME_VIEWS.GAME_BOARD_VIEW));
+  store.dispatch(gameBoardViewAC.setUncloseableModalView(
+      UNCLOSEABLE_MODAL_VIEW.PLAYER_WON_GAME));
 };
 
 const nextTurnUpdate = (message) => {
@@ -86,7 +104,8 @@ const nextTurnUpdate = (message) => {
   store.dispatch(gameAC.setGameRound(message.updatedGameData.round));
   // Reset Game View
   store.dispatch(gameAC.setGameView(GAME_VIEWS.GAME_BOARD_VIEW));
-  store.dispatch(cityMenuAC.setShowCityModalInfo(false));
+  store.dispatch(gameAC.setAdvancedDetailsModalView(
+      ADVANCED_DETAILS_MODAL_VIEW.NONE));
   store.dispatch(gameBoardViewAC.setMainPanelView(MAIN_PANEL_VIEWS.NONE));
   store.dispatch(cityMenuAC.setCityMenuSupplementalData({}));
   store.dispatch(cityMenuAC.setCityMenuSupplementalView(

@@ -3,12 +3,12 @@
   max-height: 6vh;
   overflow: hidden;
   background-color: rgb(231, 230, 230);
-  /* border: 1px solid black;; */
   border-radius: 5px;
   box-shadow: 1px 1px 5px black;
   margin-bottom: 1vh;
   text-align: center;
   width: 95%;
+  color: black;
 }
 
 .building-icon {

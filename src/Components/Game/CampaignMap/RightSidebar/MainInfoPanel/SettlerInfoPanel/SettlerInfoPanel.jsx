@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
@@ -41,8 +40,7 @@ const SettlerInfoPanel = (props) => {
   if (props.selectedSettler) {
     return (
       <React.Fragment>
-        <Container>
-          {props.ownPlayerNumber === props.selectedSettler.owner ?
+        {props.ownPlayerNumber === props.selectedSettler.owner ?
         <React.Fragment>
           <Row className='center-text'>
             <h2>{props.allFactions[props.selectedSettler.factionType]
@@ -74,7 +72,6 @@ const SettlerInfoPanel = (props) => {
             'it with an army before it creates a new enemy City!'}
           </Row>
         </React.Fragment>}
-        </Container>
       </React.Fragment>
     );
   } else {

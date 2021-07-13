@@ -30,7 +30,7 @@ const SelectedBuildingDetails = (props) => {
           {/* First col is the image */}
           <Col md={4} style={{width: '20vw'}}>
             <img
-              src={'tower.png'}
+              src={'tower.svg'}
               alt=""
               className='building-image'/>
           </Col>
@@ -39,7 +39,7 @@ const SelectedBuildingDetails = (props) => {
             <Row>
               <h5>{fullBuildingInfo.displayName} ({
                 fullBuildingInfo.productionCost} <span><img
-                src={'hammer.png'}
+                src={'hammer.svg'}
                 alt=""
                 className={'tiny-hammer-icon'}
               /></span>)</h5>

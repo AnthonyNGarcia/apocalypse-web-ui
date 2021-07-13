@@ -25,6 +25,11 @@ const actionCreators = {
       gameMessages: gameMessages,
     };
   },
+  clearChatReducerExceptGlobalMessags: () => {
+    return {
+      type: chatAT.CLEAR_CHAT_REDUCER_EXCEPT_GLOBAL_MESSAGES,
+    };
+  },
 };
 
 export default actionCreators;

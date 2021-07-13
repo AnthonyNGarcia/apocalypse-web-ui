@@ -24,6 +24,14 @@
     margin: auto;
 }
 
+.unit-labels-container {
+    background-color: rgba(0, 0, 0, 70%);
+    width: 4vw;
+    margin: 1vh auto;
+    padding-bottom: 0.5vh;
+    border-radius: 10px;
+}
+
 .own-selected-unit {
     filter: brightness(150%);
     animation-name: bob;
@@ -34,7 +42,8 @@
 
 .targetable-enemy-unit {
     border: 4px dotted red;
-    box-shadow: 0px 0px 30px red;
+    box-shadow: 0px 0px 20px 6px red;
+    opacity: 100%;
 }
 
 .unit-is-tapped {
@@ -42,8 +51,8 @@
 }
 
 .unit-eligible-for-command {
-    border: 4px dotted lightyellow;
-    box-shadow: 0px 0px 30px lightyellow;
+    border: 4px dotted blue;
+    box-shadow: 0px 0px 20px 6px blue;
 }
 
 @keyframes bob {

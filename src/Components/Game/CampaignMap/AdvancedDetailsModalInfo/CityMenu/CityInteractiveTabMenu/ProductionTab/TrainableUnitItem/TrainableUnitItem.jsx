@@ -13,6 +13,7 @@ import axios from 'axios';
 import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
 import PLAYER from '../../../../../../../Utilities/playerEnums';
 import './TrainableUnitItem.css';
+import getHeroUnitCount from '../../../../../../../Utilities/getHeroUnitCount';
 
 /**
  *
@@ -24,6 +25,7 @@ import './TrainableUnitItem.css';
 const TrainableUnitItem = (props) => {
   const [fullUnitInfo, setFullUnitInfo] = useState(null);
   const [canAddUnitToQueue, setCanAddUnitToQueue] = useState(false);
+  const [canAddHeroUnitToQueue, setCanAddHeroUnitToQueue] = useState(false);
 
   useEffect( () => {
     const updateCanAddUnitToQueue = (freshFullUnitInfo) => {
@@ -40,10 +42,24 @@ const TrainableUnitItem = (props) => {
         setCanAddUnitToQueue(false);
       }
     };
+
+    const updateCanAddHeroUnitToQueue = () => {
+      const heroUnitCount = getHeroUnitCount(
+          props.selectedCity.unassignedUnits) + getHeroUnitCount(
+          props.selectedCity.currentRecruitmentQueue);
+      if (heroUnitCount <
+        props.ownPlayerData.currentBaseTier3HeroUnitsSupported) {
+        setCanAddHeroUnitToQueue(true);
+      } else {
+        setCanAddHeroUnitToQueue(false);
+      }
+    };
+
     if (props.unitType) {
       const freshFullUnitInfo = props.allUnits[props.unitType];
       setFullUnitInfo(freshFullUnitInfo);
       updateCanAddUnitToQueue(freshFullUnitInfo);
+      updateCanAddHeroUnitToQueue();
     }
   }, [props, props.selectedCity]);
 
@@ -73,11 +89,12 @@ const TrainableUnitItem = (props) => {
   if (props.unitType && fullUnitInfo) {
     return (
       <div className='unit-option-container'>
-        <Row onClick={(e) => viewUnitHandler(e)} className='vertically-center'>
+        <Row onClick={(e) => viewUnitHandler(e)}
+          className='vertically-center' noGutters>
           <Col md={2}>
             <img
               src={props.unitType + '_ICON.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='unit-icon'/>
           </Col>
@@ -85,21 +102,29 @@ const TrainableUnitItem = (props) => {
             <p>
               {fullUnitInfo.displayName} ({
                 fullUnitInfo.productionCost} <span><img
-                src={'hammer.png'}
+                src={'hammer.svg'}
                 alt=""
                 className={'really-tiny-hammer-icon'}
               /></span>, {fullUnitInfo.turnsToTrain} <span><img
-                src={'timer.png'}
+                src={'timer.svg'}
                 alt=""
                 className={'really-tiny-timer-icon'}
-              /></span>)
+              /></span>) {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'black-hero-unit-icon'}
+              /></span>
+            ) : null}
             </p>
           </Col>
           <Col md={3}>
             <Button
               variant='primary'
               onClick={addUnitHandler}
-              disabled={!props.isOwnTurn || !canAddUnitToQueue}>
+              disabled={!props.isOwnTurn || !canAddUnitToQueue ||
+              (fullUnitInfo.tier === 3 && !canAddHeroUnitToQueue)}>
                 +
             </Button>
           </Col>

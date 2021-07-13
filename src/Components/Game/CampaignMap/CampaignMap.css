@@ -1,10 +1,19 @@
-.left-sidebar, .centerpiece, .right-sidebar {
-    display: flex;
+.left-sidebar-container {
+    width: 30vw;
+    min-width: 30vw;
+    max-width: 30vw;
 }
 
-.campaign-map-container {
-    height: 70vh;
-    width: 80vw;
+.right-sidebar-container {
+    width: 30vw;
+    min-width: 30vw;
+    max-width: 30vw;
+}
+
+.centerpiece-container {
+    width: 40vw;
+    min-width: 40vw;
+    max-width: 40vw;
 }
 
 .modal-dialog-custom-sizing {
@@ -14,36 +23,66 @@
     max-width: 80vw;
 }
 
-.player-label {
-    margin: 1vh 1vw;
+.uncloseable-modal-custom-background .modal-content {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+}
+
+.advanced-details-modal-custom-background .modal-content {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+}
+
+.player-labels-container {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.round-counter {
+    width: 10vw;
+    min-width: 10vw;
+    max-width: 10vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 4vh;
+    border-radius: 15px;
+    text-align: center;
+    margin: auto 1vw;
+}
+
+.game-board-player-label {
+    width: 40vw;
+    min-width: 40vw;
+    max-width: 40vw;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
     border-radius: 10px;
-    box-shadow: 2px 3px  7px black;
+    box-shadow: 2px 2px 0px 2px black;
+    background-color: black;
 }
 
-.own-player-label {
-    color: black;
-    
+.game-board-own-player-label {
+    color: lime;
 }
 
-.other-player-label {
-    color: red
+.game-board-other-player-label {
+    color: pink;
 }
 
-.active-turn {
-    background-color: lightgreen;
-    animation-name: blink; 
-    animation-duration: 1.5s; 
+.game-board-active-turn {
+    animation-name: game-board-player-label-blink; 
+    animation-duration: 1.2s; 
     animation-iteration-count: infinite;
     transition-timing-function: linear;
+    box-shadow: 0px 0px 3px 3px lightgoldenrodyellow;
 }
 
-.inactive-turn {
-    background-color: white;
+.game-board-inactive-turn {
+    opacity: 50%;
 }
 
-@keyframes blink {
+@keyframes game-board-player-label-blink {
   50% {
-    filter: saturate(2);
-    opacity: 80%;
+    box-shadow: 0px 0px 10px 10px lightgoldenrodyellow;
   }
 }

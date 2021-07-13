@@ -12,6 +12,7 @@ import cityMenuAC from
 import axios from 'axios';
 import apiEndpoints from '../../../../../../../Utilities/apiEndpoints';
 import PLAYER from '../../../../../../../Utilities/playerEnums';
+import getHeroUnitCount from '../../../../../../../Utilities/getHeroUnitCount';
 import './UnassignedUnitItem.css';
 
 /**
@@ -74,8 +75,9 @@ const UnassignedUnitItem = (props) => {
   if (props.unit.unitType && fullUnitInfo) {
     return (
       <div className='unit-option-container'>
-        <Row onClick={(e) => viewUnitHandler(e)} className='vertically-center'>
-          <Col md={1}>
+        <Row onClick={(e) => viewUnitHandler(e)}
+          className='vertically-center' noGutters>
+          <Col md={2}>
             <Button
               variant='danger'
               onClick={removeUnitHandler}
@@ -86,7 +88,7 @@ const UnassignedUnitItem = (props) => {
           <Col md={2}>
             <img
               src={props.unit.unitType + '_ICON.svg'}
-              onError={(e)=>e.target.src='shield.png'}
+              onError={(e)=>e.target.src='shield.svg'}
               alt=""
               className='unit-icon'/>
           </Col>
@@ -97,8 +99,15 @@ const UnassignedUnitItem = (props) => {
                   .maxHealth} <span><img
                 src={'health.svg'}
                 alt=""
-                className={'tiny-hammer-icon'}
-              /></span>)
+                className={'black-health-icon'}
+              /></span>) {
+            fullUnitInfo.tier === 3 ? (
+              <span><img
+                src={'hero_unit_icon.svg'}
+                alt=""
+                className={'black-hero-unit-icon'}
+              /></span>
+            ) : null}
             </p>
           </Col>
           <Col md={1}>
@@ -108,7 +117,10 @@ const UnassignedUnitItem = (props) => {
               disabled={!props.isOwnTurn || !props.selectedTile.army ||
               (props.selectedTile.army &&
                 props.selectedTile.army.units.length >=
-                props.ownPlayerData.currentBaseArmySize)}>
+                props.ownPlayerData.currentBaseArmySize) ||
+                (getHeroUnitCount(props.selectedTile.army.units) >=
+                props.ownPlayerData.currentBaseTier3HeroUnitsSupported &&
+                fullUnitInfo.tier === 3)}>
               {'>>'}
             </Button>
           </Col>

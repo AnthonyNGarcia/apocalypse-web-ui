@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import Spinner from 'react-bootstrap/Spinner';
-import CITY_BONUSES from '../../../../../../../Utilities/cityBonuses';
+import buildingBonusLabelMaker from
+  '../../../../../../../Utilities/buildingBonusLabelMaker';
 import './BuildingBonusItem.css';
 
 /**
@@ -16,11 +17,9 @@ const BuildingBonusItem = (props) => {
 
   useEffect(() => {
     if (props.bonus) {
-      const labelMaker = CITY_BONUSES[props.bonus.buildingBonusType];
-      const label = labelMaker.prefix + props.bonus.value + labelMaker.suffix;
-      setBuildingLabel(label);
+      setBuildingLabel(buildingBonusLabelMaker(props.bonus));
     }
-  }, [props]);
+  }, [props, props.bonus]);
 
   if (buildingLabel) {
     return (

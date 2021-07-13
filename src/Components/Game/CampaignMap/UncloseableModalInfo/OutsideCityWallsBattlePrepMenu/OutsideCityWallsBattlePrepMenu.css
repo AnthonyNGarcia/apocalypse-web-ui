@@ -1,0 +1,97 @@
+.outside-city-walls-header-container {
+    margin: auto;
+    text-align: center;
+}
+
+.outside-city-walls-enemy-commander-name {
+    color: pink;
+}
+
+.outside-city-walls-enemy-city-name {
+    color: pink;
+}
+
+.outside-city-walls-own-commander-name {
+    color: lime;
+}
+
+.outside-city-walls-own-city-name {
+    color: lime;
+}
+
+.outside-city-walls-title {
+    display: block;
+    margin: auto;
+}
+
+.outside-city-walls-forces-title {
+    text-align: center;
+}
+
+.outside-city-walls-attacker-waiting-description {
+    font-size: 20px;
+    text-align: center;
+}
+
+.outside-city-walls-sally-out-force-container {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    text-align: center;
+}
+
+.outside-city-walls-available-units-container {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    text-align: center;
+}
+
+.outside-city-walls-commander-checkbox-container {
+    background-color: red;
+    text-align: center;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.outside-city-walls-commander-checkbox-label {
+    background-color: blue;
+    text-align: center;
+    margin: auto;
+    display: inline;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.outside-city-walls-commander-checkbox {
+    background-color: purple;
+    text-align: center;
+    margin: 0px;
+    display: inline;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.outside-city-walls-commander-input-group {
+    background-color: yellow;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.outside-city-walls-must-sally-description {
+    text-align: center;
+    margin: auto;
+    font-weight: 150px;
+    padding-top: 0;
+    margin-top: 0;
+    padding-bottom: 1vh;
+}
+
+.outside-city-walls-description {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}

@@ -37,6 +37,17 @@ const actionCreators = {
       selectedTilePosition: selectedTilePosition,
     };
   },
+  setUncloseableModalView: (uncloseableModalView) => {
+    return {
+      type: gameBoardViewAT.SET_UNCLOSEABLE_MODAL_VIEW,
+      uncloseableModalView: uncloseableModalView,
+    };
+  },
+  clearGameBoardViewReducer: () => {
+    return {
+      type: gameBoardViewAT.CLEAR_GAME_BOARD_VIEW_REDUCER,
+    };
+  },
 };
 
 export default actionCreators;

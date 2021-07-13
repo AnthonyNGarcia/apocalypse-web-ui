@@ -4,6 +4,8 @@
     height: auto;
     top: 50%;
     transform: translateY(-50%);
+    background-color: white;
+    border-radius: 10px;
 }
 
 .tiny-hammer-icon {
@@ -20,6 +22,16 @@
   margin-right: auto;
   height: 2vh;
   width: auto;
+  filter: invert();
+}
+
+.hero-unit-icon {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 3vh;
+  width: auto;
+  filter: invert();
 }
 
 .unit-stat-title {

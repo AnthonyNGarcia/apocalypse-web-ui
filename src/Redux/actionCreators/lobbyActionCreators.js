@@ -31,6 +31,11 @@ const actionCreators = {
       lobbyPlayerTwo: lobbyPlayerTwo,
     };
   },
+  clearLobbyReducer: () => {
+    return {
+      type: lobbyAT.CLEAR_LOBBY_REDUCER,
+    };
+  },
 };
 
 export default actionCreators;

@@ -1,0 +1,12 @@
+.own-city-entity {
+    color: lightgreen;
+}
+
+.city-panel-timer-icon {
+    display: inline-block;
+    position: relative;
+    height: 2vh;
+    margin-bottom: 0.5vh;
+    width: auto;
+    filter: invert();
+}

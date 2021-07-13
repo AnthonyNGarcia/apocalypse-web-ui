@@ -1,7 +1,4 @@
 .center-button {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  position: absolute;
-  width:100%;
+  margin: auto;
+  width: 50%;
 }
