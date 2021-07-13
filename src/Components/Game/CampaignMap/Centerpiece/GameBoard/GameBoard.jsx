@@ -266,25 +266,31 @@ const GameBoard = (props) => {
                   (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
                   onClick={(e) => tileClicked(e, item)}
                 />
-                {(item.army.armyStance === 'FORTIFIED' &&
+                {(!item.army.isHidden ||
+                  item.army.owner === props.ownPlayerNumber) &&
+                 ((item.army.armyStance === 'FORTIFIED' &&
                 !gettingBonusBlockFromTerrain) || (
-                  item.army.armyStance === 'NONE' &&
-                  gettingBonusBlockFromTerrain) ?
+                   item.army.armyStance === 'NONE' &&
+                  gettingBonusBlockFromTerrain)) ?
                 (<img
                   src={'shield.svg'}
                   alt=""
                   className='small-army-fortified-icon'
                   onClick={(e) => tileClicked(e, item)}
-                />) : (item.army.armyStance === 'FORTIFIED' &&
+                />) : (!item.army.isHidden ||
+                item.army.owner === props.ownPlayerNumber) &&
+                ((item.army.armyStance === 'FORTIFIED' &&
                 gettingBonusBlockFromTerrain) || (
                   item.army.armyStance === 'ENTRENCHED' &&
-                  !gettingBonusBlockFromTerrain) ?
+                  !gettingBonusBlockFromTerrain)) ?
                 (<img
                   src={'shield.svg'}
                   alt=""
                   className='medium-army-fortified-icon'
                   onClick={(e) => tileClicked(e, item)}
-                />) : (item.army.armyStance === 'ENTRENCHED' &&
+                />) : (!item.army.isHidden ||
+                item.army.owner === props.ownPlayerNumber) &&
+                (item.army.armyStance === 'ENTRENCHED' &&
                 gettingBonusBlockFromTerrain) ?
                 (<img
                   src={'shield.svg'}
@@ -292,7 +298,9 @@ const GameBoard = (props) => {
                   className='large-army-fortified-icon'
                   onClick={(e) => tileClicked(e, item)}
                 />) : null}
-                {sufferingAttritionFromTerrain && !item.city?
+                {(!item.army.isHidden ||
+                item.army.owner === props.ownPlayerNumber) &&
+                sufferingAttritionFromTerrain && !item.city?
                 (<img
                   src={'poison_debuff.svg'}
                   alt=""
@@ -311,25 +319,31 @@ const GameBoard = (props) => {
                   (item.army.remainingActions > 0 ? ' army-is-untapped' : '')}
                   onClick={(e) => tileClicked(e, item)}
                 />
-                {(item.army.armyStance === 'FORTIFIED' &&
+                {(!item.army.isHidden ||
+                  item.army.owner === props.ownPlayerNumber) &&
+                 ((item.army.armyStance === 'FORTIFIED' &&
                 !gettingBonusBlockFromTerrain) || (
-                  item.army.armyStance === 'NONE' &&
-                  gettingBonusBlockFromTerrain) ?
+                   item.army.armyStance === 'NONE' &&
+                  gettingBonusBlockFromTerrain)) ?
                 (<img
                   src={'shield.svg'}
                   alt=""
                   className='small-army-fortified-icon'
                   onClick={(e) => tileClicked(e, item)}
-                />) : (item.army.armyStance === 'FORTIFIED' &&
+                />) : (!item.army.isHidden ||
+                item.army.owner === props.ownPlayerNumber) &&
+                ((item.army.armyStance === 'FORTIFIED' &&
                 gettingBonusBlockFromTerrain) || (
                   item.army.armyStance === 'ENTRENCHED' &&
-                  !gettingBonusBlockFromTerrain) ?
+                  !gettingBonusBlockFromTerrain)) ?
                 (<img
                   src={'shield.svg'}
                   alt=""
                   className='medium-army-fortified-icon'
                   onClick={(e) => tileClicked(e, item)}
-                />) : (item.army.armyStance === 'ENTRENCHED' &&
+                />) : (!item.army.isHidden ||
+                item.army.owner === props.ownPlayerNumber) &&
+                (item.army.armyStance === 'ENTRENCHED' &&
                 gettingBonusBlockFromTerrain) ?
                 (<img
                   src={'shield.svg'}
@@ -337,7 +351,9 @@ const GameBoard = (props) => {
                   className='large-army-fortified-icon'
                   onClick={(e) => tileClicked(e, item)}
                 />) : null}
-                {sufferingAttritionFromTerrain && !item.city?
+                {(!item.army.isHidden ||
+                item.army.owner === props.ownPlayerNumber) &&
+                sufferingAttritionFromTerrain && !item.city?
                 (<img
                   src={'poison_debuff.svg'}
                   alt=""
