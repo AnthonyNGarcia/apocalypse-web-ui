@@ -27,9 +27,15 @@ import apiEndpoints from '../apiEndpoints';
 const AbstractedWebsocket = forwardRef((props, ref) => {
   return (
     <React.Fragment>
-      <SockJsClient url={apiEndpoints.websocketPath} topics={props.topics}
-        onMessage={(msg, topic) => props.onReceiveMessage(msg, topic)} ref={ref}
-        onDisconnect={props.onDisconnect ? props.onDisconnect : ()=>{}}/>
+      <SockJsClient
+        ref={ref}
+        url={apiEndpoints.websocketPath}
+        topics={props.topics}
+        debug={true}
+        autoReconnect={true}
+        onMessage={(msg, topic) => props.onReceiveMessage(msg, topic)}
+        onDisconnect={props.onDisconnect ? props.onDisconnect : ()=>{}}
+        getRetryInterval={(count) => 500 * count}/>
     </React.Fragment>
   );
 });
