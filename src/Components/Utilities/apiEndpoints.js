@@ -5,9 +5,9 @@
  * associated possibilities for typos/errors.
  */
 
-// const apiBasePath = 'http://localhost:9595';
+const apiBasePath = 'http://localhost:9595';
 // const apiBasePath = 'http://54.71.95.128:9595';
-const apiBasePath = 'https://dev-api.playapocalypse.com:9595';
+// const apiBasePath = 'https://dev-api.playapocalypse.com:9595';
 
 const apiEndpoints = {
   basePath: apiBasePath,

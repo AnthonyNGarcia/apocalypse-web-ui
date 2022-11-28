@@ -25,6 +25,12 @@ const actionCreators = {
       selectedBattleUnitIndex: selectedBattleUnitIndex,
     };
   },
+  setActiveAbilityTargetSelection: (activeAbilityTargetSelection) => {
+    return {
+      type: battleViewAT.SET_ACTIVE_ABILITY_TARGET_SELECTION,
+      activeAbilityTargetSelection: activeAbilityTargetSelection,
+    };
+  },
   clearBattleViewReducer: () => {
     return {
       type: battleViewAT.CLEAR_BATTLE_VIEW_REDUCER,

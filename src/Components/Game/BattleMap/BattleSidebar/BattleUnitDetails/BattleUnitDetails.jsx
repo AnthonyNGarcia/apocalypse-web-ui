@@ -71,19 +71,31 @@ const BattleUnitDetails = (props) => {
     }
   };
 
-  const activeAbilityHandler = (e) => {
+  const activeAbilityHandler = (e, unitPerformingAction) => {
     e.preventDefault();
     try {
-      props.updateSelectedBattleUnitIndex(-1);
-      const initiateActiveAbilityRequest = {
-        gameId: props.gameId,
-        playerSubmittingAction: props.ownPlayerNumber,
-        unitActionType: UNIT_ACTION_TYPES.ACTIVE_ABILITY,
-        indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
-        indexOfTargetUnitOfAction: -1,
-      };
-      axios.post(apiEndpoints.battleController +
-        '/active-ability', initiateActiveAbilityRequest);
+      const abilityType = unitPerformingAction.activeAbility.activeAbilityType;
+      // eslint-disable-next-line max-len
+      const targetSelectionType = props.allActiveAbilities[abilityType].targetSelectionType;
+      switch (targetSelectionType) {
+        case 'NONE':
+          props.updateSelectedBattleUnitIndex(-1);
+          const initiateActiveAbilityRequest = {
+            gameId: props.gameId,
+            playerSubmittingAction: props.ownPlayerNumber,
+            unitActionType: UNIT_ACTION_TYPES.ACTIVE_ABILITY,
+            indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
+            indexOfTargetUnitOfAction: -1,
+          };
+          axios.post(apiEndpoints.battleController +
+            '/active-ability', initiateActiveAbilityRequest);
+          break;
+        case 'SINGLE_ENEMY':
+          props.updateActiveAbilityTargetSelection(targetSelectionType);
+          break;
+        default:
+          console.warn('NOT YET IMPLEMENTED - ' + targetSelectionType);
+      }
     } catch (e) {
       console.warn('There was an error trying to initiate active ability!');
       console.warn(e);
@@ -210,9 +222,9 @@ const BattleUnitDetails = (props) => {
                   <Button disabled={!props.isOwnTurn ||
               !selectedUnit.eligibleForCommand ||
               !props.showEnemyArmyInBattle ||
-              selectedUnit.currentActiveAbilityCharges <= 0 ||
-              true}
-                  onClick={activeAbilityHandler}>
+              selectedUnit.currentActiveAbilityCharges <= 0}
+                  // eslint-disable-next-line max-len
+                  onClick={(event) => activeAbilityHandler(event, selectedUnit)}>
                     {props.allActiveAbilities[
                         selectedUnit.activeAbility.activeAbilityType]
                         .displayName}
@@ -260,6 +272,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateSelectedBattleUnitIndex: (selectedBattleUnitIndex) => dispatch(
         battleViewAC.setSelectedBattleUnitIndex(selectedBattleUnitIndex)),
+    // eslint-disable-next-line max-len
+    updateActiveAbilityTargetSelection: (activeAbilityTargetSelection) => dispatch(
+        // eslint-disable-next-line max-len
+        battleViewAC.setActiveAbilityTargetSelection(activeAbilityTargetSelection)),
   };
 };
 
@@ -273,6 +289,7 @@ BattleUnitDetails.propTypes = {
   isOwnTurn: PropTypes.bool,
   showEnemyArmyInBattle: PropTypes.bool,
   updateSelectedBattleUnitIndex: PropTypes.func,
+  updateActiveAbilityTargetSelection: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BattleUnitDetails);

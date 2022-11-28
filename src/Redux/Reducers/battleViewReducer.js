@@ -6,6 +6,7 @@ const initialState = {
   showEnemyArmyInBattle: false,
   ownArmySubmitted: false,
   selectedBattleUnitIndex: -1,
+  activeAbilityTargetSelection: 'NA',
 };
 
 const setBattleData = (state, action) => {
@@ -36,6 +37,13 @@ const setSelectedBattleUnitIndex = (state, action) => {
   };
 };
 
+const setActiveAbilityTargetSelection = (state, action) => {
+  return {
+    ...state,
+    activeAbilityTargetSelection: action.activeAbilityTargetSelection,
+  };
+};
+
 const clearBattleViewReducer = (state, action) => {
   return {
     ...initialState,
@@ -48,6 +56,7 @@ const reducer = (state=initialState, action) => {
     case battleViewAT.SET_SHOW_ENEMY_ARMY_IN_BATTLE: return setShowEnemyArmyInBattle(state, action);
     case battleViewAT.SET_OWN_ARMY_SUBMITTED: return setOwnArmySubmitted(state, action);
     case battleViewAT.SET_SELECTED_BATTLE_UNIT_INDEX: return setSelectedBattleUnitIndex(state, action);
+    case battleViewAT.SET_ACTIVE_ABILITY_TARGET_SELECTION: return setActiveAbilityTargetSelection(state, action);
     case battleViewAT.CLEAR_BATTLE_VIEW_REDUCER: return clearBattleViewReducer(state, action);
     default: return state;
   }

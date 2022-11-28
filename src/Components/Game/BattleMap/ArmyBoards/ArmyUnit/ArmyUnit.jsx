@@ -146,16 +146,36 @@ const ArmyUnit = (props) => {
       return;
     }
     try {
-      props.updateSelectedBattleUnitIndex(-1);
-      const attackTargetRequest = {
-        gameId: props.gameId,
-        playerSubmittingAction: props.ownPlayerNumber,
-        unitActionType: UNIT_ACTION_TYPES.ATTACK,
-        indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
-        indexOfTargetUnitOfAction: props.unitIndex,
-      };
-      axios.post(apiEndpoints.battleController +
-        '/attack', attackTargetRequest);
+      switch (props.activeAbilityTargetSelection) {
+        case 'NA':
+          props.updateSelectedBattleUnitIndex(-1);
+          const attackTargetRequest = {
+            gameId: props.gameId,
+            playerSubmittingAction: props.ownPlayerNumber,
+            unitActionType: UNIT_ACTION_TYPES.ATTACK,
+            indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
+            indexOfTargetUnitOfAction: props.unitIndex,
+          };
+          axios.post(apiEndpoints.battleController +
+            '/attack', attackTargetRequest);
+          break;
+        case 'SINGLE_ENEMY':
+          props.updateSelectedBattleUnitIndex(-1);
+          props.updateActiveAbilityTargetSelection('NA');
+          const activeAbilityRequest = {
+            gameId: props.gameId,
+            playerSubmittingAction: props.ownPlayerNumber,
+            unitActionType: UNIT_ACTION_TYPES.ACTIVE_ABILITY,
+            indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
+            indexOfTargetUnitOfAction: props.unitIndex,
+          };
+          axios.post(apiEndpoints.battleController +
+            '/active-ability', activeAbilityRequest);
+          break;
+        default:
+          // eslint-disable-next-line max-len
+          console.warn('NOT YET IMPLEMENTED - ' + props.activeAbilityTargetSelection);
+      }
     } catch (e) {
       console.warn('There was an error trying to attack a target!');
       console.warn(e);
@@ -274,6 +294,7 @@ const mapStateToProps = (state) => {
     allUnits: state.game.gameConstants.allUnits,
     showEnemyArmyInBattle: state.battleView.showEnemyArmyInBattle,
     selectedBattleUnitIndex: state.battleView.selectedBattleUnitIndex,
+    activeAbilityTargetSelection: state.battleView.activeAbilityTargetSelection,
     ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
     battleData: state.battleView.battleData,
     ownArmySubmitted: state.battleView.ownArmySubmitted,
@@ -287,6 +308,10 @@ const mapDispatchToProps = (dispatch) => {
         battleViewAC.setSelectedBattleUnitIndex(selectedBattleUnitIndex)),
     updateBattleData: (battleData) => dispatch(
         battleViewAC.setBattleData(battleData)),
+    // eslint-disable-next-line max-len
+    updateActiveAbilityTargetSelection: (activeAbilityTargetSelection) => dispatch(
+        // eslint-disable-next-line max-len
+        battleViewAC.setActiveAbilityTargetSelection(activeAbilityTargetSelection)),
   };
 };
 
@@ -299,7 +324,9 @@ ArmyUnit.propTypes = {
   battleData: PropTypes.any,
   ownPlayerNumber: PropTypes.string,
   updateSelectedBattleUnitIndex: PropTypes.func,
+  updateActiveAbilityTargetSelection: PropTypes.func,
   selectedBattleUnitIndex: PropTypes.number,
+  activeAbilityTargetSelection: PropTypes.string,
   updateBattleData: PropTypes.func,
   ownArmySubmitted: PropTypes.bool,
   gameId: PropTypes.string,

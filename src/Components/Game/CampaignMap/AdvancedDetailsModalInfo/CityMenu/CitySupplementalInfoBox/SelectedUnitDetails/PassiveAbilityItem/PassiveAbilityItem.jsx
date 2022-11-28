@@ -25,6 +25,9 @@ const PassiveAbilityItem = (props) => {
         label = labelMaker.prefix + props.passiveAbility.value +
           labelMaker.suffix;
       }
+      if (!props.passiveAbility.isEnabled) {
+        label += ' (DISABLED)';
+      }
       setPassiveAbilityLabel(label);
     }
   }, [props]);
