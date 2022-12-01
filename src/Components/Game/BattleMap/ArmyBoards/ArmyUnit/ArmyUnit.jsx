@@ -52,6 +52,9 @@ const ArmyUnit = (props) => {
             (props.unit.isTargetable ||
               getIfFlanker(currentlySelectedOwnUnit))) {
           calculatedUnitClasses += ' targetable-enemy-unit';
+          if (props.activeAbilityTargetSelection == 'SINGLE_ENEMY') {
+            calculatedUnitClasses += ' targetable-enemy-unit-for-ability';
+          }
         } else if (props.unit.isTapped) {
           calculatedUnitClasses += ' unit-is-tapped';
         }
@@ -111,6 +114,7 @@ const ArmyUnit = (props) => {
       }
     } else {
       // Update the selected unit index for giving unit details on the sidebar
+      props.updateActiveAbilityTargetSelection('NA');
       if (props.selectedBattleUnitIndex === justSelectedUnitIndex) {
         props.updateSelectedBattleUnitIndex(-1);
       } else {

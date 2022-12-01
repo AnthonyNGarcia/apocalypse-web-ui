@@ -46,6 +46,12 @@
     opacity: 100%;
 }
 
+.targetable-enemy-unit-for-ability {
+    border: 4px dotted purple;
+    box-shadow: 0px 0px 20px 6px purple;
+    opacity: 100%;
+}
+
 .unit-is-tapped {
     opacity: 25%;
 }
