@@ -93,6 +93,17 @@ const BattleUnitDetails = (props) => {
         case 'SINGLE_ENEMY':
           props.updateActiveAbilityTargetSelection(targetSelectionType);
           break;
+        case 'NO_TARGET':
+          const noTargetActiveAbilityRequest = {
+            gameId: props.gameId,
+            playerSubmittingAction: props.ownPlayerNumber,
+            unitActionType: UNIT_ACTION_TYPES.ACTIVE_ABILITY,
+            indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
+            indexOfTargetUnitOfAction: -1,
+          };
+          props.updateSelectedBattleUnitIndex(-1);
+          axios.post(apiEndpoints.battleController +
+            '/active-ability', noTargetActiveAbilityRequest);
         default:
           console.warn('NOT YET IMPLEMENTED - ' + targetSelectionType);
       }
