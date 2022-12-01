@@ -13,6 +13,9 @@ import axios from 'axios';
 import UNIT_ACTION_TYPES from '../../../../Utilities/unitActionTypes';
 import battleViewAC from
   '../../../../../Redux/actionCreators/battleViewActionCreators';
+import getIfStunned from '../../../../Utilities/getIfStunned';
+import getIfPermastunned from '../../../../Utilities/getIfPermastunned';
+import getIfConstricted from '../../../../Utilities/getIfConstricted';
 import './BattleUnitDetails.css';
 
 /**
@@ -232,6 +235,9 @@ const BattleUnitDetails = (props) => {
                 <Col md={6}>
                   <Button disabled={!props.isOwnTurn ||
               !selectedUnit.eligibleForCommand ||
+              getIfStunned(selectedUnit) ||
+              getIfConstricted(selectedUnit) ||
+              getIfPermastunned(selectedUnit) ||
               !props.showEnemyArmyInBattle ||
               selectedUnit.currentActiveAbilityCharges <= 0}
                   // eslint-disable-next-line max-len

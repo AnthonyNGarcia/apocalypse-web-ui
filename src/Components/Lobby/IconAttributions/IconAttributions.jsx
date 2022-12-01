@@ -237,6 +237,14 @@ const IconAttributions = (props) => {
                   className='tiny-icon-image'/> made by <a href="" title="Kiranshastry">Kiranshastry</a>
               </span>
             </p>
+            <p>
+              <span>
+                <img
+                  src={'constricted_debuff.svg'}
+                  alt=""
+                  className='tiny-icon-image'/> made by <a href="https://game-icons.net/" title="game-icons.net">game-icons.net</a>
+              </span>
+            </p>
           </Scrollbars>
         </Row>
       </div>

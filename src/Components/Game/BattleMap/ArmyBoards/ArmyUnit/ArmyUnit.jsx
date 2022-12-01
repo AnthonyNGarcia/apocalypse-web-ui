@@ -12,6 +12,7 @@ import getIfStunned from '../../../../Utilities/getIfStunned';
 import getIfCityWalls from '../../../../Utilities/getIfStructure';
 import getIfInvisible from '../../../../Utilities/getIfInvisible';
 import getIfPermastunned from '../../../../Utilities/getIfPermastunned';
+import getIfConstricted from '../../../../Utilities/getIfConstricted';
 import './ArmyUnit.css';
 
 /**
@@ -47,6 +48,7 @@ const ArmyUnit = (props) => {
         } else if (currentlySelectedOwnUnit &&
             currentlySelectedOwnUnit.eligibleForCommand &&
             !getIfStunned(currentlySelectedOwnUnit) &&
+            !getIfConstricted(currentlySelectedOwnUnit) &&
             !getIfPermastunned(currentlySelectedOwnUnit) &&
             !getIfCityWalls(currentlySelectedOwnUnit) &&
             (props.unit.isTargetable ||
@@ -135,6 +137,9 @@ const ArmyUnit = (props) => {
       return;
     }
     if (getIfPermastunned(currentlySelectedOwnUnit)) {
+      return;
+    }
+    if (getIfConstricted(currentlySelectedOwnUnit)) {
       return;
     }
     if (getIfCityWalls(currentlySelectedOwnUnit)) {
@@ -273,7 +278,15 @@ const ArmyUnit = (props) => {
                     className={'tiny-hammer-icon'}
                   /></span>
                 </p>
-                ) : null}
+                ) : debuff.debuffType === 'CONSTRICTED' ? (
+                  <p className='unit-label'>
+                    {debuff.value + '%'} <span><img
+                      src={'constricted_debuff.svg'}
+                      alt=""
+                      className={'tiny-hammer-icon'}
+                    /></span>
+                  </p>
+                  ) : null}
             </Row>
           )) : null}
         </div>
