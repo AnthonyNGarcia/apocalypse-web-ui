@@ -39,10 +39,12 @@ const SelectedCommanderDetails = (props) => {
           {/* Second col is the commander info */}
           <Col md={9} style={{paddingRight: '2vw'}}>
             <Row>
-              <h5>{props.commander.commanderInfo.displayName}</h5>
+              <h5>{props.allCommanders[
+                  props.commander.commanderType].displayName}</h5>
             </Row>
             <Row>
-              {props.commander.commanderInfo.description}
+              {props.allCommanders[
+                  props.commander.commanderType].description}
             </Row>
           </Col>
         </Row>
@@ -70,12 +72,14 @@ const mapStateToProps = (state) => {
   return {
     commander: state.cityMenu.cityMenuSupplementalData,
     ownFactionType: getOwnFactionTypeFromState(state),
+    allCommanders: state.game.gameConstants.allCommanders,
   };
 };
 
 SelectedCommanderDetails.propTypes = {
-  commander: PropTypes.any,
+  commander: PropTypes.object,
   ownFactionType: PropTypes.any,
+  allCommanders: PropTypes.object,
 };
 
 export default connect(mapStateToProps)(SelectedCommanderDetails);

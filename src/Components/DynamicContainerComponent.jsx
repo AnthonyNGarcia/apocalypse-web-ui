@@ -70,8 +70,10 @@ const DynamicContainerComponent = (props) => {
 
       try {
         const response = await axios.get(url);
-        const ownUsername = response.data.username;
         const ownUserId = response.data.userId;
+        const ownUsername = response.data.username;
+        localStorage.setItem('USER_ID', ownUserId);
+        localStorage.setItem('USERNAME', ownUsername);
         props.saveOwnUsername(ownUsername);
         props.saveOwnUserId(ownUserId);
       } catch (error) {
@@ -80,7 +82,15 @@ const DynamicContainerComponent = (props) => {
       }
     };
 
-    fetchGuestData();
+    const savedUserId = localStorage.getItem('USER_ID');
+    const savedUsername = localStorage.getItem('USERNAME');
+    if (savedUserId && savedUsername) {
+      console.log('Using stored user id and username');
+      props.saveOwnUserId(savedUserId);
+      props.saveOwnUsername(savedUsername);
+    } else {
+      fetchGuestData();
+    }
   }, []);
 
   let viewToRender = (
@@ -121,6 +131,7 @@ const mapStateToProps = (state) => {
     lobbyId: state.lobby.lobbyId,
     gameId: state.game.gameId,
     ownUserId: state.general.ownUserId,
+    ownUsername: state.general.ownUsername,
   };
 };
 
@@ -141,6 +152,7 @@ DynamicContainerComponent.propTypes = {
   lobbyId: PropTypes.string,
   gameId: PropTypes.string,
   ownUserId: PropTypes.string,
+  ownUsername: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

@@ -79,12 +79,12 @@ const CityDetailsSidebar = (props) => {
     }
   };
 
-  const commanderIsAlive = (commanderInfo) => {
+  const commanderIsAlive = (commanderType) => {
     for (let i = 0; i < props.ownPlayerData
         .fallenCommanders.length; i++) {
       const commander = props.ownPlayerData.fallenCommanders[i];
-      if (commander.commanderInfo.displayName ===
-              commanderInfo.displayName) {
+      if (props.allCommanders[commander.commanderType].displayName ===
+              commanderType.displayName) {
         return false;
       }
     }
@@ -205,18 +205,20 @@ const CityDetailsSidebar = (props) => {
             <Button
               variant='primary'
               disabled={!props.isOwnTurn ||
-                (props.selectedCity.assignedCommander &&
-                  commanderIsAlive(props.selectedCity.assignedCommander))}
+                (props.selectedCity.assignedCommanderType &&
+                  commanderIsAlive(props.selectedCity.assignedCommanderType))}
               onClick={showCommanderTabHandler}
               style={{width: '100%', fontSize: 'small',
                 margin: 'auto', marginTop: '1vh'}}
             >
-              {props.selectedCity.assignedCommander ?
+              {props.selectedCity.assignedCommanderType ?
               (
                 <React.Fragment>
                   <p style={{margin: '0px', padding: '0px'}}>
-                    {props.selectedCity.assignedCommander
-                        .displayName + ' calls this City home.'}
+                    {
+                    // eslint-disable-next-line max-len
+                      props.allCommanders[props.selectedCity.assignedCommanderType]
+                          .displayName + ' calls this City home.'}
                   </p>
                   <p style={{margin: '0px', padding: '0px'}}>
                     {'They can respawn here if they fall in battle.'}
@@ -351,6 +353,7 @@ const mapStateToProps = (state) => {
         state.gameBoardView.selectedTilePosition],
     timeWarp: state.game.gameConstants.allAstridiumAbilities[
         ASTRIDIUM_ABILITY_TYPE.TIME_WARP],
+    allCommanders: state.game.gameConstants.allCommanders,
   };
 };
 
@@ -379,6 +382,7 @@ CityDetailsSidebar.propTypes = {
   updateCityMenuTab: PropTypes.func,
   ownPlayerNumber: PropTypes.any,
   timeWarp: PropTypes.any,
+  allCommanders: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CityDetailsSidebar);

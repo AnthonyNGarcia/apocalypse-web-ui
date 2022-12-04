@@ -86,8 +86,8 @@ const ArmyTab = (props) => {
           <h5 style={{'margin': 'auto'}}>
             {props.selectedTile.army ?
               <span>{props.selectedTile.army.commander ?
-                  props.selectedTile.army.commander
-                      .commanderInfo.displayName + ' (' +
+                props.allCommanders[props.selectedTile.army.commander
+                    .commanderType].displayName + ' (' +
                 props.selectedTile.army.units.length + '/' +
                 props.ownPlayerData.currentBaseArmySize :
               '(No Commander Leads This Army'} <span><img
@@ -140,13 +140,15 @@ const mapStateToProps = (state) => {
         state.gameBoardView.selectedTilePosition],
     ownPlayerData: state.gamePlayer.ownPlayerNumber === PLAYER.ONE ?
       state.gamePlayer.playerOne : state.gamePlayer.playerTwo,
+    allCommanders: state.game.gameConstants.allCommanders,
   };
 };
 
 ArmyTab.propTypes = {
-  selectedCity: PropTypes.any,
-  selectedTile: PropTypes.any,
-  ownPlayerData: PropTypes.any,
+  selectedCity: PropTypes.object,
+  selectedTile: PropTypes.object,
+  ownPlayerData: PropTypes.object,
+  allCommanders: PropTypes.object,
 };
 
 export default connect(mapStateToProps)(ArmyTab);

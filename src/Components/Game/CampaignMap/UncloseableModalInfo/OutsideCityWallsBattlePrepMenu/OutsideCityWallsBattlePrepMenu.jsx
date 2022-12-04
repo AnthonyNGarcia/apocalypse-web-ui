@@ -79,7 +79,8 @@ const OutsideCityWallsBattlePrepMenu = (props) => {
                 props.attackingArmy.owner === props.ownPlayerNumber ?
                 'outside-city-walls-own-commander-name' :
                 'outside-city-walls-enemy-commander-name'}>{
-                  props.attackingArmy.commander.commanderInfo
+                  props.allCommanders[
+                      props.attackingArmy.commander.commanderType]
                       .displayName}</span> is attacking <span
                 className={
                 props.cityUnderAttack.owner === props.ownPlayerNumber ?
@@ -141,8 +142,9 @@ const OutsideCityWallsBattlePrepMenu = (props) => {
                       </h3>
                       {props.occupyingArmy && props.occupyingArmy.commander ?
                       (<Form.Check type="checkbox"
-                        label={'Have ' + props.occupyingArmy.commander
-                            .commanderInfo.displayName +
+                        label={'Have ' + props.allCommanders[
+                            props.occupyingArmy.commander.commanderType]
+                            .displayName +
                             ' Lead the Sally Out Force'}
                         onChange={toggleCommanderLeadingSally}
                         disabled={props.sallyOutForces.units.length <= 0}
@@ -203,8 +205,9 @@ const OutsideCityWallsBattlePrepMenu = (props) => {
                         <React.Fragment>
                           <h3 className='outside-city-walls-forces-title'>
                             {props.occupyingArmy.commander ?
-                                props.occupyingArmy.commander
-                                    .commanderInfo.displayName :
+                                props.allCommanders[
+                                    props.occupyingArmy.commander.commanderType]
+                                    .displayName :
                                 'There is no Commander in this City.'} ({
                               props.occupyingArmy.units.length}/{
                               props.maxArmySize})
@@ -306,6 +309,7 @@ const mapStateToProps = (state) => {
     attackingArmyTilePosition: state.outsideCityWallsBattle
         .attackingArmyTilePosition,
     cityTilePosition: state.outsideCityWallsBattle.cityTilePosition,
+    allCommanders: state.game.gameConstants.allCommanders,
   };
 };
 
@@ -331,6 +335,7 @@ OutsideCityWallsBattlePrepMenu.propTypes = {
   gameId: PropTypes.string,
   attackingArmyTilePosition: PropTypes.number,
   cityTilePosition: PropTypes.number,
+  allCommanders: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

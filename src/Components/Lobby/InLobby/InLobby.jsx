@@ -48,15 +48,30 @@ const InLobby = (props) => {
   const startGameHandler = async (e) => {
     e.preventDefault();
     try {
-      const startGameRequest = {
-        lobbyId: props.lobbyId,
-        lobbyPlayerOne: props.lobbyPlayerOne,
-        lobbyPlayerTwo: props.lobbyPlayerTwo,
-      };
-      await axios.post(
-          apiEndpoints.gameController + '/start', startGameRequest);
+      if (props.gameIdBeingRestored && props.gameIdBeingRestored != 'NONE') {
+        console.log('Restoring game with gameId: ' + props.gameIdBeingRestored);
+        const gameDataToRestore = props.savedGames[props.gameIdBeingRestored];
+        const startGameRequest = {
+          lobbyId: props.lobbyId,
+          lobbyPlayerOne: props.lobbyPlayerOne,
+          lobbyPlayerTwo: props.lobbyPlayerTwo,
+          gameData: gameDataToRestore,
+        };
+        console.log(JSON.stringify(startGameRequest));
+        await axios.post(
+            apiEndpoints.gameController + '/restore', startGameRequest);
+      } else {
+        console.log('Creating new game!');
+        const startGameRequest = {
+          lobbyId: props.lobbyId,
+          lobbyPlayerOne: props.lobbyPlayerOne,
+          lobbyPlayerTwo: props.lobbyPlayerTwo,
+        };
+        await axios.post(
+            apiEndpoints.gameController + '/start', startGameRequest);
+      }
     } catch (e) {
-      console.warn('Oops! There was an error trying to create the lobby!');
+      console.warn('Oops! There was an error trying to start the game!');
       console.warn(e);
     }
   };
@@ -126,6 +141,8 @@ const mapStateToProps = (state) => {
     lobbyId: state.lobby.lobbyId,
     lobbyPlayerOne: state.lobby.lobbyPlayerOne,
     lobbyPlayerTwo: state.lobby.lobbyPlayerTwo,
+    gameIdBeingRestored: state.general.gameIdBeingRestored,
+    savedGames: state.general.savedGames,
   };
 };
 
@@ -134,6 +151,8 @@ InLobby.propTypes = {
   lobbyId: PropTypes.string,
   lobbyPlayerOne: PropTypes.any,
   lobbyPlayerTwo: PropTypes.any,
+  gameIdBeingRestored: PropTypes.string,
+  savedGames: PropTypes.object,
 };
 
 export default connect(mapStateToProps)(InLobby);

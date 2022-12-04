@@ -45,7 +45,8 @@ const ArmyBoards = (props) => {
             <Row>
               <h2 className='enemy-entity-title'>{
                 enemyArmy.commander ?
-              enemyArmy.commander.commanderInfo.displayName :
+              // eslint-disable-next-line max-len
+              props.allCommanders[enemyArmy.commander.commanderType].displayName :
               'No Commander Leading These Units'}</h2>
             </Row>
             {/* Second Row is for the Enemy Main Army Board */}
@@ -78,7 +79,7 @@ const ArmyBoards = (props) => {
             <Row>
               <h2 className='own-entity-title'>{
                 ownArmy.commander ?
-              ownArmy.commander.commanderInfo.displayName :
+              props.allCommanders[ownArmy.commander.commanderType].displayName :
               'No Commander Leading These Units'}</h2>
             </Row>
           </Col>
@@ -117,14 +118,16 @@ const mapStateToProps = (state) => {
       state.gamePlayer.playerOne.username,
     battleData: state.battleView.battleData,
     ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
+    allCommanders: state.game.gameConstants.allCommanders,
   };
 };
 
 ArmyBoards.propTypes = {
   ownUsername: PropTypes.string,
   enemyUsername: PropTypes.string,
-  battleData: PropTypes.any,
+  battleData: PropTypes.object,
   ownPlayerNumber: PropTypes.string,
+  allCommanders: PropTypes.object,
 };
 
 export default connect(mapStateToProps)(ArmyBoards);

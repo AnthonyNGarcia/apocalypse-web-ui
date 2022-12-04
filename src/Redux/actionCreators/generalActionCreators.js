@@ -30,6 +30,18 @@ const actionCreators = {
       type: generalAT.CLEAR_GENERAL_REDUCER_EXCEPT_USER_DATA,
     };
   },
+  setSavedGames: (savedGames) => {
+    return {
+      type: generalAT.SET_SAVED_GAMES,
+      savedGames: savedGames,
+    };
+  },
+  setGameIdBeingRestored: (gameIdBeingRestored) => {
+    return {
+      type: generalAT.SET_GAME_ID_BEING_RESTORED,
+      gameIdBeingRestored: gameIdBeingRestored,
+    };
+  },
 };
 
 export default actionCreators;

@@ -56,7 +56,7 @@ const AttackCityCourtyardConfirmationDialog = (props) => {
           <div className='city-courtyard-header-container'>
             <h3 className='city-courtyard-title'>
               <span className='city-courtyard-own-commander-name'>{
-                props.attackingArmy.commander.commanderInfo
+                props.allCommanders[props.attackingArmy.commander.commanderType]
                     .displayName}</span> is attacking <span
                 className='city-courtyard-enemy-city-name'>
                 {props.cityTile.city.name}</span>!!</h3>
@@ -148,6 +148,7 @@ const mapStateToProps = (state) => {
           state.cityCourtyardBattle.attackingArmyTilePosition].army : null,
     cityTile: state.gameBoardView.gameBoard[
         state.cityCourtyardBattle.cityTile.tilePosition],
+    allCommanders: state.game.gameConstants.allCommanders,
   };
 };
 
@@ -168,6 +169,7 @@ AttackCityCourtyardConfirmationDialog.propTypes = {
   cityTile: PropTypes.object,
   updateAdvancedDetailsModalView: PropTypes.func,
   clearCityCourtyardBattleReducer: PropTypes.func,
+  allCommanders: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

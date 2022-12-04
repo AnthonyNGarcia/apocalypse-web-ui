@@ -31,7 +31,7 @@ const messageHandler = (message) => {
   switch (messageType) {
     case WEBSOCKET_MESSAGE_TYPES.PLAYER_LEFT_GAME:
       console.warn('A player left the game!');
-      leavingGameCleanup();
+      leavingGameCleanup(message);
       break;
     case WEBSOCKET_MESSAGE_TYPES.PLAYER_ENDED_TURN:
       nextTurnUpdate(message);
@@ -46,8 +46,9 @@ const messageHandler = (message) => {
   }
 };
 
-const leavingGameCleanup = () => {
+const leavingGameCleanup = (message) => {
   const state = store.getState();
+  const gameDataToSave = message.gameData;
 
   const gameId = state.game.gameId;
   const topicForThisGame = WEBSOCKET_TOPICS.specificGameWithId(gameId);
@@ -68,6 +69,12 @@ const leavingGameCleanup = () => {
 
   store.dispatch(generalAC.setWebsocketTopics(updatedWebsocketTopics));
   store.dispatch(generalAC.setMainView(MAIN_VIEWS.LOBBY_VIEW));
+  if (!gameDataToSave.gameIsOver) {
+    console.log('Game Is Not Over - saving to local storage!');
+    const newSavedGames = {...state.general.savedGames};
+    newSavedGames[gameId] = gameDataToSave;
+    localStorage.setItem('SAVED_GAMES', JSON.stringify(newSavedGames));
+  }
 
   store.dispatch(chatAC.setGameMessages([]));
   store.dispatch(chatAC.setSelectedChatTopic(CHAT_TOPIC.GLOBAL));

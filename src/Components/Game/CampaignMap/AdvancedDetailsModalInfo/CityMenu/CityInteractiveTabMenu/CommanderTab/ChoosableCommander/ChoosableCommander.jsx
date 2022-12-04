@@ -22,24 +22,24 @@ import './ChoosableCommander.css';
  * @return {JSX} to render
  */
 const ChoosableCommander = (props) => {
-  const [fullCommanderData, setFullCommanderData] = useState(null);
+  const [thisCommander, setCommander] = useState(null);
 
   useEffect(() => {
     if (props.isRecovering) {
       if (props.commander && props.ownPlayerData) {
         commanderSearch: for (let i = 0; i < props.ownPlayerData
             .fallenCommanders.length; i++) {
-          const commander = props.ownPlayerData.fallenCommanders[i];
-          if (commander.commanderInfo.displayName ===
-              props.commander.commanderInfo.displayName) {
-            setFullCommanderData(commander);
+          const fallenCommander = props.ownPlayerData.fallenCommanders[i];
+          if (props.allCommanders[fallenCommander.commanderType].displayName ===
+            props.allCommanders[props.commander.commanderType].displayName) {
+            setCommander(fallenCommander);
             break commanderSearch;
           }
         }
       }
     } else {
       if (props.commander && props.ownPlayerData) {
-        setFullCommanderData(props.commander);
+        setCommander(props.commander);
       }
     }
   }, [props, props.commander, props.ownPlayerData]);
@@ -60,9 +60,10 @@ const ChoosableCommander = (props) => {
         commanderSearch: for (let i = 0;
           i < props.ownPlayerData.fallenCommanders.length; i++) {
           const fallenCommanderDisplayName =
-            props.ownPlayerData.fallenCommanders[i].commanderInfo.displayName;
+            // eslint-disable-next-line max-len
+            props.allCommanders[props.ownPlayerData.fallenCommanders[i].commanderType].displayName;
           if (fallenCommanderDisplayName ===
-            props.commander.commanderInfo.displayName) {
+            props.allCommanders[props.commander.commanderType].displayName) {
             matchingCommanderIndex = i;
             break commanderSearch;
           }
@@ -85,17 +86,17 @@ const ChoosableCommander = (props) => {
     }
   };
 
-  if (fullCommanderData) {
+  if (thisCommander) {
     return (
       <div className='unit-option-container'>
         <Row onClick={(e) => viewCommanderHandler(e)}
           className='vertically-center center-text'
           style={{margin: 'auto'}}>
           <Col md={8}>
-            {fullCommanderData.commanderInfo.displayName} ({
+            {props.allCommanders[thisCommander.commanderType].displayName} ({
                 (props.isRecovering &&
-                  fullCommanderData.turnsUntilRecovered > 0) ?
-                 <span>{fullCommanderData.turnsUntilRecovered} <img
+                  thisCommander.turnsUntilRecovered > 0) ?
+                 <span>{thisCommander.turnsUntilRecovered} <img
                    src={'timer.svg'}
                    alt=""
                    className={'really-tiny-timer-icon'}
@@ -106,7 +107,7 @@ const ChoosableCommander = (props) => {
               variant='dark'
               onClick={spawnCommanderHandler}
               disabled={!props.isOwnTurn || props.selectedTile.army ||
-              (props.isRecovering && fullCommanderData
+              (props.isRecovering && thisCommander
                   .turnsUntilRecovered > 0)}>
               {'SELECT'}
             </Button>
@@ -136,6 +137,7 @@ const mapStateToProps = (state) => {
         state.gameBoardView.selectedTilePosition],
     ownPlayerData: state.gamePlayer.ownPlayerNumber === PLAYER.ONE ?
       state.gamePlayer.playerOne : state.gamePlayer.playerTwo,
+    allCommanders: state.game.gameConstants.allCommanders,
   };
 };
 
@@ -149,16 +151,17 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 ChoosableCommander.propTypes = {
-  commander: PropTypes.any,
+  commander: PropTypes.object,
   commanderIndex: PropTypes.number,
   gameId: PropTypes.string,
   isOwnTurn: PropTypes.bool,
   updateCityMenuSupplementalData: PropTypes.func,
   updateCityMenuSupplementalView: PropTypes.func,
   selectedTilePosition: PropTypes.number,
-  ownPlayerData: PropTypes.any,
-  selectedTile: PropTypes.any,
+  ownPlayerData: PropTypes.object,
+  selectedTile: PropTypes.object,
   isRecovering: PropTypes.bool,
+  allCommanders: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChoosableCommander);

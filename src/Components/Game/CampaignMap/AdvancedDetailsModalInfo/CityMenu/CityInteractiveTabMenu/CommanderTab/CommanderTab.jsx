@@ -33,7 +33,8 @@ const CommanderTab = (props) => {
               props.selectedCity.commanderPool.length > 0 ?
               props.selectedCity.commanderPool
                   .map((commander, index) => (
-                    <React.Fragment key={commander.commanderInfo.displayName}>
+                    // eslint-disable-next-line max-len
+                    <React.Fragment key={props.allCommanders[commander.commanderType].displayName}>
                       <ChoosableCommander
                         commander={{...commander}}
                         commanderIndex={index}/>
@@ -65,7 +66,8 @@ const CommanderTab = (props) => {
               props.ownPlayerData.fallenCommanders.length > 0 ?
               props.ownPlayerData.fallenCommanders
                   .map((commander, index) => (
-                    <React.Fragment key={commander.commanderInfo.displayName}>
+                    // eslint-disable-next-line max-len
+                    <React.Fragment key={props.allCommanders[commander.commanderType].displayName}>
                       <ChoosableCommander
                         commander={{...commander}}
                         commanderIndex={index}
@@ -90,12 +92,14 @@ const mapStateToProps = (state) => {
         state.gameBoardView.selectedTilePosition].city},
     ownPlayerData: state.gamePlayer.ownPlayerNumber === PLAYER.ONE ?
       state.gamePlayer.playerOne : state.gamePlayer.playerTwo,
+    allCommanders: state.game.gameConstants.allCommanders,
   };
 };
 
 CommanderTab.propTypes = {
-  selectedCity: PropTypes.any,
-  ownPlayerData: PropTypes.any,
+  selectedCity: PropTypes.object,
+  ownPlayerData: PropTypes.object,
+  allCommanders: PropTypes.object,
 };
 
 export default connect(mapStateToProps)(CommanderTab);

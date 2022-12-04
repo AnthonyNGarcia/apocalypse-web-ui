@@ -98,8 +98,8 @@ const ArmyInfoPanel = (props) => {
             (
               <React.Fragment>
                 <Row className='center-text own-army-entity'>
-                  <h2>{props.selectedArmy.commander
-                      .commanderInfo.displayName}</h2>
+                  <h2>{props.allCommanders[props.selectedArmy.commander
+                      .commanderType].displayName}</h2>
                 </Row>
                 <Row className='center-text own-army-entity'>
                   <h5>Level {props.selectedArmy.commander.level}</h5>
@@ -195,8 +195,8 @@ const ArmyInfoPanel = (props) => {
             (
               <React.Fragment>
                 <Row className='center-text enemy-entity'>
-                  <h2>{props.selectedArmy.commander
-                      .commanderInfo.displayName}</h2>
+                  <h2>{props.allCommanders[props.selectedArmy.commander
+                      .commanderType].displayName}</h2>
                 </Row>
                 <Row className='center-text enemy-entity'>
                   <h5>Level {props.selectedArmy.commander.level}</h5>
@@ -235,7 +235,6 @@ const mapStateToProps = (state) => {
   return {
     isOwnTurn: state.gamePlayer.ownPlayerNumber ===
       state.gamePlayer.playerWhoseTurnItIs,
-    allUnitsConstants: state.game.gameConstants.allUnits,
     playerOne: state.gamePlayer.playerOne,
     playerTwo: state.gamePlayer.playerTwo,
     ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
@@ -247,6 +246,7 @@ const mapStateToProps = (state) => {
     PLAYER.ONE ? state.gamePlayer.playerOne : state.gamePlayer.playerTwo,
     supercharge: state.game.gameConstants.allAstridiumAbilities[
         ASTRIDIUM_ABILITY_TYPE.SUPERCHARGE],
+    allCommanders: state.game.gameConstants.allCommanders,
   };
 };
 
@@ -259,17 +259,17 @@ const mapDispatchToProps = (dispatch) => {
 
 ArmyInfoPanel.propTypes = {
   isOwnTurn: PropTypes.bool,
-  mainPanelData: PropTypes.any,
-  allUnitsConstants: PropTypes.any,
-  playerOne: PropTypes.any,
-  playerTwo: PropTypes.any,
+  mainPanelData: PropTypes.object,
+  playerOne: PropTypes.object,
+  playerTwo: PropTypes.object,
   ownPlayerNumber: PropTypes.string,
-  selectedArmy: PropTypes.any,
+  selectedArmy: PropTypes.object,
   gameId: PropTypes.string,
   selectedTilePosition: PropTypes.number,
   updateIsMovingArmy: PropTypes.func,
   supercharge: PropTypes.any,
-  ownPlayerData: PropTypes.any,
+  ownPlayerData: PropTypes.object,
+  allCommanders: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArmyInfoPanel);

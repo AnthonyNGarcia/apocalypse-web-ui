@@ -18,32 +18,31 @@ import './UncloseableModalInfo.css';
  * @return {JSX} to render
  */
 const UncloseableModalInfo = (props) => {
-  if (props.uncloseableModalView ===
-      UNCLOSEABLE_MODAL_VIEW.OUTSIDE_CITY_WALLS_BATTLE_PREP) {
-    return (
-      <React.Fragment>
-        <Modal.Body>
-          <OutsideCityWallsBattlePrepMenu/>
-        </Modal.Body>
-      </React.Fragment>
-    );
-  } if (props.uncloseableModalView ===
-      UNCLOSEABLE_MODAL_VIEW.PLAYER_WON_GAME) {
-    return (
-      <React.Fragment>
-        <Modal.Body>
-          <PlayerWonGameModal/>
-        </Modal.Body>
-      </React.Fragment>
-    );
-  } else {
-    return (
-      <React.Fragment>
-        <Spinner animation="border" role="status">
-          <span className="sr-only">Loading...</span>
-        </Spinner>
-      </React.Fragment>
-    );
+  switch (props.uncloseableModalView) {
+    case UNCLOSEABLE_MODAL_VIEW.OUTSIDE_CITY_WALLS_BATTLE_PREP:
+      return (
+        <React.Fragment>
+          <Modal.Body>
+            <OutsideCityWallsBattlePrepMenu/>
+          </Modal.Body>
+        </React.Fragment>
+      );
+    case UNCLOSEABLE_MODAL_VIEW.PLAYER_WON_GAME:
+      return (
+        <React.Fragment>
+          <Modal.Body>
+            <PlayerWonGameModal/>
+          </Modal.Body>
+        </React.Fragment>
+      );
+    default:
+      return (
+        <React.Fragment>
+          <Spinner animation="border" role="status">
+            <span className="sr-only">Loading...</span>
+          </Spinner>
+        </React.Fragment>
+      );
   }
 };
 
