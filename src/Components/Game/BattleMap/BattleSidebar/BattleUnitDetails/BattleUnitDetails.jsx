@@ -94,7 +94,12 @@ const BattleUnitDetails = (props) => {
             '/active-ability', noTargetActiveAbilityRequest);
           break;
         case 'SINGLE_ENEMY':
-          props.updateActiveAbilityTargetSelection(targetSelectionType);
+        case 'SINGLE_ALLY':
+          if (props.activeAbilityTargetSelection == 'NA') {
+            props.updateActiveAbilityTargetSelection(targetSelectionType);
+          } else {
+            props.clearUnitActionSelection();
+          }
           break;
         case 'MULTIPLE_ENEMIES':
           props.updateActiveAbilityTargetSelection(targetSelectionType);
@@ -278,6 +283,7 @@ const mapStateToProps = (state) => {
       state.battleView.battleData.playerWhoseTurnItIs ===
       state.gamePlayer.ownPlayerNumber : false,
     showEnemyArmyInBattle: state.battleView.showEnemyArmyInBattle,
+    activeAbilityTargetSelection: state.battleView.activeAbilityTargetSelection,
   };
 };
 
@@ -287,6 +293,8 @@ const mapDispatchToProps = (dispatch) => {
         battleViewAC.setSelectedBattleUnitIndex(selectedBattleUnitIndex)),
     updateActiveAbilityTargetSelection: (activeAbilityTargetSelection) => dispatch(
         battleViewAC.setActiveAbilityTargetSelection(activeAbilityTargetSelection)),
+    clearUnitActionSelection: () => dispatch(
+        battleViewAC.clearUnitActionSelection()),
     updateMultipleEnemySelectionCountRemaining: (multipleEnemySelectionCountRemaining) => dispatch(
         battleViewAC.setMultipleEnemySelectionCountRemaining(multipleEnemySelectionCountRemaining)),
   };
@@ -304,6 +312,8 @@ BattleUnitDetails.propTypes = {
   updateSelectedBattleUnitIndex: PropTypes.func,
   updateActiveAbilityTargetSelection: PropTypes.func,
   updateMultipleEnemySelectionCountRemaining: PropTypes.func,
+  activeAbilityTargetSelection: PropTypes.string,
+  clearUnitActionSelection: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BattleUnitDetails);

@@ -42,6 +42,9 @@ const ArmyUnit = (props) => {
         if (props.unit.isTapped) {
           calculatedUnitClasses += ' unit-is-tapped';
         }
+        if (props.activeAbilityTargetSelection == 'SINGLE_ALLY') {
+          calculatedUnitClasses += ' targetable-ally-unit-for-ability';
+        }
       } else {
         calculatedUnitClasses += ' enemy-unit-image';
         if (!props.unit.isTargetable && getIfInvisible(props.unit)) {
@@ -116,12 +119,26 @@ const ArmyUnit = (props) => {
         props.updateSelectedBattleUnitIndex(justSelectedUnitIndex);
       }
     } else {
-      // Update the selected unit index for giving unit details on the sidebar
-      props.clearUnitActionSelection();
-      if (props.selectedBattleUnitIndex === justSelectedUnitIndex) {
-        props.updateSelectedBattleUnitIndex(-1);
+      // First check if we are casting an ability on an ally
+      if (props.activeAbilityTargetSelection == 'SINGLE_ALLY') {
+        const singleAllyAbilityRequest = {
+          gameId: props.gameId,
+          playerSubmittingAction: props.ownPlayerNumber,
+          unitActionType: UNIT_ACTION_TYPES.ACTIVE_ABILITY,
+          indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
+          indexOfSingleTargetAllyUnitOfAction: props.unitIndex,
+        };
+        props.clearUnitActionSelection();
+        axios.post(apiEndpoints.battleController +
+          '/active-ability', singleAllyAbilityRequest);
       } else {
-        props.updateSelectedBattleUnitIndex(justSelectedUnitIndex);
+        // Update the selected unit index for giving unit details on the sidebar
+        props.clearUnitActionSelection();
+        if (props.selectedBattleUnitIndex === justSelectedUnitIndex) {
+          props.updateSelectedBattleUnitIndex(-1);
+        } else {
+          props.updateSelectedBattleUnitIndex(justSelectedUnitIndex);
+        }
       }
     }
   };

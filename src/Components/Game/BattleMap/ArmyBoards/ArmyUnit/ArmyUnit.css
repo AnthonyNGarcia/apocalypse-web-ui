@@ -43,13 +43,19 @@
 .targetable-enemy-unit {
     border: 4px dotted red;
     box-shadow: 0px 0px 20px 6px red;
-    opacity: 100%;
+    opacity: 100% !important;
 }
 
 .targetable-enemy-unit-for-ability {
-    border: 4px dotted purple;
-    box-shadow: 0px 0px 20px 6px purple;
-    opacity: 100%;
+    border: 4px dotted purple !important;
+    box-shadow: 0px 0px 20px 6px purple !important;
+    opacity: 100% !important;
+}
+
+.targetable-ally-unit-for-ability {
+    border: 8px dotted green !important;
+    box-shadow: 0px 0px 20px 6px green !important;
+    opacity: 100% !important; 
 }
 
 .unit-is-tapped {
