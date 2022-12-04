@@ -28,6 +28,9 @@ const PassiveAbilityItem = (props) => {
       if (!props.passiveAbility.isEnabled) {
         label += ' (DISABLED)';
       }
+      if (props.passiveAbility.removeAfterBattle) {
+        label += ' (BATTLE)';
+      }
       setPassiveAbilityLabel(label);
     }
   }, [props]);
