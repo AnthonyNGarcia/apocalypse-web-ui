@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import battleViewAT from '../actionTypes/battleViewActionTypes';
 
 const actionCreators = {
@@ -34,6 +35,23 @@ const actionCreators = {
   clearBattleViewReducer: () => {
     return {
       type: battleViewAT.CLEAR_BATTLE_VIEW_REDUCER,
+    };
+  },
+  setSelectedMultipleEnemyUnitIndices: (selectedMultipleEnemyUnitIndices) => {
+    return {
+      type: battleViewAT.SET_SELECTED_MULTIPLE_ENEMY_UNIT_INDICES,
+      selectedMultipleEnemyUnitIndices: selectedMultipleEnemyUnitIndices,
+    };
+  },
+  setMultipleEnemySelectionCountRemaining: (multipleEnemySelectionCountRemaining) => {
+    return {
+      type: battleViewAT.SET_MULTIPLE_ENEMY_SELECTION_COUNT_REMAINING,
+      multipleEnemySelectionCountRemaining: multipleEnemySelectionCountRemaining,
+    };
+  },
+  clearUnitActionSelection: () => {
+    return {
+      type: battleViewAT.CLEAR_UNIT_ACTION_SELECTION,
     };
   },
 };

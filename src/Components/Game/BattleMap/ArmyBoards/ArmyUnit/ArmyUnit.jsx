@@ -54,7 +54,8 @@ const ArmyUnit = (props) => {
             (props.unit.isTargetable ||
               getIfFlanker(currentlySelectedOwnUnit))) {
           calculatedUnitClasses += ' targetable-enemy-unit';
-          if (props.activeAbilityTargetSelection == 'SINGLE_ENEMY') {
+          if (props.activeAbilityTargetSelection == 'SINGLE_ENEMY' ||
+              props.activeAbilityTargetSelection == 'MULTIPLE_ENEMIES') {
             calculatedUnitClasses += ' targetable-enemy-unit-for-ability';
           }
         } else if (props.unit.isTapped) {
@@ -116,7 +117,7 @@ const ArmyUnit = (props) => {
       }
     } else {
       // Update the selected unit index for giving unit details on the sidebar
-      props.updateActiveAbilityTargetSelection('NA');
+      props.clearUnitActionSelection();
       if (props.selectedBattleUnitIndex === justSelectedUnitIndex) {
         props.updateSelectedBattleUnitIndex(-1);
       } else {
@@ -157,32 +158,57 @@ const ArmyUnit = (props) => {
     try {
       switch (props.activeAbilityTargetSelection) {
         case 'NA':
-          props.updateSelectedBattleUnitIndex(-1);
           const attackTargetRequest = {
             gameId: props.gameId,
             playerSubmittingAction: props.ownPlayerNumber,
             unitActionType: UNIT_ACTION_TYPES.ATTACK,
             indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
-            indexOfTargetUnitOfAction: props.unitIndex,
+            indexOfSingleTargetEnemyUnitOfAction: props.unitIndex,
           };
+          props.clearUnitActionSelection();
           axios.post(apiEndpoints.battleController +
             '/attack', attackTargetRequest);
           break;
         case 'SINGLE_ENEMY':
-          props.updateSelectedBattleUnitIndex(-1);
-          props.updateActiveAbilityTargetSelection('NA');
-          const activeAbilityRequest = {
+          const singleEnemyAbilityRequest = {
             gameId: props.gameId,
             playerSubmittingAction: props.ownPlayerNumber,
             unitActionType: UNIT_ACTION_TYPES.ACTIVE_ABILITY,
             indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
-            indexOfTargetUnitOfAction: props.unitIndex,
+            indexOfSingleTargetEnemyUnitOfAction: props.unitIndex,
           };
+          props.clearUnitActionSelection();
           axios.post(apiEndpoints.battleController +
-            '/active-ability', activeAbilityRequest);
+            '/active-ability', singleEnemyAbilityRequest);
+          break;
+        case 'MULTIPLE_ENEMIES':
+          const newSelectedMultipleEnemyUnitIndices =
+            [...props.selectedMultipleEnemyUnitIndices, props.unitIndex];
+          const unitSelectionsRemaining =
+            props.multipleEnemySelectionCountRemaining - 1;
+
+          if (unitSelectionsRemaining <= 0) {
+            const multipleEnemiesAbilityRequest = {
+              gameId: props.gameId,
+              playerSubmittingAction: props.ownPlayerNumber,
+              unitActionType: UNIT_ACTION_TYPES.ACTIVE_ABILITY,
+              indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
+              indexOfSingleTargetEnemyUnitOfAction: -1,
+              indexOfSingleTargetAllyUnitOfAction: -1,
+              indicesOfMultipleTargetEnemyUnitsOfAction:
+                newSelectedMultipleEnemyUnitIndices,
+            };
+            props.clearUnitActionSelection();
+            axios.post(apiEndpoints.battleController +
+              '/active-ability', multipleEnemiesAbilityRequest);
+          } else {
+            props.updateSelectedMultipleEnemyUnitIndices(
+                newSelectedMultipleEnemyUnitIndices);
+            props.updateMultipleEnemySelectionCountRemaining(
+                unitSelectionsRemaining);
+          }
           break;
         default:
-          // eslint-disable-next-line max-len
           console.warn('NOT YET IMPLEMENTED - ' + props.activeAbilityTargetSelection);
       }
     } catch (e) {
@@ -316,6 +342,8 @@ const mapStateToProps = (state) => {
     battleData: state.battleView.battleData,
     ownArmySubmitted: state.battleView.ownArmySubmitted,
     gameId: state.game.gameId,
+    selectedMultipleEnemyUnitIndices: state.battleView.selectedMultipleEnemyUnitIndices,
+    multipleEnemySelectionCountRemaining: state.battleView.multipleEnemySelectionCountRemaining,
   };
 };
 
@@ -325,28 +353,33 @@ const mapDispatchToProps = (dispatch) => {
         battleViewAC.setSelectedBattleUnitIndex(selectedBattleUnitIndex)),
     updateBattleData: (battleData) => dispatch(
         battleViewAC.setBattleData(battleData)),
-    // eslint-disable-next-line max-len
-    updateActiveAbilityTargetSelection: (activeAbilityTargetSelection) => dispatch(
-        // eslint-disable-next-line max-len
-        battleViewAC.setActiveAbilityTargetSelection(activeAbilityTargetSelection)),
+    clearUnitActionSelection: () => dispatch(
+        battleViewAC.clearUnitActionSelection()),
+    updateSelectedMultipleEnemyUnitIndices: (selectedMultipleEnemyUnitIndices) => dispatch(
+        battleViewAC.setSelectedMultipleEnemyUnitIndices(selectedMultipleEnemyUnitIndices)),
+    updateMultipleEnemySelectionCountRemaining: (multipleEnemySelectionCountRemaining) => dispatch(
+        battleViewAC.setMultipleEnemySelectionCountRemaining(multipleEnemySelectionCountRemaining)),
   };
 };
 
 ArmyUnit.propTypes = {
-  unit: PropTypes.any,
-  allUnits: PropTypes.any,
+  unit: PropTypes.object,
+  allUnits: PropTypes.object,
   ownUnit: PropTypes.bool,
   showEnemyArmyInBattle: PropTypes.bool,
   unitIndex: PropTypes.number,
-  battleData: PropTypes.any,
+  battleData: PropTypes.object,
   ownPlayerNumber: PropTypes.string,
   updateSelectedBattleUnitIndex: PropTypes.func,
-  updateActiveAbilityTargetSelection: PropTypes.func,
   selectedBattleUnitIndex: PropTypes.number,
   activeAbilityTargetSelection: PropTypes.string,
   updateBattleData: PropTypes.func,
   ownArmySubmitted: PropTypes.bool,
   gameId: PropTypes.string,
+  selectedMultipleEnemyUnitIndices: PropTypes.arrayOf(PropTypes.number),
+  clearUnitActionSelection: PropTypes.func,
+  updateSelectedMultipleEnemyUnitIndices: PropTypes.func,
+  updateMultipleEnemySelectionCountRemaining: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArmyUnit);

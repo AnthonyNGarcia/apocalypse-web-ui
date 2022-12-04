@@ -78,24 +78,9 @@ const BattleUnitDetails = (props) => {
     e.preventDefault();
     try {
       const abilityType = unitPerformingAction.activeAbility.activeAbilityType;
-      // eslint-disable-next-line max-len
-      const targetSelectionType = props.allActiveAbilities[abilityType].targetSelectionType;
+      const fullAbilityData = props.allActiveAbilities[abilityType];
+      const targetSelectionType = fullAbilityData.targetSelectionType;
       switch (targetSelectionType) {
-        case 'NONE':
-          props.updateSelectedBattleUnitIndex(-1);
-          const initiateActiveAbilityRequest = {
-            gameId: props.gameId,
-            playerSubmittingAction: props.ownPlayerNumber,
-            unitActionType: UNIT_ACTION_TYPES.ACTIVE_ABILITY,
-            indexOfUnitPerformingAction: props.selectedBattleUnitIndex,
-            indexOfTargetUnitOfAction: -1,
-          };
-          axios.post(apiEndpoints.battleController +
-            '/active-ability', initiateActiveAbilityRequest);
-          break;
-        case 'SINGLE_ENEMY':
-          props.updateActiveAbilityTargetSelection(targetSelectionType);
-          break;
         case 'NO_TARGET':
           const noTargetActiveAbilityRequest = {
             gameId: props.gameId,
@@ -107,6 +92,18 @@ const BattleUnitDetails = (props) => {
           props.updateSelectedBattleUnitIndex(-1);
           axios.post(apiEndpoints.battleController +
             '/active-ability', noTargetActiveAbilityRequest);
+          break;
+        case 'SINGLE_ENEMY':
+          props.updateActiveAbilityTargetSelection(targetSelectionType);
+          break;
+        case 'MULTIPLE_ENEMIES':
+          props.updateActiveAbilityTargetSelection(targetSelectionType);
+          const abilityValues = selectedUnit.activeAbility.abilityValues;
+          console.log(abilityValues);
+          const numberOfEnemyTargets = abilityValues[0];
+          console.log(numberOfEnemyTargets);
+          props.updateMultipleEnemySelectionCountRemaining(numberOfEnemyTargets);
+          break;
         default:
           console.warn('NOT YET IMPLEMENTED - ' + targetSelectionType);
       }
@@ -240,7 +237,6 @@ const BattleUnitDetails = (props) => {
               getIfPermastunned(selectedUnit) ||
               !props.showEnemyArmyInBattle ||
               selectedUnit.currentActiveAbilityCharges <= 0}
-                  // eslint-disable-next-line max-len
                   onClick={(event) => activeAbilityHandler(event, selectedUnit)}>
                     {props.allActiveAbilities[
                         selectedUnit.activeAbility.activeAbilityType]
@@ -289,10 +285,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateSelectedBattleUnitIndex: (selectedBattleUnitIndex) => dispatch(
         battleViewAC.setSelectedBattleUnitIndex(selectedBattleUnitIndex)),
-    // eslint-disable-next-line max-len
     updateActiveAbilityTargetSelection: (activeAbilityTargetSelection) => dispatch(
-        // eslint-disable-next-line max-len
         battleViewAC.setActiveAbilityTargetSelection(activeAbilityTargetSelection)),
+    updateMultipleEnemySelectionCountRemaining: (multipleEnemySelectionCountRemaining) => dispatch(
+        battleViewAC.setMultipleEnemySelectionCountRemaining(multipleEnemySelectionCountRemaining)),
   };
 };
 
@@ -307,6 +303,7 @@ BattleUnitDetails.propTypes = {
   showEnemyArmyInBattle: PropTypes.bool,
   updateSelectedBattleUnitIndex: PropTypes.func,
   updateActiveAbilityTargetSelection: PropTypes.func,
+  updateMultipleEnemySelectionCountRemaining: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BattleUnitDetails);

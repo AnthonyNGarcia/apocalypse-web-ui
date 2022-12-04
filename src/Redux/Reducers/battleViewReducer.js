@@ -7,6 +7,8 @@ const initialState = {
   ownArmySubmitted: false,
   selectedBattleUnitIndex: -1,
   activeAbilityTargetSelection: 'NA',
+  selectedMultipleEnemyUnitIndices: [],
+  multipleEnemySelectionCountRemaining: 0,
 };
 
 const setBattleData = (state, action) => {
@@ -50,6 +52,30 @@ const clearBattleViewReducer = (state, action) => {
   };
 };
 
+const setSelectedMultipleEnemyUnitIndices = (state, action) => {
+  return {
+    ...state,
+    selectedMultipleEnemyUnitIndices: action.selectedMultipleEnemyUnitIndices,
+  };
+};
+
+const setMultipleEnemySelectionCountRemaining = (state, action) => {
+  return {
+    ...state,
+    multipleEnemySelectionCountRemaining: action.multipleEnemySelectionCountRemaining,
+  };
+};
+
+const clearUnitActionSelection = (state, action) => {
+  return {
+    ...state,
+    selectedBattleUnitIndex: initialState.selectedBattleUnitIndex,
+    activeAbilityTargetSelection: initialState.activeAbilityTargetSelection,
+    selectedMultipleEnemyUnitIndices: initialState.selectedMultipleEnemyUnitIndices,
+    multipleEnemySelectionCountRemaining: initialState.multipleEnemySelectionCountRemaining,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case battleViewAT.SET_BATTLE_DATA: return setBattleData(state, action);
@@ -58,6 +84,9 @@ const reducer = (state=initialState, action) => {
     case battleViewAT.SET_SELECTED_BATTLE_UNIT_INDEX: return setSelectedBattleUnitIndex(state, action);
     case battleViewAT.SET_ACTIVE_ABILITY_TARGET_SELECTION: return setActiveAbilityTargetSelection(state, action);
     case battleViewAT.CLEAR_BATTLE_VIEW_REDUCER: return clearBattleViewReducer(state, action);
+    case battleViewAT.SET_SELECTED_MULTIPLE_ENEMY_UNIT_INDICES: return setSelectedMultipleEnemyUnitIndices(state, action);
+    case battleViewAT.SET_MULTIPLE_ENEMY_SELECTION_COUNT_REMAINING: return setMultipleEnemySelectionCountRemaining(state, action);
+    case battleViewAT.CLEAR_UNIT_ACTION_SELECTION: return clearUnitActionSelection(state, action);
     default: return state;
   }
 };
