@@ -82,6 +82,7 @@ const BattleUnitDetails = (props) => {
       const targetSelectionType = fullAbilityData.targetSelectionType;
       switch (targetSelectionType) {
         case 'NO_TARGET':
+        case 'MULTIPLE_RANDOM_ENEMIES':
           const noTargetActiveAbilityRequest = {
             gameId: props.gameId,
             playerSubmittingAction: props.ownPlayerNumber,
