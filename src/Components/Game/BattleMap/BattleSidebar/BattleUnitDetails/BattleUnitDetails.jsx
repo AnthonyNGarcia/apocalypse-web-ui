@@ -188,7 +188,7 @@ const BattleUnitDetails = (props) => {
                       <span key={passive.passiveAbilityType + index}>
                         {index === 0 ? ' ' :
                         index < selectedUnit.passiveAbilities.length ?
-                          ', ' : null}
+                          ' ' : null}
                         <PassiveAbilityItem
                           passiveAbility={passive}/>
                       </span>

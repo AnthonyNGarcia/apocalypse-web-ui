@@ -108,7 +108,7 @@ const SelectedUnitDetails = (props) => {
                       <span key={passive.passiveAbilityType + index}>
                         {index === 0 ? ' ' :
                         index < fullUnitInfo.basePassiveAbilities.length ?
-                          ', ' : null}
+                          ' ' : null}
                         <PassiveAbilityItem
                           passiveAbility={passive}/>
                       </span>
