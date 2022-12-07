@@ -80,11 +80,9 @@ const CityDetailsSidebar = (props) => {
   };
 
   const commanderIsAlive = (commanderType) => {
-    for (let i = 0; i < props.ownPlayerData
-        .fallenCommanders.length; i++) {
+    for (let i = 0; i < props.ownPlayerData.fallenCommanders.length; i++) {
       const commander = props.ownPlayerData.fallenCommanders[i];
-      if (props.allCommanders[commander.commanderType].displayName ===
-              commanderType.displayName) {
+      if (commander.commanderType === commanderType) {
         return false;
       }
     }

@@ -53,7 +53,6 @@ const clearGeneralReducerExceptUserData = (state, action) => {
 };
 
 const setSavedGames = (state, action) => {
-  console.log('SET SAVED GAMES: ' + JSON.stringify(action));
   return {
     ...state,
     savedGames: action.savedGames,
