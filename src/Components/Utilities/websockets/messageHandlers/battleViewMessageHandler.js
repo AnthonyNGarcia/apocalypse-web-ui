@@ -115,6 +115,7 @@ const battleEnded = async (message) => {
   await store.dispatch(battleViewAC.setOwnArmySubmitted(false));
   await store.dispatch(battleViewAC.setSelectedBattleUnitIndex(-1));
   await store.dispatch(battleViewAC.setShowEnemyArmyInBattle(false));
+  await store.dispatch(battleViewAC.clearBattleViewReducer());
 };
 
 export default messageHandler;

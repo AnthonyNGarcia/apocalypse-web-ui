@@ -56,8 +56,9 @@ const ArmyUnit = (props) => {
             !getIfCityWalls(currentlySelectedOwnUnit) &&
             (props.unit.isTargetable ||
               getIfFlanker(currentlySelectedOwnUnit))) {
-          calculatedUnitClasses += ' targetable-enemy-unit';
-          if (props.activeAbilityTargetSelection == 'SINGLE_ENEMY' ||
+          if (props.activeAbilityTargetSelection == 'NA') {
+            calculatedUnitClasses += ' targetable-enemy-unit';
+          } else if (props.activeAbilityTargetSelection == 'SINGLE_ENEMY' ||
               props.activeAbilityTargetSelection == 'MULTIPLE_ENEMIES') {
             calculatedUnitClasses += ' targetable-enemy-unit-for-ability';
           }
