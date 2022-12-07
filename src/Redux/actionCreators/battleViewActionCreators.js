@@ -54,6 +54,12 @@ const actionCreators = {
       type: battleViewAT.CLEAR_UNIT_ACTION_SELECTION,
     };
   },
+  setActionMessage: (actionMessage) => {
+    return {
+      type: battleViewAT.SET_ACTION_MESSAGE,
+      actionMessage: actionMessage,
+    };
+  },
 };
 
 export default actionCreators;

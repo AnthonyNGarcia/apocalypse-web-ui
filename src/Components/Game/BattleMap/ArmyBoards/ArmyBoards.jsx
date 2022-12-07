@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Spinner from 'react-bootstrap/esm/Spinner';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import EnemyArmyBoard from './EnemyArmyBoard/EnemyArmyBoard';
 import OwnArmyBoard from './OwnArmyBoard/OwnArmyBoard';
 import PLAYER from '../../../Utilities/playerEnums';
@@ -67,7 +68,15 @@ const ArmyBoards = (props) => {
           </Col>
           }
         </Row>
-        {/* Second Row for Own Army Information */}
+        {/* Second Row for Battle Action Messaging (to share what is going on) */}
+        <Row>
+          <Col md={12} className='action-message'>
+            <Button variant="info">
+              {props.actionMessage}
+            </Button>
+          </Col>
+        </Row>
+        {/* Third Row for Own Army Information */}
         <Row>
           {/* First Col for Own Main Army */}
           <Col md={12}>
@@ -119,6 +128,7 @@ const mapStateToProps = (state) => {
     battleData: state.battleView.battleData,
     ownPlayerNumber: state.gamePlayer.ownPlayerNumber,
     allCommanders: state.game.gameConstants.allCommanders,
+    actionMessage: state.battleView.actionMessage,
   };
 };
 
@@ -128,6 +138,7 @@ ArmyBoards.propTypes = {
   battleData: PropTypes.object,
   ownPlayerNumber: PropTypes.string,
   allCommanders: PropTypes.object,
+  actionMessage: PropTypes.string,
 };
 
 export default connect(mapStateToProps)(ArmyBoards);

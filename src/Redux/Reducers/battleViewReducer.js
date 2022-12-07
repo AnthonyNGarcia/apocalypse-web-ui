@@ -9,6 +9,7 @@ const initialState = {
   activeAbilityTargetSelection: 'NA',
   selectedMultipleEnemyUnitIndices: [],
   multipleEnemySelectionCountRemaining: 0,
+  actionMessage: 'Preparing for Battle...',
 };
 
 const setBattleData = (state, action) => {
@@ -76,6 +77,13 @@ const clearUnitActionSelection = (state, action) => {
   };
 };
 
+const setActionMessage = (state, action) => {
+  return {
+    ...state,
+    actionMessage: action.actionMessage,
+  };
+};
+
 const reducer = (state=initialState, action) => {
   switch (action.type) {
     case battleViewAT.SET_BATTLE_DATA: return setBattleData(state, action);
@@ -87,6 +95,7 @@ const reducer = (state=initialState, action) => {
     case battleViewAT.SET_SELECTED_MULTIPLE_ENEMY_UNIT_INDICES: return setSelectedMultipleEnemyUnitIndices(state, action);
     case battleViewAT.SET_MULTIPLE_ENEMY_SELECTION_COUNT_REMAINING: return setMultipleEnemySelectionCountRemaining(state, action);
     case battleViewAT.CLEAR_UNIT_ACTION_SELECTION: return clearUnitActionSelection(state, action);
+    case battleViewAT.SET_ACTION_MESSAGE: return setActionMessage(state, action);
     default: return state;
   }
 };

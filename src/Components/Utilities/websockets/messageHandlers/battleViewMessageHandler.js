@@ -74,6 +74,9 @@ const battleStarted = async (message) => {
 
 const battleDataUpdated = (message) => {
   store.dispatch(battleViewAC.setBattleData(message.battleData));
+  if (message.actionMessage) {
+    store.dispatch(battleViewAC.setActionMessage(message.actionMessage));
+  }
 };
 
 const orbitalFracturePerformed = (message) => {
