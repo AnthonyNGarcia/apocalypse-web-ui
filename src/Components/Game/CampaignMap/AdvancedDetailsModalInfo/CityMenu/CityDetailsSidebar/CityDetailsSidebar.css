@@ -63,3 +63,8 @@
 .bold-title {
   font-weight: bold;
 }
+
+.city-production-message {
+  width: 100%;
+  text-align: center;
+}

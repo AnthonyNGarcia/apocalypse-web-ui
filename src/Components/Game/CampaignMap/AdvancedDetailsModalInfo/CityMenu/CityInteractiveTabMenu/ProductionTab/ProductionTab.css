@@ -14,3 +14,9 @@
   width: auto;
   filter: invert();
 }
+
+.resume-training-button {
+  margin-bottom: 1vh;
+  width: 90%;
+  text-align: center;
+}

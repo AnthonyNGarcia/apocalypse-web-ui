@@ -33,7 +33,7 @@
 .animated-hammer {
   display: block;
   margin-left: auto;
-  margin-right: auto;
+  margin-right: 10%;
   padding: 5%;
   overflow: hidden;
   position: relative;
@@ -45,4 +45,10 @@
   animation-duration: 0.8s; 
   animation-iteration-count: infinite;
   transition-timing-function: linear;
+}
+
+.construct-building-button {
+  position: absolute;
+  top: 35%;
+  right: 20%;
 }

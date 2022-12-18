@@ -33,10 +33,6 @@ const SelectedUnitDetails = (props) => {
             src={'hammer.svg'}
             alt=""
             className={'tiny-hammer-icon'}
-          /></span>, {fullUnitInfo.turnsToTrain} <span><img
-            src={'timer.svg'}
-            alt=""
-            className={'tiny-timer-icon'}
           /></span>) - Tier {fullUnitInfo.tier} {
             fullUnitInfo.tier === 3 ? (
               <span><img

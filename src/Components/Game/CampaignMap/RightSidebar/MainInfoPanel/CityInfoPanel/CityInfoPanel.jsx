@@ -92,7 +92,7 @@ const CityInfoPanel = (props) => {
               </Col>
               <Col xs={6}>
                 <Row>
-                  {props.selectedCity.totalBuildingProduction}
+                  {props.selectedCity.totalProduction}
                 </Row>
                 <Row>
                   {props.selectedCity.totalResearch}

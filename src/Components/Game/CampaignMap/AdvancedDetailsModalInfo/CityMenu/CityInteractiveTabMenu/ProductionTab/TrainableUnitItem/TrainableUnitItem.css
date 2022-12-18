@@ -16,6 +16,11 @@
     width: auto;
 }
 
+.train-unit-button {
+  position: absolute;
+  top: 16%;
+  right: 10%;
+}
 .really-tiny-hammer-icon {
   display: inline-block;
   margin-left: auto;

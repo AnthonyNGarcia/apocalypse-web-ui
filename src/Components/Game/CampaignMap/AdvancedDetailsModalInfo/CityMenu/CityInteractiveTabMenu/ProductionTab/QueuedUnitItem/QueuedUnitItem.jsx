@@ -22,12 +22,30 @@ import './QueuedUnitItem.css';
  */
 const QueuedUnitItem = (props) => {
   const [fullUnitInfo, setFullUnitInfo] = useState(null);
+  const [unitLabel, setUnitLabel] = useState('');
 
   useEffect( () => {
     if (props.queuedUnit && props.queuedUnit.actualUnitTypeToBeProduced) {
       const freshFullUnitInfo = props.allUnits[
           props.queuedUnit.actualUnitTypeToBeProduced];
       setFullUnitInfo(freshFullUnitInfo);
+      let newUnitLabel = freshFullUnitInfo.displayName + ' (';
+      /**
+       * {
+                !props.queuedUnit.free ?
+                 '' : <span
+                   style={{'fontWeight': 'bold'}}>FREE, </span>}{
+                Math.ceil(props.queuedUnit.productionCostRemaining/props.selectedCity.totalProduction)}
+       */
+      if (props.queuedUnit.free) {
+        newUnitLabel += 'FREE ';
+      }
+      if (!props.queuedUnit.currentlyTraining) {
+        newUnitLabel += 'PAUSED ';
+      }
+      const turnsRemaining = Math.ceil(props.queuedUnit.productionCostRemaining/props.selectedCity.totalProduction);
+      newUnitLabel += turnsRemaining;
+      setUnitLabel(newUnitLabel);
     }
   }, [props]);
 
@@ -70,15 +88,7 @@ const QueuedUnitItem = (props) => {
           </Col>
           <Col md={7}>
             <p>
-              {fullUnitInfo.displayName} ({
-                !props.queuedUnit.free ?
-                 <span>{fullUnitInfo.productionCost}<img
-                   src={'hammer.svg'}
-                   alt=""
-                   className={'really-tiny-hammer-icon'}
-                 /></span>: <span
-                   style={{'fontWeight': 'bold'}}>FREE</span>}, {
-                props.queuedUnit.turnsRemaining} <span><img
+              {unitLabel}<span><img
                 src={'timer.svg'}
                 alt=""
                 className={'really-tiny-timer-icon'}
@@ -93,12 +103,14 @@ const QueuedUnitItem = (props) => {
             </p>
           </Col>
           <Col md={3}>
-            <Button
-              variant='danger'
-              onClick={removeUnitHandler}
-              disabled={!props.isOwnTurn}>
-                x
-            </Button>
+            <div className='cancel-unit-training-button'>
+              <Button
+                variant='danger'
+                onClick={removeUnitHandler}
+                disabled={!props.isOwnTurn}>
+                X
+              </Button>
+            </div>
           </Col>
         </Row>
       </div>

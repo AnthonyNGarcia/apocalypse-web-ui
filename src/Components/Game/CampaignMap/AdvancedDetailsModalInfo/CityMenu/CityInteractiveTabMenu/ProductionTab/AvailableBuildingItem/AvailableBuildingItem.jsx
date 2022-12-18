@@ -67,8 +67,8 @@ const AvailableBuildingItem = (props) => {
         const turnsToComplete =
           Math.ceil((bldgInfo.productionCost -
             props.bldg.currentProductionProgress) /
-            props.selectedCity.totalBuildingProduction);
-        label = bldgName + ' (' + turnsToComplete + ' Turns)';
+            props.selectedCity.totalProduction);
+        label = bldgName + ' (' + turnsToComplete;
       }
       setBuildingLabel(label);
 
@@ -82,7 +82,7 @@ const AvailableBuildingItem = (props) => {
       }
       forceUpdate();
     }
-  }, [props.selectedCity.totalBuildingProduction,
+  }, [props.selectedCity.totalProduction,
     props.selectedCity.currentConstructionProject,
     props.selectedCity.constructibleBuildings,
     props.bldg.buildingType, isBuildingThis]);
@@ -97,22 +97,27 @@ const AvailableBuildingItem = (props) => {
               className='building-icon'/>
           </Col>
           <Col md={6}>
-            <p style={{padding: 0, margin: 0}}>{buildingLabel}</p>
+            <p style={{padding: 0, margin: 0}}>{buildingLabel} <span><img
+              src={'timer.svg'}
+              alt=""
+              className={'really-tiny-timer-icon'}
+            /></span>{')'}</p>
           </Col>
           <Col md={4}>
-            {isBuildingThis ?
-
-              <img
-                src={'hammer.svg'}
-                alt=""
-                className={'animated-hammer'}
-              /> :
-            <Button
-              variant='warning'
-              onClick={constructBuildingHandler}
-              disabled={!props.isOwnTurn}>
-                Build
-            </Button>}
+            <div className='construct-building-button'>
+              {isBuildingThis ?
+                <img
+                  src={'hammer.svg'}
+                  alt=""
+                  className={'animated-hammer'}
+                /> :
+                <Button
+                  variant='warning'
+                  onClick={constructBuildingHandler}
+                  disabled={!props.isOwnTurn}>
+                  Build
+                </Button>}
+            </div>
           </Col>
         </Row>
       </div>

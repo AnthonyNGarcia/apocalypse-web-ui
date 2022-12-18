@@ -28,15 +28,11 @@ const TrainableUnitItem = (props) => {
   const [canAddHeroUnitToQueue, setCanAddHeroUnitToQueue] = useState(false);
 
   useEffect( () => {
-    const updateCanAddUnitToQueue = (freshFullUnitInfo) => {
-      const usableFullUnitInfo = freshFullUnitInfo ?
-        freshFullUnitInfo : fullUnitInfo;
+    const updateCanAddUnitToQueue = () => {
       const cityHasRoom = (props.selectedCity.unassignedUnits.length +
           props.selectedCity.currentRecruitmentQueue.length) <
           props.ownPlayerData.currentBaseArmySize;
-      if (props.selectedCity.unitProductionRemaining >=
-        usableFullUnitInfo.productionCost &&
-        cityHasRoom) {
+      if (props.selectedCity.currentConcurrentUnitTrainingCount > 0 && cityHasRoom) {
         setCanAddUnitToQueue(true);
       } else {
         setCanAddUnitToQueue(false);
@@ -58,7 +54,7 @@ const TrainableUnitItem = (props) => {
     if (props.unitType) {
       const freshFullUnitInfo = props.allUnits[props.unitType];
       setFullUnitInfo(freshFullUnitInfo);
-      updateCanAddUnitToQueue(freshFullUnitInfo);
+      updateCanAddUnitToQueue();
       updateCanAddHeroUnitToQueue();
     }
   }, [props, props.selectedCity]);
@@ -100,12 +96,8 @@ const TrainableUnitItem = (props) => {
           </Col>
           <Col md={7}>
             <p>
-              {fullUnitInfo.displayName} ({
-                fullUnitInfo.productionCost} <span><img
-                src={'hammer.svg'}
-                alt=""
-                className={'really-tiny-hammer-icon'}
-              /></span>, {fullUnitInfo.turnsToTrain} <span><img
+              {fullUnitInfo.displayName} (
+              {Math.ceil(fullUnitInfo.productionCost / props.selectedCity.totalProduction)} <span><img
                 src={'timer.svg'}
                 alt=""
                 className={'really-tiny-timer-icon'}
@@ -120,13 +112,15 @@ const TrainableUnitItem = (props) => {
             </p>
           </Col>
           <Col md={3}>
-            <Button
-              variant='primary'
-              onClick={addUnitHandler}
-              disabled={!props.isOwnTurn || !canAddUnitToQueue ||
+            <div className='train-unit-button'>
+              <Button
+                variant='primary'
+                onClick={addUnitHandler}
+                disabled={!props.isOwnTurn || !canAddUnitToQueue ||
               (fullUnitInfo.tier === 3 && !canAddHeroUnitToQueue)}>
-                +
-            </Button>
+                Train
+              </Button>
+            </div>
           </Col>
         </Row>
       </div>

@@ -31,6 +31,7 @@ import './CityDetailsSidebar.css';
  */
 const CityDetailsSidebar = (props) => {
   const [cityHeader, setCityHeader] = useState('');
+  const [currentProductionLabel, setCurrentProductionLabel] = useState('');
 
   const viewBuildingHandler = (e, building) => {
     e.preventDefault();
@@ -42,21 +43,6 @@ const CityDetailsSidebar = (props) => {
     e.preventDefault();
     props.updateCityMenuSupplementalView(CITY_MENU_SUPPLEMENTAL_VIEWS.UNIT);
     props.updateCityMenuSupplementalData(unitType);
-  };
-
-  const trainSettlerHandler = (e) => {
-    e.preventDefault();
-    try {
-      const request = {
-        gameId: props.gameId,
-        cityTilePosition: props.selectedTilePosition,
-        isTrainingSettler: true,
-      };
-      axios.put(apiEndpoints.cityController + '/settler-training', request);
-    } catch (error) {
-      console.warn('Error trying to train settler!');
-      console.warn(error);
-    }
   };
 
   const showCommanderTabHandler = (e) => {
@@ -98,6 +84,24 @@ const CityDetailsSidebar = (props) => {
       } else {
         console.warn('Oops! Couldn\'t identify this city faction!');
       }
+
+      let newCurrentProductionLabel = '';
+      if (props.selectedCity.currentConstructionProject) {
+        const buildingName = props.allBuildings[props.selectedCity.currentConstructionProject].displayName;
+        newCurrentProductionLabel = 'Constructing ' + buildingName;
+      } else {
+        const recruitmentQueue = props.selectedCity.currentRecruitmentQueue;
+        let manualUnitTrainingIsTakingPlace = false;
+        recruitmentQueue.forEach((queuedUnit, _) => {
+          if (!queuedUnit.free && queuedUnit.currentlyTraining) {
+            manualUnitTrainingIsTakingPlace = true;
+          }
+        });
+        if (manualUnitTrainingIsTakingPlace) {
+          newCurrentProductionLabel += 'Training Units';
+        }
+      }
+      setCurrentProductionLabel(newCurrentProductionLabel);
     }
   }, [props]);
 
@@ -153,7 +157,7 @@ const CityDetailsSidebar = (props) => {
             </Col>
             <Col md={6}>
               <Row noGutters>
-                {props.selectedCity.totalBuildingProduction}
+                {props.selectedCity.totalProduction}
               </Row>
               <Row noGutters>
                 {props.selectedCity.totalResearch}
@@ -167,37 +171,12 @@ const CityDetailsSidebar = (props) => {
           </Row>
           <Row noGutters>
             <Button
-              variant='primary'
-              disabled={!props.isOwnTurn ||
-                props.selectedCity.isTrainingSettler ||
-                props.selectedTile.settler ||
-                props.ownPlayerData
-                    .astridiumCollectionRequirementToNextSettler >
-                props.ownPlayerData
-                    .astridiumCollected}
-              onClick={trainSettlerHandler}
-              style={{width: '100%', fontSize: 'small', margin: 'auto'}}
-            >{
-                props.selectedCity.isTrainingSettler ?
-                ( 'Training Settler (' +
-                  (props.selectedCity.turnsRemainingToTrainSettler !== 1 ?
-                  props.selectedCity.turnsRemainingToTrainSettler + ' Turns ' :
-                  props.selectedCity.turnsRemainingToTrainSettler + ' Turn'
-                  ) + ')'
-                ) : (props.ownPlayerData
-                    .astridiumCollectionRequirementToNextSettler >
-                props.ownPlayerData
-                    .astridiumCollected ?
-                    'Collect ' + (props.ownPlayerData
-                        .astridiumCollectionRequirementToNextSettler -
-                        props.ownPlayerData
-                            .astridiumCollected) +
-                            ' More Astridium to Unlock the Next Settler!':
-                    'Ready To Train New Settler!')} {
-                      props.selectedTile.settler ?
-                      ' (Cannot Train While Another Settler is in this City)' :
-                      ''
-              }</Button>
+              variant={currentProductionLabel ? 'success' : 'danger'}
+              className='city-production-message'
+            >
+              {currentProductionLabel ? currentProductionLabel :
+              'This City is not Producing anything!'}
+            </Button>
           </Row>
           <Row noGutters>
             <Button
@@ -339,8 +318,8 @@ const mapStateToProps = (state) => {
     gameId: state.game.gameId,
     allBuildings: state.game.gameConstants.allBuildings,
     allUnits: state.game.gameConstants.allUnits,
-    selectedCity: state.gameBoardView.gameBoard[
-        state.gameBoardView.selectedTilePosition].city,
+    selectedCity: {...state.gameBoardView.gameBoard[
+        state.gameBoardView.selectedTilePosition].city},
     isOwnTurn: state.gamePlayer.ownPlayerNumber ===
       state.gamePlayer.playerWhoseTurnItIs,
     ownPlayerData: state.gamePlayer.ownPlayerNumber ===

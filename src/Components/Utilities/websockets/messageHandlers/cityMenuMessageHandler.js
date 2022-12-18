@@ -167,7 +167,8 @@ const unitRecruitmentQueueUpdated = (message) => {
   updatedGameBoard[message.cityTilePosition]
       .city.currentRecruitmentQueue = message.updatedUnitRecruitmentQueue;
   updatedGameBoard[message.cityTilePosition]
-      .city.unitProductionRemaining = message.updatedRemainingUnitProduction;
+      .city.currentConcurrentUnitTrainingCount = message.newConcurrentUnitTrainingCount;
+  updatedGameBoard[message.cityTilePosition].city.currentConstructionProject = message.newCurrentConstructionProject;
   store.dispatch(gameBoardViewAC.setGameBoard(updatedGameBoard));
 };
 
